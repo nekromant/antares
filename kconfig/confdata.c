@@ -776,7 +776,7 @@ int conf_write_autoconf(void)
 	struct symbol *sym;
 	const char *str;
 	const char *name;
-	FILE *out, *tristate, *out_h;
+	FILE *out, *tristate, *out_h, *out_v;
 	time_t now;
 	int i;
 
@@ -791,6 +791,10 @@ int conf_write_autoconf(void)
 	if (!out)
 		return 1;
 
+	out_v = fopen(".tmpconfig.v", "w");
+	if (!out)
+		return 1;
+	
 	tristate = fopen(".tmpconfig_tristate", "w");
 	if (!tristate) {
 		fclose(out);
@@ -804,12 +808,12 @@ int conf_write_autoconf(void)
 		return 1;
 	}
 
-	sym = sym_lookup("KERNELVERSION", 0);
+	sym = sym_lookup("VERSION_STRING", 0);
 	sym_calc_value(sym);
 	time(&now);
 	fprintf(out, "#\n"
 		     "# Automatically generated make config: don't edit\n"
-		     "# Linux kernel version: %s\n"
+		     "# Antares version: %s\n"
 		     "# %s"
 		     "#\n",
 		     sym_get_string_value(sym), ctime(&now));
@@ -823,7 +827,14 @@ int conf_write_autoconf(void)
 		       " */\n"
 		       "#define AUTOCONF_INCLUDED\n",
 		       sym_get_string_value(sym), ctime(&now));
-
+	fprintf(out_v, "/*\n"
+		       " * Automatically generated Verilog config: don't edit\n"
+		       " * Antares version: %s\n"
+		       " * %s"
+		       " */\n"
+		       "'define AUTOCONF_INCLUDED\n",
+		       sym_get_string_value(sym), ctime(&now));
+	
 	for_all_symbols(i, sym) {
 		sym_calc_value(sym);
 		if (!(sym->flags & SYMBOL_WRITE) || !sym->name)
@@ -842,12 +853,14 @@ int conf_write_autoconf(void)
 			case mod:
 				fprintf(tristate, "CONFIG_%s=M\n", sym->name);
 				fprintf(out_h, "#define CONFIG_%s_MODULE 1\n", sym->name);
+				fprintf(out_v, "'define CONFIG_%s_MODULE 1\n", sym->name);
 				break;
 			case yes:
 				if (sym->type == S_TRISTATE)
 					fprintf(tristate, "CONFIG_%s=Y\n",
 							sym->name);
 				fprintf(out_h, "#define CONFIG_%s 1\n", sym->name);
+				fprintf(out_h, "'define CONFIG_%s 1\n", sym->name);
 				break;
 			}
 			break;
@@ -858,11 +871,13 @@ int conf_write_autoconf(void)
 			str = sym_get_string_value(sym);
 			if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
 				fprintf(out_h, "#define CONFIG_%s 0x%s\n", sym->name, str);
+				fprintf(out_h, "'define CONFIG_%s 0x%s\n", sym->name, str);
 				break;
 			}
 		case S_INT:
 			str = sym_get_string_value(sym);
 			fprintf(out_h, "#define CONFIG_%s %s\n", sym->name, str);
+			fprintf(out_v, "'define CONFIG_%s %s\n", sym->name, str);
 			break;
 		default:
 			break;
@@ -873,8 +888,13 @@ int conf_write_autoconf(void)
 	fclose(out_h);
 
 	name = getenv("KCONFIG_AUTOHEADER");
+	char* vname = getenv("KCONFIG_AUTOVHEADER");
 	if (!name)
 		name = "include/generated/autoconf.h";
+	if (!vname)
+		vname = "include/generated/autoconf.v";
+	if (rename(".tmpconfig.v", vname))
+		return 1;
 	if (rename(".tmpconfig.h", name))
 		return 1;
 	name = getenv("KCONFIG_TRISTATE");

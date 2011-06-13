@@ -55,8 +55,13 @@ $(obj)/conf: $(addprefix $(obj)/,$(conf-objs))
 $(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
 	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
+kconfig-clean:
+	-rm $(obj)/*.o
+	-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
+
 versionupdate:
 	$(obj)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME) "
+	$(obj)/config --set-str VERSION_GIT $(shell git rev-parse --verify HEAD)
   
 menuconfig: $(obj)/mconf versionupdate
 	$< $(Kconfig)

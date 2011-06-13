@@ -52,6 +52,14 @@ endmenu
 menu "Dirty Hacks"
 endmenu
 
+menu "Build System Tweaks"
+
+  config MAKE_DEFTARGET
+  string "Default make target"
+  default "menuconfig"
+
+endmenu
+
 source "version.kcnf"
 
 
