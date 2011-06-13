@@ -24,7 +24,12 @@ deftarget: $(CONFIG_MAKE_DEFTARGET)
 #includes arch-specific files
 include arch/arch.mk
 
-
-
-
 include kconfig/kconfig.mk
+
+#Now the fun stuff
+build: versionupdate arch_build arch_check
+	@echo "Your Antares firmware is ready"
+
+deploy: build .deployed
+	@echo "Your Antares firmware is now deployed"
+	

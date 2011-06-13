@@ -77,3 +77,12 @@ oldconfig: $(obj)/conf
 silentoldconfig: $(obj)/conf
 	$(Q)mkdir -p include/generated
 	$< --$@ $(Kconfig)
+
+switch_profile: $(obj)/mconf  
+	-cp .config .config.switch_save
+	$(src)/kcnf_list gen profiles/ > profiles.kcnf.inc
+	$< profiles.kcnf
+	$(src)/kcnf_list process profiles
+	
+select_defconfig: $(obj)/mconf
+  

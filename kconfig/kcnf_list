@@ -1,0 +1,34 @@
+#!/bin/bash
+case $1 in
+gen)
+ls $2|grep -v "~"|sort| while read file; do
+  echo "config	FILE_$file"
+  echo -e "bool	\"$file\""
+  echo ""
+done
+;;
+process)
+  source .config
+  if [ "$CONFIG_FORGET_AND_EXIT" == "y" ]; then
+  cp .config.switch_save .config
+  echo "Reverting to old config"
+  exit 0
+  fi
+  if [ "$CONFIG_PROFILE_SAVE" == "y" ]; then
+  #Remember to backup
+  mv "$2/$CONFIG_PROFILE_FILENAME" "$2/$CONFIG_PROFILE_FILENAME~"
+  mv .config.switch_save $2/$CONFIG_PROFILE_FILENAME
+  fi
+  if [ "$CONFIG_PROFILE_TRASH" == "y" ]; then
+  rm .config.switch_save
+  echo "Trashed da config"
+  fi
+  if [ "$CONFIG_LOAD_NEW" == "y" ]; then
+  #Now goes the fun part with the kconfig's choice
+  FL=`cat .config|grep CONFIG_FILE_|grep "=y"|cut -d"_" -f3| cut -d"=" -f 1`
+  #Oh, yeah! Now load the config
+  cp $2/$FL .config
+  echo ".config $FL loaded, ok"
+  fi
+;;
+esac
