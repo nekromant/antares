@@ -1,0 +1,5 @@
+*~
+*.old
+*.backup
+*.o
+.config
