@@ -1,0 +1,57 @@
+mainmenu "Antares Firmware Config"
+menu "Architecture settings"
+source "arch.kcnf"
+endmenu
+
+menu "Hardware drivers"
+endmenu
+
+menu "RTOS and Tasking"
+
+  choice 
+  prompt "Tasking model"
+
+  config TASK_NONE
+  bool "No tasking support"
+  help
+    Basically, this places an endless loop in main()
+    suggesting, that you do all the stuff in ISR's
+  
+  config TASK_SIMPLE
+  bool "Simple single-threaded application"
+  help
+    This is a simplest application method ever. 
+    Looks quite arduino-like. You have your init
+    function, and an optional loop(). 
+  
+
+  config TASK_VUSB
+  bool "VUSB-based loop"
+  depends on ARCH_AVR
+  help
+   This turns on VUSB stack for your device
+   In this model your code can be placed 
+   between usb_poll() in main loop. 
+
+  config TASK_ANTARES
+  bool "Antares Real-Time Kernel"
+  help
+    Multiple init/loop tasks
+    Module load/unload on-the-run
+    Like linux for the 8bits
+endchoice
+
+endmenu
+
+menu "Applications"
+endmenu
+
+menu "Library routines"
+endmenu
+
+menu "Dirty Hacks"
+endmenu
+
+source "version.kcnf"
+
+

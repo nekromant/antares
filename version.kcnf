@@ -1,0 +1,27 @@
+menu "Version Information"
+comment "These opts are for devs"
+
+  config VERSION_MAJOR
+  string "Major Version"
+  default 0
+
+  config VERSION_MINOR
+  string "Major Version"
+  default 1
+
+  config VERSION_CODENAME
+  string "CodeName"
+  default "Lucky Lady"
+
+comment "+++ For reference only +++"
+comment "All values below are to be filled by Make scripts"
+
+config VERSION_STRING
+  string "Version string"
+  default "to be genned"
+
+config VERSION_GIT
+  string "GIT Revision"
+  default "to be genned"
+
+endmenu
