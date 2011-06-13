@@ -1,5 +1,33 @@
 #!/bin/bash
+list_dirs()
+{
+find $1 -type d| cut -d"/" -f2
+}
+
 case $1 in
+fgen)
+  echo -e "choice"
+  echo -e "prompt \"Architecture\""
+  list_dirs $2|  while read arch; do
+  if [ "$arch" != "" ]; then
+  echo -e config ARCH_$arch
+  echo "bool \"$arch\""
+  fi
+  done
+  echo -e "endchoice"
+  #Now the same, to gen the menus
+  
+  list_dirs $2|while read arch; do
+  if [ "$arch" != "" ]; then
+  echo -e "choice"
+  echo -e "prompt \"DefConfig file\""
+  echo -e "depends on ARCH_$arch"
+  echo -e "depends on !FORGET_AND_EXIT && LOAD_NEW"
+  $0 gen $2/$arch/
+  echo -e "endchoice"
+  fi
+  done
+;;
 gen)
 ls $2|grep -v "~"|sort| while read file; do
   echo "config	FILE_$file"
@@ -7,7 +35,15 @@ ls $2|grep -v "~"|sort| while read file; do
   echo ""
 done
 ;;
-process)
+
+
+process_defconfig)
+arch=`cat .config|grep CONFIG_ARCH_|grep "=y"|cut -d"_" -f3| cut -d"=" -f 1`
+echo $arch
+$0 process_profile $2 $arch/
+;;
+
+process_profile)
   source .config
   if [ "$CONFIG_FORGET_AND_EXIT" == "y" ]; then
   cp .config.switch_save .config
@@ -16,8 +52,8 @@ process)
   fi
   if [ "$CONFIG_PROFILE_SAVE" == "y" ]; then
   #Remember to backup
-  mv "$2/$CONFIG_PROFILE_FILENAME" "$2/$CONFIG_PROFILE_FILENAME~"
-  mv .config.switch_save $2/$CONFIG_PROFILE_FILENAME
+  mv "$2/$3$CONFIG_PROFILE_FILENAME" "$2/$3$CONFIG_PROFILE_FILENAME~"
+  mv .config.switch_save $2/$3$CONFIG_PROFILE_FILENAME
   fi
   if [ "$CONFIG_PROFILE_TRASH" == "y" ]; then
   rm .config.switch_save
@@ -27,7 +63,7 @@ process)
   #Now goes the fun part with the kconfig's choice
   FL=`cat .config|grep CONFIG_FILE_|grep "=y"|cut -d"_" -f3| cut -d"=" -f 1`
   #Oh, yeah! Now load the config
-  cp $2/$FL .config
+  cp $2/$3$FL .config
   echo ".config $FL loaded, ok"
   fi
 ;;

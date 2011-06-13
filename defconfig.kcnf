@@ -1,0 +1,26 @@
+mainmenu "Antares Firmware Defconfig Selection"
+
+config FORGET_AND_EXIT
+  bool "Don't touch anything on exit!"
+
+config LOAD_NEW
+  bool "Load a new defconfig"
+
+  source "defconfig.kcnf.inc"
+
+
+choice
+  prompt "Current config"
+  depends on !FORGET_AND_EXIT
+
+  config PROFILE_SAVE
+  bool "Save"
+  
+  config PROFILE_TRASH
+  bool "Trash"
+
+endchoice
+
+config PROFILE_FILENAME
+  depends on PROFILE_SAVE
+  string "Save current config as a defconfig"
