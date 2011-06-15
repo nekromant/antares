@@ -6,18 +6,19 @@ obj:=kconfig
 src:=kconfig
 Kconfig:=./kcnf
 
+obj-y:=t
 
 .PHONY: deftarget
 
-
+subdirs-y:=arch/avr
 	
 
-#Suck in the current config file
+#Suck in the current .config file
 -include .config
 
 CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 
-deftarget: $(CONFIG_MAKE_DEFTARGET)
+all: $(CONFIG_MAKE_DEFTARGET)
 	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
 
 #This parses the CONFIG_ARCH into something readable and 
@@ -26,8 +27,16 @@ include arch/arch.mk
 
 include kconfig/kconfig.mk
 
+
 #Now the fun stuff
-build: versionupdate arch_build arch_check
+#To make this thing work like the real thing
+
+setupsymlinks:
+	ln -sf ../arch/$(ARCH)/include include/arch
+
+build: versionupdate setupsymlinks
+	#$(Q) $(MAKE)
+	echo $(obj-y)
 	@echo "Your Antares firmware is ready"
 
 deploy: build .deployed
