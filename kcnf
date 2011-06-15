@@ -5,6 +5,7 @@ source "arch.kcnf"
 endmenu
 
 menu "Deployment settings"
+source "deploy/kcnf"
 endmenu
 
 menu "Software modules"
@@ -33,9 +34,7 @@ menu "Build System Tweaks"
    automatically, so you can deploy them later.
    Extensions will appended automatically.
 
-
 endmenu
-
 source "version.kcnf"
 
 

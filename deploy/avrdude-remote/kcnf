@@ -1,0 +1,27 @@
+menu "Remote avrdude settings"
+  
+  config AVRDUDE_SSH_HOST
+  string "hostname or IP of the remote host"
+  default "192.168.0.100"
+
+  config AVRDUDE_SSH_PORT
+  string "Remote ssh port (just in case)"
+  default "22"
+  
+  config AVRDUDE_BIN
+  string "avrdude binary name"
+  default "arm-linux-avrdude"
+
+  config AVRDUDE_COMMANDLINE
+  string "avrdude commandline (read help)"
+  default "-c arduino -P /dev/ttyUSB0"
+  help
+    MCU and filename will be auto-appended 
+    Anything not related to filename and MCU should go in here
+    TODO: Moar friendly menu
+
+  config AVRDUDE_FILEPATH
+  string "Path on the remote system to store the firmware"
+  default "/tmp"
+
+endmenu

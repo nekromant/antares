@@ -1,0 +1,108 @@
+INTRODUCTION
+-------------
+I assume that you are familiar whith how the linux kernel is 
+configured, so menuconfig make target will not scare you. Well, I 
+ripped menuconfig from the kernel, added some more code, so
+basically these are the things you need to know:
+
+CONFIGURING
+-------------
+The Makefile has several targets, that you will use. The first
+one is menuconfig. Just run 'make menuconfig' and select the 
+options you need. 
+The Antares buildsystem also provides 'profile' management GUI
+and 'defconfig' management GUI. 
+
+Let's start with profiles. You can develop several projects in
+one Antares tree. Profiles are just .config's that are stored in
+profiles/ folder. To select a different profile run
+
+make switch_profile
+
+Unlike defconfigs - they serve as a developer scratch buffer for, 
+e.g. most recent configs that worked, etc. Usually they are not in git. 
+
+All the defconfigs are stored in defconfigs/$arch. To load a defconfig
+or save the current config as a defconfig you can use:
+
+make select_defconfig
+
+This allows you to quickly select an arch and defconfig to use. 
+
+Profile switching and defconfig GUI are kind of on-the-fly hacks to 
+kconfig, so they may look alien. But still they serve their purpose 
+and save a second or two for me.
+Note, that whenever you save a profile or defconfig under the same 
+name, the old one is renamed into a backup~ file, so you'll always 
+have a backup that works. They do not show up in menuconfig, so if
+something happens - inspect the profiles/ defconfigs/ folders by
+hand. 
+
+
+NB: Pay attention to Buildsystem Tweaks. You can set up different 
+useful things there, such as default make target, and etc. 
+
+BUILDING
+----------
+
+
+
+
+DEPLOYING
+----------
+
+Unlike the Linux kernel, Antares has an option to 'deploy' the 
+firmware built. This invokes both simple scenarios, when you 
+just use avrdude/openocd/stm32flash to flash the firmware and more
+complex: e.g. transfer to a remote system via ssh, and call avrdude
+there. 
+
+All deployment scenarios can be found in deploy/ subfolder and are
+(mostly) configurable via menuconfig, so that you can set up easily
+everything you need. 
+
+Consider having a look into deploy/ folder for more information
+
+
+FURTHER READING
+---------
+Guess I can't stuff everything into one README, so check the docs/ 
+folder. There are some interesting things there, that will provide 
+you a quick start into developing your first app, writing deployment
+scripts and etc. 
+
+
+CREDITS'N'STORY
+---------
+One night, I was a bit tired of copy-pasting code from and to
+different uC projects and decided to fix that. I took the menuconfig
+I liked most from linux kernel 2.6.36, and added support for verilog
+I borrowed some code from avrlib and ethersex and added someo of mine. 
+And fixed that shit to work on uCs other than avr. 
+
+I was on a vacation in Crimea, and had some free time and a laptop...
+
+This is how Antares was born.
+
+This software uses some bits'n'pieces from other projects.
+So, finally, it's a good place to give out the thanks. 
+* Linux kernel - I actually ripped kconfig from out there, when
+found, that ethersex's menuconfig was a bit too old'n'shitty to
+be of any use to me. Kbuild exploded my brain though, so I borrowed a little
+and mostly rewrote the buildsystem from scratch. 
+* Ethersex - I liked the idea, but didn't like the implementation
+in some parts.
+* avrlib - I used some of the code as reference, copypasted some.
+* vusb - I have the whole stack in contrib folder, respects to the guys
+  that wrote that!
+
+TODO: Find out if I took any other code and forgot to mention it here.
+
+
+MISC INFO
+---------
+(Just in case you want to know, what Antares is)
+Antares (alpha SCO) - HIP 80763
+Magnitude: 1.05 (B-V: 1.76)
+Distance: 603.99 Light Years
+Parallax: 0.00540"
