@@ -1,4 +1,4 @@
-include host.mk
+include make/host.mk
 #TODO: This really sucks
 #I guess, I'll need to fix that later
 Kbuild:=Kconfig
@@ -24,7 +24,6 @@ all: $(CONFIG_MAKE_DEFTARGET)
 #This parses the CONFIG_ARCH into something readable and 
 #includes arch-specific files
 include arch/arch.mk
-
 include kconfig/kconfig.mk
 
 
@@ -34,11 +33,11 @@ include kconfig/kconfig.mk
 setupsymlinks:
 	ln -sf ../arch/$(ARCH)/include include/arch
 
-build: versionupdate setupsymlinks
-	$(MAKE) -f Makefile.build -r build
+build: versionupdate setupsymlinks silentoldconfig
+	$(MAKE) -f make/Makefile.build -r build
 	
 clean: kconfig-clean 
-	$(MAKE) -f Makefile.build -r clean
+	$(MAKE) -f make/Makefile.build -r clean
 
 deploy: build .deployed
 	@echo "Your Antares firmware is now deployed"

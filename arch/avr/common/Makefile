@@ -1,1 +1,1 @@
-obj-y+=test
+objects-y+=startup.o

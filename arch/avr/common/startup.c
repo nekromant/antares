@@ -1,9 +1,9 @@
 #include <arch/antares.h>
-
-int main()
+//#include <avr/io.h>
+int amain()
 {
   
-  antares_init();
+  //antares_init();
   
   
 }

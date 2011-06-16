@@ -860,7 +860,7 @@ int conf_write_autoconf(void)
 					fprintf(tristate, "CONFIG_%s=Y\n",
 							sym->name);
 				fprintf(out_h, "#define CONFIG_%s 1\n", sym->name);
-				fprintf(out_h, "'define CONFIG_%s 1\n", sym->name);
+				fprintf(out_v, "'define CONFIG_%s 1\n", sym->name);
 				break;
 			}
 			break;
@@ -871,7 +871,7 @@ int conf_write_autoconf(void)
 			str = sym_get_string_value(sym);
 			if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
 				fprintf(out_h, "#define CONFIG_%s 0x%s\n", sym->name, str);
-				fprintf(out_h, "'define CONFIG_%s 0x%s\n", sym->name, str);
+				fprintf(out_v, "'define CONFIG_%s 0x%s\n", sym->name, str);
 				break;
 			}
 		case S_INT:

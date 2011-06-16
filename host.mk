@@ -1,1 +1,0 @@
-HOST_CC:=gcc

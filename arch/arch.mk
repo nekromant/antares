@@ -8,7 +8,10 @@ ifeq ($(CONFIG_ARCH_8051),y)
   ARCH=8051
 endif
 
--include $(arch)/make.mk
+ARCH?=avr
+export ARCH
+
+include arch/$(ARCH)/make.mk
 
 archtest:
 	echo "ARCH IS $(ARCH)"
