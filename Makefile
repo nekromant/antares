@@ -35,9 +35,10 @@ setupsymlinks:
 	ln -sf ../arch/$(ARCH)/include include/arch
 
 build: versionupdate setupsymlinks
-	#$(Q) $(MAKE)
-	echo $(obj-y)
-	@echo "Your Antares firmware is ready"
+	$(MAKE) -f Makefile.build -r build
+	
+clean: kconfig-clean 
+	$(MAKE) -f Makefile.build -r clean
 
 deploy: build .deployed
 	@echo "Your Antares firmware is now deployed"

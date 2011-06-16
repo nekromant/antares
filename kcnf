@@ -8,15 +8,17 @@ menu "Deployment settings"
 source "deploy/kcnf"
 endmenu
 
-menu "Software modules"
-
+menu "General Setup"
 endmenu
 
-menu "Library routines"
-
+menu "Device drivers"
+source "drivers/kcnf"
 endmenu
 
-menu "Dirty Hacks"
+menu "Library functions"
+endmenu
+
+menu "Dirty'n'Hackish"
 endmenu
 
 menu "Build System Tweaks"

@@ -36,11 +36,11 @@ menu "Toolchain settings"
 
   config OBJCOPY
   string "C Object Copy (objcopy)"
-  default "avr-gcc"
+  default "avr-objcopy"
 
   config OBJDUMP
   string "C Object Dumper (objdump)"
-  default "avr-gcc"
+  default "avr-objdump"
 
 choice
   prompt "Optimisation level"

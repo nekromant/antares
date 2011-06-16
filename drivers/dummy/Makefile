@@ -1,1 +1,0 @@
-objects-y+=dummy.o

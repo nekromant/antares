@@ -1,1 +1,1 @@
-objects-y+= info.o call.o test/
+objects-y+= test.o
