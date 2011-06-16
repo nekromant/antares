@@ -1,5 +1,6 @@
 choice 
   prompt "Deployment scenario"
+
   
   config DEPLOY_AVRDUDE
   bool "avrdude"

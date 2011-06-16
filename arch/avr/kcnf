@@ -20,6 +20,57 @@ menu "AVR Target Configuration"
 
 endchoice
 
+menu "Toolchain settings"
+
+  config CC
+  string "C Compiler (cc)"
+  default "avr-gcc"
+
+  config AS
+  string "C Compiler (cc)"
+  default "avr-as"
+
+  config LD
+  string "C Linker (ld)"
+  default "avr-ld"
+
+  config OBJCOPY
+  string "C Object Copy (objcopy)"
+  default "avr-gcc"
+
+  config OBJDUMP
+  string "C Object Dumper (objdump)"
+  default "avr-gcc"
+
+choice
+  prompt "Optimisation level"
+  config CC_OPT0
+  bool "-O0"
+
+  config CC_OPT1
+  bool "-O1"
+
+  config CC_OPT2
+  bool "-O2"
+
+  config CC_OPT3
+  bool "-O3"
+
+  config CC_OPTSZ
+  bool "-Os"
+endchoice
+
+config CFLAGS
+string "Additional compiler flags (c)"
+
+config ASFLAGS
+string "Additional assembler flags (as)"
+
+
+
+endmenu
+
+
   config F_CPU
   int "CPU frequency in Hz"
   default 8000000
@@ -39,6 +90,7 @@ endchoice
   config FUSE_EXT
   hex "efuse value"
   default "0x00"
+
 
 source "arch/avr/m640/kcnf"
 

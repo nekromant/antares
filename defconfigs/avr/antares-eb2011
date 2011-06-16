@@ -1,0 +1,13 @@
+#
+# Automatically generated make config: don't edit
+# Antares version: VERSION_STRING
+# Wed Jun 15 20:47:31 2011
+#
+# CONFIG_FORGET_AND_EXIT is not set
+# CONFIG_LOAD_NEW is not set
+CONFIG_ARCH_avr=y
+# CONFIG_ARCH_arm is not set
+# CONFIG_FILE_antares-eb2011 is not set
+CONFIG_PROFILE_SAVE=y
+# CONFIG_PROFILE_TRASH is not set
+CONFIG_PROFILE_FILENAME="antares-eb2011"
