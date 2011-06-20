@@ -1,10 +1,10 @@
 #add any new method right here
 
-ifeq ($(DEPLOY_AVRDUDE),y)
-	include avrdude/Makefile
+ifeq ($(CONFIG_DEPLOY_AVRDUDE),y)
+	include deploy/avrdude/Makefile
 endif
 
 
-ifeq ($(DEPLOY_AVRDUDE_REMOTE),y)
-	include avrdude-remote/Makefile
+ifeq ($(CONFIG_DEPLOY_AVRDUDE_REMOTE),y)
+	include deploy/avrdude-remote/Makefile
 endif

@@ -1,1 +1,1 @@
-objects-y+= test.o
+objects-y+= eurobot/

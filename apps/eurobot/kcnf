@@ -1,0 +1,2 @@
+config APP_EUROBOT_PAKMAN2011
+bool "The pakman 2011 firmware"

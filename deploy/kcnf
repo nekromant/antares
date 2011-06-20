@@ -1,7 +1,5 @@
-choice 
-  prompt "Deployment scenario"
-
-  
+menu "Deployment methods"
+ 
   config DEPLOY_AVRDUDE
   bool "avrdude"
   depends on ARCH_AVR
@@ -10,7 +8,17 @@ choice
   bool "Remote avrdude via ssh"
   depends on ARCH_AVR
 
-endchoice
+
+
+endmenu
+
+menu "Architecture specific deployment options"
+
+  if ARCH_AVR
+  source "arch/avr/deploy.kcnf"
+  endif
+
+endmenu
 
 if DEPLOY_AVRDUDE
   source "deploy/avrdude/kcnf"
@@ -19,5 +27,3 @@ endif
 if DEPLOY_AVRDUDE_REMOTE
   source "deploy/avrdude-remote/kcnf"
 endif
-
-

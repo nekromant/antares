@@ -1,5 +1,5 @@
-menu "AVR Target Configuration"
   choice
+  depends on ARCH_AVR
   prompt "Select MCU variant"
   default MCU_M640
 
@@ -21,7 +21,7 @@ menu "AVR Target Configuration"
 endchoice
 
 menu "Toolchain settings"
-
+  depends on ARCH_AVR
   config CC
   string "C Compiler (cc)"
   default "avr-gcc"
@@ -70,6 +70,11 @@ string "Additional assembler flags (as)"
 
 endmenu
 
+menu "MCU Peripheral drivers"
+depends on ARCH_AVR
+source "arch/avr/common/adc/kcnf"
+
+endmenu
 
   config F_CPU
   int "CPU frequency in Hz"
@@ -91,7 +96,6 @@ endmenu
   hex "efuse value"
   default "0x00"
 
-
 source "arch/avr/m640/kcnf"
 
-endmenu
+

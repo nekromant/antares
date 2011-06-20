@@ -1,4 +1,5 @@
 include make/host.mk
+include make/Makefile.lib
 #TODO: This really sucks
 #I guess, I'll need to fix that later
 Kbuild:=Kconfig
@@ -8,9 +9,9 @@ Kconfig:=./kcnf
 
 obj-y:=t
 
-.PHONY: deftarget
+PHONY+=deftarget deploy build
 
-subdirs-y:=arch/avr
+subdirs-y:=arch apps
 	
 
 #Suck in the current .config file
@@ -36,9 +37,18 @@ setupsymlinks:
 build: versionupdate setupsymlinks silentoldconfig
 	$(MAKE) -f make/Makefile.build -r build
 	
-clean: kconfig-clean 
+clean: 
 	$(MAKE) -f make/Makefile.build -r clean
 
-deploy: build .deployed
+mrproper: clean kconfig-clean 
+	@echo "Мистер пропёр - веселей, в сырцах чисто в 3 раза быстрей!"
+
+deploy: build
+	make -f make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
 	@echo "Your Antares firmware is now deployed"
-	
+
+deploy-%: build
+	make -f make/Makefile.deploy $*
+	@echo "Your Antares firmware is now deployed"
+
+.PHONY: $(PHONY)

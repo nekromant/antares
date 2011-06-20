@@ -1,0 +1,1 @@
+objects-$(CONFIG_APP_EUROBOT_PAKMAN2011)+= pakman/

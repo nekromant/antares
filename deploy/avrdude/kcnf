@@ -1,10 +1,11 @@
 menu "avrdude settings"
-  
-  config AVRDUDE_COMMANDLINE
-  string "avrdude commandline (read help)"
+
+  config DEPLOY_AVRDUDE_COMMANDLINE
+  string "avrdude additional commandline (read help)"
   help
     MCU and filename will be autofilled. 
     Anything not related to filename and MCU should go in here
     TODO: Moar friendly menu
 
 endmenu
+

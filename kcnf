@@ -1,5 +1,9 @@
 mainmenu "Antares Firmware Config"
 
+
+menu "General Setup"
+endmenu
+
 menu "Target platform settings"
 source "arch.kcnf"
 endmenu
@@ -8,7 +12,8 @@ menu "Deployment settings"
 source "deploy/kcnf"
 endmenu
 
-menu "General Setup"
+menu "Applications & tasking"
+source "apps/kcnf"
 endmenu
 
 menu "Device drivers"
@@ -27,6 +32,13 @@ menu "Build System Tweaks"
   string "Default make target"
   default "menuconfig"
   
+  config DEPLOY_DEFTARGET
+  string "Default deployment target"
+  default "help"
+  help
+    The deployment target(s) will be run, if you type
+    'make deploy' instead of 
+
   config IMAGE_FILENAME
   string "Output image name"
   default "antares"

@@ -1,0 +1,18 @@
+config DEPLOY_FLASH
+bool "Update Flash memory"
+default y
+
+config DEPLOY_EEPROM
+bool "Update eeprom memory"
+default y
+
+comment "Double check the fuse values!!!"
+comment "Setting 'em wrong can screw up the uC"
+
+config DEPLOY_FUSES
+bool "Write fuses (if supported by programmer)"
+default n
+
+config DEPLOY_LOCKBITS
+bool "Write lockbits (if supported by programmer)"
+default n
