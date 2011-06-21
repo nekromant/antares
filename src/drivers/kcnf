@@ -1,0 +1,12 @@
+menu "System Drivers"
+endmenu
+
+menu "Sensors"
+endmenu
+
+menu "Network Devices"
+endmenu
+
+menu "Misc devices"
+
+endmenu

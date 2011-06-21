@@ -1,27 +1,24 @@
 mainmenu "Antares Firmware Config"
 
-
-menu "General Setup"
+menu "Target platform settings"
+source "src/arch/kcnf"
 endmenu
 
-menu "Target platform settings"
-source "arch.kcnf"
+menu "Library functions"
+endmenu
+
+menu "Device drivers"
+source "src/drivers/kcnf"
+endmenu
+
+menu "Applications & tasking"
+source "src/apps/kcnf"
 endmenu
 
 menu "Deployment settings"
 source "deploy/kcnf"
 endmenu
 
-menu "Applications & tasking"
-source "apps/kcnf"
-endmenu
-
-menu "Device drivers"
-source "drivers/kcnf"
-endmenu
-
-menu "Library functions"
-endmenu
 
 menu "Dirty'n'Hackish"
 endmenu

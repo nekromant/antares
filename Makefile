@@ -24,7 +24,7 @@ all: $(CONFIG_MAKE_DEFTARGET)
 
 #This parses the CONFIG_ARCH into something readable and 
 #includes arch-specific files
-include arch/arch.mk
+include src/arch/arch.mk
 include kconfig/kconfig.mk
 
 
@@ -32,10 +32,14 @@ include kconfig/kconfig.mk
 #To make this thing work like the real thing
 
 setupsymlinks:
-	ln -sf ../arch/$(ARCH)/include include/arch
+	ln -sf ../arch/$(ARCH)/include src/include/arch
 
 build: versionupdate setupsymlinks silentoldconfig
 	$(MAKE) -f make/Makefile.build -r build
+	$(call colorize,$(t_grn))
+	@echo "Antares build is now complete"
+	@echo "Inspect the files under $(IMAGES_DIR) and have fun"
+	$(call colorize,$(col_rst))
 	
 clean: 
 	$(MAKE) -f make/Makefile.build -r clean

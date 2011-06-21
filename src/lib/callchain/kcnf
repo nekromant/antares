@@ -1,0 +1,7 @@
+config LIB_CALLCHAIN_SIMPLE
+bool "Simple function callchain"
+help 
+  Organises function pointers in a chain
+  and allows calling all of them in a chain
+  No function arguments passed, removal 
+  not supported. Most dumb implementation ever.

@@ -1,3 +1,0 @@
-menu "Eurobot Apps by DMI Team"
-source "apps/eurobot/kcnf"
-endmenu

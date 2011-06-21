@@ -19,15 +19,15 @@ VERSION_CODENAME := $(shell kconfig/config --state VERSION_CODENAME)
 
 %.tab.c: %.y
 	bison -l -b $* -p $(notdir $*) $<
-	cp $@ $@_shipped
+#	cp $@ $@_shipped
 
 lex.%.c: %.l
 	flex -L -P$(notdir $*) -o$@ $<
-	cp $@ $@_shipped
+#	cp $@ $@_shipped
 
 %.hash.c: %.gperf
 	gperf < $< > $@
-	cp $@ $@_shipped
+#	cp $@ $@_shipped
 
 
 $(obj)/zconf.tab.o: $(src)/lex.zconf.c $(src)/zconf.hash.c
@@ -75,7 +75,7 @@ oldconfig: $(obj)/conf
 	$< --$@ $(Kconfig)
 
 silentoldconfig: $(obj)/conf
-	$(Q)mkdir -p include/generated
+	$(Q)mkdir -p src/include/generated
 	$< --$@ $(Kconfig)
 
 switch_profile: $(obj)/mconf  

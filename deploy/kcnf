@@ -15,7 +15,7 @@ endmenu
 menu "Architecture specific deployment options"
 
   if ARCH_AVR
-  source "arch/avr/deploy.kcnf"
+  source "src/arch/avr/deploy.kcnf"
   endif
 
 endmenu

@@ -1,0 +1,100 @@
+  choice
+  depends on ARCH_AVR
+  prompt "Select MCU variant"
+  default MCU_M640
+
+    config MCU_M8
+    bool "AtMega 8"
+
+    config MCU_M16
+    bool "AtMega 16"
+
+    config MCU_M640
+    bool "AtMega 640"
+
+    config MCU_M1280
+    bool "AtMega 640"
+
+    config MCU_M2560
+    bool "AtMega 640"
+
+endchoice
+
+menu "Toolchain settings"
+  depends on ARCH_AVR
+  config CC
+  string "C Compiler (cc)"
+  default "avr-gcc"
+
+  config AS
+  string "C Compiler (cc)"
+  default "avr-as"
+
+  config LD
+  string "C Linker (ld)"
+  default "avr-ld"
+
+  config OBJCOPY
+  string "C Object Copy (objcopy)"
+  default "avr-objcopy"
+
+  config OBJDUMP
+  string "C Object Dumper (objdump)"
+  default "avr-objdump"
+
+choice
+  prompt "Optimisation level"
+  config CC_OPT0
+  bool "-O0"
+
+  config CC_OPT1
+  bool "-O1"
+
+  config CC_OPT2
+  bool "-O2"
+
+  config CC_OPT3
+  bool "-O3"
+
+  config CC_OPTSZ
+  bool "-Os"
+endchoice
+
+config CFLAGS
+string "Additional compiler flags (c)"
+
+config ASFLAGS
+string "Additional assembler flags (as)"
+
+
+
+endmenu
+
+menu "MCU Peripheral drivers"
+depends on ARCH_AVR
+source "src/arch/avr/common/adc/kcnf"
+
+endmenu
+
+  config F_CPU
+  int "CPU frequency in Hz"
+  default 8000000
+  
+  comment "Be careful with these values"
+  comment "They can screw things up"
+  comment "Use make fuses to flash 'em"
+
+  config FUSE_LOW
+  hex "lfuse value"
+  default 0x00
+
+  config FUSE_HIGH
+  hex "hfuse value"
+  default 0x00
+
+  config FUSE_EXT
+  hex "efuse value"
+  default "0x00"
+
+
+

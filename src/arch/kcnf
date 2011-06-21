@@ -1,0 +1,28 @@
+choice 
+
+  prompt "Target Architecture"
+  default ARCH_AVR
+
+  config ARCH_AVR
+  bool "Atmel AVR RISC 8-bit MCU Family"
+  
+  config ARCH_ARM
+  bool "ARM RISC MCUs"
+
+  config ARCH_8051
+  bool "8051 CISC MCUs"
+
+endchoice
+
+if ARCH_AVR
+  source "src/arch/avr/kcnf"
+endif
+
+if ARCH_ARM
+  source "src/arch/arm/kcnf"
+endif
+
+if ARCH_8051
+  source "src/arch/8051/kcnf"
+endif
+
