@@ -1,0 +1,29 @@
+menuconfig LIB_DEBUG
+bool "Debugging support"
+default y
+
+if LIB_DEBUG
+comment "Disabling everything here will strip all the debug"
+comment "From firmware image thus decreasing the size"
+
+config LIB_DEBUG_PREFIXING
+bool "Prefix all debug strings with a magic"
+help 
+  This allows mixing data for host application and debug
+
+config LIB_DEBUG_TINY
+select LIB_DEBUG_PREFIXING
+bool "Tiny debugging support"
+help
+  A tiny debugging library for those running in environments where 
+  enabling a sprintf() inplementation is not affordable. 
+  printk() will send data, and format to the host, and the host 
+  will printf the data. 
+  
+config LIB_DEBUG_FULL
+bool "Full-blown debugging library"
+help
+  A printk() implementation. Strings optionally prefixed for 
+  filtering on the host.
+
+endif

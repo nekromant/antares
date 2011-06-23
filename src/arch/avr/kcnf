@@ -13,10 +13,10 @@
     bool "AtMega 640"
 
     config MCU_M1280
-    bool "AtMega 640"
+    bool "AtMega 1280"
 
     config MCU_M2560
-    bool "AtMega 640"
+    bool "AtMega 2560"
 
 endchoice
 

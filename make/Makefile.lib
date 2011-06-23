@@ -40,3 +40,9 @@ unquote=$(subst ",,$(1))
 
 colorize=@echo -ne '$(1)'
 IMAGES_DIR=images/
+
+TARGET=$(call unquote,$(CONFIG_IMAGE_FILENAME))
+TARGET_HEXFILE=$(IMAGES_DIR)$(TARGET).hex
+TARGET_ELFFILE=$(IMAGES_DIR)$(TARGET).elf
+TARGET_LSSFILE=$(IMAGES_DIR)$(TARGET).lss
+TARGET_EEPFILE=$(IMAGES_DIR)$(TARGET).eep

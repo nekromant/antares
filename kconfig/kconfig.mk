@@ -75,7 +75,9 @@ oldconfig: $(obj)/conf
 	$< --$@ $(Kconfig)
 
 silentoldconfig: $(obj)/conf
-	$(Q)mkdir -p src/include/generated
+	$(Q)mkdir -p include/generated
+	$(Q)mkdir -p include/config
+
 	$< --$@ $(Kconfig)
 
 switch_profile: $(obj)/mconf  

@@ -1,0 +1,2 @@
+source "src/lib/callchain/kcnf"
+source "src/lib/debug/kcnf"

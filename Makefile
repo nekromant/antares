@@ -32,7 +32,10 @@ include kconfig/kconfig.mk
 #To make this thing work like the real thing
 
 setupsymlinks:
-	ln -sf ../arch/$(ARCH)/include src/include/arch
+	#ln -sf ../arch/$(ARCH)/include src/include/arch
+
+build-%:
+	$(MAKE) -f make/Makefile.build $*
 
 build: versionupdate setupsymlinks silentoldconfig
 	$(MAKE) -f make/Makefile.build -r build

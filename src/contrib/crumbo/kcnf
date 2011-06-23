@@ -1,0 +1,35 @@
+menuconfig CONTRIB_CRUMBO
+bool "Legacy drivers from crumbo and jetlib"
+
+if CONTRIB_CRUMBO
+
+config CONTRIB_CRUMBO_START
+bool "Start condition coin driver"
+
+config CONTRIB_CRUMBO_UART
+bool "UART ISR IO driver"
+
+config CONTRIB_CRUMBO_CHASSIS
+bool "Chassis driver (BUGGY!)"
+
+config CONTRIB_CRUMBO_MANIPULATOR_DRIVER
+bool "Manipulator driver (BUGGY!)"
+
+config CONTRIB_CRUMBO_ADC
+bool "Crumbo ADC driver"
+
+config CONTRIB_CRUMBO_ENCODER
+bool "Crumbo Encoders driver"
+
+config CONTRIB_CRUMBO_DEBUG
+bool "Crumbo jet-debug driver"
+
+config CONTRIB_CRUMBO_MEXTRA
+bool "Pakman extansion for manipulator"
+depends on CONTRIB_CRUMBO_MANIP
+
+config CONTRIB_CRUMBO_MANIP
+bool "Pakman pawn manipulator"
+
+endif
+

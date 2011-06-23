@@ -8,6 +8,9 @@ menu "Deployment methods"
   bool "Remote avrdude via ssh"
   depends on ARCH_AVR
 
+  config DEPLOY_JETTERM
+  bool "Post-deployment jetterm"
+
 
 
 endmenu
@@ -23,7 +26,9 @@ endmenu
 if DEPLOY_AVRDUDE
   source "deploy/avrdude/kcnf"
 endif
-
+if DEPLOY_JETTERM
+  source "deploy/jetterm/kcnf"
+endif
 if DEPLOY_AVRDUDE_REMOTE
   source "deploy/avrdude-remote/kcnf"
 endif

@@ -5,10 +5,15 @@ source "src/arch/kcnf"
 endmenu
 
 menu "Library functions"
+source "src/lib/kcnf"
 endmenu
 
 menu "Device drivers"
 source "src/drivers/kcnf"
+endmenu
+
+menu "Contributed stuff"
+source "src/contrib/kcnf"
 endmenu
 
 menu "Applications & tasking"

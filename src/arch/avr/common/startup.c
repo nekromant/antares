@@ -4,21 +4,14 @@
 ANTARES_INIT_LOW(antares_low_init)
 {
    cli(); //Disable interrupts. Not needed really
-   PORTB=0xff;
-   int a=5;
 }
 
-ANTARES_T(test2)
-{
-  UDR=0xfa;
-}
 
 //The first thing we do is: Turn on interrupts.
 //All further code goes with interrupts enabled
 ANTARES_INIT_HIGH(antares_high_init)
 {
    sei();
-   PORTB=0xff;
 }
 
 //This is a dummy app, so that we can call it from main, to start the loop

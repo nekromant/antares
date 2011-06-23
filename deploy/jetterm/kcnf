@@ -1,0 +1,11 @@
+menu "jetterm settings"
+
+  config DEPLOY_JETTERM_PORT
+  string "Serial port to use"
+  default "/dev/ttyUSB0"
+
+  config DEPLOY_JETTERM_BAUD
+  int "Port Speed"
+  default 115200
+endmenu
+
