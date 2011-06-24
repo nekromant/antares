@@ -15,6 +15,10 @@ bool "Chassis driver"
 config CONTRIB_CRUMBO_ADC
 bool "Crumbo ADC driver"
 
+config CONTRIB_CRUMBO_ADC_TEST
+bool "Crumbo ADC test app"
+depends on CONTRIB_CRUMBO_ADC
+
 config CONTRIB_CRUMBO_ENCODER
 bool "Crumbo Encoders driver"
 
