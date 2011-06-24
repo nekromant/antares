@@ -1,6 +1,5 @@
 #include <arch/antares.h>
-#include <list.h>
-#include <drivers/system/callchain-dumb.h>
+#include <lib/callchain/callchain.h>
 
 void call_fuction_chain(struct fcall_chain_t* r)
 {
@@ -13,6 +12,6 @@ void call_fuction_chain(struct fcall_chain_t* r)
 
 void call_function_add(struct fcall_chain_t* top, struct fcall_chain_t* ntail)
 {
-  //while(r=r->next);;
-  
+  while(top->next) top=top->next;
+  top->next=ntail;
 }

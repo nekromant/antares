@@ -32,5 +32,8 @@ depends on CONTRIB_CRUMBO_MANIP
 config CONTRIB_CRUMBO_MANIP
 bool "Pakman pawn manipulator"
 
+config CONTRIB_CRUMBO_SYSTICK
+bool "Crumbo System Tick driver"
+
 endif
 

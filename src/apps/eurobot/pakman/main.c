@@ -18,7 +18,7 @@ ANTARES_APP(pakman_mainapp)
    DBG("Hello, world. Place your code in here!");
    DBG("Use #include <contrib/crumbo/file.h> for headers")
 //   comm_sync();
-//   _delay_ms(1000);
+   _delay_ms(10000);
 //   
 // //   //code here
  }

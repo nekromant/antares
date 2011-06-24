@@ -45,7 +45,24 @@ useful things there, such as default make target, and etc.
 BUILDING
 ----------
 
+Usually this is done by simply running 'make build' after the 
+configuration is done.  This creates a number of files under images/ 
+folder. For avr these are elf, hex, eep and lss (disassembly). 
+So you can proceed to deploying your config. 
+There are also some special common targets for the build. 
 
+make build-debug
+
+This prints out all the objects we're gonna build. 
+
+make build-analyze
+
+This target is special. It calls the analyze tool, that analyzes the 
+disassembly and prints out information about the resulting firmware 
+initialisation and shutdown sequence. In other words - it tells you 
+in which order will the init functions be called.
+Antares does not (yet) have the scripts to order things out based on
+kconfig dependency info, so this will save you some time. 
 
 
 DEPLOYING
@@ -61,7 +78,8 @@ All deployment scenarios can be found in deploy/ subfolder and are
 (mostly) configurable via menuconfig, so that you can set up easily
 everything you need. 
 
-Consider having a look into deploy/ folder for more information
+Consider having a look into deploy/ folder for more information and
+taking some simple example as a base for your own experiments
 
 
 FURTHER READING
@@ -102,6 +120,7 @@ TODO: Find out if I took any other code and forgot to mention it here.
 MISC INFO
 ---------
 (Just in case you want to know, what Antares is)
+
 Antares (alpha SCO) - HIP 80763
 Magnitude: 1.05 (B-V: 1.76)
 Distance: 603.99 Light Years
