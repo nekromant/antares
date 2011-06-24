@@ -10,10 +10,7 @@ config CONTRIB_CRUMBO_UART
 bool "UART ISR IO driver"
 
 config CONTRIB_CRUMBO_CHASSIS
-bool "Chassis driver (BUGGY!)"
-
-config CONTRIB_CRUMBO_MANIPULATOR_DRIVER
-bool "Manipulator driver (BUGGY!)"
+bool "Chassis driver"
 
 config CONTRIB_CRUMBO_ADC
 bool "Crumbo ADC driver"

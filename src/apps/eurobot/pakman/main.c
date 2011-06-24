@@ -1,4 +1,6 @@
 #include <arch/antares.h>
+#define _DBG_ENABLED 1
+#include <contrib/crumbo/debug.h>
 
 ANTARES_INIT_LOW(pakman_init)
  {
@@ -7,15 +9,17 @@ ANTARES_INIT_LOW(pakman_init)
  }
 
 
-ANTARES_APP(pakman_init2)
+ANTARES_APP(pakman_mainapp)
  {
-  asm("nop;");
-  DDRB=0xfa;
+  
+  //comm_send_pgms(PSTR("Main app"));
+//   comm_sync();
+//   _delay_ms(1000);
+   DBG("Hello, world. Place your code in here!");
+   DBG("Use #include <contrib/crumbo/file.h> for headers")
+//   comm_sync();
+//   _delay_ms(1000);
+//   
 // //   //code here
  }
- 
 
-ANTARES_APP(pakman_main)
- {
-   PORTB=0xff;
- }

@@ -22,10 +22,22 @@ ANTARES_APP(antares_first_app)
   
 }
 
+ANTARES_FINISH(antares_exit)
+{
+    //Since we call main, avoid stack overflow
+    //asm("pop r2;pop r2;");
+    //_delay_ms(10);
+    //comm_putc('a');
+    //comm_sync();
+    asm("jmp antares_first_app");
+}
+
 int main()
 {
   //The main code must restart the app loop
   //NOTE: Move that to single tasking method
 //  antares_first_app();
-  asm("rjmp antares_first_app");
+  //comm_putc('A');
+  //_delay_ms(100);
+
 }

@@ -7,7 +7,7 @@
 // #endif
 #include "uart.h"
 #define putc_func comm_putc
-#define puts_func comm_puts
+#define puts_func(text) comm_sync();comm_send_pgms(PSTR(text)); 
 
 #define DBG_MAGIC	0xf1
 #define INF_MAGIC	0xf2

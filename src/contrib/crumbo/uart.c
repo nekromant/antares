@@ -3,8 +3,13 @@
 // I wouldn't touch that if I were you, since all the stuff you'll fix
 // Will eventually go down the closet
 #include <arch/antares.h>
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+
 #include "include/uart.h"
+
 static char rx_buf[128];
 static char tx_buf[128];
 static volatile int tx_head;
@@ -18,17 +23,16 @@ ANTARES_INIT_LOW(comm_uart_init)
     UBRR0=8;
     UCSR0B=UCSR0B| (1 << RXEN0)| (1 << TXEN0)| (1 << TXCIE0)| (1 << RXCIE0);
     UCSR0C |= (1 << UCSZ00) | (1 << UCSZ01);
-
+    comm_expect_length(2);
+#warning TODO: Fix uart init seq
 } // void comm_uart_init()
-
 void comm_tx_next_byte()
 {
     if (tx_state==1) {
         char c = pgm_read_byte(pgm_ptr++);
         UDR0=c;
         if (!c) {
-            tx_state=0;
-            pgm_ptr=0;
+            tx_state=pgm_ptr=0;
             return;
         }
     } else {

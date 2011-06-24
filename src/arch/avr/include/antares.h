@@ -41,9 +41,9 @@ __attribute__((__section__(".init7"))) void fn(void)
 __attribute__((__section__(".init8"))) void fn(void)
 
 
-#define ANTARES_T(fn) \
+#define ANTARES_FINISH(fn) \
   __attribute__((naked))\
-__attribute__((__section__(".text.calls"))) void fn(void)
+__attribute__((__section__(".fini0"))) void fn(void)
 
 
 

@@ -1,0 +1,51 @@
+#!/bin/bash
+#Antares startup analyzer
+t_ylw="\e[0;33m"
+t_cyn="\e[0;36m"
+col_rst="\e[0m"
+
+
+echo "Antares startup sequence disassembly."
+STATE=0;
+cat $1|grep ">:"|while read line; do
+func=`echo $line|cut -d" " -f2`
+#echo "'$func'"
+if [ "$func" == "<antares_low_init>:" ]; then
+echo -en "$t_ylw"
+echo " [ Antares low level init (no interrupts)]"
+STATE=1
+fi
+
+if [ "$func" == "<antares_high_init>:" ]; then
+echo -en "$t_ylw"
+echo " [ Antares high level init (interrupts enabled) ]"
+STATE=1
+fi
+
+if [ "$func" == "<antares_init_high>:" ]; then
+echo -ne "$t_ylw"
+echo " [ Antares high level init (interrupts enabled) ]"
+STATE=1
+fi
+
+if [ "$func" == "<antares_first_app>:" ]; then
+echo -ne "$t_ylw"
+echo " [ Antares Applications in loop ]"
+STATE=1
+fi
+
+if [ "$func" == "<main>:" ]; then
+echo -ne "$t_ylw"
+echo " [ End of antares function dump ]"
+STATE=0
+fi
+
+if [ $STATE -ne "0" ]; then
+echo -ne "$t_cyn"
+echo "   $func"
+fi
+
+
+done
+echo -ne "$col_rst"
+echo "Note: Some functions may be missing due to compiler optimisations"

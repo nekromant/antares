@@ -27,7 +27,7 @@ HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
-CFLAGS+=-mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU) -Os
+CFLAGS+=-mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU) -O1
 LDFLAGS+=-mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 
 #TODO: Sort the deps stuff out
@@ -102,9 +102,6 @@ $(BUILD_DIR)%.o: $(BUILD_DIR)%.c
 	@echo "Created disassembly file: $(@)"
 	$(call colorize,$(col_rst))
 
-
-
-
 clean: $(load_makes) 
 	$(info <----cleaning---->)
 	$(foreach o,$(build_objects),$(shell rm -f $(o)))
@@ -112,5 +109,9 @@ clean: $(load_makes)
 
 debug: $(call ldmakes, $(TOP_DIR))
 	@echo "I'm gonna build: $(objects)"
+
+
+analyze: $(TARGET_LSSFILE)
+	$(Q) $(TOP_DIR)scripts/analyzer $(TARGET_LSSFILE)
 
 .PHONY: $(PHONY)
