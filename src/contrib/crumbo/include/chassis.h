@@ -33,5 +33,7 @@ drop,
 };
 */
 void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1);
+__inline void motor_set_dir(int num, int dir);
+__inline int motor_get_dir(int num);
 __inline void stop();
 #endif

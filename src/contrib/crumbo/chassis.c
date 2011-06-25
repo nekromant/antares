@@ -62,8 +62,14 @@ __inline void motor_set_speed(int num, uint8_t value)
     OCR5B=value;
     }
 }
+static int mdir[2];
+__inline int motor_get_dir(int num)
+{
+  return mdir[num];
+}
 __inline void motor_set_dir(int num, int dir)
 {
+    mdir[num]=dir;
     if(num)
     {
       if(dir)
@@ -93,6 +99,7 @@ __inline void motor_set_dir(int num, int dir)
 
 void motor_stop(int motor)
 {
+  mdir[motor]=2;
   if (!motor)
   PORTL&= ~(1<<0|1<<1|1<<6);
   else
@@ -223,8 +230,14 @@ void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1)
   motor_set_speed(1, pwm1);
 }
 
-__inline void stop(){
+__inline void __stop(){
    PORTL&= ~(1<<0|1<<1|1<<6|1<<7|1<<3|1<<4);
+}
+
+__inline void stop()
+{
+  motor_stop(0);
+  motor_stop(1);
 }
 void reset_direction()
 {

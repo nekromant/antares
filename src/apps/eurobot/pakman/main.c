@@ -14,14 +14,16 @@ static struct fcall_chain_t timeupc;
 static char pl;
 __inline void collision_avoidance(char state)
 {
+  comm_putc(state);
+  comm_putc(PORTL);
   switch(state)
   {
     case 1:
-    pl=PORTL;
-    stop();
+    __stop();
     break;
     case 0:
-    PORTL=pl;
+    if (motor_get_dir(0)!=2) motor_set_dir(0 , motor_get_dir(0));
+    if (motor_get_dir(1)!=2) motor_set_dir(1,motor_get_dir(1));
     break;
   }
   //state=1 - have something
@@ -57,12 +59,13 @@ ANTARES_APP(pakman_mainapp)
 
     //going from the start zone
     reset_direction();
+    odct_set_active_group(group_fwd);
     chassis_move_precise(0, 56);
     chassis_turn(0, 255, 90);
     reset_direction();
     
     //getting a king
-    odct_set_active_group(group_fwd);
+    
     chassis_move_precise(0, 55);
     chassis_find(king, left, 0, 255);
     chassis_turn(0, 255, 90);

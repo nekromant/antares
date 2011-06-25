@@ -12,6 +12,11 @@ static uint16_t limits[] = {
   300
 };
 
+static int _group_none[] =
+{
+  0  //count
+};
+
 static int _group_fwd[] =
 {
   3,  //count
@@ -38,6 +43,7 @@ static int _group_bck[] =
 
 static int* groups[] =
 {
+  _group_none,
   _group_fwd,
   _group_rht,
   _group_lft,
@@ -68,7 +74,8 @@ __inline void process_dithered(volatile uint16_t* data)
       #endif
       colstate=1;
     }
-    
   }
+  
   if (colstate!=prevstate) collision_avoidance(colstate);
+  prevstate=colstate;
 }
