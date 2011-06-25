@@ -24,7 +24,6 @@ ANTARES_INIT_LOW(comm_uart_init)
     UCSR0B=UCSR0B| (1 << RXEN0)| (1 << TXEN0)| (1 << TXCIE0)| (1 << RXCIE0);
     UCSR0C |= (1 << UCSZ00) | (1 << UCSZ01);
     comm_expect_length(2);
-#warning TODO: Fix uart init seq
 } // void comm_uart_init()
 void comm_tx_next_byte()
 {
@@ -32,7 +31,8 @@ void comm_tx_next_byte()
         char c = pgm_read_byte(pgm_ptr++);
         UDR0=c;
         if (!c) {
-            tx_state=pgm_ptr=0;
+            tx_state=0;
+            pgm_ptr=0;
             return;
         }
     } else {

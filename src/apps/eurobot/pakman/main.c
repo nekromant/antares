@@ -4,11 +4,36 @@
 #include <contrib/crumbo/systick.h>
 #include <contrib/crumbo/manipulator.h>
 #include <contrib/crumbo/chassis.h>
+#include <contrib/crumbo/adc.h>
+#include <contrib/crumbo/odetect.h>
+#include <lib/callchain/callchain.h>
+
 static struct fcall_chain_t timeupc;
+
+
+static char pl;
+__inline void collision_avoidance(char state)
+{
+  switch(state)
+  {
+    case 1:
+    pl=PORTL;
+    stop();
+    break;
+    case 0:
+    PORTL=pl;
+    break;
+  }
+  //state=1 - have something
+  //state=0 - all clear
+}
+
+
 static void timeup_handler()
 {
   
 }
+
 
 ANTARES_INIT_HIGH(pakman_init)
  {
@@ -23,6 +48,7 @@ ANTARES_APP(pakman_mainapp)
  {
     DDRJ|=1<<7;
     PORTJ&=~(1<<7);
+    DBG("Pakman ready, using Antares v." CONFIG_VERSION_STRING " git commit: " CONFIG_VERSION_GIT );
     //wait_start();
 
 //    chassis_find(king, left, 0, 255);
@@ -30,14 +56,14 @@ ANTARES_APP(pakman_mainapp)
 //    dump8(distance);
 
     //going from the start zone
+    reset_direction();
     chassis_move_precise(0, 56);
-    dump8(get_distance());
     chassis_turn(0, 255, 90);
     reset_direction();
     
     //getting a king
+    odct_set_active_group(group_fwd);
     chassis_move_precise(0, 55);
-    dump8(get_distance());
     chassis_find(king, left, 0, 255);
     chassis_turn(0, 255, 90);
     manipulator(grip, release);

@@ -21,7 +21,7 @@ enum actions
 move,
 grip,
 get_a_pawn,
-release,
+release,void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1)
 mid,
 bot,
 stdby,
@@ -32,5 +32,6 @@ mid2,
 drop,
 };
 */
-
+void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1);
+__inline void stop();
 #endif

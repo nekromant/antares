@@ -6,7 +6,7 @@
 #define __ADC_H
 
 //Now go the prototypes
-
+__inline void process_dithered(volatile uint16_t* data);
 __inline uint8_t adc_get_data(int channel);
 #define RGB_R	1
 #define RGB_L	2

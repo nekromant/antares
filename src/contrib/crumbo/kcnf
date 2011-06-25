@@ -15,8 +15,21 @@ bool "Chassis driver"
 config CONTRIB_CRUMBO_ADC
 bool "Crumbo ADC driver"
 
-config CONTRIB_CRUMBO_ADC_TEST
-bool "Crumbo ADC test app"
+
+config CONTRIB_CRUMBO_ADC_DITH
+bool "ADC Dithering support"
+depends on CONTRIB_CRUMBO_ADC
+
+config CONTRIB_CRUMBO_ADC_LOWSPEED
+bool "ADC Low Speed"
+depends on CONTRIB_CRUMBO_ADC
+
+config CONTRIB_CRUMBO_ADC_DITHSIM
+bool "ADC DithSIM mode"
+depends on CONTRIB_CRUMBO_ADC
+
+config CONTRIB_CRUMBO_ADC_DITH_TEST
+bool "ADC Dithering Debug logging"
 depends on CONTRIB_CRUMBO_ADC
 
 config CONTRIB_CRUMBO_ENCODER
@@ -35,10 +48,6 @@ bool "Pakman pawn manipulator"
 config CONTRIB_CRUMBO_SYSTICK
 bool "Crumbo System Tick driver"
 
-config CONTRIB_CRUMBO_SYSTICK_TEST
-bool "Crumbo System Tick driver test"
-depends on CONTRIB_CRUMBO_SYSTICK
-
 config CONTRIB_CRUMBO_SYSTICK_COUNTER
 bool "Systick time counting"
 depends on CONTRIB_CRUMBO_SYSTICK
@@ -49,6 +58,34 @@ depends on CONTRIB_CRUMBO_SYSTICK_COUNTER
 
 
 
+config CONTRIB_CRUMBO_ODETECT
+bool "Enemy detection subsystem"
+depends on CONTRIB_CRUMBO_SYSTICK
+
+menu "Testing and Calibration apps"
+
+config CONTRIB_CRUMBO_SYSTICK_TEST
+bool "Crumbo System Tick driver test"
+depends on CONTRIB_CRUMBO_SYSTICK
+
+config CONTRIB_CRUMBO_ENCODERS_TEST
+depends on CONTRIB_CRUMBO_ENCODER
+bool "Crumbo Encoders test app"
+
+config CONTRIB_CRUMBO_TURN_CALIBRATE
+depends on CONTRIB_CRUMBO_CHASSIS
+bool "Chassis calibration program"
+
+
+config CONTRIB_CRUMBO_ADC_TEST
+bool "Crumbo ADC test app"
+depends on CONTRIB_CRUMBO_ADC
+
+
+
+
+
+endmenu
 
 
 

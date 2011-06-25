@@ -29,8 +29,23 @@ void encoders_reset()
 {
     counters[0]=0;
     counters[1]=0;
+    
 } // encoders_reset()
 __inline uint16_t encoders_get(int num)
 {
     return counters[num];
 } // uint16_t encoders_get(int num)
+
+
+#ifdef CONFIG_CONTRIB_CRUMBO_ENCODERS_TEST
+
+ANTARES_APP(encoders_test)
+{
+  DBG("---encoders test---");
+  dump16(encoders_get(0));
+  dump16(encoders_get(1));
+  _delay_ms(100);
+}
+
+#endif
+
