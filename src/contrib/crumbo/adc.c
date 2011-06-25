@@ -4,7 +4,7 @@
 // Will eventually go down the closet
 #include <arch/antares.h>
 #include "include/adc.h"
-
+#define _DBG_ENABLED 1
 #include "include/debug.h"
 
 #define CHAN_COUNT 16
@@ -50,6 +50,7 @@ __inline uint8_t adc_get_data(int channel)
 ANTARES_APP(adc_test)
 {
  int i;
+ DBG("ADC data dump");
  for (i=0; i< CHAN_COUNT; i++)
  {
    dump16(channel_data[i]);

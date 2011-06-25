@@ -9,31 +9,81 @@
 #include <lib/callchain/callchain.h>
 
 static struct fcall_chain_t syschain;
-static struct fcall_chain_t syschain2;
-static struct fcall_chain_t syschain3;
+
+
+#ifdef CONFIG_CONTRIB_CRUMBO_SYSTICK_COUNTER
+static volatile int cvalue;
+static volatile int climit; 
+static struct fcall_chain_t timeup_chain;
+#endif
+
+static void timeup()
+{
+   
+}
+
+__inline void systick_counter_set_limit(int _climit)
+{
+  #ifdef CONFIG_CONTRIB_CRUMBO_SYSTICK_TEST
+  dump16(_climit);
+  #endif
+  climit=_climit;
+  DBG("<-->");
+}
+
+__inline void systick_counter_reset()
+{
+  cvalue=0;
+}
+
+__inline uint16_t systick_counter_getticks()
+{
+  return cvalue;
+}
 
 static void systick_first()
 {
-  //comm_putc('A');
+
+  #ifdef CONFIG_CONTRIB_CRUMBO_SYSTICK_COUNTER
+  cvalue++;
+  
+  #ifdef CONFIG_CONTRIB_CRUMBO_SYSTICK_TEST
+  dump16(cvalue);
+  dump16(climit);
+  #endif
+  
+  #ifdef CONFIG_CONTRIB_CRUMBO_SYSTICK_CHANDLER
+  if (cvalue==climit)
+  {
+    call_fuction_chain(&timeup_chain);
+  }
+  #endif
+  #endif
+  
+
   
 }
 
-
-
-void systick_add(struct fcall_chain_t* f)
+__inline void systick_add(struct fcall_chain_t* f)
 {
   call_function_add(&syschain,f);
+}
+
+__inline void systick_timeup_add(struct fcall_chain_t* f)
+{
+  call_function_add(&timeup_chain,f);
 }
 
 ANTARES_INIT_LOW(systick_init)
 {
     syschain.func=systick_first;
-    TCCR1B=TCCR1B| (1 << CS11);
-    TIMSK1=TIMSK1| (1 << TOIE0);
-    //DBG("Systick timer got enabled");
+    timeup_chain.func=timeup;
+    TCCR1B=TCCR1B| (1 << CS11) | (1<<WGM12) | (1<<WGM13);
+    TIMSK1=TIMSK1| (1 << ICIE1);
+    ICR1=50000;
 } // __inline void systick_init()
 
 
-ISR(TIMER1_OVF_vect) {
+ISR(TIMER1_CAPT_vect) {
     call_fuction_chain(&syschain);
 }

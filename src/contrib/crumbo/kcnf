@@ -35,5 +35,22 @@ bool "Pakman pawn manipulator"
 config CONTRIB_CRUMBO_SYSTICK
 bool "Crumbo System Tick driver"
 
+config CONTRIB_CRUMBO_SYSTICK_TEST
+bool "Crumbo System Tick driver test"
+depends on CONTRIB_CRUMBO_SYSTICK
+
+config CONTRIB_CRUMBO_SYSTICK_COUNTER
+bool "Systick time counting"
+depends on CONTRIB_CRUMBO_SYSTICK
+
+config CONTRIB_CRUMBO_SYSTICK_CHANDLER
+bool "Systick timeout handler"
+depends on CONTRIB_CRUMBO_SYSTICK_COUNTER
+
+
+
+
+
+
 endif
 

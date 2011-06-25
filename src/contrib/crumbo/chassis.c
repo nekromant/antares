@@ -49,6 +49,9 @@ ANTARES_INIT_HIGH(chassis_init)
     pin_init_button(DDRA,PORTA,1);
     DBG("chassis: ready");
 }
+
+
+
 __inline void motor_set_speed(int num, uint8_t value)
 {
     if(num == 1)
