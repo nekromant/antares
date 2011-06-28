@@ -35,6 +35,13 @@ static int g,j;
 //static int gauss[5][9];
 //unsigned char summ;
 
+ANTARES_LINK_RULE("module chassis after init init2 init3")
+/*
+ * _foo_before+=%.o
+ * _bar_after+=
+ */
+
+
 ANTARES_INIT_HIGH(chassis_init)
 {
     DDRL|= 0x3 | (1 << 6) | (1 << 7);

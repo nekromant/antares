@@ -41,6 +41,9 @@ __attribute__((__section__(".init7"))) void fn(void)
   __attribute__((naked))\
 __attribute__((__section__(".init8"))) void fn(void)
 
+//This is a dummy define, ANTARES_LINK_RULE will be parsed 
+//via bash to determine link order
+#define ANTARES_LINK_RULE(foo)  
 
 #define ANTARES_FINISH(fn) \
   __attribute__((naked))\

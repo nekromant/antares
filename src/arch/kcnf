@@ -5,12 +5,14 @@ choice
 
   config ARCH_AVR
   bool "Atmel AVR RISC 8-bit MCU Family"
-  
-  config ARCH_ARM
-  bool "ARM RISC MCUs"
+ 
+  config ARCH_MSP430
+  bool "Ti MSP430 series" 
+ # config ARCH_ARM
+ # bool "ARM RISC MCUs"
 
-  config ARCH_8051
-  bool "8051 CISC MCUs"
+#  config ARCH_8051
+#  bool "8051 CISC MCUs"
 
 endchoice
 
@@ -24,5 +26,9 @@ endif
 
 if ARCH_8051
   source "src/arch/8051/kcnf"
+endif
+
+if ARCH_MSP430
+  source "src/arch/msp430/kcnf"
 endif
 

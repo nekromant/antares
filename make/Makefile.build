@@ -71,11 +71,12 @@ link_arch=	$(call linkarch)
 build: $(clean_includes) $(load_makes) $(linkarch) $(OUTPUT_TARGETS)
 	@echo "<--Makefile.build done-->"
 
-$(BUILD_DIR)%.o: $(BUILD_DIR)%.c
+$(BUILD_DIR)%.o: $(BUILD_DIR)%.c $(subst .,_,$(subst /,_,$()))
 	$(call colorize,$(t_ylw))
 	@echo "Building object: $(@)"
 	$(call colorize,$(col_rst))
 	$(Q) $(call unquote,$(CONFIG_CC)) $(INCLUDES) $(CFLAGS) $(call unquote,$(CONFIG_CFLAGS)) -c  -o $(@) $< 
+
 
 
 %.elf: $(build_objects)	
@@ -115,3 +116,4 @@ analyze: $(TARGET_LSSFILE)
 	$(Q) $(TOP_DIR)scripts/analyzer $(TARGET_LSSFILE)
 
 .PHONY: $(PHONY)
+.PRECIOUS: $(build_objects)

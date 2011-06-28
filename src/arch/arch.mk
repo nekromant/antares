@@ -1,8 +1,8 @@
 ifeq ($(CONFIG_ARCH_AVR),y)
   ARCH=avr
 endif
-ifeq ($(CONFIG_ARCH_ARM),y)
-  ARCH=arm
+ifeq ($(CONFIG_ARCH_MSP430),y)
+  ARCH=msp430
 endif
 ifeq ($(CONFIG_ARCH_8051),y)
   ARCH=8051
