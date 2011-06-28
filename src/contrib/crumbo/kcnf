@@ -62,6 +62,29 @@ config CONTRIB_CRUMBO_ODETECT
 bool "Enemy detection subsystem"
 depends on CONTRIB_CRUMBO_SYSTICK
 
+config CONTRIB_CRUMBO_STRATEGY_GUIDE
+bool "Strategy Guide"
+depends on CONTRIB_CRUMBO_SYSTICK
+
+choice 
+depends on CONTRIB_CRUMBO_STRATEGY_GUIDE
+prompt "Strategy selection"
+
+config CONTRIB_CRUMBO_STRATEGY_DUMMY
+bool "Dummy button strategy"
+
+
+config CONTRIB_CRUMBO_STRATEGY_FRST
+bool "Some first strategy"
+
+
+endchoice
+
+config CONTRIB_CRUMBO_ODETECT
+bool "Enemy detection subsystem"
+depends on CONTRIB_CRUMBO_SYSTICK
+
+
 menu "Testing and Calibration apps"
 
 config CONTRIB_CRUMBO_SYSTICK_TEST

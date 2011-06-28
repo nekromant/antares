@@ -3,3 +3,4 @@
 *.backup
 *.o
 .config
+*.kate-swp

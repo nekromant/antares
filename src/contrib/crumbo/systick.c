@@ -26,9 +26,10 @@ __inline void systick_counter_set_limit(int _climit)
 {
   #ifdef CONFIG_CONTRIB_CRUMBO_SYSTICK_TEST
   dump16(_climit);
+  DBG("Setting up new timer limit");
   #endif
   climit=_climit;
-  DBG("<-->");
+  
 }
 
 __inline void systick_counter_reset()
@@ -78,12 +79,12 @@ ANTARES_INIT_LOW(systick_init)
 {
     syschain.func=systick_first;
     timeup_chain.func=timeup;
-    TCCR1B=TCCR1B| (1 << CS11) | (1<<WGM12) | (1<<WGM13);
-    TIMSK1=TIMSK1| (1 << ICIE1);
-    ICR1=50000;
+    TCCR4B=TCCR4B| (1 << CS42) | (1<<WGM42) | (1<<WGM43);
+    TIMSK4=TIMSK4| (1 << ICIE4);
+    ICR4=6250;
 } // __inline void systick_init()
 
 
-ISR(TIMER1_CAPT_vect) {
+ISR(TIMER4_CAPT_vect) {
     call_fuction_chain(&syschain);
 }

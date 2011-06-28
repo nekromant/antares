@@ -11,73 +11,27 @@
 #include <lib/callchain/callchain.h>
 
 
-static uint16_t distance_global;
 
-static char pl;
-__inline void collision_avoidance(char state)
+//PH0/PH1
+ANTARES_INIT_HIGH(strategy_init)
 {
-  comm_putc(state);
-  comm_putc(PORTL);
-  switch(state)
-  {
-    case 1:
-    __stop();
-    break;
-    case 0:
-    if (motor_get_dir(0)!=2) motor_set_dir(0, motor_get_dir(0));
-    if (motor_get_dir(1)!=2) motor_set_dir(1, motor_get_dir(1));
-    break;
-  }
-  //state=1 - have something
-  //state=0 - all clear
+  DDRH|=(1<<0)|(1<<1);
+  PORTH=(1<<0)|(1<<1);
 }
 
+#ifdef CONFIG_CONTRIB_CRUMBO_STRATEGY_DUMMY
+__inline void strategy(int mirror)
+{
+  DBG("Current strategy mirror flag");
+  dump16(mirror);
+  DBG("<----->");
+}
+#endif
 
+#ifdef CONFIG_CONTRIB_CRUMBO_STRATEGY_FRST
 
-ANTARES_INIT_LOW(pakman_init)
- {
-  
-  
- //code here
- }
-
-
-ANTARES_APP(pakman_mainapp)
- {
-    DDRJ|=1<<7;
-    PORTJ&=~(1<<7);
-    DBG("Pakman ready, using Antares v." CONFIG_VERSION_STRING " git commit: " CONFIG_VERSION_GIT );
-    #ifdef CONFIG_CONTRIB_CRUMBO_STRATEGY_GUIDE
-    execute_strategy();
-    #endif
-    
-    //wait_start();
-    //while(1)
-    //{
-    //  chassis_find(king, left, 0, 255);
-    //  DBG("king left");
-    //  chassis_find(pawn, left, 0, 255);
-    //  DBG("king left");
-    //  chassis_find(king, right, 0, 255);
-    //  DBG("king left");
-    //  chassis_find(pawn, right, 0, 255);
-    //  DBG("king left");
-    //}
-    //distance = get_distance();
-    //dump8(distance);
-    //going from the start zone
-
-    //chassis_find(king, right, 0, 255);
-    //count_distance();
-    //dump16(distance_global);
-    //_delay_ms(3000);
-    //return;
-
-    //odct_set_active_group(group_bck);
-    //chassis_move_precise(0, 255);
-    //return;
-    
-    
+__inline void strategy(int mirror)
+{
     DBG("Resetting direction");
     reset_direction();
     odct_set_active_group(group_fwd);
@@ -154,17 +108,19 @@ ANTARES_APP(pakman_mainapp)
     while(1);;
     reset_direction();
 }
+#endif
 
-void count_distance()
+void execute_strategy()
 {
-  distance_global = (encoders_get(0) + encoders_get(1)) / 2 / 7.3;
-  //dump16(encoders_get(0));
-  //dump16(encoders_get(1));
-  //dump16(distance_global);
-  _delay_ms(3000); 
+  DBG("Determinig strategy to use and executing it...");
+  if (PINH & (1<<0))
+  {
+    strategy(0);    
+  }
+  
+  if (PINH & (1<<1))
+  {
+    strategy(1);
+  }
+  DBG("The strategy is now executed!");
 }
-inline void reset_distance()
-{
-  distance_global = 0;
-}
-

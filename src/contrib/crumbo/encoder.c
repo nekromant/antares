@@ -29,7 +29,6 @@ void encoders_reset()
 {
     counters[0]=0;
     counters[1]=0;
-    
 } // encoders_reset()
 __inline uint16_t encoders_get(int num)
 {

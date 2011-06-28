@@ -26,19 +26,19 @@
 #endif
 
 #ifdef _INF_ENABLED
-#define INF(text) putc_func(DBG_MAGIC); puts_func(text);
+#define INF(text) putc_func(INF_MAGIC); puts_func(text);
 #else
 #define INF(text) ;;
 #endif
 
 #ifdef _WRN_ENABLED
-#define WRN(text) putc_func(DBG_MAGIC); puts_func(text);
+#define WRN(text) putc_func(WRN_MAGIC); puts_func(text);
 #else
 #define WRN(text) ;;
 #endif
 
 #ifdef _ERR_ENABLED
-#define ERR(text) putc_func(DBG_MAGIC); puts_func(text); putc_func('\n');
+#define ERR(text) putc_func(ERR_MAGIC); puts_func(text); putc_func('\n');
 #else
 #define ERR(text) ;;
 #endif

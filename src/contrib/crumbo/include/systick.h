@@ -5,7 +5,7 @@
 void systick_add(struct fcall_chain_t* f);
 
 #define systick_counter_initsimple(seconds) \
-systick_counter_set_limit(seconds*5);\
+systick_counter_set_limit(seconds*10);\
 systick_counter_reset();
 
 __inline void systick_counter_set_limit(int _climit);

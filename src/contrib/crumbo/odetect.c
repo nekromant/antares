@@ -3,8 +3,8 @@
 
 static uint16_t limits[] = {
   200,
-  0,
-  250,
+  270,
+  270,
   350,
   380,
   370,
@@ -56,7 +56,13 @@ __inline void odct_set_active_group(int _group)
   sgroup=_group;
 }
 
-static char prevstate;
+static volatile char prevstate;
+
+__inline void odct_get_collision_state()
+{
+  return prevstate;
+}
+
 __inline void process_dithered(volatile uint16_t* data)
 {
   int i;

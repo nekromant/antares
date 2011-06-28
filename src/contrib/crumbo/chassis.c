@@ -405,7 +405,7 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
   }
   //encoderik0 = encoders_get(0);
   //encoderik1 = encoders_get(1);
-  chassis_move(dir, dir, speed, speed, 10, 10);
+  //chassis_move(dir, dir, speed, speed, 10, 10);
   //distance_global = (((encoderik0 + encoderik1) / 2) / 7.3) + 10;
 }
 __inline void distance_reset()
