@@ -32,3 +32,11 @@ endif
 if DEPLOY_AVRDUDE_REMOTE
   source "deploy/avrdude-remote/kcnf"
 endif
+
+menuconfig DEPLOY_MINICOM
+bool "Run minicom after deployment"
+
+if DEPLOY_MINICOM
+  source "deploy/minicom/kcnf"
+endif
+

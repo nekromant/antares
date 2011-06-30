@@ -19,5 +19,5 @@ drop,
 };
 
 
-
+void manipulator(char task, char type);
 #endif

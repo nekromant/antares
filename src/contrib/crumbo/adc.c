@@ -58,7 +58,12 @@ static __inline void dither_process()
       process_dithered(&dith_data[0]);
       
       
-    bzero((char*) &dith_data[0],CHAN_COUNT*2);
+    for (i=0; i<CHAN_COUNT;i ++)
+    {
+      dith_data[i]=0;
+//       dith_data[i]/=20;
+//       #warning This is shit
+    }
     cnt=0;
   }
   

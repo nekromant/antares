@@ -9,8 +9,11 @@
 #include <avr/pgmspace.h>
 
 #include "include/uart.h"
+#include <contrib/avrlib/cmdline.h>
 
+#ifndef CONFIG_CONTRIB_CRUMBO_SHELL
 static char rx_buf[128];
+#endif
 static char tx_buf[128];
 static volatile int tx_head;
 static volatile int rx_pos;
@@ -54,17 +57,25 @@ ISR(USART0_TX_vect)
 }; //USART0_TX_vect
 ISR(USART0_RX_vect)
 {
+#ifndef CONFIG_CONTRIB_CRUMBO_SHELL
     rx_buf[rx_pos++]=UDR0;
     if (rx_pos == rx_expect) {
-        rx_pos=0;
+        rx_pos=0;	
         //handle_packet(rx_buf, rx_expect);
     };
+#else
+#ifdef CONFIG_CONTRIB_CRUMBO_SHELL_INT
+//     rx_buf[0]=UDR0;
+//     rx_buf[1]=0x0;
+    cmdlineInputFunc(UDR0);
+#endif
+#endif
 }; //USART0_RX_vect
 __inline void comm_expect_length(int length)
 {
     rx_expect=length;
 } // comm_expect_length
-void comm_putc(char c)
+void comm_putc(unsigned char c)
 {
     tx_buf[tx_head++]=c;
     tx_head&= 127;

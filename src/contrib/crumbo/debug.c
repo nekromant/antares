@@ -42,12 +42,9 @@ void test32()
   putc_func(0xcc);
   putc_func(0xdd);
 }
-typedef union {
-  uint32_t v;
-  uint8_t bytes[4];
-} u32;
 
-void dump32( u32 data)
+
+void dump32( _u32 data)
 {
   putc_func(DMP32);
   putc_func(data.bytes[0]);

@@ -1,5 +1,11 @@
 #include <arch/antares.h>
 #include "include/chassis.h"
+#include "include/pawnfinder.h"
+#include "include/feedback.h"
+#include "include/motors.h"
+#include "include/encoder.h"
+#include "include/odetect.h"
+
 //#include "include/manipulator.h"
 
 static volatile int mot_a;
@@ -10,20 +16,11 @@ static volatile int _enc0;
 static volatile int _enc1;
 static volatile int _deg;
 
-static int global_dir0;
-static int global_dir1;
-
 static volatile int s=180;
 static volatile int s1,s2;
-static volatile int spd1=255, spd2=255;
 
-static uint8_t distance_global;
-
-
-
-static int g,j;
 #define _INF_ENABLED 0
-#define _DBG_ENABLED 0
+#define _DBG_ENABLED 1
 #define _ERR_ENABLED 0
 #define _WNR_ENABLED 0
 
@@ -32,155 +29,48 @@ static int g,j;
 #define pin_init_button(DDR,PORT,PIN) DDR&=~(1<<PIN); PORT|=(1<<PIN); 
 #define pin_is_set(PORT, PIN) (PORT & (1<<PIN))
 
-//static int gauss[5][9];
-//unsigned char summ;
-
 ANTARES_LINK_RULE("module chassis after init init2 init3")
-/*
- * _foo_before+=%.o
- * _bar_after+=
- */
-
 
 ANTARES_INIT_HIGH(chassis_init)
 {
-    DDRL|= 0x3 | (1 << 6) | (1 << 7);
-    DDRL = DDRL| (1 << 3) | (1 << 4);
-    PORTL = PORTL| (1 << 3) | (1 << 4);
-    TCCR5A = TCCR5A| (1 << COM5A1) | (1 << COM5B1) | (1 << WGM50);
-    TCCR5B = TCCR5B| (1 << CS51) | (1 << WGM52);
-    pin_init_button(DDRD,PORTD,4);
-    pin_init_button(DDRD,PORTD,5);
-    pin_init_button(DDRD,PORTD,2);
-    pin_init_button(DDRG,PORTG,3);
-    pin_init_button(DDRG,PORTG,4);
-    pin_init_button(DDRA,PORTA,0);
-    pin_init_button(DDRA,PORTA,1);
+    pin_init_button(DDRD,PORTD,4); //back 
+    pin_init_button(DDRD,PORTD,5); //limit buttons
+    pin_init_button(DDRD,PORTD,2); //forward button
     DBG("chassis: ready");
 }
-__inline void motor_set_speed(int num, uint8_t value)
-{
-    if(num == 1)
-    {
-    OCR5A=value;
-    }
-    if(num == 0)
-    {
-    OCR5B=value;
-    }
-}
-static int mdir[2];
-__inline int motor_get_dir(int num)
-{
-  return mdir[num];
-}
-__inline void motor_set_dir(int num, int dir)
-{
-    mdir[num]=dir;
-    if(num)
-    {
-      if(dir)
-      {
-	  PORTL|= 1<<0;
-          PORTL&= ~(1<<1);
-      }
-      else
-      {
-	  PORTL|= 1<<1;
-          PORTL&= ~(1<<0);
-      }
-    }else
-    {
-      if(dir)
-      {
-	  PORTL|= 1<<6;
-          PORTL&= ~(1<<7);
-      }
-      else
-      {
-	  PORTL|= 1<<7;
-          PORTL&= ~(1<<6);
-      }
-    }
-}
 
-void motor_stop(int motor)
+void chassis_move_precise_d(int dir, uint8_t perfect_speed, int b)
 {
-  mdir[motor]=2;
-  if (!motor)
-  PORTL&= ~(1<<0|1<<1|1<<6);
-  else
-  PORTL&= ~(1<<7|1<<3|1<<4);
-}
-
-void chassis_move(char dir0, char dir1, int pwm0, int pwm1, uint16_t enc0, uint16_t enc1)
-{
-  stop();
   _delay_ms(100);
+  feedback_set_reference(perfect_speed);
   encoders_reset();
-  chassis_move_simple(dir0, dir1, pwm0, pwm1);  
-  _enc0 = enc0*7.3;
-  _enc1 = enc1*7.3;
-  
-  while (1)
-  {
-    if (encoders_get(0) > _enc0 ) motor_stop(0);
-    if (encoders_get(1) > _enc1 ) motor_stop(1);
-    if ((encoders_get(0) > _enc0) || (encoders_get(1) > _enc1)) break;
-  }
+  feedback_process();
+  motor_set_dir(0, dir);
+  motor_set_dir(1, dir);
+  //while(!(have_something(b)))
+  //{
+//    feedback_process();
+//  }
   stop();
-  
+  chassis_move_precise(dir,perfect_speed,10);
 }
 
-void chassis_move_precise(int dir, uint8_t dist)
+
+void chassis_move_precise(int dir, uint8_t perfect_speed, uint8_t dist)
 {
-  stop();
   _delay_ms(100);
+  feedback_set_reference(perfect_speed);
   encoders_reset();
-  chassis_move_simple(dir, dir, spd1, spd2);  
+  feedback_process();
+  motor_set_dir(0, dir);
+  motor_set_dir(1, dir);
   _enc0 = dist*7.3;
   while((encoders_get(0) < _enc0) || (encoders_get(1) < _enc0))
   {
-    if(encoders_get(0) < encoders_get(1))
-    {
-       if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
-    }
-    if(encoders_get(0) > encoders_get(1))
-    {
-       if(s1<s-3){s1=s1+2;}else{s2=s2-2;}
-    }
-    if(encoders_get(0) == encoders_get(1))
-    {
-       s1=s; s2=s;
-    }
-    motor_set_speed(0, s1);
-    motor_set_speed(1, s2); 
+    feedback_process();
   }
   stop();
-  _delay_ms(10);
 }
-
-/*
-void chassis_move_precise(int dir0, uint8_t enc0)
-{
-  stop();
-  _delay_ms(100);
-  encoders_reset();
-  chassis_move_simple(dir0, dir0, 255, 255);  
-
-  _enc0 = enc0*7.3;
-  while ((encoders_get(0) < _enc0) || (encoders_get(1) < _enc0))
-  {
-    if ((encoders_get(0) - encoders_get(1)) > 20) { chassis_move_simple(dir0, dir0, 255, 180); dump8(1); }
-    if ((encoders_get(1) - encoders_get(0)) > 20) { chassis_move_simple(dir0, dir0, 180, 255); dump8(2); }
-    chassis_move_simple(dir0, dir0, 255, 255);  
-    //_delay_ms(100);
-  }
-  DBG("out");
-  PORTJ=1<<7;
-  //stop();
-}
-*/
 
 float coeff=1.43;
 #ifdef CONFIG_CONTRIB_CRUMBO_TURN_CALIBRATE
@@ -191,107 +81,108 @@ ANTARES_APP(turn_calibrate)
   //for (coeff=1.44;coeff<1.50;coeff+=0.01)
   //{
   //dump8(a++);
-  chassis_turn(1, 180,360);
-  chassis_turn(0, 180,360);
+  chassis_turn(1, 180, 360);
+  chassis_turn(0, 180, 360);
   //DBG("Next");
   _delay_ms(10000);
   //}
 }
 #endif
 
+/*
+void chassis_turn(int dir, uint8_t perfect_speed, int deg)
+{
+  DBG("turn");
+  _delay_ms(100);
+  
+  feedback_set_reference(perfect_speed);
+  
+  motor_set_speed(0, perfect_speed);
+  motor_set_speed(1, perfect_speed);
+  motor_set_dir(0, !dir);
+  motor_set_dir(1, dir);
+//   _delay_ms(500);
+  _deg = deg * coeff;
+  encoders_reset();
+  while((encoders_get(0) > deg) && (encoders_get(1) > deg))
+  {
+    //feedback_process();
+  }
+  stop();
+}
+*/
 void chassis_turn(int dir, int pwm, int deg)
 {
   stop();
   _delay_ms(100);
   encoders_reset();
-  chassis_move_simple(!dir, dir, pwm, pwm);  
+  //chassis_move_simple(!dir, dir, pwm, pwm);  
+  motor_set_dir(0, !dir);
+  motor_set_dir(1, dir);
+  motor_set_speed(0, pwm);
+  motor_set_speed(1, pwm);
+  
   _deg = (int)(((float) deg) * coeff);
   while (1)
   {
-    if ((encoders_get(0) > _deg) || (encoders_get(1) > _deg)) {stop(); break;};
-    if(encoders_get(0) < encoders_get(1))
+    if(!odct_get_collision_state())
     {
-      if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
-    }
-    if(encoders_get(0) > encoders_get(1))
-    {
-      if(s1<s-3){s1=s1+2;}else{s2=s2-2;}
-    }
-    if(encoders_get(0) == encoders_get(1))
-    {
-      s1=s; s2=s;
-    }
-    motor_set_speed(0, s1);
-    motor_set_speed(1, s2); 
-  }
-  stop();
-}
-
-void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1)
-{
-  stop();
-  _delay_ms(100);
-  motor_set_dir(0, dir0);
-  motor_set_dir(1, dir1);
-  motor_set_speed(0, pwm0);
-  motor_set_speed(1, pwm1);
-}
-
-__inline void __stop(){
-   PORTL&= ~(1<<0|1<<1|1<<6|1<<7|1<<3|1<<4);
-}
-
-__inline void stop()
-{
-  motor_stop(0);
-  motor_stop(1);
-}
-void reset_direction()
-{
-  encoders_reset();
-  chassis_move_simple(1, 1, 255, 255);
-  mot_a = 1;
-  mot_b = 1;
-  char fix_disable=0;
-  while((mot_a == 1) || (mot_b == 1))
-  {
-     if (!pin_is_set(PIND,4))
-     {
-        motor_set_speed(0, 100);
-	mot_a = 0;
-	fix_disable=1;
-     }
-     if (!pin_is_set(PIND,5))
-     {
-        motor_set_speed(1, 100);
-	mot_b = 0;
-	fix_disable=1;
-     }
-     if ((pin_is_set(PINA,0)) || (pin_is_set(PINA,1)))
-     {
-//        DBG("Pin 1&2 is SET");
-     }
+      if ((encoders_get(0) > _deg) || (encoders_get(1) > _deg)) {stop(); break;};
       if(encoders_get(0) < encoders_get(1))
       {
-         if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
+        if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
       }
       if(encoders_get(0) > encoders_get(1))
       {
-         if(s1<s-3){s1=s1+2;}else{s2=s2-2;}
+        if(s1<s-3){s1=s1+2;}else{s2=s2-2;}
       }
       if(encoders_get(0) == encoders_get(1))
       {
         s1=s; s2=s;
       }
-      if (!fix_disable)
-      {
       motor_set_speed(0, s1);
       motor_set_speed(1, s2); 
-      }
+    } 
+    }
+}
+
+
+void reset_direction()
+{
+  char fix_disable=0;
+  _delay_ms(100);
+  encoders_reset();
+  motor_set_speed(0, 255);
+  motor_set_speed(1, 255);
+  motor_set_dir(0, 1);
+  motor_set_dir(1, 1);
+  //mot_a = 1;
+  //mot_b = 1;
+  
+  while((pin_is_set(PIND,4) && pin_is_set(PIND,5)))
+  {
+     if (!pin_is_set(PIND,4))
+     {
+        motor_set_speed(0, 100);
+	//mot_a = 0;
+	fix_disable=1;
+     }
+     if (!pin_is_set(PIND,5))
+     {
+        motor_set_speed(1, 100);
+	//mot_b = 0;
+	fix_disable=1;
+     }
+//      if ((pin_is_set(PINA,0)) || (pin_is_set(PINA,1)))
+//      {
+// //        DBG("Pin 1&2 is SET");
+//      }
+     if(!fix_disable) feedback_process();
   }
   _delay_ms(100);
   stop();  
 }
+/*
 void chassis_find(char what, char side, int dir, uint8_t speed)
 {
   encoders_reset();
@@ -303,11 +194,13 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
     {
       while(move == 1)
       {
-	if((read_barrier_rangefinders(l_b) == 0) && (read_barrier_rangefinders(l_t) == 1))
+	if((have_something(l_b) == 0) && (have_something(l_t) == 1))
 	{
 	  stop();
 	  move = 0;
 	}
+    if(!odct_get_collision_state())
+    {
         if(encoders_get(0) < encoders_get(1))
         {
           if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
@@ -322,18 +215,21 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
         }
         motor_set_speed(0, s1);
         motor_set_speed(1, s2); 
-      }
+    }  
+    }
     }
     else if((what == king) || (what == queen))
     {
       while(move == 1)
       {
-        if((read_barrier_rangefinders(l_b) == 0) && (read_barrier_rangefinders(l_t) == 0))
+        if((have_something(l_b) == 0) && (have_something(l_t) == 0))
         {
           stop();
 	  move = 0;
         }
-       if(encoders_get(0) < encoders_get(1))
+    if(!odct_get_collision_state())
+    {
+      if(encoders_get(0) < encoders_get(1))
        {
          if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
        }
@@ -348,6 +244,7 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
       motor_set_speed(0, s1);
       motor_set_speed(1, s2);      
       }
+      }
     }
   }
   else if(side == right)
@@ -356,12 +253,14 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
     {
       while(move == 1)
       {
-	if((read_barrier_rangefinders(r_b) == 0) && (read_barrier_rangefinders(r_t) == 1))
+	if((have_something(r_b) == 0) && (have_something(r_t) == 1))
 	{
 	  stop();
 	  move = 0;
         }
-        if(encoders_get(0) < encoders_get(1))
+     if(!odct_get_collision_state())
+    {
+     if(encoders_get(0) < encoders_get(1))
        {
          if(s2<s-3){s2=s2+2;}else{s1=s1-2;} 
        }
@@ -376,17 +275,20 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
       motor_set_speed(0, s1);
       motor_set_speed(1, s2);     
       }
+      }
     }
     else if((what == king) || (what == queen))
     {
       while(move == 1)
       {
-        if((read_barrier_rangefinders(r_b) == 0) && (read_barrier_rangefinders(r_t) == 0))
+        if((have_something(r_b) == 0) && (have_something(r_t) == 0))
         {
           stop();
 	  move = 0;
         }
-        if(encoders_get(0) < encoders_get(1))
+    if(!odct_get_collision_state())
+    {
+       if(encoders_get(0) < encoders_get(1))
         {
           if(s2<s-3){s2=s2+2;}else{s1=s1-2;}
         }
@@ -400,6 +302,7 @@ void chassis_find(char what, char side, int dir, uint8_t speed)
        }
       motor_set_speed(0, s1);
       motor_set_speed(1, s2);     
+      }
       }
     }
   }
@@ -418,20 +321,25 @@ uint8_t get_distance()
   return distance_global;
 }
 
+//PING 3 4 - lt, lb
+//A0 A1 - rb, rt
+
+
+
 int read_barrier_rangefinders(int num)
 {
   j = 0;
   g = 0;
   if(num == l_t) 
   { 
-    while(j < 20)
+    while(j < 50)
     {
       j++;
       if(pin_is_set(PING, 3)) 
       { 
 	g++; 
       }  
-      _delay_ms(2);
+      _delay_ms(20);
     }
   }
   if(num == l_b) 
@@ -480,7 +388,7 @@ int read_barrier_rangefinders(int num)
   }
 }
 
-/*
+
 int read_barrier_rangefinders(int num)
 {
     if(num == l_t) { if(pin_is_set(PING, 3)) { return 1; } else { return 0; } }
@@ -488,8 +396,6 @@ int read_barrier_rangefinders(int num)
     if(num == r_b) { if(pin_is_set(PINA, 0)) { return 1; } else { return 0; } }
     if(num == r_t) { if(pin_is_set(PINA, 1)) { return 1; } else { return 0; } }
 }
-*/
-/*
 int read_barrier_rangefinders(int num)
 {
     if(num == l_t) { if(pin_is_set(PING, 3)) { return Filter(1,1); } else { return Filter(1,0);}}

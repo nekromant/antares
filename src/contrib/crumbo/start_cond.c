@@ -39,11 +39,11 @@ ANTARES_INIT_HIGH(start_condition)
   INF("Thanks, dude, let me position myself...");
   _delay_ms(500);
   reset_direction();
-  chassis_move_precise(0, 4);
+  //chassis_move_precise(0, 1);
   manipulator(move, stdby);
   manipulator(grip, grip);
   PORTJ|=1<<7;
-  _delay_ms(500);
+  _delay_ms(100);
   INF("Waiting for start condition");
   while (!(STARTPIN & (STARTNUM)));;
   INF("Got it, gotta run!");

@@ -10,5 +10,9 @@ objects-$(CONFIG_CONTRIB_CRUMBO_START)+=start_cond.o
 objects-$(CONFIG_CONTRIB_CRUMBO_SYSTICK)+=systick.o
 objects-$(CONFIG_CONTRIB_CRUMBO_ODETECT)+=odetect.o
 objects-$(CONFIG_CONTRIB_CRUMBO_STRATEGY_GUIDE)+=strateg.o
+objects-$(CONFIG_CONTRIB_CRUMBO_SHELL)+=shell.o
+objects-$(CONFIG_CONTRIB_CRUMBO_MOTORS)+=motors.o
+objects-$(CONFIG_CONTRIB_CRUMBO_FEEDBACK)+=feedback.o
+objects-$(CONFIG_CONTRIB_CRUMBO_PF)+=pawnfinder.o
 
 $(info Crumbo source code is deprecated! Do not rely on any APIs)

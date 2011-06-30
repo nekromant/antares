@@ -1,0 +1,8 @@
+ config DEPLOY_MINICOM_PORT
+  string "Serial port to use"
+  default "/dev/ttyUSB0"
+
+  config DEPLOY_MINICOM_BAUD
+  int "Port Speed"
+  default 115200
+

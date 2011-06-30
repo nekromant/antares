@@ -1,0 +1,103 @@
+/** \mainpage Procyon AVRlib
+
+<b>C-Language Function Library for Atmel AVR Processors - Written by Pascal Stang</b><br>
+(Content supplied by other authors where noted)
+
+Procyon AVRlib \ref mainpage_footnote_one "[1]" is a library of easy-to-use
+C functions for a variety of common and uncommon tasks using AVR processors.
+The goal of AVRlib is to allow programmers to work quickly towards their end
+goal by reducing the time needed to write basic support functions and code.
+Most AVRlib header (*.h) files have lengthy descriptions of how to use the
+supplied library functions. All code (*.c) files are heavily commented with
+additional information.
+
+Documentation is still being improved and refined on many libraries. When
+getting familiar with a library, look first in this help document and at any
+example code that is available in the avrlib/examples directory. Then look
+inside the [libname].h and [libname]conf.h files, and then the [libname].c
+file for more details and documentation.
+
+Significant example code is included with AVRlib and can be found in the
+avrlib/examples directory.  The example code is organized as a set of
+demo applications each of which strives to illustrate how to use a certain
+AVRlib function library.  Effort is made to keep the example code heavily
+(and thoughtfully) commented.
+
+The latest version of Procyon AVRlib (including this documentation) is
+available from http://hubbard.engr.scu.edu/embedded/avr/avrlib
+
+Additional Pages:
+- \subpage relnotes (a.k.a. What's New)
+- \subpage install
+
+\section sublibraries AVRlib Sub-Libraries
+
+The following is a list of sub-libraries in AVRlib.
+
+\par General Use:
+
+- Byte Buffering (circular)
+- Bit Buffering (linear)
+- Printf and other formatted print functions
+- VT100 Terminal Output
+- Command Line Interface
+- FAT16/32 File System (support is read-only for now)
+- STX/ETX Packet Protocol
+- Fixed-Point Math Library (basic operations only)
+
+\par AVR Built-In Peripheral Support
+
+- Timer(s)
+- Uart(s)
+- A/D Converter
+- I2C Master/Slave
+- SPI Interface
+
+\par Device Drivers for External Hardware:
+
+- Character LCD Modules (HD44780-based)
+- I2c EEPROM Memories
+- SPI EEPROM Memories
+- MMC/SD Memory Cards (SPI-mode)
+- Quadrature Encoders
+- RC-Servos (up to 8 channels)
+- STA013 MP3 Decoder Chip
+- GPS Receivers (via serial port)
+	- NMEA-0813 Protocol
+	- Trimble TSIP Protocol
+- Graphic LCD Modules
+	- KS0108/HD61202 Controller
+	- T6963 Controller
+	- LCD Fonts and Symbols
+
+\par AVR Software-Emulated Devices and Interfaces
+
+- I2c Master (Bit-Bang)
+- UART (software-based, timer interrupt driven)
+- Pulse Output (arbitrary-frequency continuous/counted square wave)
+- Intel-type Memory Bus (Address & Data Buses + nRD,nWR)
+
+\par Network Support
+
+- Device Drivers
+	- Realtek RTL8019AS Ethernet Driver (10mb)
+	- ASIX AX88796L Ethernet Driver (10/100mb)
+	- Crystal CS8900 Ethernet Driver (10mb)
+	- PrismII 802.11b WLAN Driver
+- Network Protocols
+	- ARP
+	- IP
+	- ICMP
+	- UDP
+	- DHCP
+- Network Stack
+
+\anchor mainpage_footnote_one
+<b>[1]</b> The name "AVRlib" bears an unfortunate resemblance to "AVR libc"
+even though the two libraries are different and should not be confused.  AVR libc is
+the Standard C Library for AVR-Series Processors and provides functions we
+typically think of as being standard C like printf, stdio calls, math functions,
+plus some AVR-specific functions.  Procyon AVRlib provides additional higher-level
+functions designed to help designers accomplish typical embedded systems tasks.
+
+*/

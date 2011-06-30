@@ -12,3 +12,8 @@ endif
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_REMOTE),y)
 	include deploy/avrdude-remote/Makefile
 endif
+
+ifeq ($(CONFIG_DEPLOY_MINICOM),y)
+        include deploy/minicom/Makefile
+endif
+

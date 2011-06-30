@@ -6,7 +6,7 @@ void call_fuction_chain(struct fcall_chain_t* r)
   do
   {
     r->func();
-  } while(r=r->next);
+  } while((r=r->next));
 }
 
 

@@ -9,31 +9,10 @@ king,
 queen,             
 left,              
 right,             
-l_t,               
-l_b,               
-r_t,               
-r_b,               
 };
 
-/*
-enum actions
-{
-move,
-grip,
-get_a_pawn,
-release,void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1)
-mid,
-bot,
-stdby,
-stand,
-open,
-close,
-mid2,
-drop,
-};
-*/
-void chassis_move_simple(char dir0, char dir1, int pwm0, int pwm1);
-__inline void motor_set_dir(int num, int dir);
-__inline int motor_get_dir(int num);
-__inline void stop();
+void chassis_move_precise(int dir, uint8_t perfect_speed, uint8_t dist);
+//void chassis_turn(int dir, uint8_t perfect_speed, int deg);
+void chassis_turn(int dir, int pwm, int deg);
+void reset_direction();
 #endif

@@ -9,8 +9,18 @@ bool "Start condition coin driver"
 config CONTRIB_CRUMBO_UART
 bool "UART ISR IO driver"
 
+config CONTRIB_CRUMBO_MOTORS
+bool "Crumbo System Motor Driver"
+
+config CONTRIB_CRUMBO_PF
+bool "Pfinder"
 config CONTRIB_CRUMBO_CHASSIS
 bool "Chassis driver"
+
+config CONTRIB_CRUMBO_FEEDBACK
+bool "Feedback processor"
+depends on CONTRIB_CRUMBO_MOTORS && CONTRIB_CRUMBO_ENCODER  
+
 
 config CONTRIB_CRUMBO_ADC
 bool "Crumbo ADC driver"
@@ -37,6 +47,27 @@ bool "Crumbo Encoders driver"
 
 config CONTRIB_CRUMBO_DEBUG
 bool "Crumbo jet-debug driver"
+
+config CONTRIB_CRUMBO_DEBUG_RP
+bool "Wrap debug for minicom"
+depends on CONTRIB_CRUMBO_DEBUG
+
+menuconfig CONTRIB_CRUMBO_SHELL
+bool "Shell scripting engine"
+
+if CONTRIB_CRUMBO_SHELL
+
+choice 
+prompt "Scripting mode"
+
+config CONTRIB_CRUMBO_SHELL_INT
+bool "Interactive mode"
+
+config CONTRIB_CRUMBO_SHELL_EEP
+bool "Autonomous mode"
+
+endchoice
+endif
 
 config CONTRIB_CRUMBO_MEXTRA
 bool "Pakman extansion for manipulator"
@@ -103,6 +134,15 @@ bool "Chassis calibration program"
 config CONTRIB_CRUMBO_ADC_TEST
 bool "Crumbo ADC test app"
 depends on CONTRIB_CRUMBO_ADC
+
+config CONTRIB_CRUMBO_MOTORS_TEST
+bool "Crumbo motors test app"
+depends on CONTRIB_CRUMBO_MOTORS
+
+config CONTRIB_CRUMBO_FEEDBACK_TEST
+bool "Feedback processor test app"
+depends on CONTRIB_CRUMBO_FEEDBACK
+
 
 
 

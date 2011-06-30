@@ -7,13 +7,17 @@
 #include <contrib/crumbo/chassis.h>
 #include <contrib/crumbo/adc.h>
 #include <contrib/crumbo/odetect.h>
+#include <contrib/crumbo/motors.h>
 #include <contrib/crumbo/encoder.h>
+#include <contrib/crumbo/strateg.h>
+
 #include <lib/callchain/callchain.h>
+
 
 
 static uint16_t distance_global;
 
-static char pl;
+//static char pl;
 __inline void collision_avoidance(char state)
 {
   comm_putc(state);
@@ -51,108 +55,6 @@ ANTARES_APP(pakman_mainapp)
     execute_strategy();
     #endif
     
-    //wait_start();
-    //while(1)
-    //{
-    //  chassis_find(king, left, 0, 255);
-    //  DBG("king left");
-    //  chassis_find(pawn, left, 0, 255);
-    //  DBG("king left");
-    //  chassis_find(king, right, 0, 255);
-    //  DBG("king left");
-    //  chassis_find(pawn, right, 0, 255);
-    //  DBG("king left");
-    //}
-    //distance = get_distance();
-    //dump8(distance);
-    //going from the start zone
-
-    //chassis_find(king, right, 0, 255);
-    //count_distance();
-    //dump16(distance_global);
-    //_delay_ms(3000);
-    //return;
-
-    //odct_set_active_group(group_bck);
-    //chassis_move_precise(0, 255);
-    //return;
-    
-    
-    DBG("Resetting direction");
-    reset_direction();
-    odct_set_active_group(group_fwd);
-    chassis_move_precise(0, 56);
-    chassis_turn(0, 255, 90);
-    reset_direction();
-    
-    DBG("Locating the king");
-    odct_set_active_group(group_fwd);
-    chassis_move_precise(0, 55);
-    chassis_find(king, left, 0, 255);
-    odct_set_active_group(group_none);
-    chassis_turn(0, 255, 90);
-    manipulator(grip, release);
-    manipulator(move, bot);
-    manipulator(get_a_pawn, 0);
-    chassis_move_precise(1, 2);
-    
-    
-    //have a king, putting it in
-    pacman_eat();
-    manipulator(move, mid2);
-   
-    //lets go back
-    odct_set_active_group(group_bck);
-    chassis_move_precise(1, 30);
-    odct_set_active_group(group_rht);
-    chassis_turn(1, 255, 90);
-    odct_set_active_group(group_bck);
-    reset_direction();
-    
-    //having a pawn
-    odct_set_active_group(group_fwd);
-    chassis_move_precise(0, 55);
-    chassis_find(pawn, left, 0, 255);
-    odct_set_active_group(group_lft);
-    chassis_turn(0, 255, 90);
-    manipulator(move, bot);
-    manipulator(get_a_pawn, 0);
-    manipulator(grip, grip);
-
-    //got a pawn, going back
-    odct_set_active_group(group_bck);
-    chassis_move_precise(1, 40);
-    manipulator(grip, release);
-
-    //building
-    manipulator(stand, open);
-    manipulator(move, mid);
-    manipulator(grip, grip);
-    manipulator(move, mid2);
-    manipulator(stand, close);
-    manipulator(grip, release);
-
-    odct_set_active_group(group_bck);
-    chassis_move_precise(1, 20);
-    manipulator(move, bot);
-    odct_set_active_group(group_none);
-    chassis_move_precise(0, 20);
-
-    //grip a pyramide and try to deliver it
-    manipulator(grip, grip);
-    chassis_turn(1, 255, 90);
-    reset_direction();
-    odct_set_active_group(group_fwd);
-    chassis_move_precise(0, 140);
-    odct_set_active_group(group_rht);
-    chassis_turn(1, 255, 93);
-    odct_set_active_group(group_fwd);
-    chassis_move_precise(0, 45);
-    chassis_turn(0, 255, 80);    
-    chassis_move_precise(0, 10);
-    
-    while(1);;
-    reset_direction();
 }
 
 void count_distance()

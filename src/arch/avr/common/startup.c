@@ -39,5 +39,5 @@ int main()
 //  antares_first_app();
   //comm_putc('A');
   //_delay_ms(100);
-
+return 0;
 }

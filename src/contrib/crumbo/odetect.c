@@ -1,6 +1,6 @@
 #include <arch/antares.h>
 #include <contrib/crumbo/adc.h>
-
+#include <contrib/crumbo/odetect.h>
 static uint16_t limits[] = {
   200,
   270,
@@ -58,7 +58,7 @@ __inline void odct_set_active_group(int _group)
 
 static volatile char prevstate;
 
-__inline void odct_get_collision_state()
+__inline int odct_get_collision_state()
 {
   return prevstate;
 }

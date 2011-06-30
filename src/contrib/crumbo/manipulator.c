@@ -1,7 +1,5 @@
 #include <arch/antares.h>
 
-
-
 #define _INF_ENABLED 1
 #define _DBG_ENABLED 1
 #define _ERR_ENABLED 1
@@ -13,6 +11,7 @@
 
 
 #include "include/manipulator.h"
+#include "include/motors.h"
 
 
 ANTARES_INIT_LOW(manipulator_init)
@@ -106,13 +105,13 @@ void manipulator(char task, char type)
 
     break;
       case get_a_pawn:
-    
-        chassis_move_simple(0, 0, 255, 255);
-        while(pin_is_set(PIND, 2))
-        {
-        }
+        motor_set_speed(0, 255);
+        motor_set_speed(1, 255);
+	motor_set_dir(0, 0);
+	motor_set_dir(1, 0);	
+	while(pin_is_set(PIND, 2));
         stop();
-    break;
+        break;
       case stand:
         if(type == open)
         {
