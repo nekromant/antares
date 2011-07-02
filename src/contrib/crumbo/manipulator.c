@@ -25,7 +25,7 @@ ANTARES_INIT_LOW(manipulator_init)
     PORTC&=~(1 << 0);
     PORTC&=~(1 << 1);
     PORTH=PORTH| (1 << 6);
-    pin_init_button(DDRD,PORTD,2);
+    pin_init_button(DDRD,PORTD,1);
     TCNT1 = 0xB800;
     ICR1 = 0x0900;
     TCCR1A = _BV(COM1A1) | !_BV(COM1A0)           //   Both PWM outputs set at TOP,
@@ -42,17 +42,6 @@ ANTARES_INIT_LOW(manipulator_init)
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
     return(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-ISR(INT3_vect)
-{
-    dump8(0x3);
-    /*
-    EIMSK&= ~(1<<INT3);
-    EICRA&= ~((1<<ISC31)| (1<<ISC30)) ;
-    motor_stop(0);
-    motor_stop(1);
-    */
 }
 
 void manipulator(char task, char type)
@@ -109,7 +98,7 @@ void manipulator(char task, char type)
         motor_set_speed(1, 255);
 	motor_set_dir(0, 0);
 	motor_set_dir(1, 0);	
-	while(pin_is_set(PIND, 2));
+	while(pin_is_set(PIND, 1));
         stop();
         break;
       case stand:

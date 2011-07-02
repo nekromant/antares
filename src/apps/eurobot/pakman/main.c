@@ -54,7 +54,6 @@ ANTARES_APP(pakman_mainapp)
     #ifdef CONFIG_CONTRIB_CRUMBO_STRATEGY_GUIDE
     execute_strategy();
     #endif
-    
 }
 
 void count_distance()

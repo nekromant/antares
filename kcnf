@@ -17,7 +17,25 @@ source "src/contrib/kcnf"
 endmenu
 
 menu "Applications & tasking"
+  choice
+  prompt "Tasking model"
+  
+  config TASKING_FLAT
+  bool "Flat tasking model"
+  help
+   In the flat tasking model all ANTARES_APP macros glue application code one by one
+   in one huge loop (Unless any application blocks that with an endless loop.
+   Priority settings are ignored, if any.
+
+  config TASKING_MULTI
+  bool "Antares Multi-tasking kernel (EXPERIMENTAL)"
+    help
+    In the multi-tasking model all the code from ANTARES_APP become separate threads. 
+    
+  endchoice
+
 source "src/apps/kcnf"
+
 endmenu
 
 menu "Deployment settings"

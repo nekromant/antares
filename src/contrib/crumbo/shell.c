@@ -125,20 +125,33 @@ static void _restart()
   eeptr=0;
 }
 
+static void _falign()
+{
+  motor_set_dir(0,0);
+  motor_set_dir(1,0);
+  motor_set_speed(0,110);
+  motor_set_speed(1,110);
+  _delay_ms(1000);
+  stop();
+}
+
+//static __inline 
 static __inline void reg_cmds()
 {
   cmdlineAddCommand("gripper", _gripper);
   cmdlineAddCommand("mir", _mir);
   cmdlineAddCommand("pakman_eat", pacman_eat);
-  cmdlineAddCommand("chassis_turn", _turn);
-  cmdlineAddCommand("reset_direction", reset_direction);
-  cmdlineAddCommand("move_presise", _pr_move);
+  cmdlineAddCommand("turn", _turn);
+  cmdlineAddCommand("rd", reset_direction);
+  cmdlineAddCommand("mv", _pr_move);
   cmdlineAddCommand("stand", _stand);
   cmdlineAddCommand("end", _end);
   cmdlineAddCommand("lift", _lift);
+  cmdlineAddCommand("falign", _falign);
   //cmdlineAddCommand("pf", _pf);
   cmdlineAddCommand("restart", _restart);
   cmdlineAddCommand("pget", _m_get); //pos to get
+  //cmdlineAddCommand("od", _od); //pos to get
 }
 
 

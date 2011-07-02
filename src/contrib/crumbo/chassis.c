@@ -159,17 +159,17 @@ void reset_direction()
   //mot_a = 1;
   //mot_b = 1;
   
-  while((pin_is_set(PIND,4) && pin_is_set(PIND,5)))
+  while((pin_is_set(PIND,4) || pin_is_set(PIND,5)))
   {
      if (!pin_is_set(PIND,4))
      {
-        motor_set_speed(0, 100);
+        motor_set_speed(0, 180);
 	//mot_a = 0;
 	fix_disable=1;
      }
      if (!pin_is_set(PIND,5))
      {
-        motor_set_speed(1, 100);
+        motor_set_speed(1, 180);
 	//mot_b = 0;
 	fix_disable=1;
      }

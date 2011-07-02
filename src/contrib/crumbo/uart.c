@@ -9,7 +9,10 @@
 #include <avr/pgmspace.h>
 
 #include "include/uart.h"
+
+#ifdef CONFIG_CONTRIB_CRUMBO_SHELL
 #include <contrib/avrlib/cmdline.h>
+#endif
 
 #ifndef CONFIG_CONTRIB_CRUMBO_SHELL
 static char rx_buf[128];

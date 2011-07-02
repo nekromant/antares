@@ -1,0 +1,131 @@
+menuconfig CONFIG_CONTRIB_VUSB
+bool "VUSB Stack"
+
+
+if CONFIG_CONTRIB_VUSB
+
+menu "Hardware Config"
+
+config USB_CFG_IOPORTNAME 
+string "IO Port Name"
+default "D"
+  help
+  This is the port where the USB bus is connected. When you configure it to
+  "B", the registers PORTB, PINB and DDRB will be used.
+
+config USB_CFG_DMINUS_BIT
+int "D- bit number"
+default 4
+  help
+  This is the bit number in USB_CFG_IOPORT where the USB D- line is connected.
+  This may be any bit in the port.
+
+config USB_CFG_DPLUS_BIT
+int "D+ bit number"
+default 2
+  help
+  This is the bit number in USB_CFG_IOPORT where the USB D+ line is connected.
+  This may be any bit in the port. Please note that D+ must also be connected
+  to interrupt pin INT0! [You can also use other interrupts, see section
+  "Optional MCU Description" below, or you can connect D- to the interrupt, as
+  it is required if you use the USB_COUNT_SOF feature. If you use D- for the
+  interrupt, the USB interrupt will also be triggered at Start-Of-Frame
+  markers every millisecond.]
+
+
+
+endmenu
+
+menuconfig CONFIG_CONTRIB_VUSB_OPT
+bool "Optional Hardware Config (pullup)"
+
+if CONFIG_CONTRIB_VUSB_OPT
+
+config USB_CFG_PULLUP_IOPORTNAME
+string "Pullup port name"
+default "D"
+
+config USB_CFG_PULLUP_BIT
+int "Pullup bit number"
+default 1
+
+
+endif
+
+
+menu "Functional Range"
+
+config USB_CFG_HAVE_INTRIN_ENDPOINT
+bool "Have interrupt-in endpoint"
+default n 
+help
+  Define this to y if you want to compile a version with two endpoints: The
+  default control endpoint 0 and an interrupt-in endpoint (any other endpoint
+  number).
+
+config USB_CFG_HAVE_INTRIN_ENDPOINT3
+bool "Have interrupt-in endpoint 3"
+default n
+depends on USB_CFG_HAVE_INTRIN_ENDPOINT
+ help
+ Define this to 1 if you want to compile a version with three endpoints: The
+ default control endpoint 0, an interrupt-in endpoint 3 (or the number
+ configured below) and a catch-all default interrupt-in endpoint as above.
+ You must also define USB_CFG_HAVE_INTRIN_ENDPOINT to 1 for this feature.
+
+
+config USB_CFG_EP3_NUMBER
+int "Int-in endpoint number"
+depends on USB_CFG_HAVE_INTRIN_ENDPOINT3
+default 3
+  help
+  If the so-called endpoint 3 is used, it can now be configured to any other
+  endpoint number (except 0) with this macro. Default if undefined is 3.
+
+config USB_CFG_IMPLEMENT_HALT
+bool "Implement HALT"
+default n
+help
+  Define this to 1 if you also want to implement the ENDPOINT_HALT feature
+  for endpoint 1 (interrupt endpoint). Although you may not need this feature,
+  it is required by the standard. We have made it a config option because it
+  bloats the code considerably.
+ 
+config USB_CFG_SUPPRESS_INTR_CODE
+bool "Suppress interrupt-in code"
+default n
+help 
+  Define this to 1 if you want to declare interrupt-in endpoints, but don't
+  want to send any data over them. If this macro is defined to 1, functions
+  usbSetInterrupt() and usbSetInterrupt3() are omitted. This is useful if
+  you need the interrupt-in endpoints in order to comply to an interface
+  (e.g. HID), but never want to send any data. This option saves a couple
+  of bytes in flash memory and the transmit buffers in RAM.
+
+config USB_CFG_INTR_POLL_INTERVAL
+bool "Interrup poll interval"
+default 10
+  help
+  If you compile a version with endpoint 1 (interrupt-in), this is the poll
+  interval. The value is in milliseconds and must not be less than 10 ms for
+  low speed devices.
+
+config USB_CFG_IS_SELF_POWERED
+bool "Device is self-powered"
+default 0
+  help
+  Define this to 1 if the device has its own power supply. Set it to 0 if the
+  device is powered from the USB bus.
+
+config USB_CFG_MAX_BUS_POWER 
+int "Maximum USB power consumption"
+default 100
+help
+ Set this variable to the maximum USB bus power consumption of your device.
+ The value is in milliamperes. [It will be divided by two since USB
+ communicates power requirements in units of 2 mA.]
+
+
+endmenu
+
+endif
