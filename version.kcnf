@@ -1,4 +1,4 @@
-menu "Version Information"
+#menu "Version Information"
 comment "These opts are for devs"
 
   config VERSION_MAJOR
@@ -24,4 +24,4 @@ config VERSION_GIT
   string "GIT Revision"
   default "to be genned"
 
-endmenu
+#endmenu

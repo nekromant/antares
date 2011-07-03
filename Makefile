@@ -6,6 +6,7 @@ Kbuild:=Kconfig
 obj:=kconfig
 src:=kconfig
 Kconfig:=./kcnf
+KVersion:=./version.kcnf
 
 obj-y:=t
 
@@ -14,8 +15,14 @@ PHONY+=deftarget deploy build
 subdirs-y:=arch apps
 	
 
-#Suck in the current .config file
+#overrride with actual version information
+CONFIG_VERSION_MINOR=3
 -include .config
+$(info $(CONFIG_VERSION_CODENAME))
+#Suck in the current .config file
+-include .version
+$(info $(CONFIG_VERSION_CODENAME))
+
 
 CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 

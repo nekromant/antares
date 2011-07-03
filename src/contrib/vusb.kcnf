@@ -125,7 +125,152 @@ help
  The value is in milliamperes. [It will be divided by two since USB
  communicates power requirements in units of 2 mA.]
 
+config USB_CFG_IMPLEMENT_FN_READ 
+bool "Implement read function"
+default n
+help
+ Set this to 1 if you need to send control replies which are generated
+ "on the fly" when usbFunctionRead() is called. If you only want to send
+ data from a static buffer, set it to 0 and return the data from
+ usbFunctionSetup(). This saves a couple of bytes.
+ 
+config USB_CFG_IMPLEMENT_FN_WRITEOUT
+bool "Implement writeout function"
+default n
+help
+  Define this to 1 if you want to use interrupt-out (or bulk out) endpoints.
+  You must implement the function usbFunctionWriteOut() which receives all
+  interrupt/bulk data sent to any endpoint other than 0. The endpoint number
+  can be found in 'usbRxToken'.
+  
+config USB_CFG_HAVE_FLOWCONTROL
+default n
+bool "Implement USB Flow control"
+  help
+  Define this to 1 if you want flowcontrol over USB data. See the definition
+  of the macros usbDisableAllRequests() and usbEnableAllRequests() in
+  usbdrv.h.
+
+config USB_CFG_LONG_TRANSFERS
+default n
+bool "Implement long transfers"
+  help
+  Define this to 1 if you want to send/receive blocks of more than 254 bytes
+  in a single control-in or control-out transfer. Note that the capability
+  for long transfers increases the driver size.
+
+config USB_COUNT_SOF
+default n
+bool "Count SOF packets (READ HELP!)"
+  help
+  define this macro to 1 if you need the global variable "usbSofCount" which
+  counts SOF packets. This feature requires that the hardware interrupt is
+  connected to D- instead of D+.
+
+config USB_CFG_CHECK_DATA_TOGGLING
+default n
+  help
+  define this macro to 1 if you want to filter out duplicate data packets
+  sent by the host. Duplicates occur only as a consequence of communication
+  errors, when the host does not receive an ACK. Please note that you need to
+  implement the filtering yourself in usbFunctionWriteOut() and
+  usbFunctionWrite(). Use the global usbCurrentDataToken and a static variable
+  for each control- and out-endpoint to check for duplicate packets.
+ 
+config USB_CFG_HAVE_MEASURE_FRAME_LENGTH
+default n
+  help
+  define this macro to 1 if you want the function usbMeasureFrameLength()
+  compiled in. This function can be used to calibrate the AVR's RC oscillator.
+ 
 
 endmenu
+
+menu "Device Description"
+config USB_CFG_VENDOR_ID
+hex "Vendor ID"
+default 0x16c0
+  help
+  USB vendor ID for the device, low byte first. If you have registered your
+  own Vendor ID, define it here. Otherwise you use one of obdev's free shared
+  VID/PID pairs. Be sure to read USBID-License.txt for rules!
+  + This template uses obdev's shared VID/PID pair: 0x16c0/0x5dc.
+  + Use this VID/PID pair ONLY if you understand the implications!
+
+config USB_CFG_DEVICE_ID
+hex "Device ID"
+default 0x05dc
+  help
+  This is the ID of the product, low byte first. It is interpreted in the
+  scope of the vendor ID. If you have registered your own VID with usb.org
+  or if you have licensed a PID from somebody else, define it here. Otherwise
+  you use obdev's free shared VID/PID pair. Be sure to read the rules in
+  USBID-License.txt!
+  + This template uses obdev's shared VID/PID pair: 0x16c0/0x5dc.
+  + Use this VID/PID pair ONLY if you understand the implications!
+ 
+config USB_CFG_DEVICE_VERSION  
+hex "Version Number"
+default 0x0001
+  help
+  Version number of the device: Minor number first, then major number.
+
+config USB_HAS_VENDORNAME
+bool "Include a vendor name"
+default y
+
+if USB_HAS_VENDORNAME
+  config USB_CFG_VENDOR_NAME
+  string "Vendor name"
+  default "www.necromant.ath.cx"
+  help
+    ALWAYS define a vendor name containing your Internet domain name if you use
+    obdev's free shared VID/PID pair. See the file USBID-License.txt for
+    details.
+endif
+
+config USB_HAS_DEVNAME
+bool "Include a product name"
+default y
+
+if USB_HAS_DEVNAME
+
+  config USB_CFG_DEVICE_NAME
+  string "Device name"
+
+
+endif
+
+config USB_HAS_SERIAL
+bool "Include a serial number"
+default y
+
+config USB_SERIAL_USE_GIT
+depends on USB_HAS_SERIAL
+bool "Use git revision as the serial number"
+default n
+
+if USB_HAS_SERIAL && !USB_SERIAL_USE_GIT
+
+config USB_CFG_DEVICE_NAME
+string "Device name"
+endif 
+
+comment "See USB specification if you want to conform to an existing device class."
+comment "Class 0xff is 'vendor specific'"
+
+config USB_CFG_DEVICE_CLASS
+hex "USB Device class"
+default 0xff
+
+config USB_CFG_DEVICE_SUBCLASS
+hex "USB Device subclass"
+default 0x0
+
+
+
+
+endmenu
+
 
 endif

@@ -13,9 +13,9 @@ lxdialog += lxdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o
 conf-objs	:= conf.o  zconf.tab.o
 mconf-objs     := mconf.o zconf.tab.o $(lxdialog)
 
-VERSION_MAJOR := $(shell kconfig/config --state VERSION_MAJOR)
-VERSION_MINOR := $(shell kconfig/config --state VERSION_MINOR)
-VERSION_CODENAME := $(shell kconfig/config --state VERSION_CODENAME)
+VERSION_MAJOR := $(shell kconfig/config --file .version --state VERSION_MAJOR )
+VERSION_MINOR := $(shell kconfig/config --file .version --state VERSION_MINOR )
+VERSION_CODENAME := $(shell kconfig/config --file .version --state VERSION_CODENAME )
 
 %.tab.c: %.y
 	bison -l -b $* -p $(notdir $*) $<
@@ -60,6 +60,9 @@ kconfig-clean:
 	-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
 
 versionupdate:
+	$(obj)/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
+	$(obj)/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
+	$(obj)/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
 	$(obj)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME) "
 	$(obj)/config --set-str VERSION_GIT $(shell git rev-parse --verify HEAD)
   
@@ -86,6 +89,9 @@ switch_profile: $(obj)/mconf
 	$< profiles.kcnf
 	$(src)/kcnf_list process_profile profiles
 	
+set_version: $(obj)/mconf  
+	KCONFIG_CONFIG=.version $<  $(KVersion)
+
 select_defconfig: $(obj)/mconf
 	-cp .config .config.switch_save
 	$(src)/kcnf_list fgen defconfigs/ > defconfig.kcnf.inc
