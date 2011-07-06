@@ -4,3 +4,4 @@
 *.o
 .config
 *.kate-swp
+profiles/*

@@ -40,8 +40,6 @@ __inline void collision_avoidance(char state)
 
 ANTARES_INIT_LOW(pakman_init)
  {
-  
-  
  //code here
  }
 

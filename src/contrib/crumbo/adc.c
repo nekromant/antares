@@ -44,8 +44,8 @@ static __inline void dither_process()
     for (i=0; i<CHAN_COUNT;i ++)
     {
       dith_data[i]/=samples;
-//       dith_data[i]/=20;
-//       #warning This is shit
+//        dith_data[i]/=20;
+//        #warning This is shit
     }
     #ifdef CONFIG_CONTRIB_CRUMBO_ADC_DITH_TEST
     //for (i=0; i< CHAN_COUNT; i++)

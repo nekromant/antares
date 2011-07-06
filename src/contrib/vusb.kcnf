@@ -1,8 +1,11 @@
-menuconfig CONFIG_CONTRIB_VUSB
+menuconfig CONTRIB_VUSB
 bool "VUSB Stack"
 
 
-if CONFIG_CONTRIB_VUSB
+if CONTRIB_VUSB
+
+comment "Some rarely used options have been omitted."
+comment "See src/contrib/usbdrv/include/usb-config.h for more info"
 
 menu "Hardware Config"
 
@@ -267,10 +270,26 @@ config USB_CFG_DEVICE_SUBCLASS
 hex "USB Device subclass"
 default 0x0
 
+comment "define class here if not at device level"
+config  USB_CFG_INTERFACE_CLASS  
+hex "Interface class"
+default 0x0
 
+config USB_CFG_INTERFACE_SUBCLASS
+hex "Interface subclass"
+default 0x0
 
+config USB_CFG_INTERFACE_PROTOCOL
+hex "Interface protocol"
+default 0x00
 
 endmenu
 
+config USB_ONLY_INCLUDE
+bool "#include usbdrv.c instead of linking"
+default "n"
+help
+  Use the define above if you #include usbdrv.c instead of linking against it.
+  This technique saves a couple of bytes in flash memory.
 
 endif

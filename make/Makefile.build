@@ -78,7 +78,6 @@ $(BUILD_DIR)%.o: $(BUILD_DIR)%.c $(subst .,_,$(subst /,_,$()))
 	$(Q) $(call unquote,$(CONFIG_CC)) $(INCLUDES) $(CFLAGS) $(call unquote,$(CONFIG_CFLAGS)) -c  -o $(@) $< 
 
 
-
 %.elf: $(build_objects)	
 	$(Q) $(call unquote,$(CONFIG_CC)) $(LDFLAGS) $(call unquote,$(CONFIG_LDFLAGS)) -o $(@) $^ 
 	$(call colorize,$(t_cyn))
