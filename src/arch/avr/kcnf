@@ -9,6 +9,11 @@
     config MCU_M16
     bool "AtMega 16"
 
+
+    config MCU_M128
+    bool "AtMega 128"
+
+
     config MCU_M640
     bool "AtMega 640"
 

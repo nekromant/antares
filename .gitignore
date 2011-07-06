@@ -5,3 +5,4 @@
 .config
 *.kate-swp
 profiles/*
+*.orig

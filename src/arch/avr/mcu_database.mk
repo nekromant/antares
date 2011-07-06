@@ -8,6 +8,14 @@ ifeq ($(CONFIG_MCU_M8),y)
   EEPROM_SIZE=1024
 endif
 
+ifeq ($(CONFIG_MCU_M128),y)
+  MCU=atmega128
+  FLASH_SIZE=131072
+  RAM_SIZE=4096
+  EEPROM_SIZE=1024
+endif
+
+
 ifeq ($(CONFIG_MCU_M1280),y)
   #TODO: Check teh values
   MCU=atmega1280
