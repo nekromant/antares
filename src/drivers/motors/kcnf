@@ -1,0 +1,6 @@
+config DEV_GMOTOR
+bool "Generic motor device"
+
+config DEV_MFEEDBACK
+bool "Motor feedback driver"
+

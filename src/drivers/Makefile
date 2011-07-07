@@ -1,1 +1,1 @@
-#objects-y+=system/ io/
+#objects-$(DRV_DEVFW)+=framework/

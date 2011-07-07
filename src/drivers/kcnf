@@ -1,3 +1,10 @@
+comment "These drivers are quite abstracted from hardware"
+comment "In cases size matters you would normally want to omit them"
+comment "And use something of lower level directly in your app"
+
+config DRV_DEVFW
+bool "Small device framework"
+
 menu "System Drivers"
 endmenu
 
