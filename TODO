@@ -1,1 +1,10 @@
+0.1 Goals:
+Fix architecture makefiles to make
+msp430 support
+stm32 support
+alien code support
 Move code from avr/startup.c to tasking
+Implement draft multitasking kernel
+Fix .c deps generation
+Fix out-of-directory builds
+
