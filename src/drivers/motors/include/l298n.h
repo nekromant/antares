@@ -1,0 +1,7 @@
+enum
+{
+  L298N_STOP,
+  L298N_FWD,
+  L298N_BCK,
+  L298N_BURN
+};
