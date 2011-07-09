@@ -6,4 +6,10 @@ help
 
 config DEV_MFEEDBACK
 bool "Motor feedback driver"
+depends on DEV_GMOTOR
+help 
+  Motor feedback driver. Remember to put processing in a tick timer
+
+
+
 

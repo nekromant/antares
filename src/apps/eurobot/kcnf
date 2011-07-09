@@ -1,2 +1,11 @@
 config APP_EUROBOT_PAKMAN2011
 bool "The pakman 2011 firmware"
+
+menuconfig APP_EUROBOT_TST
+bool "Testbenches for eurobot device drivers"
+depends on AVRLIB_CMDLINE
+
+if APP_EUROBOT_TST
+source "src/contrib/"
+endif
+
