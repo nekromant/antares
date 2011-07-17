@@ -3,7 +3,7 @@
 
 struct gmotor8_t
 {
- void (*apply);
+ void (*apply)(struct gmotor8_t*);
  uint8_t spd;
  uint8_t params;
 };

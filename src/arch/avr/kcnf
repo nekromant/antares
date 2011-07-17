@@ -13,7 +13,6 @@
     config MCU_M128
     bool "AtMega 128"
 
-
     config MCU_M640
     bool "AtMega 640"
 
@@ -24,56 +23,6 @@
     bool "AtMega 2560"
 
 endchoice
-
-menu "Toolchain settings"
-  depends on ARCH_AVR
-  config CC
-  string "C Compiler (cc)"
-  default "avr-gcc"
-
-  config AS
-  string "C Compiler (cc)"
-  default "avr-as"
-
-  config LD
-  string "C Linker (ld)"
-  default "avr-ld"
-
-  config OBJCOPY
-  string "C Object Copy (objcopy)"
-  default "avr-objcopy"
-
-  config OBJDUMP
-  string "C Object Dumper (objdump)"
-  default "avr-objdump"
-
-choice
-  prompt "Optimisation level"
-  config CC_OPT0
-  bool "-O0"
-
-  config CC_OPT1
-  bool "-O1"
-
-  config CC_OPT2
-  bool "-O2"
-
-  config CC_OPT3
-  bool "-O3"
-
-  config CC_OPTSZ
-  bool "-Os"
-endchoice
-
-config CFLAGS
-string "Additional compiler flags (c)"
-
-config ASFLAGS
-string "Additional assembler flags (as)"
-
-
-
-endmenu
 
 menu "MCU Peripheral drivers"
 depends on ARCH_AVR

@@ -4,6 +4,11 @@ menu "Target platform settings"
 source "src/arch/kcnf"
 endmenu
 
+menu "Toolchain settings"
+source "toolchains/kcnf"
+endmenu
+
+
 menu "Library functions"
 source "src/lib/kcnf"
 endmenu

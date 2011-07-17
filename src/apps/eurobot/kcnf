@@ -6,6 +6,6 @@ bool "Testbenches for eurobot device drivers"
 depends on AVRLIB_CMDLINE
 
 if APP_EUROBOT_TST
-source "src/contrib/"
+#source "src/contrib/"
 endif
 
