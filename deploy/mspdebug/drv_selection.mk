@@ -1,0 +1,22 @@
+# Automatically generated. Not recommended to edit
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_RF2500),y)
+MSPDEBUGDRV=rf2500
+endif
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_OLIMEX),y)
+MSPDEBUGDRV=olimex
+endif
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_OLIMEX_ISO),y)
+MSPDEBUGDRV=olimex-iso
+endif
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_SIM),y)
+MSPDEBUGDRV=sim
+endif
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_UIF),y)
+MSPDEBUGDRV=uif
+endif
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_UIF_BSL),y)
+MSPDEBUGDRV=uif-bsl
+endif
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG_DRV_FLASH_BSL),y)
+MSPDEBUGDRV=flash-bsl
+endif

@@ -1,0 +1,15 @@
+# Automatically generated. Not recommended to edit
+config DEPLOY_MSPDEBUG_DRV_RF2500
+bool "rf2500"
+config DEPLOY_MSPDEBUG_DRV_OLIMEX
+bool "olimex"
+config DEPLOY_MSPDEBUG_DRV_OLIMEX_ISO
+bool "olimex-iso"
+config DEPLOY_MSPDEBUG_DRV_SIM
+bool "sim"
+config DEPLOY_MSPDEBUG_DRV_UIF
+bool "uif"
+config DEPLOY_MSPDEBUG_DRV_UIF_BSL
+bool "uif-bsl"
+config DEPLOY_MSPDEBUG_DRV_FLASH_BSL
+bool "flash-bsl"

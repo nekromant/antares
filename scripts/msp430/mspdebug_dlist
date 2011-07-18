@@ -1,0 +1,56 @@
+#!/bin/bash
+# Gens a target list for msp430-gcc
+# A quick and dirty solution, but it works for my current msp430-gcc
+# !works for my avr toolchain, so there's a slightly different script for that
+#run like: CC=msp430-gcc msp430_gen_list
+#And examine mcu_selection.kcnf and mcu_database.mk
+
+#CC=msp430-gcc
+
+
+get_drv_list()
+{
+STATE=0
+mspdebug --help 2>&1|while read line; do
+
+if [ -z "$line" ]; then
+  STATE=0
+fi
+
+
+if [ "$STATE" -eq "1" ]; then
+	echo "$line"
+	STATE=2
+else if [ "$STATE" -eq "2" ]; then
+  STATE=1
+fi
+fi
+
+if [ "$line" == "Available drivers are:" ]; then
+	STATE=1
+fi
+done
+}
+get_drv_list
+
+echo "Generating kconfig script..."
+#1st pass, gen the kcnf selection menu
+echo "# Automatically generated. Not recommended to edit" > drv_selection.kcnf
+#echo "choice" >> mcu_selection.kcnf
+#echo "prompt \"Select MCU variant\"" >> mcu_selection.kcnf
+get_drv_list| while read ln; do
+up=`echo $ln | tr [:lower:] [:upper:]|tr - _`
+echo "config DEPLOY_MSPDEBUG_DRV_$up" >> drv_selection.kcnf
+echo "bool \"$ln\"" >> drv_selection.kcnf
+done
+#echo "endchoice" >> mcu_selection.kcnf
+
+echo "Generating mcu database Makefile..."
+echo "# Automatically generated. Not recommended to edit" > drv_selection.mk
+get_drv_list| while read ln; do
+up=`echo $ln | tr [:lower:] [:upper:]|tr - _`
+echo "ifeq (\$(CONFIG_DEPLOY_MSPDEBUG_DRV_$up),y)" >> drv_selection.mk
+echo "MSPDEBUGDRV=$ln" >> drv_selection.mk
+echo "endif">> drv_selection.mk
+done
+echo "All done"

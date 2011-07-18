@@ -1,0 +1,14 @@
+menuconfig DEPLOY_MSPDEBUG
+bool "mspdebug"
+
+if DEPLOY_MSPDEBUG
+  config DEPLOY_MSPDEBUG_ROOT
+  bool "Run mspdebug as root"
+
+  choice 
+  prompt "Select mspdebug driver"  
+  source "deploy/mspdebug/drv_selection.kcnf"
+
+  endchoice
+
+endif

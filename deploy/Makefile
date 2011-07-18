@@ -12,4 +12,7 @@ ifeq ($(CONFIG_DEPLOY_AVRDUDE_REMOTE),y)
 	include deploy/avrdude-remote/Makefile
 endif
 
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG),y)
+        include deploy/mspdebug/Makefile
+endif
 

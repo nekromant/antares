@@ -1,6 +1,7 @@
 source "deploy/avrdude/kcnf"
 source "deploy/jetterm/kcnf"
 source "deploy/avrdude-remote/kcnf"
+source "deploy/mspdebug/kcnf"
 
 config DEPLOY_POSTRUN
 string "Command to run after deployment"

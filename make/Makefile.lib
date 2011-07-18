@@ -48,4 +48,4 @@ TARGET_LSSFILE=$(IMAGES_DIR)$(TARGET).lss
 
 
 include_toolchain=include toolchains/$(1).$(2).mk
-
+check_root=$(if $(1),sudo,)
