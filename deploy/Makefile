@@ -16,3 +16,6 @@ ifeq ($(CONFIG_DEPLOY_MSPDEBUG),y)
         include deploy/mspdebug/Makefile
 endif
 
+ifeq ($(CONFIG_DEPLOY_OPENOCD),y)
+	include deploy/openocd/Makefile
+endif
