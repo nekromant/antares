@@ -1,0 +1,188 @@
+# Automatically generated. 
+# I would't edit if I were you
+config AVRDUDE_PROG_C2N232I
+bool "c2n232i"
+
+config AVRDUDE_PROG_DASA3
+bool "dasa3"
+
+config AVRDUDE_PROG_DASA
+bool "dasa"
+
+config AVRDUDE_PROG_SIPROG
+bool "siprog"
+
+config AVRDUDE_PROG_PONYSER
+bool "ponyser"
+
+config AVRDUDE_PROG_89ISP
+bool "89isp"
+
+config AVRDUDE_PROG_FRANK-STK200
+bool "frank-stk200"
+
+config AVRDUDE_PROG_BLASTER
+bool "blaster"
+
+config AVRDUDE_PROG_ERE-ISP-AVR
+bool "ere-isp-avr"
+
+config AVRDUDE_PROG_ATISP
+bool "atisp"
+
+config AVRDUDE_PROG_DAPA
+bool "dapa"
+
+config AVRDUDE_PROG_XIL
+bool "xil"
+
+config AVRDUDE_PROG_FUTURLEC
+bool "futurlec"
+
+config AVRDUDE_PROG_ABCMINI
+bool "abcmini"
+
+config AVRDUDE_PROG_PICOWEB
+bool "picoweb"
+
+config AVRDUDE_PROG_SP12
+bool "sp12"
+
+config AVRDUDE_PROG_ALF
+bool "alf"
+
+config AVRDUDE_PROG_BASCOM
+bool "bascom"
+
+config AVRDUDE_PROG_DT006
+bool "dt006"
+
+config AVRDUDE_PROG_PONY-STK200
+bool "pony-stk200"
+
+config AVRDUDE_PROG_STK200
+bool "stk200"
+
+config AVRDUDE_PROG_BSD
+bool "bsd"
+
+config AVRDUDE_PROG_PAVR
+bool "pavr"
+
+config AVRDUDE_PROG_DRAGON_PDI
+bool "dragon_pdi"
+
+config AVRDUDE_PROG_DRAGON_DW
+bool "dragon_dw"
+
+config AVRDUDE_PROG_DRAGON_HVSP
+bool "dragon_hvsp"
+
+config AVRDUDE_PROG_DRAGON_PP
+bool "dragon_pp"
+
+config AVRDUDE_PROG_DRAGON_ISP
+bool "dragon_isp"
+
+config AVRDUDE_PROG_DRAGON_JTAG
+bool "dragon_jtag"
+
+config AVRDUDE_PROG_JTAG2PDI
+bool "jtag2pdi"
+
+config AVRDUDE_PROG_JTAG2AVR32
+bool "jtag2avr32"
+
+config AVRDUDE_PROG_JTAGMKII_AVR32
+bool "jtagmkII_avr32"
+
+config AVRDUDE_PROG_JTAG2DW
+bool "jtag2dw"
+
+config AVRDUDE_PROG_JTAG2ISP
+bool "jtag2isp"
+
+config AVRDUDE_PROG_JTAG2
+bool "jtag2"
+
+config AVRDUDE_PROG_JTAG2FAST
+bool "jtag2fast"
+
+config AVRDUDE_PROG_JTAG2SLOW
+bool "jtag2slow"
+
+config AVRDUDE_PROG_JTAGMKII
+bool "jtagmkII"
+
+config AVRDUDE_PROG_JTAG1SLOW
+bool "jtag1slow"
+
+config AVRDUDE_PROG_JTAG1
+bool "jtag1"
+
+config AVRDUDE_PROG_JTAGMKI
+bool "jtagmkI"
+
+config AVRDUDE_PROG_AVR911
+bool "avr911"
+
+config AVRDUDE_PROG_AVR109
+bool "avr109"
+
+config AVRDUDE_PROG_BUTTERFLY
+bool "butterfly"
+
+config AVRDUDE_PROG_USBTINY
+bool "usbtiny"
+
+config AVRDUDE_PROG_USBASP
+bool "usbasp"
+
+config AVRDUDE_PROG_AVR910
+bool "avr910"
+
+config AVRDUDE_PROG_STK600HVSP
+bool "stk600hvsp"
+
+config AVRDUDE_PROG_STK600PP
+bool "stk600pp"
+
+config AVRDUDE_PROG_STK600
+bool "stk600"
+
+config AVRDUDE_PROG_STK500HVSP
+bool "stk500hvsp"
+
+config AVRDUDE_PROG_STK500PP
+bool "stk500pp"
+
+config AVRDUDE_PROG_STK500V2
+bool "stk500v2"
+
+config AVRDUDE_PROG_MIB510
+bool "mib510"
+
+config AVRDUDE_PROG_STK500V1
+bool "stk500v1"
+
+config AVRDUDE_PROG_STK500
+bool "stk500"
+
+config AVRDUDE_PROG_BUSPIRATE
+bool "buspirate"
+
+config AVRDUDE_PROG_AVRISP2
+bool "avrisp2"
+
+config AVRDUDE_PROG_AVRISPMKII
+bool "avrispmkII"
+
+config AVRDUDE_PROG_AVRISPV2
+bool "avrispv2"
+
+config AVRDUDE_PROG_AVRISP
+bool "avrisp"
+
+config AVRDUDE_PROG_ARDUINO
+bool "arduino"
+
