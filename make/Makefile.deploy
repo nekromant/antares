@@ -6,9 +6,15 @@ all: $(call unquote, $(CONFIG_DEPLOY_DEFAULT))
 	echo 1
 
 help:	
-	@echo "Current firmware deployment methods are avaliable:"
+	@echo ""
+	@echo "Firmware deployment methods avaliable:"
 	@echo $(deploy_help)
+	@echo ""
 	@echo "Running 'make deploy' will invoke this methods: $(CONFIG_DEPLOY_DEFTARGET)"
 	@echo "You may setup additional deployment scenarios in menuconfig"
 	
+post:
+	@echo "Running Post-Deployment cmd"
+	$(call unquote,$(CONFIG_DEPLOY_POSTRUN))
+
 .PHONY: $(PHONY)

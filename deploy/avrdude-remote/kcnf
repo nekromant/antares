@@ -1,4 +1,8 @@
-menu "Remote avrdude settings"
+menuconfig DEPLOY_AVRDUDE_REMOTE
+bool "avrdude over ssh"
+depends on ARCH_AVR
+
+  if DEPLOY_AVRDUDE_REMOTE
   
   config DEPLOY_AVRDUDE_SSH_HOST
   string "hostname or IP of the remote host"
@@ -24,4 +28,4 @@ menu "Remote avrdude settings"
   string "Path on the remote system to store the firmware"
   default "/tmp"
 
-endmenu
+endif

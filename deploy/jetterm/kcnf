@@ -1,5 +1,6 @@
-menu "jetterm settings"
-
+menuconfig DEPLOY_JETTERM
+bool "jetterm [DEPRECATED]"
+if DEPLOY_JETTERM
   config DEPLOY_JETTERM_PORT
   string "Serial port to use"
   default "/dev/ttyUSB0"
@@ -7,5 +8,5 @@ menu "jetterm settings"
   config DEPLOY_JETTERM_BAUD
   int "Port Speed"
   default 115200
-endmenu
+endif
 

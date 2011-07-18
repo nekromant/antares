@@ -61,8 +61,13 @@ deploy: build
 	make -f make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
 	@echo "Your Antares firmware is now deployed"
 
+deploy-help:
+	make -f make/Makefile.deploy help
+
 deploy-%: build
 	make -f make/Makefile.deploy $*
 	@echo "Your Antares firmware is now deployed"
+	#run post-deployment
+	make -f make/Makefile.deploy post
 
 .PHONY: $(PHONY)

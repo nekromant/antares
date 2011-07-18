@@ -1,4 +1,11 @@
-menu "avrdude settings"
+menuconfig DEPLOY_AVRDUDE
+bool "Avrdude"
+depends on ARCH_AVR
+
+  if DEPLOY_AVRDUDE
+
+  config DEPLOY_AVRDUDE_SUDO
+  bool "Run avrdude as root (sudo)"
 
   config DEPLOY_AVRDUDE_COMMANDLINE
   string "avrdude additional commandline (read help)"
@@ -7,5 +14,7 @@ menu "avrdude settings"
     Anything not related to filename and MCU should go in here
     TODO: Moar friendly menu
 
-endmenu
+  endif
+
+
 

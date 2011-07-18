@@ -1,5 +1,5 @@
 #define a help message
-deploy_help+="jetterm - Run jetterm after flash"
+deploy_help+="\njetterm - Run jetterm after flash"
 #the deployment action
 
 jetterm: avrdude

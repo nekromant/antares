@@ -1,42 +1,12 @@
-menu "Deployment methods"
- 
-  config DEPLOY_AVRDUDE
-  bool "avrdude"
-  depends on ARCH_AVR
-  
-  config DEPLOY_AVRDUDE_REMOTE
-  bool "Remote avrdude via ssh"
-  depends on ARCH_AVR
+source "deploy/avrdude/kcnf"
+source "deploy/jetterm/kcnf"
+source "deploy/avrdude-remote/kcnf"
 
-  config DEPLOY_JETTERM
-  bool "Post-deployment jetterm"
+config DEPLOY_POSTRUN
+string "Command to run after deployment"
+default "minicom -o -D /dev/ttyUSB0 -b 57600"
 
 
 
-endmenu
 
-menu "Architecture specific deployment options"
-
-  if ARCH_AVR
-  source "src/arch/avr/deploy.kcnf"
-  endif
-
-endmenu
-
-if DEPLOY_AVRDUDE
-  source "deploy/avrdude/kcnf"
-endif
-if DEPLOY_JETTERM
-  source "deploy/jetterm/kcnf"
-endif
-if DEPLOY_AVRDUDE_REMOTE
-  source "deploy/avrdude-remote/kcnf"
-endif
-
-menuconfig DEPLOY_MINICOM
-bool "Run minicom after deployment"
-
-if DEPLOY_MINICOM
-  source "deploy/minicom/kcnf"
-endif
 
