@@ -1,26 +1,8 @@
-  choice
-  depends on ARCH_AVR
-  prompt "Select MCU variant"
-  default MCU_M640
-
-    config MCU_M8
-    bool "AtMega 8"
-
-    config MCU_M16
-    bool "AtMega 16"
-
-
-    config MCU_M128
-    bool "AtMega 128"
-
-    config MCU_M640
-    bool "AtMega 640"
-
-    config MCU_M1280
-    bool "AtMega 1280"
-
-    config MCU_M2560
-    bool "AtMega 2560"
+choice
+depends on ARCH_AVR
+prompt "Select MCU variant"
+  
+source "src/arch/avr/mcu_selection.kcnf"
 
 endchoice
 
