@@ -1,0 +1,13 @@
+menuconfig DEPLOY_OPENOCD
+bool "OpenOCD"
+depends on ARCH_ARM
+
+if DEPLOY_OPENOCD
+
+config DEPLOY_OPENOCD_ROOT
+bool "Run openocd as root"
+
+config DEPLOY_OPENOCD_COMMANDLINE
+string "OpenOCD command line"
+
+endif 
