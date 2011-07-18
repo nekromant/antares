@@ -19,7 +19,7 @@ includes-y:=
 $(info $(objects-y))
 #Out-of-dir builds not yet supported
 TOP_DIR=./
-BUILD_DIR=vars
+BUILD_DIR=./
 PHONY:= build clean
 INCLUDES=-I"$(TOP_DIR)" -I"$(TOP_DIR)include"
 Q:=

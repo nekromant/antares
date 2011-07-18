@@ -46,7 +46,7 @@ echo "# Automatically generated. Not recommended to edit" > mcu_database.mk
 get_mcu_list| while read lnn; do
 for ln in $lnn; do
 up=`echo $ln | tr [:lower:] [:upper:]`
-echo "ifeq (\$CONFIG_MCU_$up,y)" >> mcu_database.mk
+echo "ifeq (\$(CONFIG_MCU_$up),y)" >> mcu_database.mk
 echo "MCU=$ln" >> mcu_database.mk
 echo "endif">> mcu_database.mk
 done
