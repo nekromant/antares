@@ -1,0 +1,42 @@
+#!/bin/bash
+# Build avrdude programmers list
+STATE=0
+get_prog_list()
+{
+avrdude -c nonexistent 2>&1|cut -d" " -f 3|while read line; do
+if [ "$STATE" -eq "1" ]; then
+  if [ -n "$line" ]; then
+  echo $line
+  fi
+fi
+
+if [ "$line" == "are:" ]; then
+  STATE=1;  
+fi
+done
+}
+
+echo "Generating menu configuration file"
+echo "# Automatically generated. " > proglist.kcnf
+echo "# I would't edit if I were you" >> proglist.kcnf
+
+get_prog_list|while read ln; do
+up=`echo $ln|tr [:lower:] [:upper:]`
+echo "config AVRDUDE_PROG_$up" >> proglist.kcnf
+echo "bool \"$ln\"" >> proglist.kcnf
+echo "" >> proglist.kcnf
+done
+
+echo "Generating Makefile"
+
+echo "# Automatically generated. " > proglist.mk
+echo "# I would't edit if I were you" >> proglist.mk
+
+get_prog_list|while read ln; do
+up=`echo $ln|tr [:lower:] [:upper:]`
+echo "ifeq (\$(CONFIG_AVRDUDE_PROG_$up),y)" >> proglist.mk
+echo "PROG=$ln" >> proglist.mk
+echo "endif" >> proglist.mk
+echo "" >> proglist.mk
+done
+
