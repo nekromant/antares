@@ -1,0 +1,62 @@
+config TOOLCHAIN_PREFIX
+string "Toolchain prefix"
+default "somearch-gnueabi-"
+
+#  config CC
+#  string "C Compiler (cc)"
+#  default "avr-gcc"
+
+#  config AS
+#  string "C Compiler (cc)"
+#  default "avr-as"
+
+#  config LD
+#  string "C Linker (ld)"
+#  default "avr-ld"
+
+#  config OBJCOPY
+#  string "C Object Copy (objcopy)"
+#  default "avr-objcopy"
+
+#  config OBJDUMP
+#  string "C Object Dumper (objdump)"
+#  default "avr-objdump"
+
+choice
+  prompt "Optimisation level"
+
+  config CC_OPT0
+  bool "-O0"
+
+  config CC_OPT1
+  bool "-O1"
+
+  config CC_OPT2
+  bool "-O2"
+
+  config CC_OPT3
+  bool "-O3"
+
+  config CC_OPTSZ
+  bool "-Os"
+
+endchoice
+
+config GCC_PARANOID_WRN
+bool "CodeMonkey buster! (tm)"
+help
+  Adds -Wall -Werror flags. (trollface.jpg) A true paranoid
+  behaviour. But that helps to keep some bad code from noobz 
+  out of the main tree.
+
+comment "Fine tuning"
+
+config CFLAGS
+string "Additional C compiler flags (cc)"
+
+config ASFLAGS
+string "Additional Assembler flags (as)"
+
+config LDFLAGS
+string "Additional Linker flags (as)"
+
