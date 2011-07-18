@@ -1,18 +1,16 @@
 #This is a makefile used in the actual build
-#I didn't get enough dao to understand fully kbuild's magic
-#ethersex's methods of compiling sucked, so I invented my own build script
+#I didn't get enough dao to understand fully kbuild's magic and adopt it completely to avr
+#And ethersex's methods of compiling sucked, so I invented my own build script
+#Yep, there goes some NIH syndrome =)
 
 include .config
 include make/Makefile.lib
 
-
-
+# IF U ARE PORTING TO A NEW TOOLCHAIN, THIS IS WHAT YOU ARE SEARCHING FOR
+# PLACE your toolchain name here
 ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
 TOOLCHAIN=gcc
 endif
-
-
-
 
 
 objects-y:= src/
@@ -21,7 +19,7 @@ includes-y:=
 $(info $(objects-y))
 #Out-of-dir builds not yet supported
 TOP_DIR=./
-BUILD_DIR=
+BUILD_DIR=vars
 PHONY:= build clean
 INCLUDES=-I"$(TOP_DIR)" -I"$(TOP_DIR)include"
 Q:=
@@ -75,9 +73,6 @@ build: $(clean_includes) $(load_makes) $(linkarch) $(OUTPUT_TARGETS)
 #include toolchain rules
 $(eval $(call include_toolchain,$(TOOLCHAIN),rules))
 include src/arch/$(ARCH)/make.mk
-
-
-	
 
 clean: $(load_makes) 
 	$(info <----cleaning---->)
