@@ -73,6 +73,9 @@ menu "Build System Tweaks"
    automatically, so you can deploy them later.
    Extensions will appended automatically.
 
+  config BUILD_VERBOSE
+  bool "Verbose build
+  
 endmenu
 
 menu "Version Information"
