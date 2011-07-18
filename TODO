@@ -1,5 +1,5 @@
 0.1 Goals:
-Fix architecture makefiles to make
+Fix architecture makefiles to be morer cross-compiler ready *DONE
 msp430 support
 stm32 support
 alien code support

@@ -1,0 +1,18 @@
+choice 
+prompt "Toolchain selection"
+
+config TOOLCHAIN_GCC
+bool "GCC-based toolchain"
+
+config TOOLCHAIN_SDCC
+bool "SDCC-based toolchain"
+
+endchoice
+
+if TOOLCHAIN_GCC
+source "toolchains/gcc.kcnf"
+endif
+
+if TOOLCHAIN_SDCC
+source "toolchains/sdcc.kcnf"
+endif  

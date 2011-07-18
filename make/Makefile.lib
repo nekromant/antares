@@ -46,3 +46,6 @@ TARGET_ELFFILE=$(IMAGES_DIR)$(TARGET).elf
 TARGET_LSSFILE=$(IMAGES_DIR)$(TARGET).lss
 
 
+
+include_toolchain=include toolchains/$(1).$(2).mk
+

@@ -7,7 +7,9 @@ include make/Makefile.lib
 
 
 
-
+ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
+TOOLCHAIN=gcc
+endif
 
 
 
@@ -28,7 +30,8 @@ Q=@
 endif
 
 
-
+#include Toolchain variables in our build
+$(eval $(call include_toolchain,$(TOOLCHAIN),vars))
 
 all: 
 	$(error This makefile should not be called directly)
@@ -65,15 +68,16 @@ build_objects=	$(addprefix $(TOP_DIR),$(objects))
 clean_symlinks= $(call clean_includes)
 link_arch=	$(call linkarch)
 
+
 build: $(clean_includes) $(load_makes) $(linkarch) $(OUTPUT_TARGETS)
 	@echo "<--Makefile.build done-->"
 
-ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
-$(info Using the GNU Toolchain. Stallman approves!)
-include toolchains/gcc.mk
-endif
-
+#include toolchain rules
+$(eval $(call include_toolchain,$(TOOLCHAIN),rules))
 include src/arch/$(ARCH)/make.mk
+
+
+	
 
 clean: $(load_makes) 
 	$(info <----cleaning---->)
@@ -81,7 +85,7 @@ clean: $(load_makes)
 	-rm $(IMAGES_DIR)$(TARGET)*
 
 debug: $(call ldmakes, $(TOP_DIR))
-	@echo "I'm gonna build: $(objects)"
+	@echo "I'm gonna build: $(build_objects)"
 
 
 analyze: $(TARGET_LSSFILE)
