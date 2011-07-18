@@ -16,21 +16,5 @@ endmenu
   int "CPU frequency in Hz"
   default 8000000
   
-  comment "Be careful with these values"
-  comment "They can screw things up"
-  comment "Use make fuses to flash 'em"
-
-  config FUSE_LOW
-  hex "lfuse value"
-  default 0x00
-
-  config FUSE_HIGH
-  hex "hfuse value"
-  default 0x00
-
-  config FUSE_EXT
-  hex "efuse value"
-  default "0x00"
-
 
 

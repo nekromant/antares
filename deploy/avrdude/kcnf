@@ -7,6 +7,14 @@ depends on ARCH_AVR
   config DEPLOY_AVRDUDE_SUDO
   bool "Run avrdude as root (sudo)"
 
+  choice 
+  prompt "AVR programmer"
+  
+  source "deploy/avrdude/proglist.kcnf"
+  
+  endchoice
+
+
   config DEPLOY_AVRDUDE_COMMANDLINE
   string "avrdude additional commandline (read help)"
   help

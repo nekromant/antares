@@ -1,0 +1,18 @@
+choice 
+prompt "Subarchitecture"
+
+config ARCH_ARM_STM32
+bool "STM32 support"
+
+config ARCH_ARM_STELLARIS
+bool "Stellaris support"
+
+endchoice 
+
+if ARCH_ARM_STM32
+source "src/arch/arm/stm32/kcnf"
+endif 
+
+if ARCH_ARM_STELLARIS
+source "src/arch/arm/stellaris/kcnf"
+endif 

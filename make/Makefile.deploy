@@ -1,6 +1,8 @@
 -include .config
 include make/Makefile.lib
 include deploy/Makefile
+#We need this for MCU databases!
+include src/arch/$(ARCH)/make.mk
 
 all: $(call unquote, $(CONFIG_DEPLOY_DEFAULT))
 	echo 1

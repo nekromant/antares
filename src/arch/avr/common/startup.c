@@ -29,7 +29,8 @@ ANTARES_FINISH(antares_exit)
     //_delay_ms(10);
     //comm_putc('a');
     //comm_sync();
-    asm("jmp antares_first_app");
+    asm("call antares_first_app");
+    
 }
 
 int main()

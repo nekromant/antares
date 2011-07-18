@@ -1,3 +1,4 @@
+if ARCH_AVR
 config DEPLOY_FLASH
 bool "Update Flash memory"
 default y
@@ -9,6 +10,27 @@ default y
 comment "Double check the fuse values!!!"
 comment "Setting 'em wrong can screw up the uC"
 
+menu "Fuse bits settings"
+
+  config FUSE_LOW
+  hex "lfuse value"
+  default 0x00
+
+  config FUSE_HIGH
+  hex "hfuse value"
+  default 0x00
+
+  config FUSE_EXT
+  hex "efuse value"
+  default "0x00"
+
+endmenu
+
+menu "Lock bits settings"
+
+endmenu
+
+
 config DEPLOY_FUSES
 bool "Write fuses (if supported by programmer)"
 default n
@@ -16,3 +38,4 @@ default n
 config DEPLOY_LOCKBITS
 bool "Write lockbits (if supported by programmer)"
 default n
+endif

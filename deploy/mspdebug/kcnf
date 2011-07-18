@@ -1,5 +1,6 @@
 menuconfig DEPLOY_MSPDEBUG
 bool "mspdebug"
+depends on ARCH_MSP430
 
 if DEPLOY_MSPDEBUG
   config DEPLOY_MSPDEBUG_ROOT
