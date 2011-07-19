@@ -1,0 +1,29 @@
+include .config
+include make/Makefile.lib
+
+targets-y=src/alien/
+TOP_DIR=./
+
+
+
+define ldmakes
+$(eval subdirs=$(addprefix $(1),$(filter %/,$(targets-y))))
+$(eval targets+=$(filter-out %/,$(targets-y)))
+$(eval targets-y= )
+$(foreach dir, $(subdirs),$(eval include $(dir)Makefile) $(call ldmakes,$(dir)))
+endef
+
+load_makes=$(call ldmakes, $(TOP_DIR)) 
+targets_dl=$(add_prefix)
+
+debug: $(load_makes)
+	@echo "Targets: $(targets)"
+help:
+	@echo "Alien code management util"
+	@echo "Currently enabled aliens:"
+	@echo $(aliens)
+
+download: $(load_makes)
+	$(foreach target,$(targets),$(call $(target)_dowload))
+	@echo "Done"
+	

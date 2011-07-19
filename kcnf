@@ -48,8 +48,7 @@ source "deploy/kcnf"
 endmenu
 
 
-menu "Dirty'n'Hackish"
-endmenu
+source "src/alien/kcnf"
 
 menu "Build System Tweaks"
 

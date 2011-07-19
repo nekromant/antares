@@ -1,0 +1,5 @@
+menu "Alien code support"
+
+source "src/alien/libmaple/kcnf"
+ 
+endmenu

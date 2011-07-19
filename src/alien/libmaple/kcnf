@@ -1,0 +1,5 @@
+menuconfig ALIEN_LIBMAPLE
+bool "LibMaple"
+
+if ALIEN_LIBMAPLE
+endif

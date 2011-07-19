@@ -1,5 +1,6 @@
 choice 
-prompt "Subarchitecture"
+prompt "SubArchitecture"
+depends on ARCH_ARM
 
 config ARCH_ARM_STM32
 bool "STM32 support"
