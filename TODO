@@ -1,10 +1,12 @@
 0.1 Goals:
 Fix architecture makefiles to be morer cross-compiler ready *DONE
-msp430 support
+msp430 *DONE
+refactor toolchain makefiles *DONE
 stm32 support
+stellaris support
 alien code support
-Move code from avr/startup.c to tasking
-Implement draft multitasking kernel
+Implement draft multitasking kernel for avr
 Fix .c deps generation
 Fix out-of-directory builds
+Fix dependency tracking macros
 
