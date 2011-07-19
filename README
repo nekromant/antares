@@ -1,3 +1,28 @@
+WHAT THE HECK IS THAT?
+----------------------
+Antares is an all-in-one buildsystem to generate a uC firmware.
+It is highly portable, and supports a wide range if microcontrollers
+Ranging from simple 8bit AVRs with less then a kb of flash (take that,
+arduino!) to quite powerfull ARM-based MCUs.
+Want to get started? 
+Okay, read further!
+
+
+TOOLCHAIN SUPPORT
+---------------------
+gcc-based toolchains are fully and initially supoorted. 
+sdcc is still WiP
+
+uC SUPPORT
+--------------
+avr - fully and initially supported
+msp430 - less tested, but still should be fine
+arm - Still needs better ISR macros
+ stm32 - Still WiP
+ stellaris - Mostly. 
+8051/ - will be supported once sdcc support arrives
+  STC - still needs a linux flashing tool. A little reversing is yet to be done
+
 INTRODUCTION
 -------------
 I assume that you are familiar whith how the linux kernel is 
