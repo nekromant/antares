@@ -1,4 +1,5 @@
 0.1 Goals:
+Fix licensing issues (F*CK YOU Ti for making my life a bit harder!)
 Fix architecture makefiles to be morer cross-compiler ready *DONE
 msp430 *DONE
 refactor toolchain makefiles *DONE
