@@ -1,3 +1,4 @@
+menu "Eurobot apps by DMI-TEAM"
 config APP_EUROBOT_PAKMAN2011
 bool "The pakman 2011 firmware"
 
@@ -9,3 +10,4 @@ if APP_EUROBOT_TST
 #source "src/contrib/"
 endif
 
+endmenu

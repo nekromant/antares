@@ -56,9 +56,12 @@ $(eval objects-y= )
 $(foreach dir, $(subdirs),$(eval include $(dir)Makefile) $(call includedir,$(dir)) $(call ldmakes,$(dir)))
 endef
 
+include src/arch/$(ARCH)/make.mk
+
 define linkarch
 $(shell rm -Rf $(TOP_DIR)include/arch)
-$(shell ln -sf ../src/arch/$(ARCH)/include include/arch)
+
+$(if $(SUBARCH),$(shell ln -sf ../src/arch/$(ARCH)/$(SUBARCH)/include include/arch),$(shell ln -sf ../src/arch/$(ARCH)/include include/arch))
 endef
 
 load_makes=	$(call ldmakes, $(TOP_DIR)) 
@@ -72,7 +75,7 @@ build: $(clean_includes) $(load_makes) $(linkarch) $(OUTPUT_TARGETS)
 
 #include toolchain rules
 $(eval $(call include_toolchain,$(TOOLCHAIN),rules))
-include src/arch/$(ARCH)/make.mk
+
 
 clean: $(load_makes) 
 	$(info <----cleaning---->)
