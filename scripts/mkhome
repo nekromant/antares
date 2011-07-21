@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Please, enter your directory name (domain name)"
+read directory
+
+mkdir src/apps/$directory
+echo "source \"src/apps/$directory/kcnf\"" >> src/apps/kcnf
+#echo "source \"src/apps/$directory/kcnf\"" >> src/apps/kcnf

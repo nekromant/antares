@@ -1,2 +1,2 @@
-targets-$(CONFIG_ALIEN_STELLARISWARE)+=stellarisware/
-targets-$(CONFIG_ALIEN_LIBMAPLE)+=libmaple/
+objects-$(CONFIG_ALIEN_STELLARISWARE)+=stellarisware/
+objects-$(CONFIG_ALIEN_LIBMAPLE)+=libmaple/

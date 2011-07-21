@@ -2,4 +2,6 @@ menuconfig ALIEN_LIBMAPLE
 bool "LibMaple"
 
 if ALIEN_LIBMAPLE
+  config ALIEN_LIBMAPLE_GITREV
+  string "Git revision to checkout (leave blank for head)"
 endif

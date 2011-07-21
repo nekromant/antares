@@ -1,29 +1,46 @@
 include .config
 include make/Makefile.lib
 
-targets-y=src/alien/
+targets-y=src/
 TOP_DIR=./
 
 
 
-define ldmakes
-$(eval subdirs=$(addprefix $(1),$(filter %/,$(targets-y))))
-$(eval targets+=$(filter-out %/,$(targets-y)))
-$(eval targets-y= )
-$(foreach dir, $(subdirs),$(eval include $(dir)Makefile) $(call ldmakes,$(dir)))
-endef
+# define ldmakes
+# $(eval subdirs=$(addprefix $(1),$(filter %/,$(targets-y))))
+# $(eval targets+=$(addprefix $(1),$(filter-out %/,$(targets-y))))
+# $(eval targets-y= )
+# $(foreach dir, $(subdirs),$(eval alien_path=$(dir))$(eval include $(dir)Makefile) $(call ldmakes,$(dir)))
+# endef
 
 load_makes=$(call ldmakes, $(TOP_DIR)) 
 targets_dl=$(add_prefix)
 
 debug: $(load_makes)
-	@echo "Targets: $(targets)"
+	@echo "We have aliens here: $(alien)"
 help:
 	@echo "Alien code management util"
 	@echo "Currently enabled aliens:"
 	@echo $(aliens)
 
-download: $(load_makes)
-	$(foreach target,$(targets),$(call $(target)_dowload))
+download: $(load_makes)	$(alien)
+	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) download)
 	@echo "Done"
+
+patch: $(load_makes)	$(alien)
+	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) patch)
+	@echo "Done"
+
+build: $(load_makes)	$(alien)
+	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) build)
+	@echo "Done"
+
+clean: $(load_makes)	$(alien)
+	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) clean)
+	@echo "Done"
+
+mrproper: $(load_makes)	$(alien)
+	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) mrproper)
+	@echo "Done"
+
 	

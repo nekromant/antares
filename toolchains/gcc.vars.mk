@@ -1,9 +1,16 @@
 TOOL_PREFIX=$(call unquote,$(CONFIG_TOOLCHAIN_PREFIX))
-CC=$(TOOL_PREFIX)gcc
-AS=$(TOOL_PREFIX)as
-LD=$(TOOL_PREFIX)ld
-OBJDUMP=$(TOOL_PREFIX)objdump
-OBJCOPY=$(TOOL_PREFIX)objcopy
+
+CC       := $(TOOL_PREFIX)gcc
+CXX      := $(TOOL_PREFIX)g++
+LD       := $(TOOL_PREFIX)ld -v
+AR       := $(TOOL_PREFIX)ar
+AS       := $(TOOL_PREFIX)gcc
+OBJCOPY  := $(TOOL_PREFIX)objcopy
+DISAS    := $(TOOL_PREFIX)objdump
+OBJDUMP  := $(TOOL_PREFIX)objdump
+SIZE     := $(TOOL_PREFIX)size
+
+export CC CXX LD AS AR AS OBJCOPY OBJDUMP SIZE DISAS
 
 #We're targeting an ELF and an LSS (disassembly) by default.
 #Arch for avr adds us a hex and eep files for flashing

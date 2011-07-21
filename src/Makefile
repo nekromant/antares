@@ -1,1 +1,1 @@
-objects-y+=arch/$(ARCH)/ apps/ drivers/ lib/ contrib/
+objects-y+=arch/$(ARCH)/ apps/ drivers/ lib/ contrib/ alien/

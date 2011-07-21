@@ -1,0 +1,17 @@
+#/bin/bash
+#helper methods for generating .kcnf / .mk pairs
+
+gen_mk()
+{
+echo "Generating mcu database Makefile..." >&2
+echo "# Automatically generated. Not recommended to edit"
+get_mcu_list| while read lnn; do
+for ln in $lnn; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "ifeq (\$(CONFIG_MCU_$up),y)"
+echo "MCU=$ln" 
+echo "endif" 
+done
+done
+echo "All done" >&2
+}
