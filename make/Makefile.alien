@@ -16,6 +16,10 @@ TOP_DIR=./
 load_makes=$(call ldmakes, $(TOP_DIR)) 
 targets_dl=$(add_prefix)
 
+
+#include Toolchain variables in our build
+$(eval $(call include_toolchain,$(TOOLCHAIN),vars))
+
 debug: $(load_makes)
 	@echo "We have aliens here: $(alien)"
 help:
@@ -23,24 +27,26 @@ help:
 	@echo "Currently enabled aliens:"
 	@echo $(aliens)
 
+export CC CXX LD AS AR AS OBJCOPY OBJDUMP SIZE DISAS
+
 download: $(load_makes)	$(alien)
-	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) download)
+	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) download)
 	@echo "Done"
 
 patch: $(load_makes)	$(alien)
-	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) patch)
+	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) patch)
 	@echo "Done"
 
 build: $(load_makes)	$(alien)
-	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) build)
+	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) V=9 build)
 	@echo "Done"
 
 clean: $(load_makes)	$(alien)
-	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) clean)
+	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) clean)
 	@echo "Done"
 
 mrproper: $(load_makes)	$(alien)
-	$(foreach target,$(alien),make -f $(target) alien_dir=$(dir $(target)) mrproper)
+	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) mrproper)
 	@echo "Done"
 
 	

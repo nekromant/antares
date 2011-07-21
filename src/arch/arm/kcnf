@@ -10,6 +10,19 @@ bool "Stellaris support"
 
 endchoice 
 
+menu "ARM Variant tuning"
+
+  choice 
+  prompt "ARM -mcpu"
+  source "src/arch/arm/arm_mcpus.kcnf"
+  endchoice
+
+  choice 
+  prompt "ARM -march"
+  source "src/arch/arm/arm_march.kcnf"
+  endchoice
+
+endmenu
 if ARCH_ARM_STM32
 source "src/arch/arm/stm32/kcnf"
 endif 
@@ -17,3 +30,4 @@ endif
 if ARCH_ARM_STELLARIS
 source "src/arch/arm/stellaris/kcnf"
 endif 
+

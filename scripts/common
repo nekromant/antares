@@ -1,6 +1,14 @@
 #/bin/bash
 #helper methods for generating .kcnf / .mk pairs
 
+gen_test()
+{
+get_mcu_list| while read lnn; do
+echo $lnn
+done
+
+}
+
 gen_mk()
 {
 echo "Generating mcu database Makefile..." >&2
@@ -8,10 +16,25 @@ echo "# Automatically generated. Not recommended to edit"
 get_mcu_list| while read lnn; do
 for ln in $lnn; do
 up=`echo $ln | tr [:lower:] [:upper:]`
-echo "ifeq (\$(CONFIG_MCU_$up),y)"
-echo "MCU=$ln" 
+echo "ifeq (\$(CONFIG_$1_$up),y)"
+echo "$1=$ln" 
 echo "endif" 
 done
 done
-echo "All done" >&2
+}
+
+gen_kcnf()
+{
+echo "Generating kconfig script..." >&2
+#1st pass, gen the kcnf selection menu
+echo "# Automatically generated. Not recommended to edit" 
+#echo "choice" >> mcu_selection.kcnf
+#echo "prompt \"Select MCU variant\"" >> mcu_selection.kcnf
+get_mcu_list| while read lnn; do
+for ln in $lnn; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "config $1_$up" 
+echo "bool \"$ln\"" 
+done
+done
 }

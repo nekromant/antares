@@ -1,0 +1,51 @@
+#!/bin/bash
+# Yet another script that does the trick
+# Tested it with the latest code sourcery - works. 
+# I now moved get_mk and get_kcnf to common
+source `dirname $0`/../common
+
+
+get_march_list()
+{
+STATE=0
+$CC --target-help 2>&1|while read line; do
+
+if [ "$line" == "ARM-specific assembler options:" ]; then
+  STATE=0
+fi
+
+if [ "$STATE" -eq "1" ]; then
+	echo "$line"|tr -d [,]
+fi
+
+if [ "$line" == "Known ARM architectures (for use with the -march= option):" ]; then
+	STATE=1
+fi
+done
+}
+
+get_mcu_list()
+{
+STATE=0
+$CC --target-help 2>&1|while read line; do
+
+if [ -z "$line" ]; then
+  STATE=0
+fi
+
+if [ "$STATE" -eq "1" ]; then
+	echo "$line"|tr -d [,]
+fi
+
+if [ "$line" == "Known ARM CPUs (for use with the -mcpu= and -mtune= options):" ]; then
+	STATE=1
+fi
+done
+}
+ 
+
+get_march_list |gen_kcnf ARM_MCPU > arm_mcpus.kcnf
+get_march_list |gen_mk ARM_MCPU > arm_mcpus.mk
+
+get_mcu_list |gen_kcnf ARM_MARCH > arm_march.kcnf
+get_mcu_list |gen_mk ARM_MARCH > arm_march.mk

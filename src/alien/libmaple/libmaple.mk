@@ -26,6 +26,6 @@ mrproper: $(alien_dir).downloaded
 	$(Q) rm -Rfv $(alien_dir).downloaded
   
 build:	$(alien_dir).downloaded
-	$(Q) cd $(alien_dir)source && make library 
+	$(Q) cd $(alien_dir)source && $(MAKE) library 
 
 .PHONY: $(alien_dir)source

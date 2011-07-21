@@ -57,3 +57,10 @@ endef
 objects-y:= src/
 include_toolchain=include toolchains/$(1).$(2).mk
 check_root=$(if $(1),sudo,)
+
+# IF U ARE PORTING TO A NEW TOOLCHAIN, THIS IS WHAT YOU ARE SEARCHING FOR
+# PLACE your toolchain name here
+ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
+TOOLCHAIN=gcc
+endif
+

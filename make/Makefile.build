@@ -6,11 +6,6 @@
 
 include make/Makefile.lib
 
-# IF U ARE PORTING TO A NEW TOOLCHAIN, THIS IS WHAT YOU ARE SEARCHING FOR
-# PLACE your toolchain name here
-ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
-TOOLCHAIN=gcc
-endif
 
 
 objects-y:= src/
@@ -63,8 +58,10 @@ build_objects=	$(addprefix $(TOP_DIR),$(objects))
 clean_symlinks= $(call clean_includes)
 link_arch=	$(call linkarch)
 
+aliens:	
+	$(MAKE) -f $(TOP_DIR)make/Makefile.alien build
 
-build: $(clean_includes) $(load_makes) $(linkarch) $(OUTPUT_TARGETS)
+build: $(clean_includes) $(load_makes) $(linkarch) aliens $(OUTPUT_TARGETS)
 	@echo "<--Makefile.build done-->"
 
 #include toolchain rules
@@ -75,9 +72,11 @@ clean: $(load_makes)
 	$(info <----cleaning---->)
 	$(foreach o,$(build_objects),$(shell rm -f $(o)))
 	-rm $(IMAGES_DIR)$(TARGET)*
+	$(MAKE) -f $(TOP_DIR)make/Makefile.alien clean
 
 debug: $(call ldmakes, $(TOP_DIR))
 	@echo "I'm gonna build: $(build_objects)"
+	$(MAKE) -f $(TOP_DIR)make/Makefile.alien debug
 
 
 analyze: $(TARGET_LSSFILE)

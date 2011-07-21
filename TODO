@@ -5,8 +5,8 @@ msp430 *DONE
 refactor toolchain makefiles *DONE
 stm32 support
 stellaris support
-alien code support *WIP
-Implement draft multitasking kernel for avr
+alien code support *DONE
+Merge in FreeRTOS?
 Fix .c deps generation
 Fix out-of-directory builds
 Fix dependency tracking macros
