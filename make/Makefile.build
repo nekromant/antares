@@ -4,16 +4,14 @@
 #Yep, there goes some NIH syndrome =)
 
 
+
 include make/Makefile.lib
-
-
 
 objects-y:= src/
 
 $(info $(objects-y))
 #Out-of-dir builds not yet supported
-TOP_DIR=./
-BUILD_DIR=./
+
 PHONY:= build clean
 INCLUDES=-I"$(TOP_DIR)" -I"$(TOP_DIR)include"
 Q:=
@@ -45,7 +43,7 @@ endef
 
 
 
-include src/arch/$(ARCH)/make.mk
+
 
 define linkarch
 $(shell rm -Rf $(TOP_DIR)include/arch)

@@ -29,9 +29,6 @@ CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 all: $(CONFIG_MAKE_DEFTARGET)
 	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
 
-#This parses the CONFIG_ARCH into something readable and 
-#includes arch-specific files
-include src/arch/arch.mk
 include kconfig/kconfig.mk
 
 
@@ -43,6 +40,9 @@ setupsymlinks:
 
 build-%:
 	$(MAKE) -f make/Makefile.build $*
+
+alien-%:
+	$(MAKE) -f make/Makefile.alien $*
 
 build: versionupdate setupsymlinks silentoldconfig
 	$(MAKE) -f make/Makefile.build -r build

@@ -1,6 +1,9 @@
 ifeq ($(CONFIG_ARCH_AVR),y)
   ARCH=avr
 endif
+ifeq ($(CONFIG_ARCH_ARM),y)
+  ARCH=arm
+endif
 ifeq ($(CONFIG_ARCH_MSP430),y)
   ARCH=msp430
 endif
@@ -12,6 +15,3 @@ ARCH?=avr
 export ARCH
 
 include src/arch/$(ARCH)/make.mk
-
-archtest:
-	echo "ARCH IS $(ARCH)"

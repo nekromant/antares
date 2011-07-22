@@ -10,7 +10,9 @@ DISAS    := $(TOOL_PREFIX)objdump
 OBJDUMP  := $(TOOL_PREFIX)objdump
 SIZE     := $(TOOL_PREFIX)size
 
-COMPILER_TOOLS=CC=$(CC) CXX=$(CXX) LD=$(LD) AR=$(AR) AS=$(AS) OBJCOPY=$(OBJCOPY) OBJDUMP=$(OBJDUMP) DISAS=$(DISAS) SIZE=$(SIZE)
+COMPILER_TOOLS=CC=$(CC) CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
+
+export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS
 
 #We're targeting an ELF and an LSS (disassembly) by default.
 #Arch for avr adds us a hex and eep files for flashing

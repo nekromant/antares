@@ -1,4 +1,7 @@
 -include .config
+include src/arch/arch.mk
+TOP_DIR=./
+BUILD_DIR=./
 #Coloring support
 t_blk=\e[0;30m
 t_red=\e[0;31m
@@ -64,3 +67,5 @@ ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
 TOOLCHAIN=gcc
 endif
 
+
+include src/arch/$(ARCH)/make.mk
