@@ -18,15 +18,18 @@ done
 gen_stm32_mk()
 {
 cat $1|while read line; do
+if [ "$line" != "" ]; then
 MCU=`echo $line|cut -d"," -f 1|tr -d [\"]`
 SPEED=`echo $line|cut -d"," -f 4|tr -d [\"]`000000
 FLASH_SZ=`echo $line|cut -d"," -f 5|tr -d [\"]`
 RAM_SZ=`echo $line|cut -d"," -f 6|tr -d [\"]`
 echo "ifeq (\$(CONFIG_$2_$MCU),y)"
-echo "SPEED=$SPEED"
-echo "RAM_SZ=$RAM_SZ"
-echo "FLASH_SZ=$FLASH_SZ"   
+echo "MCU=$MCU"
+echo "MAX_SPEED=$SPEED"
+echo "RAM_SIZE=`echo $RAM_SZ*1024|bc`"
+echo "FLASH_SIZE=`echo $FLASH_SZ*1024|bc`"   
 echo "endif" 
+fi
 done
 }
 

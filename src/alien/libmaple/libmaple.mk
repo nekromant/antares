@@ -5,13 +5,13 @@ libmaple_ldflags=
 #Get's the actual source
 
 include make/Makefile.lib
-$(info $(COMPILER_TOOLS))
-$(info $(CC))
+$(info $(FLASHSZ))
+$(info $(MCU))
 #We use libmaple's Makefile as our target
 $(alien_dir).downloaded:
 	$(Q) git clone https://github.com/leaflabs/libmaple.git $(alien_dir)source
 	$(Q) mkdir -p $(TOP_DIR)/include/alien
-	$(Q) ln -sf $(alien_dir)source $(TOP_DIR)include/alien/libmaple
+	$(Q) ln -sf $(abspath $(alien_dir)source) $(TOP_DIR)include/alien/libmaple
 	$(Q) $(if $(ALIEN_LIBMAPLE_GITREV), cd $(alien_dir)/source && git checkout $(ALIEN_LIBMAPLE_GITREV))
 	$(Q) touch $@
   
@@ -30,6 +30,6 @@ mrproper: $(alien_dir).downloaded
   
 build:	$(alien_dir).downloaded
 	$(info $(COMPILER_TOOLS))
-	$(Q) cd $(alien_dir)source && $(MAKE) $(COMPILER_TOOLS) $(PARAMS) board=antares library 
+	$(Q) cd $(alien_dir)source && $(MAKE) $(COMPILER_TOOLS) $(PARAMS) BOARD=maple library 
 
 .PHONY: $(alien_dir)source

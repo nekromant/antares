@@ -4,4 +4,14 @@ bool "LibMaple"
 if ALIEN_LIBMAPLE
   config ALIEN_LIBMAPLE_GITREV
   string "Git revision to checkout (leave blank for head)"
+
+  config ALIEN_LIBMAPLE_ERROR_LED_PORT
+  string "Error led port"
+  default "GPIOA"
+
+  config ALIEN_LIBMAPLE_ERROR_LED_PIN
+  int "Error led pin"
+  default 5
+
+
 endif
