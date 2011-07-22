@@ -47,8 +47,10 @@ endef
 
 define linkarch
 $(shell rm -Rf $(TOP_DIR)include/arch)
-
 $(if $(SUBARCH),$(shell ln -sf ../src/arch/$(ARCH)/$(SUBARCH)/include include/arch),$(shell ln -sf ../src/arch/$(ARCH)/include include/arch))
+$(eval CFLAGS+=$(cflags-y))
+$(eval LDLAGS+=$(ldflags-y))
+$(eval ASLAGS+=$(asflags-y))
 endef
 
 load_makes=	$(call ldmakes, $(TOP_DIR)) 
