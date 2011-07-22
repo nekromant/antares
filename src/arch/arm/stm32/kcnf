@@ -1,0 +1,16 @@
+choice 
+prompt "STM32 Variant"
+
+config	ARCH_ARM_STM32F
+bool "STM32F"
+
+endchoice
+
+if ARCH_ARM_STM32F
+choice 
+prompt "MCU"
+source "src/arch/arm/stm32/stm32f_list.kcnf"
+
+
+endchoice
+endif

@@ -3,12 +3,22 @@ prompt "SubArchitecture"
 depends on ARCH_ARM
 
 config ARCH_ARM_STM32
-bool "STM32 support"
+bool "ST STM32"
 
 config ARCH_ARM_STELLARIS
-bool "Stellaris support"
+bool "Ti Stellaris"
 
 endchoice 
+
+if ARCH_ARM_STM32
+source "src/arch/arm/stm32/kcnf"
+endif 
+
+if ARCH_ARM_STELLARIS
+source "src/arch/arm/stellaris/kcnf"
+endif 
+
+
 
 menu "ARM Variant tuning"
 
@@ -23,11 +33,3 @@ menu "ARM Variant tuning"
   endchoice
 
 endmenu
-if ARCH_ARM_STM32
-source "src/arch/arm/stm32/kcnf"
-endif 
-
-if ARCH_ARM_STELLARIS
-source "src/arch/arm/stellaris/kcnf"
-endif 
-
