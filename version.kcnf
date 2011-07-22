@@ -1,5 +1,6 @@
 #menu "Version Information"
-comment "These opts are for devs"
+comment "This is a secret menu for developers"
+comment "They use it once they want to increment the version"
 
   config VERSION_MAJOR
   string "Major Version"
@@ -12,16 +13,5 @@ comment "These opts are for devs"
   config VERSION_CODENAME
   string "CodeName"
   default "Lucky Lady"
-
-comment "+++ For reference only +++"
-comment "All values below are to be filled by Make scripts"
-
-config VERSION_STRING
-  string "Version string"
-  default "to be genned"
-
-config VERSION_GIT
-  string "GIT Revision"
-  default "to be genned"
 
 #endmenu

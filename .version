@@ -1,11 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Antares version: to be genned
-# Sun Jul  3 16:01:22 2011
-#
-
-#
-# Version Information
+# Antares version: VERSION_STRING
+# Sat Jul 23 00:23:58 2011
 #
 
 #
@@ -14,13 +10,3 @@
 CONFIG_VERSION_MAJOR="0"
 CONFIG_VERSION_MINOR="1"
 CONFIG_VERSION_CODENAME="Scorpion's Heart"
-
-#
-# +++ For reference only +++
-#
-
-#
-# All values below are to be filled by Make scripts
-#
-CONFIG_VERSION_STRING="to be genned"
-CONFIG_VERSION_GIT="to be genned"
