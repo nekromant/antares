@@ -8,6 +8,11 @@ ifeq ($(CONFIG_DEPLOY_JETTERM),y)
         include deploy/jetterm/Makefile
 endif
 
+ifeq ($(CONFIG_DEPLOY_STM32FLASH),y)
+        include deploy/stm32flash/Makefile
+endif
+
+
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_REMOTE),y)
 	include deploy/avrdude-remote/Makefile
 endif

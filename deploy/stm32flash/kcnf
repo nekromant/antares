@@ -1,0 +1,53 @@
+menuconfig DEPLOY_STM32FLASH
+bool "STM32Flash"
+depends on ARCH_ARM_STM32
+
+if DEPLOY_STM32FLASH
+
+  config DEPLOY_AS_ROOT
+  bool "Run stm32 as root"
+  
+  config DEPLOY_STM32FLASH_BIN
+  string "stm32flash binary name"
+  default "stm32flash"
+
+  config DEPLOY_STM32FLASH_PORT
+  string "Serial port"
+  default "/dev/ttyUSB0"
+
+  config DEPLOY_STM32FLASH_BAUD
+  int "Baudrate"
+  default 57600
+
+  menu "Extended Flash options"
+
+  config DEPLOY_STM32FLASH_DFWP
+  bool "Disable the flash write-protection"
+  
+  config DEPLOY_STM32FLASH_VFY
+  bool "Verify writes"
+
+  config DEPLOY_STM32FLASH_RETRY_COUNT
+  int "Retry failed writes count "
+  default 10
+  
+  config DEPLOY_STM32FLASH_FBP
+  bool "Force binary parser"
+  default n
+  
+  config DEPLOY_STM32FLASH_EXEC
+  bool "Run the code after flashing"
+  default n
+  
+  if DEPLOY_STM32FLASH_EXEC
+  
+  config DEPLOY_STM32FLASH_EXEC_ADDR
+  hex "Adress of the code to jump to"
+  default 0x0
+
+  endif
+  
+
+  endmenu
+  
+endif
