@@ -1,5 +1,6 @@
 menuconfig ALIEN_LIBMAPLE
 bool "LibMaple"
+depends on ARCH_ARM_STM32
 
 if ALIEN_LIBMAPLE
   config ALIEN_LIBMAPLE_GITREV

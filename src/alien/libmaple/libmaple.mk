@@ -2,14 +2,13 @@
 libmaple_cflags=
 libmaple_asflags=
 libmaple_ldflags=
+PACKAGE=libmaple
 #Get's the actual source
 
 include make/Makefile.lib
-$(info $(FLASHSZ))
-$(info $(MCU))
 #We use libmaple's Makefile as our target
 $(alien_dir).downloaded:
-	$(Q) git clone https://github.com/leaflabs/libmaple.git $(alien_dir)source
+	$(SILENT_DL) git clone https://github.com/leaflabs/libmaple.git $(alien_dir)source
 	$(Q) mkdir -p $(TOP_DIR)/include/alien
 	$(Q) ln -sf $(abspath $(alien_dir)source) $(TOP_DIR)include/alien/libmaple
 	$(Q) $(if $(ALIEN_LIBMAPLE_GITREV), cd $(alien_dir)/source && git checkout $(ALIEN_LIBMAPLE_GITREV))
@@ -19,7 +18,7 @@ download: $(alien_dir).downloaded
 	@echo "Download complete"
 
 update:	$(alien_dir).downloaded
-	$(Q) cd $(alien_dir)/source && git pull
+	$(SILENT_UPDATE) cd $(alien_dir)/source && git pull
 
 clean:	$(alien_dir).downloaded
 	$(Q) cd $(alien_dir)source && make clean

@@ -30,11 +30,15 @@ help:
 export CC CXX LD AS AR AS OBJCOPY OBJDUMP SIZE DISAS
 
 download: $(load_makes)	$(alien)
-	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) download)
+	$(foreach target,$(alien), $(MAKE) -f $(target) alien_dir=$(dir $(target)) download)
 	@echo "Done"
 
 patch: $(load_makes)	$(alien)
 	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) patch)
+	@echo "Done"
+
+update: $(load_makes)	$(alien)
+	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) V=9 update)
 	@echo "Done"
 
 build: $(load_makes)	$(alien)

@@ -1,2 +1,3 @@
 source "src/apps/eurobot/kcnf"
+source "src/apps/examples/kcnf"
 

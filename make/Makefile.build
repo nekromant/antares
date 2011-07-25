@@ -14,14 +14,14 @@ $(info $(objects-y))
 
 PHONY:= build clean
 INCLUDES=-I"$(TOP_DIR)" -I"$(TOP_DIR)include"
-Q:=
-ifneq ($(CONFIG_BUILD_VERBOSE),y)
-Q=@
-endif
+
 
 
 #include Toolchain variables in our build
 $(eval $(call include_toolchain,$(TOOLCHAIN),vars))
+#append arch-specific rules, flags & vars
+include src/arch/$(ARCH)/make.mk
+
 
 all: 
 	$(error This makefile should not be called directly)

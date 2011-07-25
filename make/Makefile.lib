@@ -1,49 +1,75 @@
 -include .config
+
+# set the ARCH variable accordingly
 include src/arch/arch.mk
+
 TOP_DIR=./
 BUILD_DIR=./
+IMAGES_DIR=images/
+
 #Coloring support
-t_blk=\e[0;30m
-t_red=\e[0;31m
-t_grn=\e[0;32m
-t_ylw=\e[0;33m
-t_blu=\e[0;34m
-t_pur=\e[0;35m
-t_cyn=\e[0;36m
-t_wht=\e[0;37m
+t_blk=$(shell echo -e '\e[0;30m')
+t_red=$(shell echo -e '\e[0;31m')
+t_grn=$(shell echo -e '\e[0;32m')
+t_ylw=$(shell echo -e '\e[0;33m')
+t_blu=$(shell echo -e '\e[0;34m')
+t_pur=$(shell echo -e '\e[0;35m')
+t_cyn=$(shell echo -e '\e[0;36m')
+t_wht=$(shell echo -e '\e[0;37m')
 
-tb_blk=\e[1;30m
-tb_red=\e[1;31m
-tb_grn=\e[1;32m
-tb_ylw=\e[1;33m
-tb_blu=\e[1;34m
-tb_pur=\e[1;35m
-tb_cyn=\e[1;36m
-tb_wht=\e[1;37m
+tb_blk=$(shell echo -e '\e[1;30m')
+tb_red=$(shell echo -e '\e[1;31m')
+tb_grn=$(shell echo -e '\e[1;32m')
+tb_ylw=$(shell echo -e '\e[1;33m')
+tb_blu=$(shell echo -e '\e[1;34m')
+tb_pur=$(shell echo -e '\e[1;35m')
+tb_cyn=$(shell echo -e '\e[1;36m')
+tb_wht=$(shell echo -e '\e[1;37m')
 
-tu_blk=\e[4;30m
-tu_red=\e[4;31m
-tu_grn=\e[4;32m
-tu_ylw=\e[4;33m
-tu_blu=\e[4;34m
-tu_pur=\e[4;35m
-tu_cyn=\e[4;36m
-tu_wht=\e[4;37m
+tu_blk=$(shell echo -e '\e[4;30m')
+tu_red=$(shell echo -e '\e[4;31m')
+tu_grn=$(shell echo -e '\e[4;32m')
+tu_ylw=$(shell echo -e '\e[4;33m')
+tu_blu=$(shell echo -e '\e[4;34m')
+tu_pur=$(shell echo -e '\e[4;35m')
+tu_cyn=$(shell echo -e '\e[4;36m')
+tu_wht=$(shell echo -e '\e[4;37m')
 
-bg_blk=\e[40m
-bg_red=\e[41m
-bg_grn=\e[42m
-bg_ylw=\e[43m
-bg_blu=\e[44m
-bg_pur=\e[45m
-bg_cyn=\e[46m
-bg_wht=\e[47m
-col_rst=\e[0m
+bg_blk=$(shell echo -e '\e[40m')
+bg_red=$(shell echo -e '\e[41m')
+bg_grn=$(shell echo -e '\e[42m')
+bg_ylw=$(shell echo -e '\e[43m')
+bg_blu=$(shell echo -e '\e[44m')
+bg_pur=$(shell echo -e '\e[45m')
+bg_cyn=$(shell echo -e '\e[46m')
+bg_wht=$(shell echo -e '\e[47m')
+col_rst=$(shell echo -e '\e[0m')
 
 unquote=$(subst ",,$(1))
 
-colorize=@echo -ne '$(1)'
-IMAGES_DIR=images/
+
+
+Q:=
+ECHO=@echo -e
+ifneq ($(CONFIG_BUILD_VERBOSE),y)
+   SILENT_CC       = @echo '  $(tb_ylw)[CC]$(col_rst)       ' $(@:$(BUILD_DIR)/%.o=%.c);
+   SILENT_AS       = @echo '  $(tb_ylw)[AS]$(col_rst)      ' $(@:$(BUILD_DIR)/%.o=%.S);
+   SILENT_CXX      = @echo '  $(tb_ylw)[CXX]$(col_rst)      ' $(@:$(BUILD_DIR)/%.o=%.cpp);
+   SILENT_LD       = @echo '  $(tb_pur)[LD]$(col_rst)       ' $(@F);
+   SILENT_AR       = @echo '  $(tb_pur)[AR]$(col_rst)       '
+   SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      '
+   SILENT_DL       = @echo '  $(tb_cyn)[DOWNLOAD]$(col_rst) ' $(PACKAGE);
+   SILENT_PATCH    = @echo '  $(tb_cyn)[PATCH]$(col_rst)    ' $(PACKAGE);
+   SILENT_UPDATE   = @echo '  $(tb_cyn)[UPD]$(col_rst)      ' $(PACKAGE);
+   SILENT_PARSE    = @echo '  $(tb_cyn)[PARSE]$(col_rst)    '
+   SILENT_OBJCOPY  = @echo '  $(tb_blu)[OBJCOPY]$(col_rst)  ' $(@F);
+   SILENT_DISAS    = @echo '  $(tb_blu)[DISAS]$(col_rst)    ' $(@:$(BUILD_DIR)/%.bin=%);
+   SILENT_OBJDUMP  = @echo '  $(tb_blu)[OBJDUMP]$(col_rst)  ' $(OBJDUMP);
+
+endif
+
+
+
 
 TARGET=$(call unquote,$(CONFIG_IMAGE_FILENAME))
 TARGET_ELFFILE=$(IMAGES_DIR)$(TARGET).elf
@@ -67,5 +93,6 @@ ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
 TOOLCHAIN=gcc
 endif
 
+#include ARCH-spesific rules
 
-include src/arch/$(ARCH)/make.mk
+$(info $(CFLAGS))
