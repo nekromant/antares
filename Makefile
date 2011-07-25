@@ -16,7 +16,6 @@ subdirs-y:=arch apps
 	
 
 #overrride with actual version information
-CONFIG_VERSION_MINOR=3
 -include .config
 $(info $(CONFIG_VERSION_CODENAME))
 #Suck in the current .config file

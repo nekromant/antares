@@ -74,6 +74,10 @@ menu "Build System Tweaks"
 
   config BUILD_VERBOSE
   bool "Verbose build
+
+  config BUILD_VERBOSE_D
+  bool "Even more verbose build
+  depends on BUILD_VERBOSE
   
 endmenu
 
