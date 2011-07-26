@@ -16,13 +16,13 @@ OUTPUT_TARGETS+=$(TARGET_HEXFILE) $(TARGET_EEPFILE)
 #Default Makefile will cook the elf for us
 
 %.hex: %.elf
-	$(Q) $(call unquote,$(CONFIG_OBJCOPY)) -O ihex $(HEX_FLASH_FLAGS)  $< $@
-	$(call colorize,$(t_cyn))
-	@echo "Created Intel HEX file: $(@)"
-	$(call colorize,$(col_rst))
+	$(SILENT_OBJCOPY) $(OBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $< $@
+	#$(call colorize,$(t_cyn))
+	#@echo "Created Intel HEX file: $(@)"
+	#$(call colorize,$(col_rst))
 
 %.eep: %.elf
-	$(Q) $(call unquote,$(CONFIG_OBJCOPY)) $(HEX_EEPROM_FLAGS) -O ihex $< $@ || exit 0
+	$(SILENT_OBJCOPY) $(OBJCOPY) $(HEX_EEPROM_FLAGS) -O ihex $< $@ || exit 0
 	$(call colorize,$(t_cyn))
 	@echo "Created Intel HEX file for eeprom: $(@)"
 	$(call colorize,$(col_rst))

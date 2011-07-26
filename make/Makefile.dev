@@ -1,0 +1,5 @@
+include make/Makefile.lib
+
+help:
+	@echo "Antares developer scripts quick help"
+# 	@echo ""

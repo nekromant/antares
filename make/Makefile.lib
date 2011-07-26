@@ -58,6 +58,7 @@ endif
 
 ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_VER      = @echo '  $(tb_ylw)[VERSION]$(col_rst)  ' "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME); git commit: $(VERSION_GIT)  ";
+   SILENT_CFG      = @echo '  $(tb_cyn)[CFG]$(col_rst)       '
    SILENT_CC       = @echo '  $(tb_ylw)[CC]$(col_rst)       ' $(@:$(BUILD_DIR)/%.o=%.c);
    SILENT_AS       = @echo '  $(tb_ylw)[AS]$(col_rst)       ' $(@:$(BUILD_DIR)/%.o=%.S);
    SILENT_CXX      = @echo '  $(tb_ylw)[CXX]$(col_rst)      ' $(@:$(BUILD_DIR)/%.o=%.cpp);
@@ -101,5 +102,3 @@ TOOLCHAIN=gcc
 endif
 
 #include ARCH-spesific rules
-
-$(info $(CFLAGS))

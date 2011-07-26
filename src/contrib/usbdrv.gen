@@ -1,0 +1,5 @@
+#!/bin/bash
+# This tiny script generates the vendor/product/serial header for usbconfig.h
+# Neat stuff, heh =)
+source $CONFIG
+echo "//Automatically generated, do not edit"

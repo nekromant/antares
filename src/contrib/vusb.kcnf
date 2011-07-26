@@ -39,10 +39,10 @@ default 2
 
 endmenu
 
-menuconfig CONFIG_CONTRIB_VUSB_OPT
+menuconfig USB_OPT
 bool "Optional Hardware Config (pullup)"
 
-if CONFIG_CONTRIB_VUSB_OPT
+if USB_OPT
 
 config USB_CFG_PULLUP_IOPORTNAME
 string "Pullup port name"
@@ -106,7 +106,7 @@ help
   of bytes in flash memory and the transmit buffers in RAM.
 
 config USB_CFG_INTR_POLL_INTERVAL
-bool "Interrup poll interval"
+bool "Interrupt poll interval"
 default 10
   help
   If you compile a version with endpoint 1 (interrupt-in), this is the poll
@@ -257,8 +257,9 @@ default n
 
 if USB_HAS_SERIAL && !USB_SERIAL_USE_GIT
 
-config USB_CFG_DEVICE_NAME
-string "Device name"
+config USB_CFG_SERIAL_NUMBER
+string "Serial Number"
+default "n+1"
 endif 
 
 comment "See USB specification if you want to conform to an existing device class."
@@ -284,6 +285,21 @@ default 0x0
 config USB_CFG_INTERFACE_PROTOCOL
 hex "Interface protocol"
 default 0x00
+
+config USB_CFG_INTERFACE_PROTOCOL
+hex "Interface protocol"
+default 0x00
+
+config USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH
+int "USB HID Descriptor length"
+default 0
+help
+  Define this to the length of the HID report descriptor, if you implement
+  an HID device. Otherwise don't define it or define it to 0.
+  If you use this define, you must add a PROGMEM character array named
+  "usbHidReportDescriptor" to your code which contains the report descriptor.
+  Don't forget to keep the array and this define in sync!
+ 
 
 endmenu
 

@@ -1,0 +1,1 @@
+objects-$(CONFIG_APP_ORDERING_TEST)+=m2.o test.o

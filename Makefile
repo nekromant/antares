@@ -38,17 +38,16 @@ setupsymlinks:
 	#ln -sf ../arch/$(ARCH)/include src/include/arch
 
 build-%:
-	$(MAKE) -f make/Makefile.build $*
+	$(Q)$(MAKE) -f make/Makefile.build $*
 
 alien-%:
-	$(MAKE) -f make/Makefile.alien $*
+	$(Q)$(MAKE) -f make/Makefile.alien $*
 
 build: versionupdate setupsymlinks silentoldconfig
-	$(MAKE) -f make/Makefile.build -r build
-	$(call colorize,$(t_grn))
-	@echo "Antares build is now complete"
-	@echo "Inspect the files under $(IMAGES_DIR) and have fun"
-	$(call colorize,$(col_rst))
+	$(Q)$(MAKE) -f make/Makefile.build -r build
+	@echo "$(t_grn)Antares build is now complete"
+	@echo "Inspect the files under $(IMAGES_DIR) and have fun$(col_rst)"
+	
 	
 clean: 
 	$(MAKE) -f make/Makefile.build -r clean
