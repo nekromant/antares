@@ -30,27 +30,27 @@ help:
 export CC CXX LD AS AR AS OBJCOPY OBJDUMP SIZE DISAS
 
 download: $(load_makes)	$(alien)
-	$(foreach target,$(alien), $(MAKE) -f $(target) alien_dir=$(dir $(target)) download)
+	$(foreach target,$(alien),$(Q)$(MAKE) -f $(target) alien_dir=$(dir $(target)) download)
 	@echo "Done"
 
 patch: $(load_makes)	$(alien)
-	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) patch)
+	$(foreach target,$(alien),$(Q)$(MAKE) -f $(target) alien_dir=$(dir $(target)) patch)
 	@echo "Done"
 
 update: $(load_makes)	$(alien)
-	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) V=9 update)
+	$(foreach target,$(alien),$(Q)$(MAKE) -f $(target) alien_dir=$(dir $(target)) V=9 update)
 	@echo "Done"
 
 build: $(load_makes)	$(alien)
-	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) V=9 build)
+	$(foreach target,$(alien),$(Q)$(MAKE) -f $(target) alien_dir=$(dir $(target)) V=9 build)
 	@echo "Done"
 
 clean: $(load_makes)	$(alien)
-	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) clean)
+	$(foreach target,$(alien),$(Q)$(MAKE) -f $(target) alien_dir=$(dir $(target)) clean)
 	@echo "Done"
 
 mrproper: $(load_makes)	$(alien)
-	$(foreach target,$(alien),$(MAKE) -f $(target) alien_dir=$(dir $(target)) mrproper)
+	$(foreach target,$(alien),$(Q)$(MAKE) -f $(target) alien_dir=$(dir $(target)) mrproper)
 	@echo "Done"
 
 	

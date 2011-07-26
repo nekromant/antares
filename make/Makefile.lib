@@ -51,7 +51,11 @@ unquote=$(subst ",,$(1))
 
 
 Q:=
-ECHO=@echo -e
+#When the build is ! 'even more verbose' we place @ istread of Q
+ifneq ($(CONFIG_BUILD_VERBOSE),y)
+Q=@
+endif
+
 ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_VER      = @echo '  $(tb_ylw)[VERSION]$(col_rst)  ' "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME); git commit: $(VERSION_GIT)  ";
    SILENT_CC       = @echo '  $(tb_ylw)[CC]$(col_rst)       ' $(@:$(BUILD_DIR)/%.o=%.c);

@@ -59,7 +59,7 @@ clean_symlinks= $(call clean_includes)
 link_arch=	$(call linkarch)
 
 aliens:	
-	$(MAKE) -f $(TOP_DIR)make/Makefile.alien build
+	$(Q)$(MAKE) -f $(TOP_DIR)make/Makefile.alien build
 
 build: $(clean_includes) $(load_makes) $(linkarch) aliens $(OUTPUT_TARGETS)
 	@echo "<--Makefile.build done-->"
@@ -71,16 +71,16 @@ $(eval $(call include_toolchain,$(TOOLCHAIN),rules))
 clean: $(load_makes) 
 	$(info <----cleaning---->)
 	$(foreach o,$(build_objects),$(shell rm -f $(o)))
-	-rm $(IMAGES_DIR)$(TARGET)*
-	$(MAKE) -f $(TOP_DIR)make/Makefile.alien clean
+	-$(Q)rm $(IMAGES_DIR)$(TARGET)*
+	$(Q)$(MAKE) -f $(TOP_DIR)make/Makefile.alien clean
 
 debug: $(call ldmakes, $(TOP_DIR))
 	@echo "I'm gonna build: $(build_objects)"
-	$(MAKE) -f $(TOP_DIR)make/Makefile.alien debug
+	$(Q)$(MAKE) -f $(TOP_DIR)make/Makefile.alien debug
 
 
 analyze: $(TARGET_LSSFILE)
-	$(Q) $(TOP_DIR)scripts/analyzer $(TARGET_LSSFILE)
+	$(Q)$(TOP_DIR)scripts/analyzer $(TARGET_LSSFILE)
 
 .PHONY: $(PHONY)
 .PRECIOUS: $(build_objects)
