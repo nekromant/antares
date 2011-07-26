@@ -171,6 +171,7 @@ bool "Count SOF packets (READ HELP!)"
   connected to D- instead of D+.
 
 config USB_CFG_CHECK_DATA_TOGGLING
+bool "Check data toggling"
 default n
   help
   define this macro to 1 if you want to filter out duplicate data packets
@@ -181,6 +182,7 @@ default n
   for each control- and out-endpoint to check for duplicate packets.
  
 config USB_CFG_HAVE_MEASURE_FRAME_LENGTH
+bool "Enable usbMeasureFrameLength()"
 default n
   help
   define this macro to 1 if you want the function usbMeasureFrameLength()

@@ -73,10 +73,10 @@ menu "Build System Tweaks"
    Extensions will appended automatically.
 
   config BUILD_VERBOSE
-  bool "Verbose build
+  bool "Verbose build"
 
   config BUILD_VERBOSE_D
-  bool "Even more verbose build
+  bool "Even more verbose build"
   depends on BUILD_VERBOSE
   
 endmenu
