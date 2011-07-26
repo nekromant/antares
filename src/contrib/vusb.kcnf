@@ -106,7 +106,7 @@ help
   of bytes in flash memory and the transmit buffers in RAM.
 
 config USB_CFG_INTR_POLL_INTERVAL
-bool "Interrupt poll interval"
+int "Interrupt poll interval"
 default 10
   help
   If you compile a version with endpoint 1 (interrupt-in), this is the poll

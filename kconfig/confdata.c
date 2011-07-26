@@ -400,16 +400,27 @@ int conf_read(const char *name)
 }
 
 /* Write a S_STRING */
-static void conf_write_string(bool headerfile, const char *name,
+static void conf_write_string(int headerfile, const char *name,
                               const char *str, FILE *out)
 {
 	int l;
-	if (headerfile)
-		fprintf(out, "#define CONFIG_%s \"", name);
-	else
-		fprintf(out, "CONFIG_%s=\"", name);
+	switch(headerfile)
+	{
+	case 1: //C header
+		fprintf(out, "#define CONFIG_%s ", name);
+	break;
+	case 0: 
+		fprintf(out, "CONFIG_%s=", name);
+	break;
+	case 2: //verilog
+		fprintf(out, "'define CONFIG_%s ", name);
+	break;
+	}
+	  //if (quote) 
+	    fputs("\"", out);
 
 	while (1) {
+	      
 		l = strcspn(str, "\"\\");
 		if (l) {
 			xfwrite(str, l, 1, out);
@@ -419,7 +430,10 @@ static void conf_write_string(bool headerfile, const char *name,
 			break;
 		fprintf(out, "\\%c", *str++);
 	}
-	fputs("\"\n", out);
+// 	if (quote)
+	fputs("\"", out);
+// 	else
+	fputs("\n", out);
 }
 
 static void conf_write_symbol(struct symbol *sym, enum symbol_type type,
@@ -865,7 +879,8 @@ int conf_write_autoconf(void)
 			}
 			break;
 		case S_STRING:
-			conf_write_string(true, sym->name, sym_get_string_value(sym), out_h);
+			conf_write_string(1, sym->name, sym_get_string_value(sym), out_h);
+			conf_write_string(2, sym->name, sym_get_string_value(sym), out_v);
 			break;
 		case S_HEX:
 			str = sym_get_string_value(sym);
