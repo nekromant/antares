@@ -28,5 +28,6 @@
 //And some that control generic outlets
 #define outlet_off(num) OUTLET_##num##_PORT  |= (1<<OUTLET_##num##_PIN);
 #define outlet_on(num) OUTLET_##num##_PORT  &=~ (1<<OUTLET_##num##_PIN);
+#define outlet_toggle(num) OUTLET_##num##_PORT  ^= (1<<OUTLET_##num##_PIN);
 
 

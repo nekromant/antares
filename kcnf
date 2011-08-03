@@ -106,10 +106,6 @@ config VERSION_GIT
   string "GIT Revision"
   default "to be genned"
 
-config TEST
-string "test"
-default "`'!@#$%^&*()_+;;'';;"
-option nostdinit=1
 
 endmenu
 

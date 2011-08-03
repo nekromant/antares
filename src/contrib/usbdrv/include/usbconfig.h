@@ -30,7 +30,7 @@ section at the end of this file).
 
 /* ---------------------------- Hardware Config ---------------------------- */
 
-#define USB_CFG_IOPORTNAME      CONFIG_USB_CFG_IOPORTNAME
+//#define USB_CFG_IOPORTNAME      CONFIG_USB_CFG_IOPORTNAME
 /* This is the port where the USB bus is connected. When you configure it to
  * "B", the registers PORTB, PINB and DDRB will be used.
  */
@@ -60,7 +60,7 @@ section at the end of this file).
 
 #ifdef CONFIG_USB_OPT
 
-#define USB_CFG_PULLUP_IOPORTNAME   CONFIG_USB_CFG_PULLUP_IOPORTNAME
+//#define USB_CFG_PULLUP_IOPORTNAME   CONFIG_USB_CFG_PULLUP_IOPORTNAME
 #define USB_CFG_PULLUP_BIT          CONFIG_USB_CFG_PULLUP_BIT 
 
 #endif
