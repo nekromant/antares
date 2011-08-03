@@ -1,0 +1,8 @@
+#!/bin/bash
+echo -n "$1="
+echo $2 |while read -n 1 char; do
+echo -n "'${char}',"
+done
+echo
+LEN=${#2}
+echo $1_LEN=$LEN
