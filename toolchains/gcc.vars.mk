@@ -22,6 +22,7 @@ OUTPUT_TARGETS= $(TARGET_ELFFILE) $(TARGET_LSSFILE)
 CFLAGS=$(call unquote,$(CONFIG_CFLAGS))
 LDFLAGS=$(call unquote,$(CONFIG_LDFLAGS))
 ASFLAGS=$(call unquote,$(CONFIG_ASFLAGS))
+
 #TODO: Sort the deps stuff out
 #CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
@@ -48,9 +49,11 @@ endif
 
 
 
-
-CFLAGS+=-Wall
+COMMONFLAGS+=-Wall
 ifeq ($(CONFIG_GCC_PARANOID_WRN),y)
-CFLAGS+=-Werror
+COMMONFLAGS+=-Werror
 endif
+
+ASFLAGS+=$(COMMONFLAGS)
+CFLAGS+=$(COMMONFLAGS)
 

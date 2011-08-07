@@ -6,6 +6,7 @@
 
 #ifdef CONFIG_ARCH_AVR
 //Suck in all the default headers
+#ifndef __ASSEMBLER__
 #include <string.h>
 #include <avr/io.h>
 #include <avr/eeprom.h>
@@ -13,18 +14,13 @@
 #include <avr/pgmspace.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
+#endif
+
 //#include <string.h>
 
 //In case of avr we use .initX sections for low and high init functions
 
 //Suck in all the default headers
-#include <string.h>
-#include <avr/io.h>
-#include <avr/eeprom.h>
-#include <avr/interrupt.h>
-#include <avr/pgmspace.h>
-#include <avr/wdt.h>
-#include <util/delay.h>
 
 //In case of avr we use .initX sections for low and high init functions
 //APPS are called one by one in the main()

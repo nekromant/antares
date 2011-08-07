@@ -74,6 +74,8 @@ PROGMEM char usbDescriptorString0[] = { /* language descriptor */
 };
 #endif
 
+#warning USB_CFG_VENDOR_NAME
+
 #if USB_CFG_DESCR_PROPS_STRING_VENDOR == 0 && USB_CFG_VENDOR_NAME_LEN
 #undef USB_CFG_DESCR_PROPS_STRING_VENDOR
 #define USB_CFG_DESCR_PROPS_STRING_VENDOR   sizeof(usbDescriptorStringVendor)

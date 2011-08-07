@@ -1,8 +1,21 @@
 #!/bin/bash
-echo -n "$1="
-echo $2 |while read -n 1 char; do
-echo -n "'${char}',"
-done
-echo
 LEN=${#2}
-echo $1_LEN=$LEN
+case "$3" in
+"str")
+  echo -n "$1="
+  echo $2 |while read -n 1 char; do
+  if [ "${char}" != "" ]; then
+  LEN=$((LEN-1))
+  echo -n "'${char}'"
+  if [ "$LEN" -gt "0" ]; then
+  echo -n ","
+  fi
+  fi
+  done
+  echo -e ""
+  
+  ;;
+"len")
+  echo $1_LEN=$LEN
+  ;;
+esac
