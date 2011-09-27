@@ -8,9 +8,10 @@
  * This Revision: $Id: usbdrv.c 692 2008-11-07 15:07:40Z cs $
  */
 
-#include "usbportability.h"
-#include "usbdrv.h"
-#include "oddebug.h"
+#include "include/usbportability.h"
+#include "include/usbdrv.h"
+#include "include/oddebug.h"
+#include "include/usbconfig.h"
 
 /*
 General Description:

@@ -18,7 +18,7 @@ volatile char pos0,pos1;
 //timer8: 12000000/1024/23
 //Then goes interrupt, then goes soft
 
-
+/*
 void timer8_wait()
 {
     OCR0A=0xdb;
@@ -53,10 +53,10 @@ void timer8_toggle_mode()
     TCCR0A = (1<<COM0A1)|(1<<COM0B1)|(1<<WGM01)|(1<<WGM00); 
     TCCR0B = (1<<CS01)|(1<<CS00);  
     //outlet_on(1);
-    //*/
+    //
     }
-}
-
+} //*/
+/*
 ISR(TIMER0_OVF_vect)
 {
   //timer8_toggle_mode();  
@@ -90,7 +90,7 @@ ANTARES_INIT_LOW(servotool_init_timer8)
       _delay_ms(100);
     }
     
-}
+}*/
 
 //Init the 16-bit timer for pwm
 //We get here some nice presision. 
@@ -114,3 +114,24 @@ ANTARES_INIT_LOW(servotool_init_timer16)
     
 }
 
+
+#include <contrib/usbdrv/usbdrv.h>
+#define uchar unsigned char
+
+static uchar replyBuffer[8];
+uchar usbFunctionSetup(uchar data[8]) {
+
+	uchar len = 0;
+	usbMsgPtr = replyBuffer;
+
+	return len;
+}
+
+ANTARES_APP(servotool_app)
+{
+  usbInit();
+	sei();
+	for (;;) {
+		usbPoll();
+	}
+}

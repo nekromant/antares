@@ -8,7 +8,7 @@
  * This Revision: $Id: oddebug.c 692 2008-11-07 15:07:40Z cs $
  */
 
-#include "oddebug.h"
+#include "include/oddebug.h"
 
 #if DEBUG_LEVEL > 0
 
