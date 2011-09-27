@@ -9,7 +9,7 @@
 #include <string.h>
 #include <io.h>
 #include <signal.h>
-//#include <string.h>
+#include <string.h>
 
 //In case of avr we use .initX sections for low and high init functions
 

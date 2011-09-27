@@ -1,4 +1,6 @@
 source "src/apps/eurobot/kcnf"
 source "src/apps/examples/kcnf"
 source "src/apps/ncrmnt/kcnf"
+source "src/apps/dmitry/kcnf"
+
 

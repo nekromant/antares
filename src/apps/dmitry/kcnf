@@ -1,0 +1,12 @@
+
+menuconfig APPS_DMITRY
+bool "Dmitry's apps"
+
+if APPS_DMITRY
+  
+  config APP_DMITRY_MSP430BLINK
+  bool "MSP430 Led Blinker"
+  help
+    Led blinker example
+
+endif
