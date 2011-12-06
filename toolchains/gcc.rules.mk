@@ -9,7 +9,7 @@ $(BUILD_DIR)%.o: $(BUILD_DIR)%.S $(subst .,_,$(subst /,_,$()))
 
 
 %.elf: $(build_objects)	
-	$(SILENT_LD) $(CC) $(LDFLAGS) -o $(@) $^ 
+	$(SILENT_LD) $(LD) $(LDFLAGS) -o $(@) $^ 
 
 %.lss: %.elf
 	$(SILENT_DISAS) $(OBJDUMP) -h -S $< > $@
