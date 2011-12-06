@@ -1,0 +1,1 @@
+objects-$(CONFIG_APP_MEM_O_BOT_MAIN)+=mem-o-bot.o memorizer.o
