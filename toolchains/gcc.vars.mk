@@ -2,7 +2,7 @@ TOOL_PREFIX=$(call unquote,$(CONFIG_TOOLCHAIN_PREFIX))
 
 CC       := $(TOOL_PREFIX)gcc
 CXX      := $(TOOL_PREFIX)g++
-LD       := $(TOOL_PREFIX)ld -v
+LD       := $(TOOL_PREFIX)gcc
 AR       := $(TOOL_PREFIX)ar
 AS       := $(TOOL_PREFIX)gcc
 OBJCOPY  := $(TOOL_PREFIX)objcopy
@@ -56,4 +56,4 @@ endif
 
 ASFLAGS+=$(COMMONFLAGS)
 CFLAGS+=$(COMMONFLAGS)
-
+LDFLAGS+=$(COMMONFLAGS)
