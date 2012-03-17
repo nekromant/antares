@@ -25,3 +25,7 @@ endif
 ifeq ($(CONFIG_DEPLOY_OPENOCD),y)
 	include $(SRCDIR)/deploy/openocd/Makefile
 endif
+
+ifeq ($(CONFIG_DEPLOY_DFU),y)
+	include $(SRCDIR)/deploy/dfu-util/Makefile
+endif

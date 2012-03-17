@@ -3,7 +3,7 @@ bool "dfu-util"
 depends on ARCH_ARM
 
 if DEPLOY_DFU
-  config DEPLOY_MSPDEBUG_ROOT
+  config DEPLOY_DFU_ROOT
   bool "Run dfu-util as root"
   
   config DEPLOY_DFU_ARGS
