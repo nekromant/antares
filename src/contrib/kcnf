@@ -1,3 +1,0 @@
-source "src/contrib/crumbo/kcnf"
-source "src/contrib/avrlib.kcnf"
-source "src/contrib/vusb.kcnf"

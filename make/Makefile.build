@@ -3,87 +3,46 @@
 #And ethersex's methods of compiling sucked, so I invented my own build script
 #Yep, there goes some NIH syndrome =)
 
+include $(SRCDIR)/make/Makefile.lib
+include $(TMPDIR)/arch.mk
+include $(SRCDIR)/src/arch/$(ARCH)/arch.mk
+include $(OBJDIR)/Makefile
 
 
-include make/Makefile.lib
+objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
+PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
+clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
+# include $(SRCDIR)/toolchain/
 
-objects-y:= src/
+objects-y:=$(addprefix $(SRCDIR)/$(OBJDIR)/,$(objects-y))
 
-$(info $(objects-y))
 #Out-of-dir builds not yet supported
 
-PHONY:= build clean
-INCLUDES=-I"$(TOP_DIR)" -I"$(TOP_DIR)include"
+PHONY:= build clean 
 
+%/built-in.o:
+	$(Q)$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build	
 
+	
+%.o: %.c
+	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
-#include Toolchain variables in our build
-$(eval $(call include_toolchain,$(TOOLCHAIN),vars))
-#append arch-specific rules, flags & vars
-include src/arch/$(ARCH)/make.mk
+%.o: %.S 
+	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
+%.o: %.s 
+	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
-all: 
-	$(error This makefile should not be called directly)
+build: $(OBJDIR)/built-in.o
+	
+$(OBJDIR)/built-in.o: $(objects-y)
+	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 
+	
+clean: $(clean-y)
+# 	$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
+	-rm $(OBJDIR)/*.o
+	-rm tmp/*
 
-#Create sylinks in include
-
-define clean_includes
-$(info Recreating symlinks...)
-$(shell find $(TOPDIR)include -type l -delete)
-endef
-
-define includedir
-$(eval lndir=$(patsubst %/,%,$(dir $(patsubst %/,%,$(1)))))
-$(if $(wildcard $(1)include),$(shell mkdir -p $(TOP_DIR)include/$(subst $(TOP_DIR)src/,,$(lndir)))
-	$(shell ln -s $(abspath $(1)include) $(TOP_DIR)include/$(patsubst %/,%,$(subst $(TOP_DIR)src/,,$(1)))))
-endef
-
-
-
-
-
-
-define linkarch
-$(shell rm -Rf $(TOP_DIR)include/arch)
-$(if $(SUBARCH),$(shell ln -sf ../src/arch/$(ARCH)/$(SUBARCH)/include include/arch),$(shell ln -sf ../src/arch/$(ARCH)/include include/arch))
-$(eval CFLAGS+=$(cflags-y))
-$(eval CFLAGS+=$(commonflags-y))
-$(eval LDFLAGS+=$(ldflags-y))
-$(eval LDFLAGS+=$(commonflags-y))
-$(eval ASFLAGS+=$(asflags-y))
-$(eval ASFLAGS+=$(commonflags-y))
-endef
-
-load_makes=	$(call ldmakes, $(TOP_DIR)) 
-build_objects=	$(addprefix $(TOP_DIR),$(objects)) 
-clean_symlinks= $(call clean_includes)
-link_arch=	$(call linkarch)
-
-aliens:	
-	$(Q)$(MAKE) -f $(TOP_DIR)make/Makefile.alien build
-
-build: $(clean_includes) $(load_makes) $(linkarch) aliens $(OUTPUT_TARGETS)
-	@echo "<--Makefile.build done-->"
-
-#include toolchain rules
-$(eval $(call include_toolchain,$(TOOLCHAIN),rules))
-
-
-clean: $(load_makes) 
-	$(info <----cleaning---->)
-	$(foreach o,$(build_objects),$(shell rm -f $(o)))
-	-$(Q)rm $(IMAGES_DIR)$(TARGET)*
-	$(Q)$(MAKE) -f $(TOP_DIR)make/Makefile.alien clean
-
-debug: $(call ldmakes, $(TOP_DIR))
-	@echo "I'm gonna build: $(build_objects)"
-	$(Q)$(MAKE) -f $(TOP_DIR)make/Makefile.alien debug
-
-
-analyze: $(TARGET_LSSFILE)
-	$(Q)$(TOP_DIR)scripts/analyzer $(TARGET_LSSFILE)
-
-.PHONY: $(PHONY)
+.PHONY: $(PHONY) %/built-in.o
 .PRECIOUS: $(build_objects)

@@ -1,0 +1,21 @@
+junk_filter=Makefile built-in.o
+junk=$(addprefix |grep -v ,$(junk_filter))
+
+$(TMPDIR)/arch.kcnf:
+	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
+		$(SRCDIR)/scripts/listgen ARCH kcnf > $@
+
+$(TMPDIR)/arch.mk:
+	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
+		$(SRCDIR)/scripts/listgen ARCH mk > $@		
+
+$(TMPDIR)/allarch.kcnf:
+	$(SILENT_GEN) for arch in `ls $(SRCDIR)/src/arch/ $(junk)`; do\
+		echo source \"src/arch/$$arch/kcnf\" >> $@;\
+		done; echo "" >> $@
+		
+collectinfo: \
+	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
+	     $(TMPDIR)/allarch.kcnf
+	
+PHONY+=collectinfo

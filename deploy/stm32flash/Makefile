@@ -25,4 +25,4 @@ stm32f=$(call unquote, $(CONFIG_DEPLOY_STM32FLASH_BIN))
 
 
 stm32flash:
-	$(root) $(stm32f) -w $(TARGET_BINFILE) $(stm32f_extraflags) $(CONFIG_DEPLOY_STM32FLASH_PORT) -b $(CONFIG_DEPLOY_STM32FLASH_BAUD)
+	$(root) $(stm32f) -w $(IMAGENAME).bin $(stm32f_extraflags) $(CONFIG_DEPLOY_STM32FLASH_PORT) -b $(CONFIG_DEPLOY_STM32FLASH_BAUD)

@@ -1,16 +1,61 @@
 choice 
-prompt "STM32 Variant"
+prompt "STM32 Family"
 
-config	ARCH_ARM_STM32F
-bool "STM32F"
+config STM32F10X_LD  
+bool "STM32 Low density devices"
+
+config STM32F10X_LD_VL 
+bool "STM32 Low density Value Line devices"
+
+config STM32F10X_MD 
+bool "STM32 Medium density devices"
+
+config STM32F10X_MD_VL 
+bool "STM32 Medium density Value Line devices"
+
+config STM32F10X_HD 
+bool "STM32 High density devices "
+
+config STM32F10X_HD_VL 
+bool "STM32 High density value line devices"
+
+config STM32F10X_XL 
+bool "STM32 XL-density devices "
+
+config STM32F10X_CL  
+bool "STM32 Connectivity line devices"
 
 endchoice
 
-if ARCH_ARM_STM32F
-choice 
-prompt "MCU"
-source "src/arch/arm/stm32/stm32f_list.kcnf"
+config ARM_ESTACK
+hex	"Highest address of the user mode stack"
+default 0x20010000 if MCU_STM32
+
+config ARM_FLASHBASE
+hex	"Base address of flash memory"
+default 0x08000000 if MCU_STM32
+
+config ARM_RAMBASE
+hex	"Base address of RAM memory"
+default 0x20000000 if MCU_STM32
+
+config ARM_FLASHSZ
+string	"FLASH size"
+default 64K if MCU_STM32
+
+config ARM_RAMSZ
+string	"RAM size"
+default 64K if MCU_STM32
+
+config ARM_MINSTACK
+hex "Minimal stack size"
+default 0x200 if MCU_STM32
+
+config ARM_MINHEAP
+hex "Minimal heap size"
+default 0x0 if MCU_STM32
+
+config STM32_FULL_ASSERT
+bool "Use full assert in STM32 periph lib"
 
 
-endchoice
-endif

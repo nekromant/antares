@@ -1,1 +1,0 @@
-objects-$(CONFIG_APP_DMITRY_MSP430BLINK)+=msp430-blink.o

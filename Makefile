@@ -1,5 +1,5 @@
-include make/host.mk
-include make/Makefile.lib
+
+
 #TODO: This really sucks
 #I guess, I'll need to fix that later
 Kbuild:=Kconfig
@@ -8,19 +8,14 @@ src:=kconfig
 Kconfig:=./kcnf
 KVersion:=./version.kcnf
 
-obj-y:=t
-
-PHONY+=deftarget deploy build
-
-subdirs-y:=arch apps
-	
+PHONY+=deftarget deploy build collectinfo clean
 
 #overrride with actual version information
 -include .config
-$(info $(CONFIG_VERSION_CODENAME))
-#Suck in the current .config file
 -include .version
-$(info $(CONFIG_VERSION_CODENAME))
+SRCDIR=.
+TMPDIR=tmp
+IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
 
 
 CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
@@ -28,44 +23,42 @@ CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 all: $(CONFIG_MAKE_DEFTARGET)
 	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
 
+include make/host.mk
+include make/Makefile.lib
+include make/Makefile.collect
+include tmp/arch.mk
+-include src/arch/$(ARCH)/arch.mk
 include kconfig/kconfig.mk
 
+export SRCDIR TMPDIR IMAGENAME ARCH
 
-#Now the fun stuff
-#To make this thing work like the real thing
-
-setupsymlinks:
-	#ln -sf ../arch/$(ARCH)/include src/include/arch
-
-build-%:
-	$(Q)$(MAKE) -f make/Makefile.build $*
-
-alien-%:
-	$(Q)$(MAKE) -f make/Makefile.alien $*
-
-build: versionupdate setupsymlinks silentoldconfig
-	$(Q)$(MAKE) -f make/Makefile.build -r build
-	@echo "$(t_grn)Antares build is now complete"
-	@echo "Inspect the files under $(IMAGES_DIR) and have fun$(col_rst)"
-	
-	
 clean: 
-	$(MAKE) -f make/Makefile.build -r clean
+# 	$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
+	$(Q)find . -iname *.o| while read line; do rm "$$line"; done
+	$(Q)rm tmp/*
+
 
 mrproper: clean kconfig-clean 
 	@echo "Мистер пропёр - веселей, в сырцах чисто в 3 раза быстрей!"
 
+# build: collectinfo silentoldconfig collectinfo $(BUILD_PREREQS) 
+# 	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
+
+build: collectinfo silentoldconfig collectinfo $(BUILDGOALS)
+	
+	
 deploy: build
-	make -f make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
+	$(Q)$(MAKE) -f make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
 	@echo "Your Antares firmware is now deployed"
 
+deploy-%: build
+	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy $*
+	@echo "Your Antares firmware is now deployed"
+	#run post-deployment
+	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy post
+	
 deploy-help:
 	make -f make/Makefile.deploy help
 
-deploy-%: build
-	make -f make/Makefile.deploy $*
-	@echo "Your Antares firmware is now deployed"
-	#run post-deployment
-	make -f make/Makefile.deploy post
-
+	
 .PHONY: $(PHONY)

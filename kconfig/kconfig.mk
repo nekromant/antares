@@ -13,9 +13,9 @@ lxdialog += lxdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o
 conf-objs	:= conf.o  zconf.tab.o
 mconf-objs     := mconf.o zconf.tab.o $(lxdialog)
 
-VERSION_MAJOR := $(shell kconfig/config --file .version --state VERSION_MAJOR )
-VERSION_MINOR := $(shell kconfig/config --file .version --state VERSION_MINOR )
-VERSION_CODENAME := $(shell kconfig/config --file .version --state VERSION_CODENAME )
+VERSION_MAJOR := $(shell kconfig/config --file ".version" --state VERSION_MAJOR )
+VERSION_MINOR := $(shell kconfig/config --file ".version" --state VERSION_MINOR )
+VERSION_CODENAME := $(shell kconfig/config --file ".version" --state VERSION_CODENAME )
 VERSION_GIT = $(shell git rev-parse --verify HEAD)
 %.tab.c: %.y
 	bison -l -b $* -p $(notdir $*) $<
@@ -57,6 +57,7 @@ $(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
 
 kconfig-clean:
 	-rm $(obj)/*.o
+	-rm $(obj)/lxdialog/*.o
 	-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
 
 versionupdate:
@@ -67,7 +68,7 @@ versionupdate:
 	$(SILENT_VER) $(obj)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
 	
   
-menuconfig: $(obj)/mconf versionupdate
+menuconfig: $(obj)/mconf versionupdate collectinfo
 	$< $(Kconfig)
 	@echo "Version information updated, configuration is now complete"
 	

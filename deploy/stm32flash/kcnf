@@ -1,6 +1,6 @@
 menuconfig DEPLOY_STM32FLASH
 bool "STM32Flash"
-depends on ARCH_ARM_STM32
+depends on MCU_STM32
 
 if DEPLOY_STM32FLASH
 

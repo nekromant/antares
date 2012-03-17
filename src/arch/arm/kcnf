@@ -1,35 +1,13 @@
+if ARCH_ARM
 choice 
-prompt "SubArchitecture"
-depends on ARCH_ARM
+	prompt "MCU variant"
+	config MCU_STM32
+	bool "STM32"
+endchoice
 
-config ARCH_ARM_STM32
-bool "ST STM32"
-
-config ARCH_ARM_STELLARIS
-bool "Ti Stellaris"
-
-endchoice 
-
-if ARCH_ARM_STM32
-source "src/arch/arm/stm32/kcnf"
-endif 
-
-if ARCH_ARM_STELLARIS
-source "src/arch/arm/stellaris/kcnf"
-endif 
+if MCU_STM32
+source src/arch/arm/stm32/kcnf
+endif
 
 
-
-menu "ARM Variant tuning"
-
-  choice 
-  prompt "ARM -mcpu"
-  source "src/arch/arm/arm_mcpus.kcnf"
-  endchoice
-
-  choice 
-  prompt "ARM -march"
-  source "src/arch/arm/arm_march.kcnf"
-  endchoice
-
-endmenu
+endif

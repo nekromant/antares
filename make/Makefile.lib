@@ -1,7 +1,5 @@
 -include .config
 
-# set the ARCH variable accordingly
-include src/arch/arch.mk
 
 TOP_DIR=./
 BUILD_DIR=./
@@ -64,7 +62,7 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_CXX      = @echo '  $(tb_ylw)[CXX]$(col_rst)      ' $(@:$(BUILD_DIR)/%.o=%.cpp);
    SILENT_LD       = @echo '  $(tb_pur)[LD]$(col_rst)       ' $(@F);
    SILENT_AR       = @echo '  $(tb_pur)[AR]$(col_rst)       '
-   SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      '
+   SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      ' $(@F); 
    SILENT_DL       = @echo '  $(tb_cyn)[DOWNLOAD]$(col_rst) ' $(PACKAGE);
    SILENT_PATCH    = @echo '  $(tb_cyn)[PATCH]$(col_rst)    ' $(PACKAGE);
    SILENT_UPDATE   = @echo '  $(tb_cyn)[UPD]$(col_rst)      ' $(PACKAGE);
@@ -91,7 +89,6 @@ $(eval objects-y= )
 $(foreach dir, $(subdirs),$(eval include $(dir)Makefile) $(call includedir,$(dir)) $(call ldmakes,$(dir)))
 endef
 
-objects-y:= src/
 include_toolchain=include toolchains/$(1).$(2).mk
 check_root=$(if $(1),sudo,)
 

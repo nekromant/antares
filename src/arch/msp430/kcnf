@@ -1,7 +1,0 @@
-choice
-
-  depends on ARCH_MSP430
-  prompt "Select MCU variant"
-  source "src/arch/msp430/mcu_selection.kcnf"
-
-endchoice

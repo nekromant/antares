@@ -1,1 +1,2 @@
-objects-y+=arch/$(ARCH)/ apps/ drivers/ lib/ contrib/ alien/
+subdirs-y+=arch
+subdirs-y+=app

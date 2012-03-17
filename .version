@@ -1,12 +1,16 @@
 #
 # Automatically generated make config: don't edit
 # Antares version: VERSION_STRING
-# Sat Jul 23 00:23:58 2011
+# Fri Mar  9 23:03:57 2012
 #
 
 #
-# These opts are for devs
+# This is a secret menu for developers
+#
+
+#
+# They use it once they want to increment the version
 #
 CONFIG_VERSION_MAJOR="0"
-CONFIG_VERSION_MINOR="1"
-CONFIG_VERSION_CODENAME="Scorpion's Heart"
+CONFIG_VERSION_MINOR="2"
+CONFIG_VERSION_CODENAME="Azra"

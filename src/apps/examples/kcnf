@@ -1,2 +1,0 @@
-config APP_ORDERING_TEST
-bool "Module link order test"

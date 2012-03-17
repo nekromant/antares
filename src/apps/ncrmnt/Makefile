@@ -1,1 +1,0 @@
-objects-$(CONFIG_APP_NCRMNT_SERVOTOOL)+=servotool.o

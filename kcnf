@@ -1,7 +1,11 @@
 mainmenu "Antares Firmware Config"
 
 menu "Target platform settings"
-source "src/arch/kcnf"
+	choice
+	prompt "Target architecture"
+		source tmp/arch.kcnf
+	endchoice
+		source tmp/allarch.kcnf
 endmenu
 
 menu "Toolchain settings"
@@ -9,17 +13,22 @@ source "toolchains/kcnf"
 endmenu
 
 
-menu "Library functions"
+menu "Libraries and drivers"
 source "src/lib/kcnf"
 endmenu
 
-menu "Device drivers"
-source "src/drivers/kcnf"
+
+menu "Project Settings"
+source "src/app/kcnf"
 endmenu
 
-menu "Contributed stuff"
-source "src/contrib/kcnf"
-endmenu
+#menu "Device drivers"
+#source "src/drivers/kcnf"
+#endmenu
+
+#menu "Contributed stuff"
+#source "src/contrib/kcnf"
+#endmenu
 
 menu "Applications & tasking"
   choice
@@ -31,15 +40,10 @@ menu "Applications & tasking"
    In the flat tasking model all ANTARES_APP macros glue application code one by one
    in one huge loop (Unless any application blocks that with an endless loop.
    Priority settings are ignored, if any.
-
-  config TASKING_MULTI
-  bool "Antares Multi-tasking kernel (EXPERIMENTAL)"
-    help
-    In the multi-tasking model all the code from ANTARES_APP become separate threads. 
-    
+   
   endchoice
 
-source "src/apps/kcnf"
+#source "src/apps/kcnf"
 
 endmenu
 
@@ -48,7 +52,9 @@ source "deploy/kcnf"
 endmenu
 
 
-source "src/alien/kcnf"
+
+
+#source "src/alien/kcnf"
 
 menu "Build System Tweaks"
 
@@ -71,7 +77,14 @@ menu "Build System Tweaks"
    under some name. They won't be purged 
    automatically, so you can deploy them later.
    Extensions will appended automatically.
-
+   
+  config IMAGE_DIR
+  string "Output image dir"
+  default "images/"
+  help
+   Directory to store output images, elfs
+   disassembly and such stuff
+   
   config BUILD_VERBOSE
   bool "Verbose build"
 

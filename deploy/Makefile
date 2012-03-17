@@ -1,26 +1,27 @@
 #add any new method right here
+#TODO: Autogen this sh*t
 
 ifeq ($(CONFIG_DEPLOY_AVRDUDE),y)
-	include deploy/avrdude/Makefile
+	include $(SRCDIR)/deploy/avrdude/Makefile
 endif
 
 ifeq ($(CONFIG_DEPLOY_JETTERM),y)
-        include deploy/jetterm/Makefile
+        include $(SRCDIR)/deploy/jetterm/Makefile
 endif
 
 ifeq ($(CONFIG_DEPLOY_STM32FLASH),y)
-        include deploy/stm32flash/Makefile
+        include $(SRCDIR)/deploy/stm32flash/Makefile
 endif
 
 
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_REMOTE),y)
-	include deploy/avrdude-remote/Makefile
+	include $(SRCDIR)/deploy/avrdude-remote/Makefile
 endif
 
 ifeq ($(CONFIG_DEPLOY_MSPDEBUG),y)
-        include deploy/mspdebug/Makefile
+        include $(SRCDIR)/deploy/mspdebug/Makefile
 endif
 
 ifeq ($(CONFIG_DEPLOY_OPENOCD),y)
-	include deploy/openocd/Makefile
+	include $(SRCDIR)/deploy/openocd/Makefile
 endif

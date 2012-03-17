@@ -2,7 +2,7 @@ TOOL_PREFIX=$(call unquote,$(CONFIG_TOOLCHAIN_PREFIX))
 
 CC       := $(TOOL_PREFIX)gcc
 CXX      := $(TOOL_PREFIX)g++
-LD       := $(TOOL_PREFIX)gcc
+LD       := $(TOOL_PREFIX)ld
 AR       := $(TOOL_PREFIX)ar
 AS       := $(TOOL_PREFIX)gcc
 OBJCOPY  := $(TOOL_PREFIX)objcopy
@@ -10,8 +10,7 @@ DISAS    := $(TOOL_PREFIX)objdump
 OBJDUMP  := $(TOOL_PREFIX)objdump
 SIZE     := $(TOOL_PREFIX)size
 
-COMPILER_TOOLS=CC=$(CC) CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
-
+COMPILER_TOOLS=CC="$(CC)" CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
 export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS
 
 #We're targeting an ELF and an LSS (disassembly) by default.
@@ -44,6 +43,10 @@ CFLAGS+=-O3
 endif
 
 ifeq ($(CONFIG_CC_OPTSZ),y)
+CFLAGS+=-Os
+endif
+
+ifeq ($(CONFIG_CC_LDFILE),y)
 CFLAGS+=-Os
 endif
 

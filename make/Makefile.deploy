@@ -1,8 +1,8 @@
 -include .config
-include make/Makefile.lib
-include deploy/Makefile
+include $(SRCDIR)/make/Makefile.lib
+include $(SRCDIR)/deploy/Makefile
 #We need this for MCU databases!
-include src/arch/$(ARCH)/make.mk
+include src/arch/$(ARCH)/arch.mk
 
 all: $(call unquote, $(CONFIG_DEPLOY_DEFAULT))
 	echo 1
@@ -10,7 +10,7 @@ all: $(call unquote, $(CONFIG_DEPLOY_DEFAULT))
 help:	
 	@echo ""
 	@echo "Firmware deployment methods avaliable:"
-	@echo $(deploy_help)
+	@echo -e $(deploy_help)
 	@echo ""
 	@echo "Running 'make deploy' will invoke this methods: $(CONFIG_DEPLOY_DEFTARGET)"
 	@echo "You may setup additional deployment scenarios in menuconfig"
