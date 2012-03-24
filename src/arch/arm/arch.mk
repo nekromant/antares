@@ -72,7 +72,7 @@ $(IMAGENAME).elf: $(TMPDIR)/ldfile.lds builtin
 	$(SILENT_LD) $(LD) -T $(TMPDIR)/ldfile.lds $(LDFLAGS) -o $(@) $(SRCDIR)/src/built-in.o 
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
-	$(SILENT_OBJCOPY) $(OBJCOPY) $(OBJCOPYFLAGS) antares.elf $(@) 
+	$(SILENT_OBJCOPY) $(OBJCOPY) $(OBJCOPYFLAGS) $< $(@) 
 
 $(IMAGENAME).lss: $(IMAGENAME).elf
 	$(SILENT_DISAS) $(OBJDUMP) -h -S $< > $@
