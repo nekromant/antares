@@ -68,39 +68,6 @@ void test_led(int c)
 }
 
 
-#include "fw.h"
-// int fw_size = 5;
-// const char fw[] = {1,2,3,4,5,6};
-
-/*
-JRST CCLK PB4
-JTDO DIN PB3
-JTDI INITB PA15
-JTCK PROGB PA14
-JTMS DONE PA13
-*/
-
-static  GPIO_InitTypeDef xsscu_pai = {
-.GPIO_Pin = GPIO_Pin_13|GPIO_Pin_15,
-.GPIO_Mode = GPIO_Mode_IPU,
-};
-
-static  GPIO_InitTypeDef xsscu_pao = {
-.GPIO_Speed = GPIO_Speed_50MHz,
-.GPIO_Pin = GPIO_Pin_14,
-.GPIO_Mode = GPIO_Mode_Out_PP,
-};
-
-static  GPIO_InitTypeDef xsscu_pbo = {
-.GPIO_Speed = GPIO_Speed_50MHz,
-.GPIO_Pin = GPIO_Pin_3|GPIO_Pin_4,
-.GPIO_Mode = GPIO_Mode_Out_PP,
-};
-
-// 
-
-#define DELAY	;;
-
 
 void test_pin()
 {
@@ -115,63 +82,8 @@ void test_pin()
 		}
 }
 
-static int xsscu_reset_fpga()
-{
-	int i = 500;
-	GPIO_ResetBits(GPIOA,GPIO_Pin_14); //progb
-	mdelay(1200);
-	GPIO_SetBits(GPIOA,GPIO_Pin_14); //progb
-	mdelay(1000);
-	while (i--) {
-		if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_15)) //initb
-			return 0;
- 		mdelay(1);
-	}
-	return 1;
-}
 
-static int xsscu_send_clocks(int c)
-{
-	while (c--) {
-		GPIO_ResetBits(GPIOB,GPIO_Pin_4);
-		DELAY;
-		GPIO_SetBits(GPIOB,GPIO_Pin_4);
-		DELAY;
-		if (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_13))
-			return 0;
-	}
-	return 1;
-}
 
-void xsscu_init_pins()
-{
-  	
-	GPIO_Init(GPIOA, &xsscu_pao);
-	GPIO_Init(GPIOA, &xsscu_pai);
- 	GPIO_Init(GPIOB, &xsscu_pbo);
-};
-
-void xsscu_write()
-{
-	int i=0;
-	int k;
-	GPIO_WriteBit(GPIOB,GPIO_Pin_4,0);
-	GPIO_WriteBit(GPIOB,GPIO_Pin_3,0);
-	
-	while (i < fw_size) {
-		led_off();
-		for (k = 7; k >= 0; k--) {
-			GPIO_WriteBit(GPIOB,GPIO_Pin_3,
-					      ((fw[i] & (1 << k))));
-			GPIO_WriteBit(GPIOB,GPIO_Pin_4,1);
-			DELAY;
-			GPIO_WriteBit(GPIOB,GPIO_Pin_4,0);
-			DELAY;
-		}
-		led_on();
-		i++;
-	}
-}
 
 
 void hang(int code)
@@ -180,24 +92,15 @@ void hang(int code)
 	if (0==code) led_off();
 	while(1);;;
 }
-
+#include "mcortex-sscu.h"
 int main()
 {
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
 		GPIO_Init(GPIOG, &gpio_leds);
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);
-	    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-		GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
-		xsscu_init_pins();
-		 //Disable JTAG
-// 		setup_freq();
 		led_off();
-		mdelay(1200);
- 		if (xsscu_reset_fpga()) hang(7);
-		xsscu_write();
-		if ((xsscu_send_clocks(1000))) hang(8);;
-		test_led(0);
-		led_off();
+		mcortex_fpga_init();
+		mcortex_fpga_fromflash();
+		led_on();
 		while(1);;
         return 0;
 }
