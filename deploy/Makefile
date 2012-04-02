@@ -18,6 +18,12 @@ ifeq ($(CONFIG_DEPLOY_AVRDUDE_REMOTE),y)
 	include $(SRCDIR)/deploy/avrdude-remote/Makefile
 endif
 
+
+ifeq ($(CONFIG_DEPLOY_STLINK),y)
+	include $(SRCDIR)/deploy/stlink/Makefile
+endif
+
+
 ifeq ($(CONFIG_DEPLOY_MSPDEBUG),y)
         include $(SRCDIR)/deploy/mspdebug/Makefile
 endif

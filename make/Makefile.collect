@@ -17,5 +17,6 @@ $(TMPDIR)/allarch.kcnf:
 collectinfo: \
 	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
 	     $(TMPDIR)/allarch.kcnf
+	     ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(SRCDIR)/include/arch
 	
 PHONY+=collectinfo

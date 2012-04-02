@@ -5,6 +5,7 @@ source "deploy/mspdebug/kcnf"
 source "deploy/openocd/kcnf"
 source "deploy/stm32flash/kcnf"
 source "deploy/dfu-util/kcnf"
+source "deploy/stlink/kcnf"
 
 config DEPLOY_POSTRUN
 string "Command to run after deployment"
