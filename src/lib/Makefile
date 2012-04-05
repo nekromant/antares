@@ -1,0 +1,1 @@
+objects-$(CONFIG_LIB_SNPRINTF)+=snprintf.o
