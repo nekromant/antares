@@ -60,9 +60,9 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_CC       = @echo '  $(tb_ylw)[CC]$(col_rst)       ' $(@:$(BUILD_DIR)/%.o=%.c);
    SILENT_AS       = @echo '  $(tb_ylw)[AS]$(col_rst)       ' $(@:$(BUILD_DIR)/%.o=%.S);
    SILENT_CXX      = @echo '  $(tb_ylw)[CXX]$(col_rst)      ' $(@:$(BUILD_DIR)/%.o=%.cpp);
-   SILENT_LD       = @echo '  $(tb_pur)[LD]$(col_rst)       ' $(@F);
-   SILENT_AR       = @echo '  $(tb_pur)[AR]$(col_rst)       '
-   SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      ' $(@F); 
+   SILENT_LD       = @echo '  $(tb_pur)[LD]$(col_rst)       ' $(@);
+   SILENT_AR       = @echo '  $(tb_pur)[AR]$(col_rst)       ' $(@);
+   SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      ' $(@); 
    SILENT_DL       = @echo '  $(tb_cyn)[DOWNLOAD]$(col_rst) ' $(PACKAGE);
    SILENT_PATCH    = @echo '  $(tb_cyn)[PATCH]$(col_rst)    ' $(PACKAGE);
    SILENT_UPDATE   = @echo '  $(tb_cyn)[UPD]$(col_rst)      ' $(PACKAGE);

@@ -34,10 +34,13 @@ PHONY:= build clean
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
 build: $(OBJDIR)/built-in.o
-	
+ifeq ($(objects-y),)
+$(OBJDIR)/built-in.o:
+	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
+else
 $(OBJDIR)/built-in.o: $(objects-y)
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
-
+endif
 	
 clean: $(clean-y)
 # 	$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
