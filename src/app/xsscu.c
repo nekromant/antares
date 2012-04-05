@@ -1,9 +1,6 @@
 #include <arch/antares.h>
 #include "xsscu.h"
 
-
-
-
 int xsscu_reset(const struct xsscu_unit* x)
 {
 	int i = 500;

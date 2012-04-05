@@ -79,20 +79,39 @@ static const GPIO_InitTypeDef xsscu_pbo = {
 .GPIO_Mode = GPIO_Mode_Out_PP,
 };
 
+static  const GPIO_InitTypeDef fpga_clk = {
+	.GPIO_Speed = GPIO_Speed_50MHz,
+	.GPIO_Pin = GPIO_Pin_8,
+	.GPIO_Mode = GPIO_Mode_Out_PP,
+};
+
+void fpga_enable_clock()
+{
+	GPIO_SetBits(GPIOG,GPIO_Pin_8);
+}
+
+void fpga_disable_clock()
+{
+	GPIO_ResetBits(GPIOG,GPIO_Pin_8);
+}
+
 
 void mcortex_fpga_init()
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO|RCC_APB2Periph_GPIOB, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOG|RCC_APB2Periph_AFIO|RCC_APB2Periph_GPIOB, ENABLE);
 	GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
 	GPIO_Init(GPIOA, (GPIO_InitTypeDef*) &xsscu_pao);
 	GPIO_Init(GPIOA, (GPIO_InitTypeDef*) &xsscu_pai);
  	GPIO_Init(GPIOB, (GPIO_InitTypeDef*) &xsscu_pbo);
+	GPIO_Init(GPIOG, (GPIO_InitTypeDef*) &fpga_clk);
 }
 
 #include "fw.h"
 void mcortex_fpga_fromflash()
 {
+	fpga_disable_clock();
 	xsscu_reset(&fpga0);
 	xsscu_write(&fpga0, fw, fw_size);
 	xsscu_finalize(&fpga0, 1200);
+	fpga_enable_clock();
 }

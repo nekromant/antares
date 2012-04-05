@@ -16,22 +16,9 @@ void mdelay(int n)
 }
 
 
-static  GPIO_InitTypeDef gpio_leds = {
-	.GPIO_Speed = GPIO_Speed_50MHz,
-	.GPIO_Pin = GPIO_Pin_8,
-	.GPIO_Mode = GPIO_Mode_Out_PP,
-};
 
 
-inline void led_off()
-{
-	GPIO_SetBits(GPIOG,GPIO_Pin_8);
-}
 
-inline void led_on()
-{
-	GPIO_ResetBits(GPIOG,GPIO_Pin_8);
-}
 
 
 //TODO: Tuning to custom freqs
@@ -56,51 +43,14 @@ void setup_freq()
 }
 
 
-void test_led(int c)
-{
-	while(c--)
-		{
-			led_off();
-			mdelay(12000);
-			led_on();
-			mdelay(12000);
-		}
-}
 
 
-
-void test_pin()
-{
-		while(1)
-		{
-		led_on();
-		GPIO_Write(GPIOA,0x0000);
-		mdelay(120);
-		GPIO_Write(GPIOA,0xffff);
-		led_off();
-		mdelay(120);
-		}
-}
-
-
-
-
-
-void hang(int code)
-{
-	test_led(code);
-	if (0==code) led_off();
-	while(1);;;
-}
 #include "mcortex-sscu.h"
 int main()
 {
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
-		GPIO_Init(GPIOG, &gpio_leds);
-		led_off();
 		mcortex_fpga_init();
 		mcortex_fpga_fromflash();
-		led_on();
 		while(1);;
         return 0;
 }
