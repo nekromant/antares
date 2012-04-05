@@ -1,0 +1,9 @@
+menuconfig DEPLOY_STLINK
+bool "stlink"
+depends on ARCH_ARM
+
+if DEPLOY_STLINK
+  config DEPLOY_STLINK_ROOT
+  bool "Run stlink as root"
+  
+endif
