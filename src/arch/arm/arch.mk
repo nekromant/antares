@@ -69,7 +69,7 @@ builtin:
 	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
 
 $(IMAGENAME).elf: $(TMPDIR)/ldfile.lds builtin
-	$(SILENT_LD) $(LD) -T $(TMPDIR)/ldfile.lds $(LDFLAGS) -o $(@) $(SRCDIR)/src/built-in.o 
+	$(SILENT_LD) $(CC) -T $(TMPDIR)/ldfile.lds -o $(@) $(SRCDIR)/src/built-in.o $(LDFLAGS) 
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
 	$(SILENT_OBJCOPY) $(OBJCOPY) $(OBJCOPYFLAGS) $< $(@) 

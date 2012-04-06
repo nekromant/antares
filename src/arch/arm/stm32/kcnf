@@ -27,6 +27,34 @@ bool "STM32 Connectivity line devices"
 
 endchoice
 
+config STM32_HSE_VALUE
+int "HSE (Crystal) value in Hz"
+help
+	Use this to set the crystal freq accordingly. 
+	It is used in some periph libs, and in regular 
+	'SystemInit' function
+
+choice
+prompt "Target frequency (for SysInit)"
+
+config STM32_FREQ_72
+bool "72 Mhz"
+
+config STM32_FREQ_56
+bool "56 Mhz"
+
+config STM32_FREQ_48
+bool "48 Mhz"
+
+config STM32_FREQ_36
+bool "24 Mhz"
+
+config STM32_FREQ_HSE
+bool "Use HSE"
+
+endchoice
+
+
 config ARM_ESTACK
 hex	"Highest address of the user mode stack"
 default 0x20010000 if MCU_STM32

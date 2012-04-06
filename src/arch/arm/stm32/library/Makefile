@@ -1,3 +1,8 @@
+ifeq($(CONFIG_STM32_FREQ_76),y)
+CFLAGS+=-DSYSCLK_FREQ_76MHz
+endif
+
+CFLAGS+=-DHSE_VALUE=$(CONFIG_HSE_VALUE)
 objects-y+=core_cm3.o
 objects-y+=misc.o
 objects-$(CONFIG_STM32_LIB_ADC)+=stm32f10x_adc.o
