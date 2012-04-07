@@ -1,10 +1,14 @@
 //#define STM32F10X_LD
 #include <arch/antares.h>
+#include <stdio.h>
 #include "stm32f10x.h"
 #include "stm32f10x_tim.h"
 #include "stm32f10x_adc.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_rcc.h"
+#include "stm32f10x_usart.h"
+#include "stm32_eval_spi_flash.h"
+
 #include "misc.h"
 
 void mdelay(int n)
@@ -14,12 +18,6 @@ void mdelay(int n)
                 asm("nop");													/* This stops it optimising code out */
         }
 }
-
-
-
-
-
-
 
 //TODO: Tuning to custom freqs
 void setup_freq()
@@ -42,16 +40,171 @@ void setup_freq()
   while ((RCC->CFGR & 0x00000008) == 0); /* wait for it to come on */
 }
 
+void Usart1Init(void)
+{
+GPIO_InitTypeDef GPIO_InitStructure;
+USART_InitTypeDef USART_InitStructure;
+USART_ClockInitTypeDef USART_ClockInitStructure;
+//enable bus clocks
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+//Set USART1 Tx (PA.09) as AF push-pull
+GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_Init(GPIOA, &GPIO_InitStructure);
+ 
+//Set USART1 Rx (PA.10) as input floating
+ 
+GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+ 
+GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+ 
+GPIO_Init(GPIOA, &GPIO_InitStructure);
+ 
+USART_ClockStructInit(&USART_ClockInitStructure);
+ 
+USART_ClockInit(USART1, &USART_ClockInitStructure);
+ 
+USART_InitStructure.USART_BaudRate = 115200;
+ 
+USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+ 
+USART_InitStructure.USART_StopBits = USART_StopBits_1;
+ 
+USART_InitStructure.USART_Parity = USART_Parity_No ;
+ 
+USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+ 
+USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+ 
+//Write USART1 parameters
+ 
+USART_Init(USART1, &USART_InitStructure);
+ 
+//Enable USART1
+ 
+USART_Cmd(USART1, ENABLE);
+ 
+}
+
+
+void SysTick_Handler()
+{
+    tmgr_tick();
+}
 
 
 
+
+
+//TODO: Totally rewrite it once a portable driver arrives
+#define sFLASH_SPI                       SPI1
+#define sFLASH_SPI_CLK                   RCC_APB2Periph_SPI1
+#define sFLASH_SPI_SCK_PIN               GPIO_Pin_5                  /* PA.05 */
+#define sFLASH_SPI_SCK_GPIO_PORT         GPIOA                       /* GPIOA */
+#define sFLASH_SPI_SCK_GPIO_CLK          RCC_APB2Periph_GPIOA
+#define sFLASH_SPI_MISO_PIN              GPIO_Pin_6                  /* PA.06 */
+#define sFLASH_SPI_MISO_GPIO_PORT        GPIOA                       /* GPIOA */
+#define sFLASH_SPI_MISO_GPIO_CLK         RCC_APB2Periph_GPIOA
+#define sFLASH_SPI_MOSI_PIN              GPIO_Pin_7                  /* PA.07 */
+#define sFLASH_SPI_MOSI_GPIO_PORT        GPIOA                       /* GPIOA */
+#define sFLASH_SPI_MOSI_GPIO_CLK         RCC_APB2Periph_GPIOA
+void mcortex_flash_init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+
+  /*!< sFLASH_SPI_CS_GPIO, sFLASH_SPI_MOSI_GPIO, sFLASH_SPI_MISO_GPIO 
+       and sFLASH_SPI_SCK_GPIO Periph clock enable */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB, ENABLE);
+
+  /*!< sFLASH_SPI Periph clock enable */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+  
+  /*!< Configure sFLASH_SPI pins: SCK */
+  GPIO_InitStructure.GPIO_Pin = sFLASH_SPI_SCK_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(sFLASH_SPI_SCK_GPIO_PORT, &GPIO_InitStructure);
+
+  /*!< Configure sFLASH_SPI pins: MOSI */
+  GPIO_InitStructure.GPIO_Pin = sFLASH_SPI_MOSI_PIN;
+  GPIO_Init(sFLASH_SPI_MOSI_GPIO_PORT, &GPIO_InitStructure);
+
+  /*!< Configure sFLASH_SPI pins: MISO */
+  GPIO_InitStructure.GPIO_Pin = sFLASH_SPI_MISO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+  GPIO_Init(sFLASH_SPI_MISO_GPIO_PORT, &GPIO_InitStructure);
+  
+  /*!< Configure sFLASH_CS_PIN pin: sFLASH Card CS pin */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_0;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+  GPIO_SetBits(GPIOB,GPIO_Pin_1|GPIO_Pin_0);
+}
+
+#define sFLASH_M25P128_ID         0x202018
+#define sFLASH_M25P128_ID         0x202018
+#define sFLASH_M25P32_ID          0x202016
 #include "mcortex-sscu.h"
+
+struct spi_flash_chip 
+{
+	char* name;
+	uint32_t id;
+	uint32_t pagesize;
+	uint32_t erase_size;
+	uint32_t size;
+};
+
+static struct spi_flash_chip sflash =
+{
+	.name = "ST M25P32",
+	.id = 0x202016,
+	.pagesize = 256,
+	.erase_size = 512*1024,
+	.size = 4 * 1024* 1024
+};
+
+
 int main()
 {
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
-		mcortex_fpga_init();
-		mcortex_fpga_fromflash();
-		while(1);;
+		Usart1Init();
+		SysTick_Config(SystemCoreClock / 100);
+		setvbuf(stdin, NULL, _IONBF, 0);
+		setvbuf(stdout, NULL, _IONBF, 0);
+		setvbuf(stderr, NULL, _IONBF, 0);
+		printf("\xFF\n\r\n\r"); //text mode
+		printk("Motor Cortex rev. 0.9 :: Antares uC system, v. %s\n\r", CONFIG_VERSION_STRING);
+		printk("git commit: %s\n\r", CONFIG_VERSION_GIT);
+		mcortex_flash_init();
+		printk("sflash: lowlevel init performed\n\r");
+		sFLASH_Init();
+		uint32_t id = sFLASH_ReadID();
+		printk("sflash: Detected %s (0x%x) %d bytes\n\r", sflash.name, sflash.id, sflash.size);
+		printk("bootmode: press 'f' to update fpga firmware, or any other key to boot\n\r");
+		char m = getchar();
+		printk("Thnc\n\r");
+		if ('f' == m)
+		{
+			mcortex_fpga_update();
+		}
+// 		printk("sflash: erasing everything...\n\r");
+// 		
+// 		printk("sflash: done\n\r");
+		printk("fpga: starting config...\n\r");
+		
+		int t = tmgr_get_uptime();
+		
+// 		mcortex_fpga_fromflash();
+		t = tmgr_get_uptime() - t;
+		
+		printk("fpga: configuration done in %d ticks\n\r",t);
+		while(1)
+		{
+// 			printk("tick!\n\r");
+			mdelay(10000);
+		}
         return 0;
 }
 

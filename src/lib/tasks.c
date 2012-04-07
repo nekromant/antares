@@ -1,10 +1,16 @@
 #include <lib/tasks.h>
 
-volatile uint32_t uptime = 0;
-uint8_t num_handlers = 0;
-handler_t * first = 0;
+static volatile unsigned int uptime = 0;
+static  uint8_t num_handlers = 0;
+static handler_t * first = 0;
 
-uint8_t add_handler(handler_t * data)
+
+unsigned int tmgr_get_uptime()
+{
+	return uptime;
+}
+
+int tmgr_register(handler_t * data)
 {
     // 0. The most simplest case - too late to run handler
     if(data->uptime < uptime) return TIME_OVER;
@@ -83,7 +89,7 @@ uint8_t add_handler(handler_t * data)
     return 0;
 }
 
-void task_manager(void)
+void tmgr_tick(void)
 {
     uint8_t i = num_handlers;
     handler_t * current = first;

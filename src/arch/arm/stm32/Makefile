@@ -1,1 +1,1 @@
-subdirs-y+=startup library
+subdirs-y+=startup library extra

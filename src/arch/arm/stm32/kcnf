@@ -47,6 +47,9 @@ config STM32_FREQ_48
 bool "48 Mhz"
 
 config STM32_FREQ_36
+bool "36 Mhz"
+
+config STM32_FREQ_24
 bool "24 Mhz"
 
 config STM32_FREQ_HSE
@@ -162,6 +165,31 @@ if STM32_PLIBS
 	bool "WWDG"		
 
 endif
+
+menuconfig STM32_EXTRA
+bool "STM32 Extra drivers"
+
+if STM32_EXTRA
+	menuconfig STM32_SPIFLASH
+	bool "SPI Flash driver"
+	if STM32_SPIFLASH
+		comment "ST's driver is ugly. Only once dev is supported"
+		comment "It should be rewritten in a more portable manner"
+		
+		config STM32_SPIFLASH_GPIN
+		string "CS PIN"
+		default "GPIO_Pin_1"
+		
+		config STM32_SPIFLASH_GPORT
+		string "CS PORT"
+		default "GPIOA"
+		
+		config STM32_SPIFLASH_SPI
+		string "SPI device"
+		default "SPI1"
+		
+	endif
+endif 
 
 config STM32_FULL_ASSERT
 bool "Use full assert in STM32 periph lib"

@@ -104,8 +104,32 @@ void mcortex_fpga_init()
 	GPIO_Init(GPIOA, (GPIO_InitTypeDef*) &xsscu_pai);
  	GPIO_Init(GPIOB, (GPIO_InitTypeDef*) &xsscu_pbo);
 	GPIO_Init(GPIOG, (GPIO_InitTypeDef*) &fpga_clk);
+	printk("fpga: Initialising %s\n\r",fpga0.name);
+	
 }
 
+#define MAGIC	0xf0f0f0
+struct fpga_hdr
+{
+	uint32_t magic;
+	uint32_t len;
+};
+
+void mcortex_fpga_update()
+{
+	char buf[256];
+	printk("fpga: erasing SPI flash...\n\r");
+	sFLASH_EraseBulk();
+	printk("fpga: Will now enter binary mode for flash upload\n\r");
+	char m=0;
+	do {
+		m = getchar();
+	}
+	while (m!=0xF0);
+}
+
+
+#if 0
 #include "fw.h"
 void mcortex_fpga_fromflash()
 {
@@ -115,3 +139,4 @@ void mcortex_fpga_fromflash()
 	xsscu_finalize(&fpga0, 1200);
 	fpga_enable_clock();
 }
+#endif
