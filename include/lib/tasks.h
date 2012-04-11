@@ -58,4 +58,6 @@ unsigned int tmgr_get_uptime();
 /** @}
   */
 
+void sleep_ticks(unsigned int ticks);
+
 #endif // TASKS_H

@@ -10,6 +10,12 @@ unsigned int tmgr_get_uptime()
 	return uptime;
 }
 
+void sleep_ticks(unsigned int ticks)
+{
+	unsigned int start = uptime;
+	while (uptime - start < ticks);
+}
+
 int tmgr_register(handler_t * data)
 {
     // 0. The most simplest case - too late to run handler
