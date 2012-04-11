@@ -4,3 +4,43 @@ bool "Portable vsprintf implementation"
 config LIB_NLDUMMY
 bool "Basic newlib stubs (for -lc)"
 
+menuconfig LIB_URPC
+bool "uRPC framework"
+
+if LIB_URPC
+	
+	comment "These options are used for very memory constrained systems"
+	comment "where one would normally want some more control over things"
+	
+	config URPC_DEBUG
+	bool "Enable uRPC debugging"
+		help 
+		Enables a shitload of annoying messages
+		
+	choice
+	prompt "uRPC mode"
+		config URPC_LINEAR
+		bool "Linear"
+		help
+			Each method call, triggers a linear search in
+			the linked list of methods. Uses very little 
+			memory, but slow when there	are many methods.
+			Might be a good idea on some systems.
+			
+		config URPC_ARRAY
+		bool "Array lookup"
+			help
+			Each method is looked up by an id in array.
+			Uses sizeof(void*) * number of objects memory.
+			Memory ptr should be passed as an argument to 
+			urpc_init() prior to anything
+	endchoice
+	
+	config URPC_NO_SEATBELTS
+	bool "Disable safety checks"
+		help
+			Disable some internal sanity checks, e.g. bounds 
+			checking and stuff. Frees up some bytes, so that 
+			we can fit into even and attiny MCU. You can safely
+			check this, after you have debugged everything. 
+	endif

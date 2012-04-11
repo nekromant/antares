@@ -15,7 +15,13 @@
 #define MAXRETRANS 25
 
 
-int spi_writer(unsigned char* buffer, int size);
+static int (*_writer)(unsigned char* buffer, int size);
+
+void xmodem_init(int (*writer)(unsigned char* buffer, int size))
+{
+	_writer = writer;
+}
+
 
 unsigned short crc16(const unsigned char *buf, int sz)
 {
@@ -142,7 +148,7 @@ start_recv:
                 if (count > 0)
                 {
                     //memcpy (&dest[len], &xbuff[3], count);
-                    spi_writer(&xbuff[3], count);
+                    _writer(&xbuff[3], count);
                     len += count;
                 }
                 ++packetno;

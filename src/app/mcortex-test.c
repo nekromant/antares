@@ -13,7 +13,7 @@
 
 void mdelay(int n)
 {
-        int i = n*100;													/* About 1/4 second delay */
+        int i = n*10;													/* About 1/4 second delay */
         while (i-- > 0) {
                 asm("nop");													/* This stops it optimising code out */
         }
@@ -169,6 +169,11 @@ static struct spi_flash_chip sflash =
 int main()
 {
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF, ENABLE);
+		RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
+		
 		Usart1Init();
 		SysTick_Config(SystemCoreClock / 100);
 		setvbuf(stdin, NULL, _IONBF, 0);
@@ -182,9 +187,9 @@ int main()
 		sFLASH_Init();
 		uint32_t id = sFLASH_ReadID();
 		printk("sflash: Detected %s (0x%x) %d bytes\n\r", sflash.name, sflash.id, sflash.size);
-		printk("bootmode: press 'f' to update fpga firmware, or any other key to boot\n\r");
+		mcortex_fpga_init();
+		printk("bootmode: press 'f' to update fpga firmware in 1 sec\n\r");
 		char m = getchar();
-		printk("Thnc\n\r");
 		if ('f' == m)
 		{
 			mcortex_fpga_update();
@@ -192,14 +197,13 @@ int main()
 // 		printk("sflash: erasing everything...\n\r");
 // 		
 // 		printk("sflash: done\n\r");
-		printk("fpga: starting config...\n\r");
-		
 		int t = tmgr_get_uptime();
-		
-// 		mcortex_fpga_fromflash();
+		mcortex_fpga_fromspi();
+		mcortex_fpga_smc();
+		mctx_init();
 		t = tmgr_get_uptime() - t;
-		
 		printk("fpga: configuration done in %d ticks\n\r",t);
+		// TODO: CODE HERE!!!
 		while(1)
 		{
 // 			printk("tick!\n\r");

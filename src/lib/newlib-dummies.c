@@ -166,6 +166,23 @@ char * stack = (char*) __get_MSP();
  */
 
 
+int try_getc(int delay)
+{
+	int c;
+	int timeout=delay;
+	while (timeout && (!(USART1->SR & USART_FLAG_RXNE)))
+	{
+		timeout--;
+		mdelay(1);
+	}
+	if ((USART1->SR & USART_FLAG_RXNE))
+	{
+		c = (char)(USART1->DR & (uint16_t)0x01FF);
+		return (int) c;
+	}
+	return -1;
+}
+
 int _read(int file, char *ptr, int len) {
     int n;
     int num = 0;
