@@ -1,0 +1,11 @@
+choice 
+prompt "Select app"
+
+config APP_MCORTEX
+bool "Motor cortex fw"
+
+
+config APP_SL
+bool "Slava's robot"
+
+endchoice

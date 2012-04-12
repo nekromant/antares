@@ -1,0 +1,3 @@
+objects-y+=main.o
+
+
