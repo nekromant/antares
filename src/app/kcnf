@@ -8,4 +8,8 @@ bool "Motor cortex fw"
 config APP_SL
 bool "Slava's robot"
 
+config APP_URPC
+bool "URPC Test"
+
+
 endchoice

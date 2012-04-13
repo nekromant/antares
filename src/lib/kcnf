@@ -4,6 +4,15 @@ bool "Portable vsprintf implementation"
 config LIB_NLDUMMY
 bool "Basic newlib stubs (for -lc)"
 
+config LIB_TMGR
+bool "Simple cron and uptime counter"
+
+config LIB_XMODEM
+bool "Simple XMODEM implementation"
+
+config LIB_PRINTK
+bool "printk and dbg() macro support"
+
 menuconfig LIB_URPC
 bool "uRPC framework"
 

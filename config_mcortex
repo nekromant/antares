@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Antares version: 0.2, Azra
-# Wed Apr 11 17:03:54 2012
+# Fri Apr 13 00:09:45 2012
 #
 
 #
@@ -112,6 +112,8 @@ CONFIG_URPC_LINEAR=y
 #
 # Project Settings
 #
+CONFIG_APP_MCORTEX=y
+# CONFIG_APP_SL is not set
 
 #
 # Applications & tasking

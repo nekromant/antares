@@ -175,12 +175,14 @@ SECTIONS
   } >MEMORY_B1
 
   /* Remove information from the standard libraries */
+  /*
   /DISCARD/ :
   {
     libc.a ( * )
     libm.a ( * )
     libgcc.a ( * )
   }
+  */
   
 }
 EOF

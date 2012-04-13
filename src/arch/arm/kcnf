@@ -5,6 +5,7 @@ choice
 	bool "STM32"
 endchoice
 
+
 if MCU_STM32
 source src/arch/arm/stm32/kcnf
 endif

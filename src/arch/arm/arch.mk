@@ -40,9 +40,19 @@ ifeq ($(CONFIG_CC_OPTSZ),y)
 CFLAGS+=-Os
 endif
 
-ifeq ($(CONFIG_CC_LDFILE),y)
-CFLAGS+=-Os
+ifeq ($(CONFIG_GCC_NOSTDLIBS),y)
+ELFFLAGS+=-nostdlib
 endif
+
+ifeq ($(CONFIG_GCC_LC),y)
+ELFFLAGS+=-lc
+endif
+
+ifeq ($(CONFIG_GCC_LM),y)
+ELFFLAGS+=-lm
+endif
+
+
 
 
 CFLAGS+=-Wall
@@ -50,10 +60,17 @@ ifeq ($(CONFIG_GCC_PARANOID_WRN),y)
 CFLAGS+=-Werror
 endif
 
+#Voodoo to remove dead code from image
+ifeq ($(CONFIG_GCC_STRIP),y)
+#DEADCODE+=-Wl,-static
+CFLAGS+=-fdata-sections -ffunction-sections
+ELFFLAGS+=-Wl,--gc-sections -Wl,-s 
+endif
+
 CFLAGS+=-I$(SRCDIR)/include
 
 ASFLAGS+=$(COMMONFLAGS)
-CFLAGS+=$(COMMONFLAGS)
+CFLAGS+=$(COMMONFLAGS) 
 LDFLAGS+=$(COMMONFLAGS)
 
 #TODO: STM32 abstraction
@@ -69,7 +86,7 @@ builtin:
 	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
 
 $(IMAGENAME).elf: $(TMPDIR)/ldfile.lds builtin
-	$(SILENT_LD) $(CC) -T $(TMPDIR)/ldfile.lds -o $(@) $(SRCDIR)/src/built-in.o $(LDFLAGS) 
+	$(SILENT_LD) $(CC) $(ELFFLAGS) -T $(TMPDIR)/ldfile.lds -o $(@) $(SRCDIR)/src/built-in.o 
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
 	$(SILENT_OBJCOPY) $(OBJCOPY) $(OBJCOPYFLAGS) $< $(@) 

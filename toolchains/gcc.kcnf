@@ -42,12 +42,30 @@ choice
 
 endchoice
 
+config GCC_NOSTDLIBS
+bool "Do not link agains standart libraries"
+	help
+	Adds -nostdlib to gcc flags
+
+
+config GCC_LC
+bool "Link agains -lc"
+
+config GCC_LM
+bool "Link agains -lm"
+
+config GCC_STRIP
+bool "Remove dead code"
+	help
+		Strips symbol info, unused function and other crap,
+		from the binary, resulting in smaller size. 
+	
 config GCC_PARANOID_WRN
 bool "CodeMonkey buster! (tm)"
 help
   Adds -Wall -Werror flags. (trollface.jpg) A true paranoid
   behaviour. But that helps to keep some bad code from noobz 
-  out of the main tree.
+  out of the main tree. Partly
 
 comment "Fine tuning"
 
