@@ -5,6 +5,12 @@ static  uint8_t num_handlers = 0;
 static handler_t * first = 0;
 
 
+void tmgr_msleep(unsigned int  time)
+{
+  uint32_t end = uptime + time;
+  while ( uptime < end );;
+}
+
 unsigned int tmgr_get_uptime()
 {
 	return uptime;

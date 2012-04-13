@@ -14,26 +14,7 @@
 #include "stm32_eval_spi_flash.h"
 #include "misc.h"
 #include "xsscu.h"
-
-
-#define FPGA_MEM ((uint32_t)0x68000000)
-
-#define MCTX_LED_CTL	(char*) (FPGA_MEM+0)
-#define MCTX_MOTOR_CTL	(char*) (FPGA_MEM+1)
-#define MCTX_ENC_CTL	(char*) (FPGA_MEM+2)
-#define MCTX_ADV_CTL	(char*) (FPGA_MEM+3)
-#define MCTX_ENC0V		(int*)  (FPGA_MEM+4)
-#define MCTX_ENC1V		(int*)  (FPGA_MEM+8)
-#define MCTX_PSCALE		(short*)  (FPGA_MEM+12)
-
-#define MCTX_M_TOP		(short*)  (FPGA_MEM+14)
-#define MCTX_S_TOP		(short*)  (FPGA_MEM+16)
-#define MCTX_MPWM		(short*)  (FPGA_MEM+18)
-#define MCTX_SPWM		(short*)  (FPGA_MEM+22)
-
-#define MCTX_MSTOP	0
-#define MCTX_MFWD	1
-#define MCTX_MBCK	2
+#include "mcortex-hw.h"
 
 
 void mctx_init()
@@ -49,8 +30,11 @@ void mctx_init()
 /* reset encoder counters */
 void mctx_enc_reset(int enc)
 {
-	*MCTX_ENC_CTL|=(1<<enc);
-	*MCTX_ENC_CTL&=~(1<<enc);
+  
+	// should work
+        *MCTX_ENC_CTL=0xff;
+	mdelay(100);
+        *MCTX_ENC_CTL=0x0;
 }
 
 /* inversion of channels */
@@ -76,19 +60,20 @@ int mctx_enc_read(int enc)
 
 void mctx_set_motor_dir(int motor, int dir)
 {
-	*MCTX_MOTOR_CTL&=~(3<<motor); 
-	*MCTX_MOTOR_CTL|=(dir<<motor);
+*MCTX_MOTOR_CTL&=~(3<<(motor*2));
+*MCTX_MOTOR_CTL|=(dir<<(motor*2));
+//printk("mt %d %d\n\r",motor, dir);
 }
 
 void mctx_set_servo_pwm(int servo, short value)
 {
-	uint16_t* pwm = MCTX_SPWM + servo*2;
+	uint16_t* pwm = MCTX_SPWM + servo;
 	*pwm = value;
 }
 
 void mctx_set_motor_pwm(int motor, short value)
 {
-	uint16_t* pwm = MCTX_MPWM + motor*2;
+	uint16_t* pwm = MCTX_MPWM + motor;
 	*pwm = value;
 }
 
