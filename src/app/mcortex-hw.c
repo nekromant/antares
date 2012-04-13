@@ -27,6 +27,23 @@ void mctx_init()
 	*top=1000;
 }
 
+void mctx_servo_test()
+{
+	int s;
+	uint16_t n=0;
+	while (1)
+	{
+	printk("servo: ");
+	scanf("%d", &s);
+	scanf("%hd", &n);
+	printk("Angle: %hd/19944\n\r",n);
+ 	sleep_ticks(50);
+	mctx_set_servo_pwm(s,n);
+	}
+}
+
+//PA8 PC11
+
 /* reset encoder counters */
 void mctx_enc_reset(int enc)
 {
@@ -70,6 +87,8 @@ void mctx_set_servo_pwm(int servo, short value)
 	uint16_t* pwm = MCTX_SPWM + servo;
 	*pwm = value;
 }
+
+
 
 void mctx_set_motor_pwm(int motor, short value)
 {

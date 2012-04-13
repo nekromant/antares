@@ -210,10 +210,10 @@ int main()
 		t = tmgr_get_uptime() - t;
 		printk("fpga: configuration done in %d ticks\n\r",t);
 		// TODO: CODE HERE!!!
-		robot_move(0, 65535, 16000);
+// 		robot_move(0, 65535, 16000);
 		printk("Moving completed\n\r");
 		//mctx_console();
-		tmgr_msleep(500);
+/*		tmgr_msleep(500);
 		robot_rotate(0, 88, 32768);
 		tmgr_msleep(500);
 		robot_move(0, 65535, 4000);
@@ -230,8 +230,8 @@ int main()
 		tmgr_msleep(500);		
 		robot_rotate(0, 88, 32768);
 		tmgr_msleep(500);		
-		robot_move(0, 65535, 16000);		
-
+		robot_move(0, 65535, 16000);*/		
+		mctx_servo_test();
 		//motors_test();
 		//mctx_console();
 		//encoders_test();
