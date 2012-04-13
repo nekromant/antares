@@ -223,8 +223,15 @@ void mcortex_fpga_smc()
 	int offset;
 	char m;
 	char value;
-#if 0
-	
+}
+void mctx_console()
+{
+  	char* a = Bank1_SRAM3_ADDR;
+	short* b = Bank1_SRAM3_ADDR;
+	int* c = Bank1_SRAM3_ADDR;
+	int offset;
+	char m;
+	char value;
 	while (1)
 	{
 		printf("\n\rfpga: ");
@@ -260,9 +267,7 @@ void mcortex_fpga_smc()
 		printf("\n\r *%d == %hhx / %hx / %x\n\r", offset, *a, *b, *c );
 		}
 	}
-#endif 
 }
-
 
 void mcortex_init_prescaler()
 {
