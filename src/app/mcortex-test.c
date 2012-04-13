@@ -206,11 +206,13 @@ int main()
 		mcortex_fpga_fromspi();
 		mcortex_fpga_smc();
 		mctx_init();
+		mcortex_btns_init();
 		//mctx_console();
 		t = tmgr_get_uptime() - t;
 		printk("fpga: configuration done in %d ticks\n\r",t);
 		// TODO: CODE HERE!!!
-// 		robot_move(0, 65535, 16000);
+ 		robot_move(0, 65535, 16000);
+		
 		printk("Moving completed\n\r");
 		//mctx_console();
 /*		tmgr_msleep(500);
@@ -231,7 +233,10 @@ int main()
 		robot_rotate(0, 88, 32768);
 		tmgr_msleep(500);		
 		robot_move(0, 65535, 16000);*/		
-		mctx_servo_test();
+// 		mctx_servo_test();
+		mctx_reset_dir();
+		mctx_etest();
+		
 		//motors_test();
 		//mctx_console();
 		//encoders_test();
@@ -424,7 +429,18 @@ void robot_move(int dir, uint16_t speed, uint32_t distance){
       l -= change;
     }
     chassis_write(dir, dir, l, r);
-    
+	
+	if (!dir)
+	{
+		if (mctx_odct(0))
+		{
+			mctx_set_motor_pwm(0,0);
+			mctx_set_motor_pwm(1,0);
+		}else
+		{
+			chassis_write(dir, inv(dir), speed, speed);
+		}
+	}
     /*Serial1.print(l_dist);
     Serial1.print(" ");
     Serial1.print(r_dist);
@@ -436,7 +452,7 @@ void robot_move(int dir, uint16_t speed, uint32_t distance){
     Serial1.print(i_mem);
     Serial1.print(" ");
     Serial1.println(change);*/
-    printk("%d %d\n\r", encoder_get(0,0), encoder_get(1,0));
+    printk("%d %d %hhx\n\r", encoder_get(0,0), encoder_get(1,0), mctx_odct(0));
   }
   chassis_stop(dir, speed);
 }
@@ -512,6 +528,8 @@ void robot_rotate(int dir, int angle, int speed){
   motor_stop(0);
   motor_stop(1);
 }
+
+
 int to_ticks(int mm){
   return (int) mm*29.4;
 }

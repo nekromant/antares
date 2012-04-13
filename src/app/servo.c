@@ -1,24 +1,7 @@
-#define SMODE_START	0
-#define SMODE_TRANSPORT	1
-#define SMODE_HORIZ	2
-#define SMODE_DROP	3
+#include "servo.h"
+#include "mcortex-hw.h"
 
-
-struct servo_front
-{
-	uint16_t open;
-	uint16_t closed;
-	uint16_t hold;
-	int snum;
-};
-
-struct servo_mode
-{
-	int snum;
-	uint16_t pos[10];
-};
-
-static struct servo_mode side[] = 
+static struct servo_mode sides[] = 
 {
 	{
 		.snum = 6,
@@ -33,5 +16,5 @@ static struct servo_mode side[] =
 
 void side_servo_mode(int s, int mode)
 {
-	
-}
+	mctx_set_servo_pwm(sides[s].snum, sides[s].pos[mode]);
+};

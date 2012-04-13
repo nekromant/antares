@@ -89,13 +89,26 @@ void mctx_set_servo_pwm(int servo, short value)
 }
 
 
-
 void mctx_set_motor_pwm(int motor, short value)
 {
 	uint16_t* pwm = MCTX_MPWM + motor;
 	*pwm = value;
 }
 
+void mctx_reset_dir()
+{
+	
+	mctx_set_motor_pwm(0,600);
+	mctx_set_motor_pwm(1,600);
+	mctx_set_motor_dir(0, MCTX_MBCK);
+	mctx_set_motor_dir(1, MCTX_MBCK);
+	while ((mctx_endtoggle(0)) || (mctx_endtoggle(1)))
+	{
+		asm("nop");
+	}
+	mctx_set_motor_pwm(0,0);
+	mctx_set_motor_pwm(1,0);
+}
 
 void mctx_enc_dumploop()
 {
