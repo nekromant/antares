@@ -1,6 +1,8 @@
 #ifndef HM_CHASSIS
 #define HM_CHASSIS
 
+#include <stm32f10x.h>
+
 typedef enum{
   left = 0,
   right
