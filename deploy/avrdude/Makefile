@@ -2,7 +2,7 @@
 deploy_help+="\navrdude - Flash the firmware via avrdude"
 #the deployment action
 
-include deploy/avrdude/proglist.mk
+include $(SRCDIR)/deploy/avrdude/proglist.mk
 
 $(info $(CONFIG_AVRDUDE_PROG_USBASP))
 $(info $(PROG))

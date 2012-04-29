@@ -11,5 +11,7 @@ bool "Slava's robot"
 config APP_URPC
 bool "URPC Test"
 
+config APP_UISP
+bool "uISP"
 
 endchoice

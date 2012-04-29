@@ -1,0 +1,14 @@
+choice
+depends on ARCH_AVR
+prompt "Select MCU variant"
+  
+source "src/arch/avr/mcu_selection.kcnf"
+
+endchoice
+
+  config F_CPU
+  int "CPU frequency in Hz"
+  default 8000000
+  
+
+

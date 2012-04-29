@@ -32,7 +32,11 @@ PHONY:= build clean
 %.o: %.s 
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
+
+
 build: $(OBJDIR)/built-in.o
+
+ifneq ($(LD_NO_COMBINE),y)
 ifeq ($(objects-y),)
 $(OBJDIR)/built-in.o:
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
@@ -40,7 +44,15 @@ else
 $(OBJDIR)/built-in.o: $(objects-y)
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
-	
+else
+$(OBJDIR)/built-in.o: $(objects-y)
+# 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
+	$(SILENT_GEN) echo "$(objects-y)" > $@
+endif
+
+
+
+
 clean: $(clean-y)
 # 	$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
 	-rm $(OBJDIR)/*.o

@@ -1,0 +1,1 @@
+objects-y+=blink.o

@@ -14,6 +14,7 @@ PHONY+=deftarget deploy build collectinfo clean
 -include .config
 -include .version
 SRCDIR=.
+OBJDIR=.
 TMPDIR=tmp
 IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
 

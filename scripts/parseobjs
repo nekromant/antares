@@ -1,0 +1,13 @@
+#!/bin/bash
+read_builtin()
+{
+cat $1 | while read line; do 
+	if [[ "$line" =~ "built-in.o" ]]; then 
+		read_builtin "$line"; 
+	else
+		echo "$line";
+	fi; 
+done
+}
+
+read_builtin "$1"

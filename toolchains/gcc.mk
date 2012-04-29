@@ -1,5 +1,3 @@
-
-
 TOOL_PREFIX=$(call unquote,$(CONFIG_TOOLCHAIN_PREFIX))
 
 CC       := $(TOOL_PREFIX)gcc
@@ -81,8 +79,13 @@ endif
 builtin:
 	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
 
-$(IMAGENAME).elf: $(TMPDIR)/ldfile.lds builtin
+ifneq ($(LD_NO_COMBINE),y)
+$(IMAGENAME).elf: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(SRCDIR)/src/built-in.o 
+else
+$(IMAGENAME).elf: $(GCC_LDFILE) builtin
+	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) `$(SRCDIR)/scripts/parseobjs $(SRCDIR)/src/built-in.o`
+endif
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
 	$(SILENT_OBJCOPY) $(OBJCOPY) $(OBJCOPYFLAGS) $< $(@) 
