@@ -20,7 +20,8 @@ objects-y:=$(addprefix $(SRCDIR)/$(OBJDIR)/,$(objects-y))
 
 PHONY:= build clean 
 
-%/built-in.o:
+%/built-in.o: $(SRCDIR)/include/generated/autoconf.h
+	$(eval PHONY+=$*/built-in.o)
 	$(Q)$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build	
 
 	

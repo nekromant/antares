@@ -1,3 +1,70 @@
+menuconfig LIB_NLIBSTUBS
+bool "Configure newlib stubs"
+
+if LIB_NLIBSTUBS
+	comment "You will probably want to write your own for one or more"
+	comment "These do actually nothing"
+	
+	config LIB_NLIBSTUBS_ENV
+	bool "Environment"
+		help 
+		Include an empty environment list
+	
+	config LIB_NLIBSTUBS_EXIT
+	bool "_exit"
+		help 
+		Provide an infinite loop for exit()
+	
+	config LIB_NLIBSTUBS_CLOSE
+	bool "_close"
+	
+	config LIB_NLIBSTUBS_EXECVE
+	bool "_execve"
+	
+	config LIB_NLIBSTUBS_FORK
+	bool "_fork"
+	
+	config LIB_NLIBSTUBS_FSTAT
+	bool "_fstat"
+	
+	config LIB_NLIBSTUBS_ISATTY
+	bool "_isatty"
+	
+	config LIB_NLIBSTUBS_KILL
+	bool "_kill"
+	
+	config LIB_NLIBSTUBS_LINK
+	bool "_link"	
+	
+	config LIB_NLIBSTUBS_LSEEK
+	bool "_lseek"	
+
+	config LIB_NLIBSTUBS_GETPID
+	bool "_getpid"	
+	
+	config LIB_NLIBSTUBS_SBRK
+	bool "_sbrk"	
+
+	config LIB_NLIBSTUBS_STAT
+	bool "_stat"		
+	
+	config LIB_NLIBSTUBS_TIMES
+	bool "_times"		
+
+	config LIB_NLIBSTUBS_UNLINK
+	bool "_unlink"		
+	
+	config LIB_NLIBSTUBS_WAIT
+	bool "_wait"		
+	
+	config LIB_NLIBSTUBS_WRITE
+	bool "_write"		
+	
+	config LIB_NLIBSTUBS_READ
+	bool "_read"		
+	
+	endif
+
 config LIB_SNPRINTF
 bool "Portable vsprintf implementation"
 

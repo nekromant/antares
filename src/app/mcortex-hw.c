@@ -27,6 +27,27 @@ void mctx_init()
 	*top=1000;
 }
 
+#define MCTX_INFOREG	(char*) (FPGA_MEM+512)
+
+void mctx_dump_inforeg()
+{
+	char* m = MCTX_INFOREG;
+	printk("mctx: Motor cortex FPGA driver :: IP Core ID 0x%hhx\n\r", *m);
+	printk("mctx: (c) Necromant 2011-2012\n\r");
+	printk("mctx: Dumping avaliable hardware\n\r");
+	m++;
+	printk("mctx: %hhd Servo OCs avaliable\n\r",*m);
+	m++;
+	printk("mctx: %hhd Motor OCs avaliable\n\r",*m);
+	m++;
+	printk("mctx: %hhd Quadrature Encoder Counters with %hhd bits filtering avaliable\n\r",*m, *(MCTX_INFOREG+6));
+	m++;
+	printk("mctx: %hhd RGB Sensor Channels (Round-Robin) avaliable\r\n",*m);
+	m++;
+	printk("mctx: %hhd Ultrasonic Ranging Channels (Round-Robin) avaliable\r\n",*m);
+	
+}
+
 void mctx_servo_test()
 {
 	int s;

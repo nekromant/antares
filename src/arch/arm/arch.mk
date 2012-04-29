@@ -52,9 +52,6 @@ ifeq ($(CONFIG_GCC_LM),y)
 ELFFLAGS+=-lm
 endif
 
-
-
-
 CFLAGS+=-Wall
 ifeq ($(CONFIG_GCC_PARANOID_WRN),y)
 CFLAGS+=-Werror
@@ -72,8 +69,6 @@ CFLAGS+=-I$(SRCDIR)/include
 ASFLAGS+=$(COMMONFLAGS)
 CFLAGS+=$(COMMONFLAGS) 
 LDFLAGS+=$(COMMONFLAGS)
-
-#TODO: STM32 abstraction
 
 
 ifeq ($(CONFIG_MCU_STM32),y)

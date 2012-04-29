@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <lib/tasks.h>
 
+
 void printk(const char *fmt, /*args*/ ...)
 {
 	printf("[%d	] ", tmgr_get_uptime());

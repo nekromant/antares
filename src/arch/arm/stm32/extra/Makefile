@@ -4,3 +4,4 @@ CFLAGS+=-DsFLASH_CS_GPIO_PORT=$(call unquote,$(CONFIG_STM32_SPIFLASH_GPORT))
 CFLAGS+=-DsFLASH_SPI=$(call unquote,$(CONFIG_STM32_SPIFLASH_SPI))
 endif
 objects-$(CONFIG_STM32_SPIFLASH)+=stm32_eval_spi_flash.o
+objects-$(CONFIG_STM32_UARTIO)+=newlib-io.o

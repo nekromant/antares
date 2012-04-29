@@ -207,7 +207,7 @@ int main()
 		mcortex_fpga_smc();
 		mctx_init();
 		mcortex_btns_init();
-		//mctx_console();
+		mctx_console();
 		t = tmgr_get_uptime() - t;
 		printk("fpga: configuration done in %d ticks\n\r",t);
 		// TODO: CODE HERE!!!

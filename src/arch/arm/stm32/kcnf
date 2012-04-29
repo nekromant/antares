@@ -186,9 +186,14 @@ if STM32_EXTRA
 		
 		config STM32_SPIFLASH_SPI
 		string "SPI device"
-		default "SPI1"
-		
+		default "SPI1"		
 	endif
+	config STM32_UARTIO
+	bool "USART STDIO support"
+	help
+		Provides simple io routines to USART
+
+	
 endif 
 
 config STM32_FULL_ASSERT

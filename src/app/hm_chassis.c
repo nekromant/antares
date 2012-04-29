@@ -8,7 +8,7 @@ void motor_set_dir(motor_t motor, dir_t dir)
 {
   if(motor == left)
   {
-    if(dir == forward)
+    if(dir == backward)
     {
       GPIO_SetBits(GPIOB, GPIO_Pin_14);
       GPIO_ResetBits(GPIOB, GPIO_Pin_15);

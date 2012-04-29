@@ -143,12 +143,9 @@ void __putc(char c)
 
 FSMC_NORSRAMTimingInitTypeDef  fsmc_timing = 
 {
-  .FSMC_AddressSetupTime = 2,
-  .FSMC_AddressHoldTime = 12,
-  .FSMC_DataSetupTime = 12,
-//   .FSMC_BusTurnAroundDuration = 0,
-  .FSMC_CLKDivision = 4,
-//   .FSMC_DataLatency = 0,
+  .FSMC_AddressSetupTime = 9,
+  .FSMC_AddressHoldTime = 0,
+  .FSMC_DataSetupTime = 15,
   .FSMC_AccessMode = FSMC_AccessMode_A,
 };
 
@@ -224,6 +221,10 @@ void mcortex_fpga_smc()
 	char m;
 	char value;
 }
+
+
+
+
 void mctx_console()
 {
   	char* a = Bank1_SRAM3_ADDR;
@@ -246,7 +247,13 @@ void mctx_console()
 		a = Bank1_SRAM3_ADDR + offset;
 		b = a;
 		c = a; 
-		if ((m!='r') && (m!='w') && (m!='m') && (m!='p')) continue;
+		if ((m!='r') && (m!='w') && (m!='m') && (m!='p') && (m!='i')) continue;
+		if (m=='i')
+		{
+			printf("\n\r");
+			mctx_dump_inforeg(); // Dump info registers
+			continue;
+		}else
 		if (m=='w') 
 		{
 			scanf("%hhx",&value);
