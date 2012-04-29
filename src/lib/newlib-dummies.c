@@ -10,6 +10,14 @@
 #include <sys/times.h>
 #include <sys/unistd.h>
 
+/* If we're doing business with STM32 - suck in headers */
+#ifdef CONFIG_MCU_STM32
+#include "stm32f10x.h"
+#include "core_cm3.h"
+#endif
+
+
+
 #undef errno
 extern int errno;
 
@@ -210,6 +218,7 @@ int _unlink(char *name) {
     return -1;
 }
 #endif
+
 
 #ifdef CONFIG_LIB_NLIBSTUBS_UNLINK
 /*

@@ -24,10 +24,11 @@ all: $(CONFIG_MAKE_DEFTARGET)
 	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
 
 include make/host.mk
+include tmp/arch.mk
 include make/Makefile.lib
 include make/Makefile.collect
-include tmp/arch.mk
--include src/arch/$(ARCH)/arch.mk
+
+# -include src/arch/$(ARCH)/arch.mk
 include kconfig/kconfig.mk
 
 export SRCDIR TMPDIR IMAGENAME ARCH

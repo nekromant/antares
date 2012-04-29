@@ -4,8 +4,6 @@
 #Yep, there goes some NIH syndrome =)
 
 include $(SRCDIR)/make/Makefile.lib
-include $(TMPDIR)/arch.mk
-include $(SRCDIR)/src/arch/$(ARCH)/arch.mk
 include $(OBJDIR)/Makefile
 
 
