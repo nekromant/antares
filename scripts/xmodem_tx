@@ -1,0 +1,21 @@
+#!/bin/bash
+if [ $# -lt "2" ]; then
+echo "Send file via xmodem"
+echo "usage: $0 file port"
+exit 1
+fi
+
+PORT=$2
+FW=$1
+echo "Entering upgrade mode..."
+#echo f > $PORT
+echo "Waiting for erase to complete"
+cat /dev/ttyUSB0|while read -n1 c; do
+if [ "$c" == "C" ]; then
+	break
+	fi
+done
+echo "Sending data"
+sx -X -k $FW > $PORT < $PORT
+echo "All done, reboot"
+minicom -o -D $PORT
