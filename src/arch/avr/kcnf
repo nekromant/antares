@@ -6,9 +6,16 @@ source "src/arch/avr/mcu_selection.kcnf"
 
 endchoice
 
-  config F_CPU
-  int "CPU frequency in Hz"
-  default 8000000
-  
+config F_CPU
+int "CPU frequency in Hz"
+default 8000000
+
+menuconfig CONFIG_AVR_EXTRA
+bool "Extra AVR Goodies"
+
+if CONFIG_AVR_EXTRA
+source "src/arch/avr/vusb/kcnf"
+endif
+
 
 

@@ -77,9 +77,9 @@ endif
 
 
 
-TARGET=$(call unquote,$(CONFIG_IMAGE_FILENAME))
-TARGET_ELFFILE=$(IMAGES_DIR)$(TARGET).elf
-TARGET_LSSFILE=$(IMAGES_DIR)$(TARGET).lss
+# TARGET=$(call unquote,$(CONFIG_IMAGE_FILENAME))
+# TARGET_ELFFILE=$(IMAGES_DIR)$(TARGET).elf
+# TARGET_LSSFILE=$(IMAGES_DIR)$(TARGET).lss
 
 define ldmakes
 $(eval subdirs=$(addprefix $(1),$(filter %/,$(objects-y))))

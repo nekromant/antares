@@ -17,6 +17,8 @@ CFLAGS+=$(call unquote,$(CONFIG_CFLAGS)) -include $(SRCDIR)/include/generated/au
 LDFLAGS+=$(call unquote,$(CONFIG_LDFLAGS))
 ASFLAGS+=$(call unquote,$(CONFIG_ASFLAGS))
 
+#FixMe: Hack
+ASFLAGS+=$(CFLAGS)
 OBJCOPYFLAGS+=-Obinary
 
 #Let's parse optimisations from .config

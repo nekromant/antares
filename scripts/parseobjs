@@ -1,8 +1,8 @@
 #!/bin/bash
 read_builtin()
 {
-cat $1 | while read line; do 
-	if [[ "$line" =~ "built-in.o" ]]; then 
+for line in `cat $1`; do 
+	if [ "`basename $line`" == "built-in.o" ]; then 
 		read_builtin "$line"; 
 	else
 		echo "$line";

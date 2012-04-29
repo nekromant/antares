@@ -1,0 +1,313 @@
+menuconfig CONTRIB_VUSB
+bool "VUSB Stack"
+
+
+if CONTRIB_VUSB
+
+comment "Some rarely used options have been omitted."
+comment "See src/contrib/usbdrv/include/usb-config.h for more info"
+
+menu "Hardware Config"
+
+config USB_CFG_IOPORTNAME 
+string "IO Port Name"
+default "D"
+  help
+  This is the port where the USB bus is connected. When you configure it to
+  "B", the registers PORTB, PINB and DDRB will be used.
+
+config USB_CFG_DMINUS_BIT
+int "D- bit number"
+default 4
+  help
+  This is the bit number in USB_CFG_IOPORT where the USB D- line is connected.
+  This may be any bit in the port.
+
+config USB_CFG_DPLUS_BIT
+int "D+ bit number"
+default 2
+  help
+  This is the bit number in USB_CFG_IOPORT where the USB D+ line is connected.
+  This may be any bit in the port. Please note that D+ must also be connected
+  to interrupt pin INT0! [You can also use other interrupts, see section
+  "Optional MCU Description" below, or you can connect D- to the interrupt, as
+  it is required if you use the USB_COUNT_SOF feature. If you use D- for the
+  interrupt, the USB interrupt will also be triggered at Start-Of-Frame
+  markers every millisecond.]
+
+
+
+endmenu
+
+menuconfig USB_OPT
+bool "Optional Hardware Config (pullup)"
+
+if USB_OPT
+
+config USB_CFG_PULLUP_IOPORTNAME
+string "Pullup port name"
+default "D"
+
+config USB_CFG_PULLUP_BIT
+int "Pullup bit number"
+default 1
+
+
+endif
+
+
+menu "Functional Range"
+
+config USB_CFG_HAVE_INTRIN_ENDPOINT
+bool "Have interrupt-in endpoint"
+default n 
+help
+  Define this to y if you want to compile a version with two endpoints: The
+  default control endpoint 0 and an interrupt-in endpoint (any other endpoint
+  number).
+
+config USB_CFG_HAVE_INTRIN_ENDPOINT3
+bool "Have interrupt-in endpoint 3"
+default n
+depends on USB_CFG_HAVE_INTRIN_ENDPOINT
+ help
+ Define this to 1 if you want to compile a version with three endpoints: The
+ default control endpoint 0, an interrupt-in endpoint 3 (or the number
+ configured below) and a catch-all default interrupt-in endpoint as above.
+ You must also define USB_CFG_HAVE_INTRIN_ENDPOINT to 1 for this feature.
+
+
+config USB_CFG_EP3_NUMBER
+int "Int-in endpoint number"
+depends on USB_CFG_HAVE_INTRIN_ENDPOINT3
+default 3
+  help
+  If the so-called endpoint 3 is used, it can now be configured to any other
+  endpoint number (except 0) with this macro. Default if undefined is 3.
+
+config USB_CFG_IMPLEMENT_HALT
+bool "Implement HALT"
+default n
+help
+  Define this to 1 if you also want to implement the ENDPOINT_HALT feature
+  for endpoint 1 (interrupt endpoint). Although you may not need this feature,
+  it is required by the standard. We have made it a config option because it
+  bloats the code considerably.
+ 
+config USB_CFG_SUPPRESS_INTR_CODE
+bool "Suppress interrupt-in code"
+default n
+help 
+  Define this to 1 if you want to declare interrupt-in endpoints, but don't
+  want to send any data over them. If this macro is defined to 1, functions
+  usbSetInterrupt() and usbSetInterrupt3() are omitted. This is useful if
+  you need the interrupt-in endpoints in order to comply to an interface
+  (e.g. HID), but never want to send any data. This option saves a couple
+  of bytes in flash memory and the transmit buffers in RAM.
+
+config USB_CFG_INTR_POLL_INTERVAL
+int "Interrupt poll interval"
+default 10
+  help
+  If you compile a version with endpoint 1 (interrupt-in), this is the poll
+  interval. The value is in milliseconds and must not be less than 10 ms for
+  low speed devices.
+
+config USB_CFG_IS_SELF_POWERED
+bool "Device is self-powered"
+default 0
+  help
+  Define this to 1 if the device has its own power supply. Set it to 0 if the
+  device is powered from the USB bus.
+
+config USB_CFG_MAX_BUS_POWER 
+int "Maximum USB power consumption"
+default 100
+help
+ Set this variable to the maximum USB bus power consumption of your device.
+ The value is in milliamperes. [It will be divided by two since USB
+ communicates power requirements in units of 2 mA.]
+
+config USB_CFG_IMPLEMENT_FN_READ 
+bool "Implement read function"
+default n
+help
+ Set this to 1 if you need to send control replies which are generated
+ "on the fly" when usbFunctionRead() is called. If you only want to send
+ data from a static buffer, set it to 0 and return the data from
+ usbFunctionSetup(). This saves a couple of bytes.
+ 
+config USB_CFG_IMPLEMENT_FN_WRITEOUT
+bool "Implement writeout function"
+default n
+help
+  Define this to 1 if you want to use interrupt-out (or bulk out) endpoints.
+  You must implement the function usbFunctionWriteOut() which receives all
+  interrupt/bulk data sent to any endpoint other than 0. The endpoint number
+  can be found in 'usbRxToken'.
+  
+config USB_CFG_HAVE_FLOWCONTROL
+default n
+bool "Implement USB Flow control"
+  help
+  Define this to 1 if you want flowcontrol over USB data. See the definition
+  of the macros usbDisableAllRequests() and usbEnableAllRequests() in
+  usbdrv.h.
+
+config USB_CFG_LONG_TRANSFERS
+default n
+bool "Implement long transfers"
+  help
+  Define this to 1 if you want to send/receive blocks of more than 254 bytes
+  in a single control-in or control-out transfer. Note that the capability
+  for long transfers increases the driver size.
+
+config USB_COUNT_SOF
+default n
+bool "Count SOF packets (READ HELP!)"
+  help
+  define this macro to 1 if you need the global variable "usbSofCount" which
+  counts SOF packets. This feature requires that the hardware interrupt is
+  connected to D- instead of D+.
+
+config USB_CFG_CHECK_DATA_TOGGLING
+bool "Check data toggling"
+default n
+  help
+  define this macro to 1 if you want to filter out duplicate data packets
+  sent by the host. Duplicates occur only as a consequence of communication
+  errors, when the host does not receive an ACK. Please note that you need to
+  implement the filtering yourself in usbFunctionWriteOut() and
+  usbFunctionWrite(). Use the global usbCurrentDataToken and a static variable
+  for each control- and out-endpoint to check for duplicate packets.
+ 
+config USB_CFG_HAVE_MEASURE_FRAME_LENGTH
+bool "Enable usbMeasureFrameLength()"
+default n
+  help
+  define this macro to 1 if you want the function usbMeasureFrameLength()
+  compiled in. This function can be used to calibrate the AVR's RC oscillator.
+ 
+
+endmenu
+
+menu "Device Description"
+config USB_CFG_VENDOR_ID
+hex "Vendor ID"
+default 0x16c0
+  help
+  USB vendor ID for the device, low byte first. If you have registered your
+  own Vendor ID, define it here. Otherwise you use one of obdev's free shared
+  VID/PID pairs. Be sure to read USBID-License.txt for rules!
+  + This template uses obdev's shared VID/PID pair: 0x16c0/0x5dc.
+  + Use this VID/PID pair ONLY if you understand the implications!
+
+config USB_CFG_DEVICE_ID
+hex "Device ID"
+default 0x05dc
+  help
+  This is the ID of the product, low byte first. It is interpreted in the
+  scope of the vendor ID. If you have registered your own VID with usb.org
+  or if you have licensed a PID from somebody else, define it here. Otherwise
+  you use obdev's free shared VID/PID pair. Be sure to read the rules in
+  USBID-License.txt!
+  + This template uses obdev's shared VID/PID pair: 0x16c0/0x5dc.
+  + Use this VID/PID pair ONLY if you understand the implications!
+ 
+config USB_CFG_DEVICE_VERSION  
+hex "Version Number"
+default 0x0001
+  help
+  Version number of the device: Minor number first, then major number.
+
+config USB_HAS_VENDORNAME
+bool "Include a vendor name"
+default y
+
+if USB_HAS_VENDORNAME
+  config USB_CFG_VENDOR_NAME
+  string "Vendor name"
+  default "www.necromant.ath.cx"
+  help
+    ALWAYS define a vendor name containing your Internet domain name if you use
+    obdev's free shared VID/PID pair. See the file USBID-License.txt for
+    details.
+endif
+
+config USB_HAS_DEVNAME
+bool "Include a product name"
+default y
+
+if USB_HAS_DEVNAME
+
+  config USB_CFG_DEVICE_NAME
+  string "Device name"
+
+
+endif
+
+config USB_HAS_SERIAL
+bool "Include a serial number"
+default y
+
+config USB_SERIAL_USE_GIT
+depends on USB_HAS_SERIAL
+bool "Use git revision as the serial number"
+default n
+
+if USB_HAS_SERIAL && !USB_SERIAL_USE_GIT
+
+config USB_CFG_SERIAL_NUMBER
+string "Serial Number"
+default "n+1"
+endif 
+
+comment "See USB specification if you want to conform to an existing device class."
+comment "Class 0xff is 'vendor specific'"
+
+config USB_CFG_DEVICE_CLASS
+hex "USB Device class"
+default 0xff
+
+config USB_CFG_DEVICE_SUBCLASS
+hex "USB Device subclass"
+default 0x0
+
+comment "define class here if not at device level"
+config  USB_CFG_INTERFACE_CLASS  
+hex "Interface class"
+default 0x0
+
+config USB_CFG_INTERFACE_SUBCLASS
+hex "Interface subclass"
+default 0x0
+
+config USB_CFG_INTERFACE_PROTOCOL
+hex "Interface protocol"
+default 0x00
+
+config USB_CFG_INTERFACE_PROTOCOL
+hex "Interface protocol"
+default 0x00
+
+config USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH
+int "USB HID Descriptor length"
+default 0
+help
+  Define this to the length of the HID report descriptor, if you implement
+  an HID device. Otherwise don't define it or define it to 0.
+  If you use this define, you must add a PROGMEM character array named
+  "usbHidReportDescriptor" to your code which contains the report descriptor.
+  Don't forget to keep the array and this define in sync!
+ 
+
+endmenu
+
+config USB_ONLY_INCLUDE
+bool "#include usbdrv.c instead of linking"
+default "n"
+help
+  Use the define above if you #include usbdrv.c instead of linking against it.
+  This technique saves a couple of bytes in flash memory.
+
+endif
