@@ -1,1 +1,1 @@
-subdirs-$(CONFIG_CONTRIB_VUSB)+=usbdrv/
+subdirs-$(CONFIG_CONTRIB_VUSB)+=usbdrv

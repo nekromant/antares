@@ -10,6 +10,7 @@ include $(OBJDIR)/Makefile
 objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
+
 # include $(SRCDIR)/toolchain/
 
 objects-y:=$(addprefix $(SRCDIR)/$(OBJDIR)/,$(objects-y))
@@ -18,12 +19,11 @@ objects-y:=$(addprefix $(SRCDIR)/$(OBJDIR)/,$(objects-y))
 
 PHONY:= build clean 
 
-%/built-in.o: $(SRCDIR)/include/generated/autoconf.h
+%/built-in.o: $(TOPDIR)/include/generated/autoconf.h
 	$(eval PHONY+=$*/built-in.o)
-	$(Q)$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build	
+	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build	
 
-	
-%.o: %.c
+%.o: %.c 
 	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
 %.o: %.S 
@@ -38,14 +38,14 @@ build: $(OBJDIR)/built-in.o
 
 ifneq ($(LD_NO_COMBINE),y)
 ifeq ($(objects-y),)
-$(OBJDIR)/built-in.o:
+$(OBJDIR)/built-in.o: $(gen-y)
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 else
-$(OBJDIR)/built-in.o: $(objects-y)
+$(OBJDIR)/built-in.o: $(gen-y) $(objects-y)
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
 else
-$(OBJDIR)/built-in.o: $(objects-y)
+$(OBJDIR)/built-in.o: $(gen-y) $(objects-y)
 # 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif

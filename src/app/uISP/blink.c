@@ -1,15 +1,17 @@
 #include <arch/antares.h>
+#include <generated/usbconfig.h>
+#include <arch/vusb/usbdrv.h>
 
+uchar usbFunctionSetup(uchar data[8]) {
+
+	
+}
 
 ANTARES_APP(blink_test)
 {
-	DDRC|=1<<2;
+	usbInit();
 	while (1)
 	{
-	PORTC|=(1<<2);
-	_delay_ms(1000);
-	PORTC&=~(1<<2);
-	_delay_ms(1000);
-	
+	usbPoll();
 	}
 }

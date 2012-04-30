@@ -15,6 +15,7 @@ PHONY+=deftarget deploy build collectinfo clean
 -include .version
 SRCDIR=.
 OBJDIR=.
+TOPDIR=.
 TMPDIR=tmp
 IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
 
@@ -32,7 +33,7 @@ include make/Makefile.collect
 # -include src/arch/$(ARCH)/arch.mk
 include kconfig/kconfig.mk
 
-export SRCDIR TMPDIR IMAGENAME ARCH
+export SRCDIR TMPDIR IMAGENAME ARCH TOPDIR
 
 clean: 
 # 	$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean

@@ -16,6 +16,7 @@ the file appropriate for the given clock rate.
 */
 
 #define __SFR_OFFSET 0      /* used by avr-libc's register definitions */
+#include <generated/usbconfig.h>
 #include <arch/vusb/usbportability.h>
 #include <arch/vusb/usbdrv.h>         /* for common defs */
 

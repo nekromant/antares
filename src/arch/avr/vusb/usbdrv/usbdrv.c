@@ -8,10 +8,11 @@
  * This Revision: $Id$
  */
 
+#include <generated/usbconfig.h>
 #include <arch/vusb/usbportability.h>
 #include <arch/vusb/usbdrv.h>
 #include <arch/vusb/oddebug.h>
-#include <arch/vusb/usbconfig.h>
+
 
 /*
 General Description:
