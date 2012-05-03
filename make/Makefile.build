@@ -2,18 +2,28 @@
 #I didn't get enough dao to understand fully kbuild's magic and adopt it completely to avr
 #And ethersex's methods of compiling sucked, so I invented my own build script
 #Yep, there goes some NIH syndrome =)
+.SUFFIXES:
 
-include $(SRCDIR)/make/Makefile.lib
-include $(OBJDIR)/Makefile
+include $(TOPDIR)/.config
+include $(ANTARES_DIR)/make/Makefile.lib
+include $(SRCDIR)/Makefile
+# VPATH = $(SRCDIR)
 
+
+RELPATH = $(patsubst $(ANTARES_DIR)/%,%,$(SRCDIR))
 
 objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 
+
 # include $(SRCDIR)/toolchain/
 
-objects-y:=$(addprefix $(SRCDIR)/$(OBJDIR)/,$(objects-y))
+# sources-y:=$(addprefix $(SRCDIR)/,$(objects-y))
+# objects-y:=$(addprefix $(OBJDIR)/,$(objects-y))
+
+# $(info ====> $(CFLAGS))
+# $(info $(sources-y))
 
 #Out-of-dir builds not yet supported
 
@@ -21,16 +31,23 @@ PHONY:= build clean
 
 %/built-in.o: $(TOPDIR)/include/generated/autoconf.h
 	$(eval PHONY+=$*/built-in.o)
-	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build	
+	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
+	$(Q)mkdir -p $*
+	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
+	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
+	-C $* \
+	-f $(ANTARES_DIR)/make/Makefile.build -r build	
 
-%.o: %.c 
-	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
-%.o: %.S 
-	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
-%.o: %.s 
-	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
+$(OBJDIR)/%.o: $(SRCDIR)/%.c 
+	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $^  
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.S 
+	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $^  
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.s 
+	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $^  
 
 
 
@@ -42,14 +59,13 @@ $(OBJDIR)/built-in.o: $(gen-y)
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 else
 $(OBJDIR)/built-in.o: $(gen-y) $(objects-y)
-	$(SILENT_LD) $(LD) -r -o $(@) $^ 
+	$(SILENT_LD) $(LD) -r -o $(@) $(addprefix $(OBJDIR)/,$^) 
 endif
 else
-$(OBJDIR)/built-in.o: $(gen-y) $(objects-y)
+$(OBJDIR)/built-in.o: $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
 # 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif
-
 
 
 

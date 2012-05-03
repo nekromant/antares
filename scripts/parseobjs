@@ -1,13 +1,13 @@
 #!/bin/bash
 read_builtin()
 {
+	local DIR="`dirname $1`"
 for line in `cat $1`; do 
 	if [ "`basename $line`" == "built-in.o" ]; then 
-		read_builtin "$line"; 
+		read_builtin "$DIR/$line"; 
 	else
-		echo "$line";
+		echo "$DIR/$line";
 	fi; 
 done
 }
-
 read_builtin "$1"

@@ -136,7 +136,15 @@ help
  "on the fly" when usbFunctionRead() is called. If you only want to send
  data from a static buffer, set it to 0 and return the data from
  usbFunctionSetup(). This saves a couple of bytes.
- 
+
+config USB_CFG_IMPLEMENT_FN_WRITE 
+bool "Implement write function"
+default n
+help
+	Set this to 1 if you want usbFunctionWrite() to be called for control-out
+	transfers. Set it to 0 if you don't need it and want to save a couple of
+	bytes.
+
 config USB_CFG_IMPLEMENT_FN_WRITEOUT
 bool "Implement writeout function"
 default n

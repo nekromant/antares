@@ -9,25 +9,25 @@ menu "Target platform settings"
 endmenu
 
 menu "Toolchain settings"
-source "toolchains/kcnf"
+source "antares/toolchains/kcnf"
 endmenu
 
 
 menu "Libraries and drivers"
-source "src/lib/kcnf"
+source "antares/src/lib/kcnf"
 endmenu
 
 
 menu "Project Settings"
-source "src/app/kcnf"
+source "antares/src/app/kcnf"
 endmenu
 
 #menu "Device drivers"
-#source "src/drivers/kcnf"
+#source "antares/src/drivers/kcnf"
 #endmenu
 
 #menu "Contributed stuff"
-#source "src/contrib/kcnf"
+#source "antares/src/contrib/kcnf"
 #endmenu
 
 menu "Applications & tasking"
@@ -43,18 +43,18 @@ menu "Applications & tasking"
    
   endchoice
 
-#source "src/apps/kcnf"
+#source "antares/src/apps/kcnf"
 
 endmenu
 
 menu "Deployment settings"
-source "deploy/kcnf"
+source "antares/deploy/kcnf"
 endmenu
 
 
 
 
-#source "src/alien/kcnf"
+#source "antares/src/alien/kcnf"
 
 menu "Build System Tweaks"
 

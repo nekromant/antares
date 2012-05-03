@@ -3,16 +3,16 @@ gen-y+=usbconfig
 
 #Nothing can describe, how much this thing sucks
 
-U_VID=$(shell $(SRCDIR)/scripts/avr/vusb_id $(CONFIG_USB_CFG_VENDOR_ID))
-U_PID=$(shell $(SRCDIR)/scripts/avr/vusb_id $(CONFIG_USB_CFG_DEVICE_ID))
-U_VER=$(shell $(SRCDIR)/scripts/avr/vusb_id $(CONFIG_USB_CFG_DEVICE_VERSION))
+U_VID=$(shell $(ANTARES_DIR)/scripts/avr/vusb_id $(CONFIG_USB_CFG_VENDOR_ID))
+U_PID=$(shell $(ANTARES_DIR)/scripts/avr/vusb_id $(CONFIG_USB_CFG_DEVICE_ID))
+U_VER=$(shell $(ANTARES_DIR)/scripts/avr/vusb_id $(CONFIG_USB_CFG_DEVICE_VERSION))
 
-$(eval $(shell $(SRCDIR)/scripts/avr/vusb_str USB_CFG_VENDOR_NAME $(CONFIG_USB_CFG_VENDOR_NAME) str ))
-$(eval $(shell $(SRCDIR)/scripts/avr/vusb_str USB_CFG_VENDOR_NAME $(CONFIG_USB_CFG_VENDOR_NAME) len ))
+$(eval $(shell $(ANTARES_DIR)/scripts/avr/vusb_str USB_CFG_VENDOR_NAME $(CONFIG_USB_CFG_VENDOR_NAME) str ))
+$(eval $(shell $(ANTARES_DIR)/scripts/avr/vusb_str USB_CFG_VENDOR_NAME $(CONFIG_USB_CFG_VENDOR_NAME) len ))
 
 define vusb_def_string
-	@$(eval $(shell $(SRCDIR)/scripts/avr/vusb_str $(1) $(CONFIG_$(1)) str ))
-	@$(eval $(shell $(SRCDIR)/scripts/avr/vusb_str $(1) $(CONFIG_$(1)) len ))
+	@$(eval $(shell $(ANTARES_DIR)/scripts/avr/vusb_str $(1) $(CONFIG_$(1)) str ))
+	@$(eval $(shell $(ANTARES_DIR)/scripts/avr/vusb_str $(1) $(CONFIG_$(1)) len ))
 	@echo "#define $(1) $($(1))"  >> $(TOPDIR)/include/generated/usbconfig.h
 	@echo "#define $(1)_LEN $($(1)_LEN)"  >> $(TOPDIR)/include/generated/usbconfig.h
 endef

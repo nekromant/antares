@@ -1,4 +1,4 @@
-include $(SRCDIR)/src/arch/avr/mcu_database.mk
+include $(ANTARES_DIR)/src/arch/avr/mcu_database.mk
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).bin $(IMAGENAME).lss $(IMAGENAME).hex $(IMAGENAME).eep
 
@@ -17,6 +17,15 @@ CFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 ELFFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 
 #avr-specifik voodoo for hex generation
+
+#ELFFLAGS+=-Wl,--relax,--gc-sections 
+#CFLAGS+=-Wl,--relax,--gc-sections 
+
+ifeq ($(CONFIG_AVR_BLDR),y)
+ELFFLAGS+=-Wl,--section-start=.text=$(CONFIG_AVR_BLDADDR)
+CFLAGS+=-fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions -Wl,--section-start=.text=1800
+
+endif
 
 HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 HEX_EEPROM_FLAGS = -j .eeprom

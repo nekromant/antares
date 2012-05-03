@@ -3,9 +3,16 @@ LEN=${#2}
 case "$3" in
 "str")
   echo -n "$1="
-  echo $2 |while read -n 1 char; do
+  echo "$2" |while read -n 1 char; do
   if [ "${char}" != "" ]; then
   LEN=$((LEN-1))
+  if [ "${char}" == "'" ]; then
+	  char="\'"
+	  fi
+   if [ "${char}" == "_" ]; then	 
+	  char=" "
+	  fi
+	  
   echo -n "'${char}'"
   if [ "$LEN" -gt "0" ]; then
   echo -n ","

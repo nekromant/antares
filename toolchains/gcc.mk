@@ -11,9 +11,8 @@ OBJDUMP  := $(TOOL_PREFIX)objdump
 SIZE     := $(TOOL_PREFIX)size
 
 COMPILER_TOOLS=CC="$(CC)" CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
-export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS
 
-CFLAGS+=$(call unquote,$(CONFIG_CFLAGS)) -include $(SRCDIR)/include/generated/autoconf.h
+CFLAGS+=$(call unquote,$(CONFIG_CFLAGS)) -include $(TOPDIR)/include/generated/autoconf.h
 LDFLAGS+=$(call unquote,$(CONFIG_LDFLAGS))
 ASFLAGS+=$(call unquote,$(CONFIG_ASFLAGS))
 
@@ -67,7 +66,7 @@ CFLAGS+=-fdata-sections -ffunction-sections
 ELFFLAGS+=-Wl,--gc-sections -Wl,-s 
 endif
 
-CFLAGS+=-I$(SRCDIR)/include
+CFLAGS+=-I$(TOPDIR)/include -I$(ANTARES_DIR)/include
 
 ASFLAGS+=$(COMMONFLAGS)
 CFLAGS+=$(COMMONFLAGS) 
@@ -78,15 +77,22 @@ ifneq ($(GCC_LDFILE),)
 ELFFLAGS+=-T $(GCC_LDFILE)
 endif
 
+export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
+export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
+
 builtin:
-	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
+	mkdir -p $(OBJDIR)/build
+	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
+	-C $(ANTARES_DIR) \
+	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
+
 
 ifneq ($(LD_NO_COMBINE),y)
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(SRCDIR)/src/built-in.o 
 else
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
-	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) `$(SRCDIR)/scripts/parseobjs $(SRCDIR)/src/built-in.o`
+	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) `$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o`
 endif
 
 $(IMAGENAME).bin: $(IMAGENAME).elf

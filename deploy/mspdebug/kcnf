@@ -8,7 +8,7 @@ if DEPLOY_MSPDEBUG
 
   choice 
   prompt "Select mspdebug driver"  
-  source "deploy/mspdebug/drv_selection.kcnf"
+  source "antares/deploy/mspdebug/drv_selection.kcnf"
 
   endchoice
 

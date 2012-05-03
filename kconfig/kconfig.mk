@@ -13,10 +13,10 @@ lxdialog += lxdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o
 conf-objs	:= conf.o  zconf.tab.o
 mconf-objs     := mconf.o zconf.tab.o $(lxdialog)
 
-VERSION_MAJOR := $(shell kconfig/config --file ".version" --state VERSION_MAJOR )
-VERSION_MINOR := $(shell kconfig/config --file ".version" --state VERSION_MINOR )
-VERSION_CODENAME := $(shell kconfig/config --file ".version" --state VERSION_CODENAME )
-VERSION_GIT = $(shell git rev-parse --verify HEAD)
+VERSION_MAJOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MAJOR )
+VERSION_MINOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
+VERSION_CODENAME := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
+VERSION_GIT = $(shell GIT_DIR=$(SRCDIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
 %.tab.c: %.y
 	bison -l -b $* -p $(notdir $*) $<
 #	cp $@ $@_shipped
@@ -45,13 +45,13 @@ $(obj)/lkc_defs.h: $(src)/lkc_proto.h
 	sed < $< > $@ 's/P(\([^,]*\),.*/#define \1 (\*\1_p)/'
 
 
-%.o: %.c
+$(obj)/%.o: $(src)/%.c
 	 $(HOST_CC) -c $(HOST_EXTRACFLAGS) $< -o $@
 
 $(obj)/conf: $(addprefix $(obj)/,$(conf-objs))
 	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
-
+	
 $(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
 	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
@@ -61,11 +61,11 @@ kconfig-clean:
 	-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
 
 versionupdate:
-	$(Q)$(obj)/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
-	$(Q)$(obj)/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
-	$(Q)$(obj)/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
-	$(Q)$(obj)/config --set-str VERSION_GIT $(VERSION_GIT) 
-	$(SILENT_VER) $(obj)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
+	$(Q)$(src)/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
+	$(Q)$(src)/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
+	$(Q)$(src)/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
+	$(Q)$(src)/config --set-str VERSION_GIT $(VERSION_GIT) 
+	$(SILENT_VER) $(src)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
 	
   
 menuconfig: $(obj)/mconf versionupdate collectinfo

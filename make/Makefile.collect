@@ -11,13 +11,13 @@ $(TMPDIR)/arch.mk:
 
 $(TMPDIR)/allarch.kcnf:
 	$(SILENT_GEN) for arch in `ls $(SRCDIR)/src/arch/ $(junk)`; do\
-		echo source \"src/arch/$$arch/kcnf\" >> $@;\
+		echo source \"antares/src/arch/$$arch/kcnf\" >> $@;\
 		done; echo "" >> $@
 	
 collectinfo: \
 	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
 	     $(TMPDIR)/allarch.kcnf
-	     rm $(OBJDIR)/include/arch
+	     -rm $(OBJDIR)/include/arch
 	     ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
 	
 PHONY+=collectinfo

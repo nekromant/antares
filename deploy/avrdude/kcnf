@@ -10,7 +10,7 @@ depends on ARCH_AVR
   choice 
   prompt "AVR programmer"
   
-  source "deploy/avrdude/proglist.kcnf"
+  source "antares/deploy/avrdude/proglist.kcnf"
   
   endchoice
 

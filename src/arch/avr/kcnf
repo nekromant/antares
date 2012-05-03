@@ -2,7 +2,7 @@ choice
 depends on ARCH_AVR
 prompt "Select MCU variant"
   
-source "src/arch/avr/mcu_selection.kcnf"
+source "antares/src/arch/avr/mcu_selection.kcnf"
 
 endchoice
 
@@ -10,11 +10,20 @@ config F_CPU
 int "CPU frequency in Hz"
 default 8000000
 
+
+config AVR_BLDR
+bool "Run in bootloader section"
+
+config AVR_BLDADDR
+depends on AVR_BLDR
+hex "Bootloader address"
+
+
 menuconfig CONFIG_AVR_EXTRA
 bool "Extra AVR Goodies"
 
 if CONFIG_AVR_EXTRA
-source "src/arch/avr/vusb/kcnf"
+source "antares/src/arch/avr/vusb/kcnf"
 endif
 
 

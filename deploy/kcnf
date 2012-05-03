@@ -1,11 +1,11 @@
-source "deploy/avrdude/kcnf"
-source "deploy/jetterm/kcnf"
-source "deploy/avrdude-remote/kcnf"
-source "deploy/mspdebug/kcnf"
-source "deploy/openocd/kcnf"
-source "deploy/stm32flash/kcnf"
-source "deploy/dfu-util/kcnf"
-source "deploy/stlink/kcnf"
+source "antares/deploy/avrdude/kcnf"
+source "antares/deploy/jetterm/kcnf"
+source "antares/deploy/avrdude-remote/kcnf"
+source "antares/deploy/mspdebug/kcnf"
+source "antares/deploy/openocd/kcnf"
+source "antares/deploy/stm32flash/kcnf"
+source "antares/deploy/dfu-util/kcnf"
+source "antares/deploy/stlink/kcnf"
 
 config DEPLOY_POSTRUN
 string "Command to run after deployment"
@@ -13,7 +13,7 @@ default "minicom -o -D /dev/ttyUSB0 -b 57600"
 
 comment "Architecture-specific deployment options"
 #Avr has some deployment tricks, that we need to include
-source "src/arch/avr/deploy.kcnf"
+source "antares/src/arch/avr/deploy.kcnf"
 
 
 

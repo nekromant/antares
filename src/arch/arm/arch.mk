@@ -7,5 +7,5 @@ GCC_LDFILE=$(TMPDIR)/ldfile.lds
 BUILDGOALS=$(IMAGENAME).bin $(IMAGENAME).lss
 
 ifeq ($(CONFIG_MCU_STM32),y)
-include $(SRCDIR)/src/arch/arm/stm32/arch.mk
+include $(TOPDIR)/antares/src/arch/arm/stm32/arch.mk
 endif

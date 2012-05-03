@@ -4,7 +4,6 @@ prompt "Select app"
 config APP_MCORTEX
 bool "Motor cortex fw"
 
-
 config APP_SL
 bool "Slava's robot"
 
@@ -15,3 +14,8 @@ config APP_UISP
 bool "uISP"
 
 endchoice
+
+if APP_UISP
+source "antares/src/app/uISP/kcnf"
+endif
+

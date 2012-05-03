@@ -10,9 +10,9 @@ bool "GCC-based toolchain"
 endchoice
 
 if TOOLCHAIN_GCC
-source "toolchains/gcc.kcnf"
+source "antares/toolchains/gcc.kcnf"
 endif
 
 #if TOOLCHAIN_SDCC
-#source "toolchains/sdcc.kcnf"
+#source "antares/toolchains/sdcc.kcnf"
 #endif  

@@ -7,7 +7,7 @@ endchoice
 
 
 if MCU_STM32
-source src/arch/arm/stm32/kcnf
+source "antares/src/arch/arm/stm32/kcnf"
 endif
 
 
