@@ -1,0 +1,20 @@
+#!/bin/bash
+if [ "$ANTARES_DIR" == "" ]; then
+	echo "Please set the path to your antares source tree"
+	exit
+	fi
+
+cp -Rf $ANTARES_DIR/abootstrap/template/* .
+cp -Rf $ANTARES_DIR/abootstrap/template/.gitignore .
+
+echo "Pick a .config you'd like to start with."
+
+select config in `ls $ANTARES_DIR/defconfigs`; do
+	cp $ANTARES_DIR/defconfigs/$config .config
+	make antares
+	git init .
+	git add Makefile src/ include/
+	echo "You can run menuconfig now and make adjustments"
+	echo "Have fun!"
+	exit 0
+done

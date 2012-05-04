@@ -98,7 +98,7 @@ $(IMAGENAME).elf: $(GCC_LDFILE) builtin
 else
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \
-	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o`
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`
 endif
 

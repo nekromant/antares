@@ -38,8 +38,6 @@ PHONY:= build clean
 	-C $* \
 	-f $(ANTARES_DIR)/make/Makefile.build -r build	
 
-$(info $(SRCDIR) :: $(OBJDIR))
-
 $(OBJDIR)/%.o: $(SRCDIR)/%.c 
 	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $^  
 
