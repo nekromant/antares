@@ -81,9 +81,14 @@ export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
 
 builtin:
-	mkdir -p $(OBJDIR)/build
+	#Build the antares objects
+	$(Q) mkdir -p $(OBJDIR)/build/app
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
 	-C $(ANTARES_DIR)/src \
+	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
+	#And the actual application
+	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
+	-C $(TOPDIR)/$(project_sources) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
 
@@ -92,7 +97,9 @@ $(IMAGENAME).elf: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
 else
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
-	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) `$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o`
+	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o`
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`
 endif
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
