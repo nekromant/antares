@@ -83,13 +83,13 @@ export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
 builtin:
 	mkdir -p $(OBJDIR)/build
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
-	-C $(ANTARES_DIR) \
+	-C $(ANTARES_DIR)/src \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
 
 ifneq ($(LD_NO_COMBINE),y)
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
-	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(SRCDIR)/src/built-in.o 
+	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
 else
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) `$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o`

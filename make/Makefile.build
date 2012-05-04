@@ -38,7 +38,7 @@ PHONY:= build clean
 	-C $* \
 	-f $(ANTARES_DIR)/make/Makefile.build -r build	
 
-
+$(info $(SRCDIR) :: $(OBJDIR))
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c 
 	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $^  
@@ -58,8 +58,8 @@ ifeq ($(objects-y),)
 $(OBJDIR)/built-in.o: $(gen-y)
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 else
-$(OBJDIR)/built-in.o: $(gen-y) $(objects-y)
-	$(SILENT_LD) $(LD) -r -o $(@) $(addprefix $(OBJDIR)/,$^) 
+$(OBJDIR)/built-in.o: $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
+	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
 else
 $(OBJDIR)/built-in.o: $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))

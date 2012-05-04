@@ -27,8 +27,8 @@ CFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
 ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
 
 #FixMe: ...
-CFLAGS+=-I$(SRCDIR)/src/arch/arm/stm32/include
-CFLAGS+=-include $(SRCDIR)/src/arch/arm/stm32/include/assert.h
+CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include
+CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include/assert.h
 
 $(TMPDIR)/ldfile.lds:
 	$(SILENT_GEN) ESTACK=$(CONFIG_ARM_ESTACK) \
@@ -38,5 +38,5 @@ $(TMPDIR)/ldfile.lds:
 		RAM_SZ=$(CONFIG_ARM_RAMSZ) \
 		MIN_STACK=$(CONFIG_ARM_MINSTACK) \
 		MIN_HEAP=$(CONFIG_ARM_MINHEAP) \
-		$(SRCDIR)/ldfiles/stm32_flash.ld.sh > $(@)
+		$(ANTARES_DIR)/ldfiles/stm32_flash.ld.sh > $(@)
 
