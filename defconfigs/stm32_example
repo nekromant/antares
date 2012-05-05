@@ -1,0 +1,116 @@
+#
+# Automatically generated make config: don't edit
+# Antares version: 0.2, Azra
+# Sat Mar 17 15:59:26 2012
+#
+
+#
+# Target platform settings
+#
+CONFIG_ARCH_ARM=y
+# CONFIG_ARCH_AVR is not set
+CONFIG_MCU_STM32=y
+CONFIG_STM32F10X_LD=y
+# CONFIG_STM32F10X_LD_VL is not set
+# CONFIG_STM32F10X_MD is not set
+# CONFIG_STM32F10X_MD_VL is not set
+# CONFIG_STM32F10X_HD is not set
+# CONFIG_STM32F10X_HD_VL is not set
+# CONFIG_STM32F10X_XL is not set
+# CONFIG_STM32F10X_CL is not set
+CONFIG_ARM_ESTACK=0x20010000
+CONFIG_ARM_FLASHBASE=0x08000000
+CONFIG_ARM_RAMBASE=0x20000000
+CONFIG_ARM_FLASHSZ="512K"
+CONFIG_ARM_RAMSZ="64K"
+CONFIG_ARM_MINSTACK=0x200
+CONFIG_ARM_MINHEAP=0x0
+# CONFIG_STM32_FULL_ASSERT is not set
+
+#
+# Toolchain settings
+#
+CONFIG_TOOLCHAIN_GCC=y
+CONFIG_TOOLCHAIN_PREFIX="arm-none-eabi-"
+# CONFIG_CC_OPT0 is not set
+# CONFIG_CC_OPT1 is not set
+# CONFIG_CC_OPT2 is not set
+# CONFIG_CC_OPT3 is not set
+CONFIG_CC_OPTSZ=y
+CONFIG_GCC_PARANOID_WRN=y
+
+#
+# Fine tuning
+#
+CONFIG_CFLAGS=""
+CONFIG_ASFLAGS=""
+CONFIG_LDFLAGS=""
+
+#
+# Libraries and drivers
+#
+
+#
+# Project Settings
+#
+
+#
+# Applications & tasking
+#
+CONFIG_TASKING_FLAT=y
+
+#
+# Deployment settings
+#
+# CONFIG_DEPLOY_JETTERM is not set
+# CONFIG_DEPLOY_OPENOCD is not set
+CONFIG_DEPLOY_STM32FLASH=y
+CONFIG_DEPLOY_AS_ROOT=y
+CONFIG_DEPLOY_STM32FLASH_BIN="stm32flash"
+CONFIG_DEPLOY_STM32FLASH_PORT="/dev/ttyUSB0"
+CONFIG_DEPLOY_STM32FLASH_BAUD=115200
+
+#
+# Extended Flash options
+#
+# CONFIG_DEPLOY_STM32FLASH_DFWP is not set
+CONFIG_DEPLOY_STM32FLASH_VFY=y
+CONFIG_DEPLOY_STM32FLASH_RETRY_COUNT=10
+# CONFIG_DEPLOY_STM32FLASH_FBP is not set
+CONFIG_DEPLOY_STM32FLASH_EXEC=y
+CONFIG_DEPLOY_STM32FLASH_EXEC_ADDR=0x0
+CONFIG_DEPLOY_POSTRUN="minicom -o -D /dev/ttyUSB0 -b 57600"
+
+#
+# Architecture-specific deployment options
+#
+
+#
+# Build System Tweaks
+#
+CONFIG_MAKE_DEFTARGET="build"
+CONFIG_DEPLOY_DEFTARGET="deploy"
+CONFIG_IMAGE_FILENAME="antares"
+CONFIG_IMAGE_DIR="images"
+# CONFIG_BUILD_VERBOSE is not set
+
+#
+# Version Information
+#
+
+#
+# +++ For reference only +++
+#
+
+#
+# All values below are to be filled by Make scripts
+#
+
+#
+# Use make set_version to change
+#
+CONFIG_VERSION_MAJOR="0"
+CONFIG_VERSION_MINOR="2"
+CONFIG_VERSION_CODENAME="Azra"
+CONFIG_VERSION_STRING="0.2, Azra"
+CONFIG_VERSION_GIT="8b36e2aa8c82d03e75d58f4a0a182a876cb0a793"
