@@ -1,0 +1,179 @@
+#
+# Automatically generated make config: don't edit
+# Antares version: 0.2, Azra
+# Fri Apr 13 00:09:45 2012
+#
+
+#
+# Target platform settings
+#
+CONFIG_ARCH_ARM=y
+# CONFIG_ARCH_AVR is not set
+CONFIG_MCU_STM32=y
+# CONFIG_STM32F10X_LD is not set
+# CONFIG_STM32F10X_LD_VL is not set
+# CONFIG_STM32F10X_MD is not set
+# CONFIG_STM32F10X_MD_VL is not set
+CONFIG_STM32F10X_HD=y
+# CONFIG_STM32F10X_HD_VL is not set
+# CONFIG_STM32F10X_XL is not set
+# CONFIG_STM32F10X_CL is not set
+CONFIG_STM32_HSE_VALUE=12000000
+CONFIG_STM32_FREQ_72=y
+# CONFIG_STM32_FREQ_56 is not set
+# CONFIG_STM32_FREQ_48 is not set
+# CONFIG_STM32_FREQ_36 is not set
+# CONFIG_STM32_FREQ_24 is not set
+# CONFIG_STM32_FREQ_HSE is not set
+CONFIG_ARM_ESTACK=0x20010000
+CONFIG_ARM_FLASHBASE=0x08000000
+CONFIG_ARM_RAMBASE=0x20000000
+CONFIG_ARM_FLASHSZ="512K"
+CONFIG_ARM_RAMSZ="64K"
+CONFIG_ARM_MINSTACK=0x200
+CONFIG_ARM_MINHEAP=0x0
+CONFIG_STM32_PLIBS=y
+CONFIG_STM32_LIB_SYSTEM=y
+CONFIG_STM32_LIB_ADC=y
+# CONFIG_STM32_LIB_BKP is not set
+# CONFIG_STM32_LIB_CAN is not set
+# CONFIG_STM32_LIB_CEC is not set
+# CONFIG_STM32_LIB_CRC is not set
+# CONFIG_STM32_LIB_DAC is not set
+# CONFIG_STM32_LIB_DBGMCU is not set
+# CONFIG_STM32_LIB_DMA is not set
+# CONFIG_STM32_LIB_EXTI is not set
+# CONFIG_STM32_LIB_FLASH is not set
+CONFIG_STM32_LIB_FSMC=y
+CONFIG_STM32_LIB_GPIO=y
+# CONFIG_STM32_LIB_I2C is not set
+# CONFIG_STM32_LIB_IWDG is not set
+CONFIG_STM32_LIB_PWR=y
+CONFIG_STM32_LIB_RCC=y
+# CONFIG_STM32_LIB_RTC is not set
+# CONFIG_STM32_LIB_SDIO is not set
+CONFIG_STM32_LIB_SPI=y
+CONFIG_STM32_LIB_TIM=y
+CONFIG_STM32_LIB_USART=y
+# CONFIG_STM32_LIB_WWDG is not set
+CONFIG_STM32_EXTRA=y
+CONFIG_STM32_SPIFLASH=y
+
+#
+# ST's driver is ugly. Only once dev is supported
+#
+
+#
+# It should be rewritten in a more portable manner
+#
+CONFIG_STM32_SPIFLASH_GPIN="GPIO_Pin_1"
+CONFIG_STM32_SPIFLASH_GPORT="GPIOB"
+CONFIG_STM32_SPIFLASH_SPI="SPI1"
+# CONFIG_STM32_FULL_ASSERT is not set
+
+#
+# Toolchain settings
+#
+CONFIG_TOOLCHAIN_GCC=y
+CONFIG_TOOLCHAIN_PREFIX="arm-ncrmnt-eabi-"
+# CONFIG_CC_OPT0 is not set
+# CONFIG_CC_OPT1 is not set
+# CONFIG_CC_OPT2 is not set
+# CONFIG_CC_OPT3 is not set
+CONFIG_CC_OPTSZ=y
+# CONFIG_GCC_PARANOID_WRN is not set
+
+#
+# Fine tuning
+#
+CONFIG_CFLAGS=""
+CONFIG_ASFLAGS=""
+CONFIG_LDFLAGS="-lc -lgcc -lm"
+
+#
+# Libraries and drivers
+#
+# CONFIG_LIB_SNPRINTF is not set
+CONFIG_LIB_NLDUMMY=y
+CONFIG_LIB_URPC=y
+
+#
+# These options are used for very memory constrained systems
+#
+
+#
+# where one would normally want some more control over things
+#
+CONFIG_URPC_DEBUG=y
+CONFIG_URPC_LINEAR=y
+# CONFIG_URPC_ARRAY is not set
+# CONFIG_URPC_NO_SEATBELTS is not set
+
+#
+# Project Settings
+#
+CONFIG_APP_MCORTEX=y
+# CONFIG_APP_SL is not set
+
+#
+# Applications & tasking
+#
+CONFIG_TASKING_FLAT=y
+
+#
+# Deployment settings
+#
+# CONFIG_DEPLOY_JETTERM is not set
+# CONFIG_DEPLOY_OPENOCD is not set
+CONFIG_DEPLOY_STM32FLASH=y
+CONFIG_DEPLOY_AS_ROOT=y
+CONFIG_DEPLOY_STM32FLASH_BIN="stm32flash"
+CONFIG_DEPLOY_STM32FLASH_PORT="/dev/ttyUSB0"
+CONFIG_DEPLOY_STM32FLASH_BAUD=115200
+
+#
+# Extended Flash options
+#
+# CONFIG_DEPLOY_STM32FLASH_DFWP is not set
+# CONFIG_DEPLOY_STM32FLASH_VFY is not set
+CONFIG_DEPLOY_STM32FLASH_RETRY_COUNT=10
+# CONFIG_DEPLOY_STM32FLASH_FBP is not set
+CONFIG_DEPLOY_STM32FLASH_EXEC=y
+CONFIG_DEPLOY_STM32FLASH_EXEC_ADDR=0x0
+# CONFIG_DEPLOY_DFU is not set
+# CONFIG_DEPLOY_STLINK is not set
+CONFIG_DEPLOY_POSTRUN="minicom -o -D /dev/ttyUSB0"
+
+#
+# Architecture-specific deployment options
+#
+
+#
+# Build System Tweaks
+#
+CONFIG_MAKE_DEFTARGET="build"
+CONFIG_DEPLOY_DEFTARGET="stm32flash"
+CONFIG_IMAGE_FILENAME="antares"
+CONFIG_IMAGE_DIR="images"
+# CONFIG_BUILD_VERBOSE is not set
+
+#
+# Version Information
+#
+
+#
+# +++ For reference only +++
+#
+
+#
+# All values below are to be filled by Make scripts
+#
+
+#
+# Use make set_version to change
+#
+CONFIG_VERSION_MAJOR="0"
+CONFIG_VERSION_MINOR="2"
+CONFIG_VERSION_CODENAME="Azra"
+CONFIG_VERSION_STRING="0.2, Azra"
+CONFIG_VERSION_GIT="08882aedb54c310e99ddb6cefe97d50d929d7ede"
