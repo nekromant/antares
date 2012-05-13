@@ -35,3 +35,8 @@ endif
 ifeq ($(CONFIG_DEPLOY_DFU),y)
 	include $(SRCDIR)/deploy/dfu-util/Makefile
 endif
+
+ifeq ($(CONFIG_DEPLOY_UISPTOOL),y)
+        include $(SRCDIR)/deploy/uisptool/Makefile
+endif
+

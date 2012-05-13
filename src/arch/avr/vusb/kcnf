@@ -5,7 +5,7 @@ bool "VUSB Stack"
 if CONTRIB_VUSB
 
 comment "Some rarely used options have been omitted."
-comment "See src/contrib/usbdrv/include/usb-config.h for more info"
+comment "See usb-config.h for more info"
 
 menu "Hardware Config"
 
@@ -200,6 +200,17 @@ default n
 endmenu
 
 menu "Device Description"
+
+config USB_TUNEPROPS
+bool "Include an extra file with tweeks"
+
+config USB_TUNEPROPSFILE
+string "Extra header with props for usb"
+depends on USB_TUNEPROPS
+default "usbprops.h"
+
+
+
 config USB_CFG_VENDOR_ID
 hex "Vendor ID"
 default 0x16c0

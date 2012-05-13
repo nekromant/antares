@@ -1,3 +1,8 @@
+config DEPLOY_ROOT
+bool "Run deploy commands with superuser priveledges"
+help
+	You'll need this if you are missing udev rules
+
 source "antares/deploy/avrdude/kcnf"
 source "antares/deploy/jetterm/kcnf"
 source "antares/deploy/avrdude-remote/kcnf"
@@ -6,6 +11,8 @@ source "antares/deploy/openocd/kcnf"
 source "antares/deploy/stm32flash/kcnf"
 source "antares/deploy/dfu-util/kcnf"
 source "antares/deploy/stlink/kcnf"
+source "antares/deploy/uisptool/kcnf"
+
 
 config DEPLOY_POSTRUN
 string "Command to run after deployment"

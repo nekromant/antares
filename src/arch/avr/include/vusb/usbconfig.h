@@ -397,6 +397,9 @@ section at the end of this file).
  *     'S', 'e', 'r', 'i', 'a', 'l'
  * };
  */
+#ifdef CONFIG_USB_TUNEPROPS
+#include CONFIG_USB_TUNEPROPSFILE
+#else
 
 #define USB_CFG_DESCR_PROPS_DEVICE                  0
 #define USB_CFG_DESCR_PROPS_CONFIGURATION           0
@@ -408,6 +411,8 @@ section at the end of this file).
 #define USB_CFG_DESCR_PROPS_HID                     0
 #define USB_CFG_DESCR_PROPS_HID_REPORT              0
 #define USB_CFG_DESCR_PROPS_UNKNOWN                 0
+
+#endif
 
 /* ----------------------- Optional MCU Description ------------------------ */
 

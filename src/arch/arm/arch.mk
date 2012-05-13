@@ -1,6 +1,7 @@
 # We do need a custom LD file here
 
 GCC_LDFILE=$(TMPDIR)/ldfile.lds
+LD_NO_COMBINE=y
 
 
 #Set our build goals
