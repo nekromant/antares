@@ -30,13 +30,7 @@ ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include
 CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include/assert.h
 
-$(TMPDIR)/ldfile.lds:
-	$(SILENT_GEN) ESTACK=$(CONFIG_ARM_ESTACK) \
-		FLASH_SZ=$(CONFIG_ARM_FLASHSZ) \
-		FLASH_BASE=$(CONFIG_ARM_FLASHBASE) \
-		RAM_BASE=$(CONFIG_ARM_RAMBASE) \
-		RAM_SZ=$(CONFIG_ARM_RAMSZ) \
-		MIN_STACK=$(CONFIG_ARM_MINSTACK) \
-		MIN_HEAP=$(CONFIG_ARM_MINHEAP) \
-		$(ANTARES_DIR)/ldfiles/stm32_flash.ld.sh > $(@)
+# Let the magic of gcc preprocessor commence!
+$(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
+	cat "$^" | $(SILENT_GEN) $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
 

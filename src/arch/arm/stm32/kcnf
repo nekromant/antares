@@ -58,25 +58,46 @@ bool "Use HSE"
 endchoice
 
 
-config ARM_ESTACK
-hex	"Highest address of the user mode stack"
-default 0x20010000 if MCU_STM32
+menuconfig STM32_OVERRIDE_BASES
+bool "Overrride FLASH&RAM Base adresses"
 
-config ARM_FLASHBASE
-hex	"Base address of flash memory"
-default 0x08000000 if MCU_STM32
+if STM32_OVERRIDE_BASES
 
-config ARM_RAMBASE
-hex	"Base address of RAM memory"
-default 0x20000000 if MCU_STM32
+	config STM32_FLASH_BASE
+        hex	"Base address of flash memory"
+	default 0x08000000 if MCU_STM32
 
-config ARM_FLASHSZ
-string	"FLASH size"
-default 64K if MCU_STM32
+	config STM32_RAM_BASE
+       	hex	"Base address of RAM memory"
+	default 0x20000000 if MCU_STM32
 
-config ARM_RAMSZ
-string	"RAM size"
-default 64K if MCU_STM32
+endif
+
+
+menu "Set RAM and FLASH sizes"
+	config STM32_FLASH_LEN
+	hex	"FLASH size"
+	default 0x80000
+
+	config STM32_RAM_LEN
+	hex	"RAM size"
+	default 0x10000 
+endmenu
+
+menuconfig STM32_SET_OFFSETS
+bool "Configure code to run at offsets"
+
+if STM32_SET_OFFSETS
+
+   	config STM32_FLASH_OFFSET
+	hex	"FLASH offset"
+	default 0x5000
+
+	config STM32_RAM_OFFSET
+	hex	"RAM offset"
+	default 0x0 
+endif
+
 
 config ARM_MINSTACK
 hex "Minimal stack size"
@@ -136,9 +157,6 @@ if STM32_PLIBS
 
 	config	STM32_LIB_IWDG
 	bool "IWDG"
-
-	config	STM32_LIB_PWR
-	bool "PWR"	
 
 	config	STM32_LIB_PWR
 	bool "PWR"	
