@@ -1,0 +1,9 @@
+ANTARES is an all-in-one buildsystem, that is designed to
+be portable across a lot of MCU arches. 
+I utilises Kconfig from linux kernel, and a set of homebrew
+Makfiles. 
+Currently somewhat supported arches are:
+AVR ARM/STM32 MSP430
+This stuff is still pre-alpha quality, so if you want to
+give it a try - better drop me a line. DRAGONS AHEAD. 
+
