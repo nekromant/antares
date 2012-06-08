@@ -58,6 +58,19 @@ bool "Use HSE"
 endchoice
 
 
+menu "Code placement settings"
+
+config STM32_RUN_IN_RAM
+bool "Generate code to run in RAM"
+
+#config STM32_FPIC
+#bool "Generate Position Independent code"
+#help
+#	WARNING.
+#	You still have to specify the offsets, since init
+#	code must know where to pick the isr table from
+#	Or you can disable the startup code and linking, btw.
+
 menuconfig STM32_OVERRIDE_BASES
 bool "Overrride FLASH&RAM Base adresses"
 
@@ -98,14 +111,7 @@ if STM32_SET_OFFSETS
 	default 0x0 
 endif
 
-
-config ARM_MINSTACK
-hex "Minimal stack size"
-default 0x200 if MCU_STM32
-
-config ARM_MINHEAP
-hex "Minimal heap size"
-default 0x0 if MCU_STM32
+endmenu
 
 menuconfig STM32_PLIBS
 bool "Select STM32 libraries to build"
