@@ -22,6 +22,8 @@ ifeq ($(CONFIG_STM32_FULL_ASSERT),y)
 	CFLAGS+=-DFULL_ASSERT
 endif
 
+
+
 #FixMe: ...
 CFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
 ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
@@ -32,5 +34,5 @@ CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include/assert.h
 
 # Let the magic of gcc preprocessor commence!
 $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
-	cat "$^" | $(SILENT_GEN) $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
+	$(SILENT_GEN) cat "$^" | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
 
