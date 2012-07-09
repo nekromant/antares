@@ -1,0 +1,7 @@
+# Antares uC build system files
+# Added automatically with aproj configuration wizard
+
+.antares
+.config
+Makefile
+kcnf
