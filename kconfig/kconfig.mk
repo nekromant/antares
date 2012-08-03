@@ -1,6 +1,7 @@
 .PHONY: conf mconf
 
 HOST_CC:=gcc
+
 .SECONDEXPANSION: 
 check-lxdialog:= $(src)/lxdialog/check-lxdialog.sh
 
@@ -17,6 +18,7 @@ VERSION_MAJOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSI
 VERSION_MINOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
 VERSION_CODENAME := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
 VERSION_GIT = $(shell GIT_DIR=$(SRCDIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
+
 %.tab.c: %.y
 	bison -l -b $* -p $(notdir $*) $<
 #	cp $@ $@_shipped
@@ -51,7 +53,7 @@ $(obj)/%.o: $(src)/%.c
 $(obj)/conf: $(addprefix $(obj)/,$(conf-objs))
 	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
-	
+
 $(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
 	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
@@ -66,33 +68,32 @@ versionupdate:
 	$(Q)$(src)/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
 	$(Q)$(src)/config --set-str VERSION_GIT $(VERSION_GIT) 
 	$(SILENT_VER) $(src)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
-	
-  
-menuconfig: $(obj)/mconf versionupdate collectinfo
-	$< $(Kconfig)
+
+
+menuconfig: collectinfo $(obj)/mconf versionupdate
+	$(obj)/mconf $(Kconfig)
 	@echo "Version information updated, configuration is now complete"
-	
+
 
 config: $(obj)/conf
-	$< --oldaskconfig $(Kconfig)
+	$(Q)$< --oldaskconfig $(Kconfig)
 
 oldconfig: $(obj)/conf
-	$< --$@ $(Kconfig)
+	$(Q)$< --$@ $(Kconfig)
 
 silentoldconfig: $(obj)/conf
 	$(Q)mkdir -p include/generated
 	$(Q)mkdir -p include/config
-
-	$< --$@ $(Kconfig)
+	$(Q)$< --$@ $(Kconfig)
 
 switch_profile: $(obj)/mconf  
 	-cp .config .config.switch_save
 	$(src)/kcnf_list gen profiles/ > profiles.kcnf.inc
 	$< profiles.kcnf
 	$(src)/kcnf_list process_profile profiles
-	
+
 set_version: $(obj)/mconf  
-	KCONFIG_CONFIG=.version $<  $(KVersion)
+	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version $<  $(KVersion)
 
 select_defconfig: $(obj)/mconf
 	-cp .config .config.switch_save

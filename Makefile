@@ -20,7 +20,7 @@ Kconfig:=$(SRCDIR)/kcnf
 KVersion:=./version.kcnf
 
 PHONY+=deftarget deploy build collectinfo clean
-
+MAKEFLAGS:=-r
 #overrride with actual version information
 
 IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
@@ -43,30 +43,33 @@ include $(ANTARES_DIR)/make/Makefile.collect
 
 -include src/arch/$(ARCH)/arch.mk
 
-
 all: $(CONFIG_MAKE_DEFTARGET)
 	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
 
-	
 include $(ANTARES_DIR)/kconfig/kconfig.mk
+
+.SUFFIXES:
 
 export SRCDIR TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
 
+#FixMe: Properly clean the project tree
 clean: 
 # 	$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
 	$(Q)find . -iname *.o| while read line; do rm "$$line"; done
-	$(Q)rm tmp/*
+	$(Q)rm -f tmp/*
 
 
 mrproper: clean kconfig-clean 
+	$(Q)-rm -Rfv $(TMPDIR)
+	$(Q)-rm -Rfv $(TOPDIR)/kconfig
+	$(Q)-rm -Rfv $(TOPDIR)/include
 	@echo "Мистер пропёр - веселей, в сырцах чисто в 3 раза быстрей!"
 
 # build: collectinfo silentoldconfig collectinfo $(BUILD_PREREQS) 
 # 	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
 
 build: collectinfo silentoldconfig collectinfo $(BUILDGOALS)
-	
-	
+
 deploy: build
 	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
 	@echo "Your Antares firmware is now deployed"
@@ -74,11 +77,9 @@ deploy: build
 deploy-%: build
 	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy $*
 	@echo "Your Antares firmware is now deployed"
-	#run post-deployment
 	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy post
-	
+
 deploy-help:
 	make -f make/Makefile.deploy help
 
-	
 .PHONY: $(PHONY)

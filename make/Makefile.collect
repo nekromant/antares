@@ -1,23 +1,36 @@
 junk_filter=Makefile built-in.o
 junk=$(addprefix |grep -v ,$(junk_filter))
 
-$(TMPDIR)/arch.kcnf:
-	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
-		$(SRCDIR)/scripts/listgen ARCH kcnf > $@
+ARCH?=arm
 
-$(TMPDIR)/arch.mk:
+#This gets read&run by top level, therefore must have extra stuff
+$(TMPDIR)/arch.mk: 
+	$(Q)[ -d $(TMPDIR) ] || mkdir -p $(TMPDIR)
 	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
 		$(SRCDIR)/scripts/listgen ARCH mk > $@		
 
-$(TMPDIR)/allarch.kcnf:
+$(TMPDIR)/arch.kcnf: 
+	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
+		$(SRCDIR)/scripts/listgen ARCH kcnf > $@
+
+
+$(TMPDIR)/allarch.kcnf: 
 	$(SILENT_GEN) for arch in `ls $(SRCDIR)/src/arch/ $(junk)`; do\
 		echo source \"antares/src/arch/$$arch/kcnf\" >> $@;\
 		done; echo "" >> $@
-	
-collectinfo: \
+
+checkdirs:
+	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
+	$(Q)[ -d $(TOPDIR)/include ] || mkdir -p $(TOPDIR)/include
+
+collectinfo: $(TMPDIR)/.collected
+
+$(TMPDIR)/.collected:  checkdirs \
 	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
 	     $(TMPDIR)/allarch.kcnf
-	     -rm $(OBJDIR)/include/arch
-	     ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
-	
+	     $(Q)-rm $(OBJDIR)/include/arch
+	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
+	touch $(TMPDIR)/.collected
+
+
 PHONY+=collectinfo
