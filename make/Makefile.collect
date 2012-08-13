@@ -25,12 +25,21 @@ checkdirs:
 
 collectinfo: $(TMPDIR)/.collected
 
-$(TMPDIR)/.collected:  checkdirs \
+define check_tool
+	$(SILENT_CHECK) $(1); $(1) >> /dev/null || (echo "Missing $(1), please check docs"; exit 1)
+endef
+
+checktools:
+	$(call check_tool,bison --version)
+	$(call check_tool,flex --version)
+	$(call check_tool,gperf --version)
+
+$(TMPDIR)/.collected:  checkdirs checktools\
 	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
 	     $(TMPDIR)/allarch.kcnf
 	     $(Q)-rm $(OBJDIR)/include/arch
 	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
-	touch $(TMPDIR)/.collected
+	     $(Q)touch $(TMPDIR)/.collected
 
 
 PHONY+=collectinfo

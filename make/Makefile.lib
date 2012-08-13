@@ -56,6 +56,7 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      ' $(subst $(TOPDIR)/build,,$(@)); 
    SILENT_DL       = @echo '  $(tb_cyn)[DOWNLOAD]$(col_rst) ' $(PACKAGE);
    SILENT_PATCH    = @echo '  $(tb_cyn)[PATCH]$(col_rst)    ' $(PACKAGE);
+   SILENT_CHECK    = @echo '  $(tb_cyn)[CHECK]$(col_rst)    ' 
    SILENT_UPDATE   = @echo '  $(tb_cyn)[UPD]$(col_rst)      ' $(PACKAGE);
    SILENT_PARSE    = @echo '  $(tb_cyn)[PARSE]$(col_rst)    '
    SILENT_OBJCOPY  = @echo '  $(tb_blu)[OBJCOPY]$(col_rst)  ' $(@F);
