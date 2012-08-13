@@ -44,7 +44,7 @@ $(obj)/lex.zconf.c: $(src)/zconf.l
 $(obj)/zconf.hash.c: $(src)/zconf.gperf
 
 $(obj)/lkc_defs.h: $(src)/lkc_proto.h
-	sed < $< > $@ 's/P(\([^,]*\),.*/#define \1 (\*\1_p)/'
+	$(Q)sed < $< > $@ 's/P(\([^,]*\),.*/#define \1 (\*\1_p)/'
 
 
 $(obj)/%.o: $(src)/%.c
@@ -58,9 +58,9 @@ $(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
 	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
 kconfig-clean:
-	-rm $(obj)/*.o
-	-rm $(obj)/lxdialog/*.o
-	-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
+	$(Q)-rm $(obj)/*.o
+	$(Q)-rm $(obj)/lxdialog/*.o
+	$(Q)-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
 
 versionupdate:
 	$(Q)$(src)/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
@@ -71,7 +71,7 @@ versionupdate:
 
 
 menuconfig: collectinfo $(obj)/mconf versionupdate
-	$(obj)/mconf $(Kconfig)
+	$(Q) $(obj)/mconf $(Kconfig)
 	@echo "Version information updated, configuration is now complete"
 
 
@@ -87,16 +87,16 @@ silentoldconfig: $(obj)/conf
 	$(Q)$< --$@ $(Kconfig)
 
 switch_profile: $(obj)/mconf  
-	-cp .config .config.switch_save
+	$(Q)-cp .config .config.switch_save
 	$(src)/kcnf_list gen profiles/ > profiles.kcnf.inc
-	$< profiles.kcnf
+	$(Q)$< profiles.kcnf
 	$(src)/kcnf_list process_profile profiles
 
 set_version: $(obj)/mconf  
 	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version $<  $(KVersion)
 
 select_defconfig: $(obj)/mconf
-	-cp .config .config.switch_save
+	$(Q)-cp .config .config.switch_save
 	$(src)/kcnf_list fgen defconfigs/ > defconfig.kcnf.inc
-	$< defconfig.kcnf 
+	$(Q)$< defconfig.kcnf 
 	$(src)/kcnf_list process_defconfig defconfigs
