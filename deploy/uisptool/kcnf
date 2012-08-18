@@ -1,0 +1,22 @@
+menuconfig DEPLOY_UISPTOOL
+bool "uISPtool"
+depends on ARCH_AVR
+
+  if DEPLOY_UISPTOOL
+
+  config DEPLOY_UISPTOOL_NAME
+  string "Application name"
+  
+  config DEPLOY_UISPTOOL_VER
+  string "Application version"
+  
+  config DEPLOY_UISPTOOL_SERIAL
+  string "Use device with serial number (empty for default)"
+  
+  config DEPLOY_UISPTOOL_RUN
+  bool "Execute after deployment"
+  
+  endif
+
+
+
