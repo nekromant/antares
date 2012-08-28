@@ -142,11 +142,11 @@ cleanup()
     question "Do you really want to remove Antares from your project?"
     if [[ $? = $yes ]]; then
         debug "Removing files: Makefile, kcnf, .antares"
-        rm -rf Makefile kcnf .antares
+        rm -rf Makefile kcnf antares tmp kconfig build include lex.backup images
         question "Do you want to remove your .config file?"
         if [[ $? = $yes ]]; then
             debug "Removing .config file"
-            rm .config
+            rm .config*
         else
             debug "Saving .config file"
             cp .config antares.config
