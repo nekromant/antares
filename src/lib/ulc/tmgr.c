@@ -1,13 +1,13 @@
 #include <lib/tasks.h>
 
 static volatile unsigned int uptime = 0;
-static  uint8_t num_handlers = 0;
+static int num_handlers = 0;
 static handler_t * first = 0;
 
 
 void tmgr_msleep(unsigned int  time)
 {
-  uint32_t end = uptime + time;
+  unsigned int end = uptime + time;
   while ( uptime < end );;
 }
 
@@ -51,7 +51,7 @@ int tmgr_register(handler_t * data)
     // 3. There are many handlers - run sorting algorythm
     else
     {
-        uint8_t i = num_handlers;
+        int i = num_handlers;
         handler_t * current = first;
         handler_t * prev = 0;
 
@@ -103,7 +103,7 @@ int tmgr_register(handler_t * data)
 
 void tmgr_tick(void)
 {
-    uint8_t i = num_handlers;
+    int i = num_handlers;
     handler_t * current = first;
     while(i != 0)
     {
