@@ -34,34 +34,34 @@ if LIB_NLIBSTUBS
 	bool "_kill"
 	
 	config LIB_NLIBSTUBS_LINK
-	bool "_link"	
+	bool "_link"
 	
 	config LIB_NLIBSTUBS_LSEEK
-	bool "_lseek"	
+	bool "_lseek"
 
 	config LIB_NLIBSTUBS_GETPID
-	bool "_getpid"	
+	bool "_getpid"
 	
 	config LIB_NLIBSTUBS_SBRK
-	bool "_sbrk"	
+	bool "_sbrk"
 
 	config LIB_NLIBSTUBS_STAT
-	bool "_stat"		
+	bool "_stat"
 	
 	config LIB_NLIBSTUBS_TIMES
-	bool "_times"		
+	bool "_times"
 
 	config LIB_NLIBSTUBS_UNLINK
-	bool "_unlink"		
+	bool "_unlink"
 	
 	config LIB_NLIBSTUBS_WAIT
-	bool "_wait"		
-	
+	bool "_wait"
+
 	config LIB_NLIBSTUBS_WRITE
-	bool "_write"		
+	bool "_write"
 	
 	config LIB_NLIBSTUBS_READ
-	bool "_read"		
+	bool "_read"
 	
 	endif
 
@@ -92,25 +92,16 @@ if LIB_URPC
 	bool "Enable uRPC debugging"
 		help 
 		Enables a shitload of annoying messages
-		
-	choice
-	prompt "uRPC mode"
-		config URPC_LINEAR
-		bool "Linear"
+	
+	config URPC_LUT
+	bool "Enable lookup cache"
 		help
-			Each method call, triggers a linear search in
-			the linked list of methods. Uses very little 
-			memory, but slow when there	are many methods.
-			Might be a good idea on some systems.
-			
-		config URPC_ARRAY
-		bool "Array lookup"
-			help
-			Each method is looked up by an id in array.
-			Uses sizeof(void*) * number of objects memory.
-			Memory ptr should be passed as an argument to 
-			urpc_init() prior to anything
-	endchoice
+		Without it, Each method call, triggers a linear search in
+		the linked list of methods. Uses very little memory, but 
+		slow when there are many methods. Might be a good idea on 
+		some systems. 
+		This creates a lookup table, therefore speeds things up. 
+		Uses (count(events+methods)*sizeof(void*)) memory.
 	
 	config URPC_NO_SEATBELTS
 	bool "Disable safety checks"
