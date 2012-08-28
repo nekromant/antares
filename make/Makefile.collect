@@ -22,6 +22,8 @@ $(TMPDIR)/allarch.kcnf:
 checkdirs:
 	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
 	$(Q)[ -d $(TOPDIR)/include ] || mkdir -p $(TOPDIR)/include
+	$(Q)[ -d $(CONFIG_IMAGE_DIR) ] || mkdir -p $(CONFIG_IMAGE_DIR)
+
 
 collectinfo: $(TMPDIR)/.collected
 
