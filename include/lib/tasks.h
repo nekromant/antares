@@ -1,7 +1,5 @@
 #ifndef TMGR_H
-#define TASKS_H
-
-#include "stm32f10x.h"
+#define TMGR_H
 
 /** @defgroup Defines section
   * @{
@@ -34,7 +32,7 @@
 // Typedef for handler data structure
 typedef struct hndlr{
     void (*handler)(void); // address of handler function (void)
-    uint32_t uptime; // uptime to run
+    unsigned int uptime; // uptime to run
     // private: address of the next structure in list
     struct hndlr * next;
 } handler_t;
@@ -53,11 +51,11 @@ int tmgr_register(handler_t * data);   // NOTE: It's better if data structure de
 
 void tmgr_tick(void); // add this function to SysTick timer / another simple timer / just in forever loop :)
 
+void sleep_ticks(unsigned int ticks); // sleep for n timer ticks
 
 unsigned int tmgr_get_uptime();
 /** @}
   */
 
-void sleep_ticks(unsigned int ticks);
 
 #endif // TASKS_H
