@@ -21,23 +21,22 @@ KVersion:=./version.kcnf
 
 PHONY+=deftarget deploy build collectinfo clean
 MAKEFLAGS:=-r
-#overrride with actual version information
 
 IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
-CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
+
+export SRCDIR TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
 
 -include $(TOPDIR)/.config
 -include $(ANTARES_DIR)/.version
 
-all: 
-	$(Q)make $(CONFIG_MAKE_DEFTARGET)
-	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
-
+.DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 
 include $(ANTARES_DIR)/make/host.mk
 include $(TMPDIR)/arch.mk
 include $(ANTARES_DIR)/make/Makefile.lib
 -include $(ANTARES_DIR)/src/arch/$(ARCH)/arch.mk
+
+
 
 ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
 include $(ANTARES_DIR)/toolchains/gcc.mk
@@ -49,9 +48,9 @@ include $(ANTARES_DIR)/make/Makefile.collect
 
 include $(ANTARES_DIR)/kconfig/kconfig.mk
 
+
 .SUFFIXES:
 
-export SRCDIR TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
 
 #FixMe: Properly clean the project tree
 clean: 
