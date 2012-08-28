@@ -29,6 +29,10 @@ CONFIG_MAKE_DEFTARGET := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 -include $(TOPDIR)/.config
 -include $(ANTARES_DIR)/.version
 
+all: 
+	$(Q)make $(CONFIG_MAKE_DEFTARGET)
+	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
+
 
 include $(ANTARES_DIR)/make/host.mk
 include $(TMPDIR)/arch.mk
@@ -42,9 +46,6 @@ endif
 include $(ANTARES_DIR)/make/Makefile.collect
 
 -include src/arch/$(ARCH)/arch.mk
-
-all: $(CONFIG_MAKE_DEFTARGET)
-	@echo "Default target $(CONFIG_MAKE_DEFTARGET) remade"
 
 include $(ANTARES_DIR)/kconfig/kconfig.mk
 
