@@ -19,18 +19,18 @@ VERSION_MINOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSI
 VERSION_CODENAME := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
 VERSION_GIT = $(shell GIT_DIR=$(SRCDIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
 
-%.tab.c: %.y
-	bison -l -b $* -p $(notdir $*) $<
+
 #	cp $@ $@_shipped
+# TODO: use shipped versions here
+
+%.tab.c: %.y
+	$(SILENT_BISON)bison -l -b $* -p $(notdir $*) $<
 
 lex.%.c: %.l
-	flex -L -P$(notdir $*) -o$@ $<
-#	cp $@ $@_shipped
+	$(SILENT_FLEX)flex -L -P$(notdir $*) -o$@ $<
 
 %.hash.c: %.gperf
-	gperf < $< > $@
-#	cp $@ $@_shipped
-
+	$(SILENT_GPERF)gperf < $< > $@
 
 $(obj)/zconf.tab.o: $(src)/lex.zconf.c $(src)/zconf.hash.c
 
@@ -48,14 +48,14 @@ $(obj)/lkc_defs.h: $(src)/lkc_proto.h
 
 
 $(obj)/%.o: $(src)/%.c
-	 $(HOST_CC) -c $(HOST_EXTRACFLAGS) $< -o $@
+	 $(SILENT_HOSTCC)$(HOST_CC) -c $(HOST_EXTRACFLAGS) $< -o $@
 
 $(obj)/conf: $(addprefix $(obj)/,$(conf-objs))
-	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
+	 $(SILENT_HOSTCC)$(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
 
 $(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
-	 $(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
+	 $(SILENT_HOSTCC)$(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
 
 kconfig-clean:
 	$(Q)-rm $(obj)/*.o
