@@ -37,7 +37,7 @@ checktools:
 $(TMPDIR)/.collected:  checkdirs checktools\
 	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
 	     $(TMPDIR)/allarch.kcnf
-	     $(Q)-rm $(OBJDIR)/include/arch
+	     $(Q)-rm -f $(OBJDIR)/include/arch
 	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
 	     $(Q)touch $(TMPDIR)/.collected
 
