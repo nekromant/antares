@@ -22,38 +22,10 @@ menu "Project Settings"
 source "kcnf"
 endmenu
 
-#menu "Device drivers"
-#source "antares/src/drivers/kcnf"
-#endmenu
-
-#menu "Contributed stuff"
-#source "antares/src/contrib/kcnf"
-#endmenu
-
-#menu "Applications & tasking"
-#  choice
-# prompt "Tasking model"
-#  
-#  config TASKING_FLAT
-#  bool "Flat tasking model"
-#  help
-#   In the flat tasking model all ANTARES_APP macros glue application code one by one
-#   in one huge loop (Unless any application blocks that with an endless loop.
-#   Priority settings are ignored, if any.
-#   
-#  endchoice
-#source "antares/src/apps/kcnf"
-
-#endmenu
-
 menu "Deployment settings"
 source "antares/deploy/kcnf"
 endmenu
 
-
-
-
-#source "antares/src/alien/kcnf"
 
 menu "Build System Tweaks"
 
@@ -117,7 +89,6 @@ config VERSION_STRING
 config VERSION_GIT
   string "GIT Revision"
   default "to be genned"
-
 
 endmenu
 
