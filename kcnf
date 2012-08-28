@@ -79,7 +79,7 @@ menu "Build System Tweaks"
    
   config IMAGE_DIR
   string "Output image dir"
-  default "images/"
+  default "images"
   help
    Directory to store output images, elfs
    disassembly and such stuff
