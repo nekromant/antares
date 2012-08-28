@@ -66,11 +66,5 @@ $(OBJDIR)/built-in.o: $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
 endif
 
 
-
-clean: $(clean-y)
-# 	$(MAKE) OBJDIR=$* SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
-	-rm $(OBJDIR)/*.o
-	-rm tmp/*
-
 .PHONY: $(PHONY) %/built-in.o
 .PRECIOUS: $(build_objects)

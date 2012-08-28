@@ -51,22 +51,18 @@ include $(ANTARES_DIR)/kconfig/kconfig.mk
 
 .SUFFIXES:
 
+clean-y:="$(TMPDIR)" "$(TOPDIR)/build" "$(TOPDIR)/include/generated" "$(CONFIG_IMAGE_DIR)"
 
-#FixMe: Properly clean the project tree
-clean: 
-# 	$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r clean
-	$(Q)find . -iname *.o| while read line; do rm "$$line"; done
-	$(Q)rm -f tmp/*
+clean:  
+	-$(SILENT_CLEAN) rm -Rf $(clean-y)
 
+mrproper: clean
+	-$(SILENT_MRPROPER) rm -Rf $(TOPDIR)/kconfig 
+	$(Q)rm -f $(TOPDIR)/antares
+	$(Q)rm -Rf $(TOPDIR)/include/config
+	$(Q)rm -f $(TOPDIR)/include/arch
 
-mrproper: clean kconfig-clean 
-	$(Q)-rm -Rfv $(TMPDIR)
-	$(Q)-rm -Rfv $(TOPDIR)/kconfig
-	$(Q)-rm -Rfv $(TOPDIR)/include
-	@echo "Мистер пропёр - веселей, в сырцах чисто в 3 раза быстрей!"
-
-# build: collectinfo silentoldconfig collectinfo $(BUILD_PREREQS) 
-# 	$(Q)$(MAKE) OBJDIR=$(SRCDIR)/src SRCDIR=$(SRCDIR) TMPDIR=$(TMPDIR) -f make/Makefile.build -r build
+distclean: mrproper
 
 build: collectinfo silentoldconfig collectinfo $(BUILDGOALS)
 
