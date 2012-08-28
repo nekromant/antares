@@ -11,7 +11,7 @@ yes=1
 no=2
 na=3
 
-antaresdirs="/opt/antares /usr/local/share/antares /usr/share/antares"
+antaresdirs="/opt/antares /usr/local/share/antares /usr/share/antares ~/.antares"
 
 # Stage 0. Print header
 cecho()
@@ -161,7 +161,7 @@ get_antares_dir()
     echo -ne "Type path to Antares installation directory and press Enter: "
     read dir
     if [[ -d $dir ]]; then
-        export ANTARES_DIR=$dir
+        export ANTARES_INSTALL_DIR=$dir
     else
         echo "It is not a directory"
     fi
@@ -171,13 +171,13 @@ get_antares_dir()
 
 antares_dir()
 {
-if [[ -z $ANTARES_DIR ]]; then
+if [[ -z $ANTARES_INSTALL_DIR ]]; then
 
     
     for dir in $antaresdirs; do
         debug "Checking path $dir"
         if [[ -d $dir ]]; then
-            export ANTARES_DIR="$dir"
+            export ANTARES_INSTALL_DIR="$dir"
             
             echo -ne "Looking for Antares installation directory... "
             echo "found in $dir"
@@ -186,30 +186,30 @@ if [[ -z $ANTARES_DIR ]]; then
         fi
     done
 
-    if [[ -z $ANTARES_DIR ]]; then
+    if [[ -z $ANTARES_INSTALL_DIR ]]; then
         
         echo -ne "Looking for Antares installation directory... "
         echo "not found!"
         echo
-        while [[ -z $ANTARES_DIR ]]; do
+        while [[ -z $ANTARES_INSTALL_DIR ]]; do
             get_antares_dir
         done
     fi
 
 else
-    if [[ -d $ANTARES_DIR ]]; then
-        echo "Defined Antares installation directory: $ANTARES_DIR"
+    if [[ -d $ANTARES_INSTALL_DIR ]]; then
+        echo "Defined Antares installation directory: $ANTARES_INSTALL_DIR"
     else
-        export ANTARES_DIR=""
+        export ANTARES_INSTALL_DIR=""
         echo "Defined path to Antares directory is not correct."
         echo
-        while [[ -z $ANTARES_DIR ]]; do
+        while [[ -z $ANTARES_INSTALL_DIR ]]; do
             get_antares_dir
         done
     fi
 fi
 
-debug "Set Antares installation directory path: $ANTARES_DIR"
+debug "Set Antares installation directory path: $ANTARES_INSTALL_DIR"
 }
 
 declare -i i
@@ -238,7 +238,7 @@ for arg in $@; do
                     
                     "help" ) show_help ;;
                     "list-configs" ) list_configs ;;
-                    "dir" ) export ANTARES_DIR=${@:$i:1}; i+=2 ;;
+                    "dir" ) export ANTARES_INSTALL_DIR=${@:$i:1}; i+=2 ;;
                     "new-repo" ) ARG_NEW_REPO="y" ;;
                     "attach-repo" ) ARG_CONNECT_REPO="y" ;;
                     "config" ) ARG_CONFIG_FILE=${@:$i:1}; i+=2 ;;
@@ -258,7 +258,7 @@ for arg in $@; do
 done
 
 if [[ -n "$ARG_DIR" ]]; then
-    export ANTARES_DIR=$ARG_DIR
+    export ANTARES_INSTALL_DIR=$ARG_DIR
 fi
 
 # Stage 1. Run manual or interactive mode??
@@ -275,9 +275,9 @@ antares_dir
 # Stage 3 (manual mode). Attach config if required
 
 if [[ -n $ARG_CONFIG_FILE ]]; then
-    if [[ -f $ANTARES_DIR/defconfigs/$ARG_CONFIG_FILE ]]; then
+    if [[ -f $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE ]]; then
         debug "Config file $ARG_CONFIG_FILE found"
-        cp $ANTARES_DIR/defconfigs/$ARG_CONFIG_FILE .config
+        cp $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE .config
     else
         question "Config file $ARG_CONFIG_FILE not found! Do you want to select another?"
         if [[ $? -eq $yes ]]; then
@@ -285,11 +285,11 @@ if [[ -n $ARG_CONFIG_FILE ]]; then
             echo "Type the number of config you want to use and press Enter:"
             echo
             IFS=", "
-            select conf in `ls -m $ANTARES_DIR/defconfigs`; do
+            select conf in `ls -m $ANTARES_INSTALL_DIR/defconfigs`; do
                 ARG_CONFIG_FILE=$conf
                 break
             done
-            cp $ANTARES_DIR/defconfigs/$ARG_CONFIG_FILE .config
+            cp $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE .config
         else
             debug "Your config file is empty"
             touch .config
@@ -306,7 +306,7 @@ fi
 debug "Initialising Antares in this directory"
 
 # TODO: Make it more friendly
-cp $ANTARES_DIR/abootstrap/template/* . -Rf
+cp $ANTARES_INSTALL_DIR/abootstrap/template/* . -Rf
 make -s antares
 
 # Stage 5. Actions with repositories
@@ -315,11 +315,11 @@ if [[ -e "/usr/bin/git" || -e "/usr/local/bin/git" ]]; then # TODO: Add manual g
 
 if [[ $ARG_CONNECT_REPO == "y" ]]; then
     debug "Antares files added to .gitignore of your project"
-    cat $ANTARES_DIR/abootstrap/gitignores >> .gitignore
+    cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
 elif [[ $ARG_NEW_REPO == "y" ]]; then
     debug "Creating new Git repository in this directory"
     git init .
-    cat $ANTARES_DIR/abootstrap/gitignores >> .gitignore
+    cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
 fi
 
 else
@@ -368,11 +368,11 @@ if [[ $? = $yes ]]; then
     IFS=", "
     echo
     echo "Select one of the templates, type its number and press Enter:"
-    select conf in `ls -m $ANTARES_DIR/defconfigs`; do
+    select conf in `ls -m $ANTARES_INSTALL_DIR/defconfigs`; do
         ARG_CONFIG_FILE=$conf
         break
     done
-    cp $ANTARES_DIR/defconfigs/$ARG_CONFIG_FILE .config
+    cp $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE .config
 else
     touch .config
     debug "Your config file is empty"
@@ -390,7 +390,7 @@ if [[ -d .git ]]; then # if Git repository found in this dir
     question "Do you want Antares to add its files to .gitignore?"
     if [[ $? = $yes ]]; then
         debug "Copying Antares ignore file to your .gitignore"
-        cat $ANTARES_DIR/abootstrap/gitignores >> .gitignore
+        cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
     else
         debug "Warning! Antares didn't add something in your .gitignore"
     fi
@@ -404,7 +404,7 @@ else # if there's no Git repository
         question "Add Antares files to .gitignore (recommended)?"
         if [[ $? = $yes ]]; then
             debug "Copying Antares ignore file to your .gitignore"
-            cat $ANTARES_DIR/abootstrap/gitignores >> .gitignore
+            cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
         else
             debug "Warning! Antares did't add something in your .gitignore"
         fi
@@ -420,7 +420,7 @@ cecho "Stage 4. Creating Antares environment"
 echo
 
 # TODO: Make it more friendly
-cp $ANTARES_DIR/abootstrap/template/* . -Rf
+cp $ANTARES_INSTALL_DIR/abootstrap/template/* . -Rf
 make -s antares
 
 echo "Antares environment created."
