@@ -7,3 +7,5 @@
 profiles/*
 *.orig
 tmp/
+*.swp
+.*.swp
