@@ -31,23 +31,22 @@ It is not arduino. It doesn't aim to provide any crippled IDE
 for your projects. You are free to use whatever IDE/editor you
 like. VIM/emacs users welcome. Eclipse? You're welcome.  
 It doesn't make you think that you are writing in any 'innovative' 
-programming language, nor aims to provide an IDE. Just use whatever 
-you like. It just handles configuring your project, building and 
+programming language, nor aims to provide an IDE. It;s mostly just 
+plain C. Antares just handles configuring your project, building and 
 deploying. 
 Although antares comes with quite some library code, you are free
 to NOT use any of it. The choice is yours.
 
 So, in short antares is...
 --------------------------
-A set of Makefiles and a bunch of library code, that can be used in
-your projects bundled with kconfig. 
+A set of Makefiles and a bunch of library code, that can be used 
+(and reused) in your projects, bundled with kconfig. 
 
 Supported architectures
 ------------------------
 Currently a few architectures are supported: 
 avr, msp430, arm(stm32), 8051
-(Or at least sheduled for 0.2 release)
-
+(Or at least sheduled for 0.2 release, details when it comes out)
 
 Supported operating systems
 ---------------------------
