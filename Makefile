@@ -36,6 +36,15 @@ include $(TMPDIR)/arch.mk
 include $(ANTARES_DIR)/make/Makefile.lib
 -include $(ANTARES_DIR)/src/arch/$(ARCH)/arch.mk
 
+ifeq ($(ANTARES_DIR),$(TOPDIR))
+$(info $(tb_red))
+$(info Please, do not run make in the antares directory)
+$(info Use an out-of-tree project directory instead.)
+$(info Have a look at the documentation on how to do that)
+$(info $(col_rst))
+$(error aborted)
+endif
+
 
 
 ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
