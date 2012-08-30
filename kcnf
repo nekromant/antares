@@ -5,7 +5,7 @@ menu "Target platform settings"
 	prompt "Target architecture"
 		source tmp/arch.kcnf
 	endchoice
-		source tmp/allarch.kcnf
+		source tmp/all-arch.kcnf
 endmenu
 
 menu "Toolchain settings"
@@ -23,7 +23,15 @@ source "kcnf"
 endmenu
 
 menu "Deployment settings"
-source "antares/deploy/kcnf"
+     config DEPLOY_ROOT
+     bool "Run deploy commands with superuser priveledges"
+     help
+	Pick this, if you're missing udev rules
+
+comment "Pick the deployment methods you need below"
+
+source "tmp/all-deploy.kcnf"
+
 endmenu
 
 

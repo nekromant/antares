@@ -9,6 +9,20 @@ done
 
 }
 
+
+gen_mka()
+{
+echo "# Automatically generated. Not recommended to edit"
+while read lnn; do
+for ln in $lnn; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "ifeq (\$(CONFIG_$1_$up),y)"
+echo "$1+=$ln"
+echo "endif"
+done
+done
+}
+
 gen_mk()
 {
 echo "# Automatically generated. Not recommended to edit"

@@ -1,5 +1,5 @@
 menuconfig DEPLOY_UISPTOOL
-bool "uISPtool"
+bool "uisptool"
 depends on ARCH_AVR
 
   if DEPLOY_UISPTOOL

@@ -1,5 +1,5 @@
 menuconfig DEPLOY_STM32FLASH
-bool "STM32Flash"
+bool "stm32flash"
 depends on MCU_STM32
 
 if DEPLOY_STM32FLASH

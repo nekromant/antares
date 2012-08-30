@@ -2,7 +2,8 @@
 include $(SRCDIR)/make/Makefile.lib
 #We need this for MCU databases!
 include $(SRCDIR)/src/arch/$(ARCH)/arch.mk
-include $(SRCDIR)/deploy/Makefile
+include $(TMPDIR)/deploy.mk
+
 all: $(call unquote, $(CONFIG_DEPLOY_DEFAULT))
 	echo 1
 

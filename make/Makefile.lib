@@ -55,6 +55,8 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_LD       = @echo '  $(tb_pur)[LD]$(col_rst)       ' $(subst $(TOPDIR)/build,,$(@));
    SILENT_AR       = @echo '  $(tb_pur)[AR]$(col_rst)       ' $(subst $(TOPDIR)/build,,$(@));
    SILENT_GEN      = @echo '  $(tb_cyn)[GEN]$(col_rst)      ' $(subst $(TOPDIR)/build,,$(@)); 
+   SILENT_GEN2      = @echo '  $(tb_cyn)[GEN]$(col_rst)      ' $(subst $(TOPDIR)/build,,$$(@)); 
+
    SILENT_DL       = @echo '  $(tb_cyn)[DOWNLOAD]$(col_rst) ' $(PACKAGE);
    SILENT_PATCH    = @echo '  $(tb_cyn)[PATCH]$(col_rst)    ' $(PACKAGE);
    SILENT_CHECK    = @echo '  $(tb_cyn)[CHECK]$(col_rst)    ' 
@@ -64,7 +66,7 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_BISON    = @echo '  $(tb_pur)[BISON]$(col_rst)    ' $(@F);
    SILENT_FLEX     = @echo '  $(tb_pur)[FLEX]$(col_rst)     ' $(@F);
    SILENT_CLEAN    = @echo '  $(tb_pur)[CLEAN]$(col_rst)    ' cleaning up build directory and temporary files;
-   SILENT_MRPROPER    = @echo '  $(tb_pur)[CLEAN]$(col_rst)    ' cleaning up kconfig utilities;
+   SILENT_MRPROPER = @echo '  $(tb_pur)[MRPROPER]$(col_rst) ' purging everything;
 
    SILENT_GPERF    = @echo '  $(tb_pur)[GPERF]$(col_rst)    ' $(@F);
 

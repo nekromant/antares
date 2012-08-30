@@ -1,23 +1,41 @@
-junk_filter=Makefile built-in.o
+junk_filter=Makefile built-in.o kcnf
 junk=$(addprefix |grep -v ,$(junk_filter))
 
 ARCH?=arm
 
 #This gets read&run by top level, therefore must have extra stuff
-$(TMPDIR)/arch.mk: 
+
+# 1 name, e.g. arch
+# 2 (caps) name for kconfig symbol
+# 3 is path, e.g. src/arch/, automerged with top
+# SILENT_GEN2 is used for canned stuff
+define gendirlist
+$(TMPDIR)/$(1).mk: $(SRCDIR)/$(3)
 	$(Q)[ -d $(TMPDIR) ] || mkdir -p $(TMPDIR)
-	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
-		$(SRCDIR)/scripts/listgen ARCH mk > $@		
+	$(SILENT_GEN2) ls $(SRCDIR)/$(3) $(junk)| \
+		$(SRCDIR)/scripts/listgen $(2) mk > $$@
 
-$(TMPDIR)/arch.kcnf: 
-	$(SILENT_GEN) ls $(SRCDIR)/src/arch/ $(junk)| \
-		$(SRCDIR)/scripts/listgen ARCH kcnf > $@
+$(TMPDIR)/$(1).kcnf: $(SRCDIR)/$(3)
+	$(SILENT_GEN2) ls $(SRCDIR)/$(3) $(junk)| \
+		$(SRCDIR)/scripts/listgen $(2) kcnf > $$@
 
+$(TMPDIR)/all-$(1).kcnf: $(TMPDIR)/$(1).kcnf $(TMPDIR)/$(1).mk
+	$(SILENT_GEN2) echo "" > $$@;\
+		for item in `ls $(SRCDIR)/$(3) $(junk)`; do\
+		echo source \"antares/$(3)/$$$${item}/kcnf\" >> $$@;\
+		done; echo "" >> $$@
+	$(SILENT_GEN2) [ -d "$(TOPDIR)/$(4)" ] && \
+		for item in `ls $(TOPDIR)/$(4) $(junk)`; do\
+		echo source \"$(4)/$$$${item}/kcnf\" >> $$@;\
+		done; echo "" >> $$@
+endef
 
-$(TMPDIR)/allarch.kcnf: 
-	$(SILENT_GEN) for arch in `ls $(SRCDIR)/src/arch/ $(junk)`; do\
-		echo source \"antares/src/arch/$$arch/kcnf\" >> $@;\
-		done; echo "" >> $@
+define gendirs
+$(TMPDIR)/$(1).mk $(TMPDIR)/$(1).kcnf $(TMPDIR)/all-$(1).kcnf
+endef 
+
+$(eval $(call gendirlist,arch,ARCH,src/arch,src/arch))
+$(eval $(call gendirlist,deploy,DEPLOY,deploy,deploy))
 
 checkdirs:
 	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
@@ -36,9 +54,9 @@ checktools:
 	$(call check_tool,flex --version)
 	$(call check_tool,gperf --version)
 
-$(TMPDIR)/.collected:  checkdirs checktools\
-	     $(TMPDIR)/arch.kcnf $(TMPDIR)/arch.mk \
-	     $(TMPDIR)/allarch.kcnf
+$(TMPDIR)/.collected:  checkdirs checktools \
+	     $(call gendirs,arch) \
+	     $(call gendirs,deploy)
 	     $(Q)-rm -f $(OBJDIR)/include/arch
 	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
 	     $(Q)touch $(TMPDIR)/.collected

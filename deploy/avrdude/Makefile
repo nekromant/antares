@@ -6,7 +6,7 @@ include $(SRCDIR)/deploy/avrdude/proglist.mk
 
 $(info $(CONFIG_AVRDUDE_PROG_USBASP))
 $(info $(PROG))
-root=$(call check_root,$(CONFIG_DEPLOY_AVRDUDE_SUDO))
+root=$(call check_root,$(CONFIG_DEPLOY_ROOT))
 
 avrdude:
 	$(root) avrdude -c $(PROG) -p $(MCU) $(call unquote,$(CONFIG_DEPLOY_AVRDUDE_COMMANDLINE)) -U flash:w:$(TARGET_HEXFILE)

@@ -19,7 +19,7 @@ ifeq ($(CONFIG_DEPLOY_STM32FLASH_EXEC),y)
 stm32f_extraflags+=-g $(CONFIG_DEPLOY_STM32FLASH_EXEC_ADDR)
 endif
 
-root=$(call check_root,$(CONFIG_DEPLOY_AS_ROOT))
+root=$(call check_root,$(CONFIG_DEPLOY_ROOT))
 stm32f=$(call unquote, $(CONFIG_DEPLOY_STM32FLASH_BIN))
 
 

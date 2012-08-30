@@ -1,11 +1,8 @@
 menuconfig DEPLOY_AVRDUDE
-bool "Avrdude"
+bool "avrdude"
 depends on ARCH_AVR
 
   if DEPLOY_AVRDUDE
-
-  config DEPLOY_AVRDUDE_SUDO
-  bool "Run avrdude as root (sudo)"
 
   choice 
   prompt "AVR programmer"
