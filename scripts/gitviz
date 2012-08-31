@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+use common::sense;
+use IO::All;
+
+my @branches = map { s/^\*?\s*//; $_ } io('git branch |')->chomp->getlines;
+
+say "digraph G {";
+for(io('git log --pretty=format:"%d %h %p" ' . join(" ", map { "\"$_\"" } @branches) . " -- |")->chomp->getlines) {
+    my $label;
+    if (s[^ (\(.+\))][]) {
+        $label = $1;
+        substr($label, 0, 1) = substr($label, -1, 1) = "";
+    }
+
+    my ($commit, @children) = split " ";
+
+    $label ||= $commit;
+    say qq("$commit"[label="$label"]; ), map { qq("$_"->"$commit"; ) } @children;
+}
+say "}";
+
