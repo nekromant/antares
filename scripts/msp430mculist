@@ -1,0 +1,36 @@
+#!/bin/bash
+# Gens a target list for msp430-gcc
+# A quick and dirty solution, but it works for my current msp430-gcc
+# !works for my avr toolchain, so there's a slightly different script for that
+#run like: CC=msp430-gcc msp430_gen_list
+#And examine mcu_selection.kcnf and mcu_database.mk
+
+#CC=msp430-gcc
+
+
+get_mcu_list()
+{
+ls /usr/msp430/lib/ldscripts/
+}
+
+echo "Generating kconfig script..."
+#1st pass, gen the kcnf selection menu
+echo "# Automatically generated. Not recommended to edit" > mcu_selection.kcnf
+#echo "choice" >> mcu_selection.kcnf
+#echo "prompt \"Select MCU variant\"" >> mcu_selection.kcnf
+get_mcu_list| while read ln; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "config MCU_$up" >> mcu_selection.kcnf
+echo "bool \"$ln\"" >> mcu_selection.kcnf
+done
+#echo "endchoice" >> mcu_selection.kcnf
+
+echo "Generating mcu database Makefile..."
+echo "# Automatically generated. Not recommended to edit" > mcu_database.mk
+get_mcu_list| while read ln; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "ifeq (\$(CONFIG_MCU_$up),y)" >> mcu_database.mk
+echo "MCU=$ln" >> mcu_database.mk
+echo "endif">> mcu_database.mk
+done
+echo "All done"
