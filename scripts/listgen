@@ -1,5 +1,11 @@
 #/bin/bash
 #helper methods for generating .kcnf / .mk pairs
+#
+
+tag="$1"
+method="$2"
+shift; shift
+args="$*"
 
 gen_test()
 {
@@ -10,28 +16,15 @@ done
 }
 
 
-gen_mka()
-{
-echo "# Automatically generated. Not recommended to edit"
-while read lnn; do
-for ln in $lnn; do
-up=`echo $ln | tr [:lower:] [:upper:]`
-echo "ifeq (\$(CONFIG_$1_$up),y)"
-echo "$1+=$ln"
-echo "endif"
-done
-done
-}
-
 gen_mk()
 {
 echo "# Automatically generated. Not recommended to edit"
 while read lnn; do
 for ln in $lnn; do
 up=`echo $ln | tr [:lower:] [:upper:]`
-echo "ifeq (\$(CONFIG_$1_$up),y)"
-echo "$1=$ln" 
-echo "endif" 
+echo "ifeq (\$(CONFIG_${tag}_${up}),y)"
+echo "${tag}$*$ln"
+echo "endif"
 done
 done
 }
@@ -40,15 +33,13 @@ gen_kcnf()
 {
 #1st pass, gen the kcnf selection menu
 echo "# Automatically generated. Not recommended to edit" 
-#echo "choice" >> mcu_selection.kcnf
-#echo "prompt \"Select MCU variant\"" >> mcu_selection.kcnf
 while read lnn; do
 for ln in $lnn; do
 up=`echo $ln | tr [:lower:] [:upper:]`
-echo "config $1_$up" 
+echo "config ${tag}_${up}" 
 echo "bool \"$ln\"" 
 done
 done
 }
 
-gen_$2 $1
+gen_${method} $*

@@ -19,8 +19,4 @@ endif
 uisptool:
 	$(root) uisptool -u $(CONFIG_DEPLOY_UISPTOOL_NAME) $(CONFIG_DEPLOY_UISPTOOL_VER) -f $(TARGET_HEXFILE) $(RUN)
 
-#TODO: Remove this shit
-script:
-	$(root) avrdude $(call unquote,$(CONFIG_DEPLOY_AVRDUDE_COMMANDLINE)) -U eeprom:w:./script.eep:r
-	minicom -o -D /dev/ttyUSB0 -b 115200
 	

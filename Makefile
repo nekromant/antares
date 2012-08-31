@@ -24,7 +24,7 @@ MAKEFLAGS:=-r
 
 IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
 
-export SRCDIR TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
+export SRCDIR ARCH TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
 
 -include $(TOPDIR)/.config
 -include $(ANTARES_DIR)/.version
@@ -76,15 +76,17 @@ distclean: mrproper
 build: collectinfo silentoldconfig collectinfo $(BUILDGOALS)
 
 deploy: build
-	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
 	@echo "Your Antares firmware is now deployed"
 
 deploy-%: build
-	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy $*
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy $*
 	@echo "Your Antares firmware is now deployed"
-	$(Q)$(MAKE) -f $(SRCDIR)/make/Makefile.deploy post
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy post
 
+
+#Help needs a dedicated rule, so that it won't invoke build as it normally does
 deploy-help:
-	make -f make/Makefile.deploy help
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy help
 
 .PHONY: $(PHONY)
