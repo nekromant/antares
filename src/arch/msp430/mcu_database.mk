@@ -1,0 +1,1159 @@
+# Automatically generated. Not recommended to edit
+ifeq ($(CONFIG_MCU_CC430F5123),y)
+MCU=cc430f5123
+endif
+ifeq ($(CONFIG_MCU_CC430F5125),y)
+MCU=cc430f5125
+endif
+ifeq ($(CONFIG_MCU_CC430F5133),y)
+MCU=cc430f5133
+endif
+ifeq ($(CONFIG_MCU_CC430F5135),y)
+MCU=cc430f5135
+endif
+ifeq ($(CONFIG_MCU_CC430F5137),y)
+MCU=cc430f5137
+endif
+ifeq ($(CONFIG_MCU_CC430F5143),y)
+MCU=cc430f5143
+endif
+ifeq ($(CONFIG_MCU_CC430F5145),y)
+MCU=cc430f5145
+endif
+ifeq ($(CONFIG_MCU_CC430F5147),y)
+MCU=cc430f5147
+endif
+ifeq ($(CONFIG_MCU_CC430F6125),y)
+MCU=cc430f6125
+endif
+ifeq ($(CONFIG_MCU_CC430F6126),y)
+MCU=cc430f6126
+endif
+ifeq ($(CONFIG_MCU_CC430F6127),y)
+MCU=cc430f6127
+endif
+ifeq ($(CONFIG_MCU_CC430F6135),y)
+MCU=cc430f6135
+endif
+ifeq ($(CONFIG_MCU_CC430F6137),y)
+MCU=cc430f6137
+endif
+ifeq ($(CONFIG_MCU_CC430F6143),y)
+MCU=cc430f6143
+endif
+ifeq ($(CONFIG_MCU_CC430F6145),y)
+MCU=cc430f6145
+endif
+ifeq ($(CONFIG_MCU_CC430F6147),y)
+MCU=cc430f6147
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE221),y)
+MCU=msp430afe221
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE222),y)
+MCU=msp430afe222
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE223),y)
+MCU=msp430afe223
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE231),y)
+MCU=msp430afe231
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE232),y)
+MCU=msp430afe232
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE233),y)
+MCU=msp430afe233
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE251),y)
+MCU=msp430afe251
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE252),y)
+MCU=msp430afe252
+endif
+ifeq ($(CONFIG_MCU_MSP430AFE253),y)
+MCU=msp430afe253
+endif
+ifeq ($(CONFIG_MCU_MSP430BT5190),y)
+MCU=msp430bt5190
+endif
+ifeq ($(CONFIG_MCU_MSP430C091),y)
+MCU=msp430c091
+endif
+ifeq ($(CONFIG_MCU_MSP430C092),y)
+MCU=msp430c092
+endif
+ifeq ($(CONFIG_MCU_MSP430C111),y)
+MCU=msp430c111
+endif
+ifeq ($(CONFIG_MCU_MSP430C1111),y)
+MCU=msp430c1111
+endif
+ifeq ($(CONFIG_MCU_MSP430C112),y)
+MCU=msp430c112
+endif
+ifeq ($(CONFIG_MCU_MSP430C1121),y)
+MCU=msp430c1121
+endif
+ifeq ($(CONFIG_MCU_MSP430C1331),y)
+MCU=msp430c1331
+endif
+ifeq ($(CONFIG_MCU_MSP430C1351),y)
+MCU=msp430c1351
+endif
+ifeq ($(CONFIG_MCU_MSP430C311S),y)
+MCU=msp430c311s
+endif
+ifeq ($(CONFIG_MCU_MSP430C312),y)
+MCU=msp430c312
+endif
+ifeq ($(CONFIG_MCU_MSP430C313),y)
+MCU=msp430c313
+endif
+ifeq ($(CONFIG_MCU_MSP430C314),y)
+MCU=msp430c314
+endif
+ifeq ($(CONFIG_MCU_MSP430C315),y)
+MCU=msp430c315
+endif
+ifeq ($(CONFIG_MCU_MSP430C323),y)
+MCU=msp430c323
+endif
+ifeq ($(CONFIG_MCU_MSP430C325),y)
+MCU=msp430c325
+endif
+ifeq ($(CONFIG_MCU_MSP430C336),y)
+MCU=msp430c336
+endif
+ifeq ($(CONFIG_MCU_MSP430C337),y)
+MCU=msp430c337
+endif
+ifeq ($(CONFIG_MCU_MSP430C412),y)
+MCU=msp430c412
+endif
+ifeq ($(CONFIG_MCU_MSP430C413),y)
+MCU=msp430c413
+endif
+ifeq ($(CONFIG_MCU_MSP430CG4616),y)
+MCU=msp430cg4616
+endif
+ifeq ($(CONFIG_MCU_MSP430CG4617),y)
+MCU=msp430cg4617
+endif
+ifeq ($(CONFIG_MCU_MSP430CG4618),y)
+MCU=msp430cg4618
+endif
+ifeq ($(CONFIG_MCU_MSP430CG4619),y)
+MCU=msp430cg4619
+endif
+ifeq ($(CONFIG_MCU_MSP430E112),y)
+MCU=msp430e112
+endif
+ifeq ($(CONFIG_MCU_MSP430E313),y)
+MCU=msp430e313
+endif
+ifeq ($(CONFIG_MCU_MSP430E315),y)
+MCU=msp430e315
+endif
+ifeq ($(CONFIG_MCU_MSP430E325),y)
+MCU=msp430e325
+endif
+ifeq ($(CONFIG_MCU_MSP430E337),y)
+MCU=msp430e337
+endif
+ifeq ($(CONFIG_MCU_MSP430F110),y)
+MCU=msp430f110
+endif
+ifeq ($(CONFIG_MCU_MSP430F1101),y)
+MCU=msp430f1101
+endif
+ifeq ($(CONFIG_MCU_MSP430F1101A),y)
+MCU=msp430f1101a
+endif
+ifeq ($(CONFIG_MCU_MSP430F1111),y)
+MCU=msp430f1111
+endif
+ifeq ($(CONFIG_MCU_MSP430F1111A),y)
+MCU=msp430f1111a
+endif
+ifeq ($(CONFIG_MCU_MSP430F112),y)
+MCU=msp430f112
+endif
+ifeq ($(CONFIG_MCU_MSP430F1121),y)
+MCU=msp430f1121
+endif
+ifeq ($(CONFIG_MCU_MSP430F1121A),y)
+MCU=msp430f1121a
+endif
+ifeq ($(CONFIG_MCU_MSP430F1122),y)
+MCU=msp430f1122
+endif
+ifeq ($(CONFIG_MCU_MSP430F1132),y)
+MCU=msp430f1132
+endif
+ifeq ($(CONFIG_MCU_MSP430F122),y)
+MCU=msp430f122
+endif
+ifeq ($(CONFIG_MCU_MSP430F1222),y)
+MCU=msp430f1222
+endif
+ifeq ($(CONFIG_MCU_MSP430F123),y)
+MCU=msp430f123
+endif
+ifeq ($(CONFIG_MCU_MSP430F1232),y)
+MCU=msp430f1232
+endif
+ifeq ($(CONFIG_MCU_MSP430F133),y)
+MCU=msp430f133
+endif
+ifeq ($(CONFIG_MCU_MSP430F135),y)
+MCU=msp430f135
+endif
+ifeq ($(CONFIG_MCU_MSP430F147),y)
+MCU=msp430f147
+endif
+ifeq ($(CONFIG_MCU_MSP430F1471),y)
+MCU=msp430f1471
+endif
+ifeq ($(CONFIG_MCU_MSP430F148),y)
+MCU=msp430f148
+endif
+ifeq ($(CONFIG_MCU_MSP430F1481),y)
+MCU=msp430f1481
+endif
+ifeq ($(CONFIG_MCU_MSP430F149),y)
+MCU=msp430f149
+endif
+ifeq ($(CONFIG_MCU_MSP430F1491),y)
+MCU=msp430f1491
+endif
+ifeq ($(CONFIG_MCU_MSP430F155),y)
+MCU=msp430f155
+endif
+ifeq ($(CONFIG_MCU_MSP430F156),y)
+MCU=msp430f156
+endif
+ifeq ($(CONFIG_MCU_MSP430F157),y)
+MCU=msp430f157
+endif
+ifeq ($(CONFIG_MCU_MSP430F1610),y)
+MCU=msp430f1610
+endif
+ifeq ($(CONFIG_MCU_MSP430F1611),y)
+MCU=msp430f1611
+endif
+ifeq ($(CONFIG_MCU_MSP430F1612),y)
+MCU=msp430f1612
+endif
+ifeq ($(CONFIG_MCU_MSP430F167),y)
+MCU=msp430f167
+endif
+ifeq ($(CONFIG_MCU_MSP430F168),y)
+MCU=msp430f168
+endif
+ifeq ($(CONFIG_MCU_MSP430F169),y)
+MCU=msp430f169
+endif
+ifeq ($(CONFIG_MCU_MSP430F2001),y)
+MCU=msp430f2001
+endif
+ifeq ($(CONFIG_MCU_MSP430F2002),y)
+MCU=msp430f2002
+endif
+ifeq ($(CONFIG_MCU_MSP430F2003),y)
+MCU=msp430f2003
+endif
+ifeq ($(CONFIG_MCU_MSP430F2011),y)
+MCU=msp430f2011
+endif
+ifeq ($(CONFIG_MCU_MSP430F2012),y)
+MCU=msp430f2012
+endif
+ifeq ($(CONFIG_MCU_MSP430F2013),y)
+MCU=msp430f2013
+endif
+ifeq ($(CONFIG_MCU_MSP430F2101),y)
+MCU=msp430f2101
+endif
+ifeq ($(CONFIG_MCU_MSP430F2111),y)
+MCU=msp430f2111
+endif
+ifeq ($(CONFIG_MCU_MSP430F2112),y)
+MCU=msp430f2112
+endif
+ifeq ($(CONFIG_MCU_MSP430F2121),y)
+MCU=msp430f2121
+endif
+ifeq ($(CONFIG_MCU_MSP430F2122),y)
+MCU=msp430f2122
+endif
+ifeq ($(CONFIG_MCU_MSP430F2131),y)
+MCU=msp430f2131
+endif
+ifeq ($(CONFIG_MCU_MSP430F2132),y)
+MCU=msp430f2132
+endif
+ifeq ($(CONFIG_MCU_MSP430F2232),y)
+MCU=msp430f2232
+endif
+ifeq ($(CONFIG_MCU_MSP430F2234),y)
+MCU=msp430f2234
+endif
+ifeq ($(CONFIG_MCU_MSP430F2252),y)
+MCU=msp430f2252
+endif
+ifeq ($(CONFIG_MCU_MSP430F2254),y)
+MCU=msp430f2254
+endif
+ifeq ($(CONFIG_MCU_MSP430F2272),y)
+MCU=msp430f2272
+endif
+ifeq ($(CONFIG_MCU_MSP430F2274),y)
+MCU=msp430f2274
+endif
+ifeq ($(CONFIG_MCU_MSP430F233),y)
+MCU=msp430f233
+endif
+ifeq ($(CONFIG_MCU_MSP430F2330),y)
+MCU=msp430f2330
+endif
+ifeq ($(CONFIG_MCU_MSP430F235),y)
+MCU=msp430f235
+endif
+ifeq ($(CONFIG_MCU_MSP430F2350),y)
+MCU=msp430f2350
+endif
+ifeq ($(CONFIG_MCU_MSP430F2370),y)
+MCU=msp430f2370
+endif
+ifeq ($(CONFIG_MCU_MSP430F2410),y)
+MCU=msp430f2410
+endif
+ifeq ($(CONFIG_MCU_MSP430F2416),y)
+MCU=msp430f2416
+endif
+ifeq ($(CONFIG_MCU_MSP430F2417),y)
+MCU=msp430f2417
+endif
+ifeq ($(CONFIG_MCU_MSP430F2418),y)
+MCU=msp430f2418
+endif
+ifeq ($(CONFIG_MCU_MSP430F2419),y)
+MCU=msp430f2419
+endif
+ifeq ($(CONFIG_MCU_MSP430F247),y)
+MCU=msp430f247
+endif
+ifeq ($(CONFIG_MCU_MSP430F2471),y)
+MCU=msp430f2471
+endif
+ifeq ($(CONFIG_MCU_MSP430F248),y)
+MCU=msp430f248
+endif
+ifeq ($(CONFIG_MCU_MSP430F2481),y)
+MCU=msp430f2481
+endif
+ifeq ($(CONFIG_MCU_MSP430F249),y)
+MCU=msp430f249
+endif
+ifeq ($(CONFIG_MCU_MSP430F2491),y)
+MCU=msp430f2491
+endif
+ifeq ($(CONFIG_MCU_MSP430F2616),y)
+MCU=msp430f2616
+endif
+ifeq ($(CONFIG_MCU_MSP430F2617),y)
+MCU=msp430f2617
+endif
+ifeq ($(CONFIG_MCU_MSP430F2618),y)
+MCU=msp430f2618
+endif
+ifeq ($(CONFIG_MCU_MSP430F2619),y)
+MCU=msp430f2619
+endif
+ifeq ($(CONFIG_MCU_MSP430F412),y)
+MCU=msp430f412
+endif
+ifeq ($(CONFIG_MCU_MSP430F413),y)
+MCU=msp430f413
+endif
+ifeq ($(CONFIG_MCU_MSP430F4132),y)
+MCU=msp430f4132
+endif
+ifeq ($(CONFIG_MCU_MSP430F415),y)
+MCU=msp430f415
+endif
+ifeq ($(CONFIG_MCU_MSP430F4152),y)
+MCU=msp430f4152
+endif
+ifeq ($(CONFIG_MCU_MSP430F417),y)
+MCU=msp430f417
+endif
+ifeq ($(CONFIG_MCU_MSP430F423),y)
+MCU=msp430f423
+endif
+ifeq ($(CONFIG_MCU_MSP430F423A),y)
+MCU=msp430f423a
+endif
+ifeq ($(CONFIG_MCU_MSP430F425),y)
+MCU=msp430f425
+endif
+ifeq ($(CONFIG_MCU_MSP430F4250),y)
+MCU=msp430f4250
+endif
+ifeq ($(CONFIG_MCU_MSP430F425A),y)
+MCU=msp430f425a
+endif
+ifeq ($(CONFIG_MCU_MSP430F4260),y)
+MCU=msp430f4260
+endif
+ifeq ($(CONFIG_MCU_MSP430F427),y)
+MCU=msp430f427
+endif
+ifeq ($(CONFIG_MCU_MSP430F4270),y)
+MCU=msp430f4270
+endif
+ifeq ($(CONFIG_MCU_MSP430F427A),y)
+MCU=msp430f427a
+endif
+ifeq ($(CONFIG_MCU_MSP430F435),y)
+MCU=msp430f435
+endif
+ifeq ($(CONFIG_MCU_MSP430F4351),y)
+MCU=msp430f4351
+endif
+ifeq ($(CONFIG_MCU_MSP430F436),y)
+MCU=msp430f436
+endif
+ifeq ($(CONFIG_MCU_MSP430F4361),y)
+MCU=msp430f4361
+endif
+ifeq ($(CONFIG_MCU_MSP430F437),y)
+MCU=msp430f437
+endif
+ifeq ($(CONFIG_MCU_MSP430F4371),y)
+MCU=msp430f4371
+endif
+ifeq ($(CONFIG_MCU_MSP430F438),y)
+MCU=msp430f438
+endif
+ifeq ($(CONFIG_MCU_MSP430F439),y)
+MCU=msp430f439
+endif
+ifeq ($(CONFIG_MCU_MSP430F447),y)
+MCU=msp430f447
+endif
+ifeq ($(CONFIG_MCU_MSP430F448),y)
+MCU=msp430f448
+endif
+ifeq ($(CONFIG_MCU_MSP430F4481),y)
+MCU=msp430f4481
+endif
+ifeq ($(CONFIG_MCU_MSP430F449),y)
+MCU=msp430f449
+endif
+ifeq ($(CONFIG_MCU_MSP430F4491),y)
+MCU=msp430f4491
+endif
+ifeq ($(CONFIG_MCU_MSP430F4616),y)
+MCU=msp430f4616
+endif
+ifeq ($(CONFIG_MCU_MSP430F46161),y)
+MCU=msp430f46161
+endif
+ifeq ($(CONFIG_MCU_MSP430F4617),y)
+MCU=msp430f4617
+endif
+ifeq ($(CONFIG_MCU_MSP430F46171),y)
+MCU=msp430f46171
+endif
+ifeq ($(CONFIG_MCU_MSP430F4618),y)
+MCU=msp430f4618
+endif
+ifeq ($(CONFIG_MCU_MSP430F46181),y)
+MCU=msp430f46181
+endif
+ifeq ($(CONFIG_MCU_MSP430F4619),y)
+MCU=msp430f4619
+endif
+ifeq ($(CONFIG_MCU_MSP430F46191),y)
+MCU=msp430f46191
+endif
+ifeq ($(CONFIG_MCU_MSP430F47126),y)
+MCU=msp430f47126
+endif
+ifeq ($(CONFIG_MCU_MSP430F47127),y)
+MCU=msp430f47127
+endif
+ifeq ($(CONFIG_MCU_MSP430F47163),y)
+MCU=msp430f47163
+endif
+ifeq ($(CONFIG_MCU_MSP430F47166),y)
+MCU=msp430f47166
+endif
+ifeq ($(CONFIG_MCU_MSP430F47167),y)
+MCU=msp430f47167
+endif
+ifeq ($(CONFIG_MCU_MSP430F47173),y)
+MCU=msp430f47173
+endif
+ifeq ($(CONFIG_MCU_MSP430F47176),y)
+MCU=msp430f47176
+endif
+ifeq ($(CONFIG_MCU_MSP430F47177),y)
+MCU=msp430f47177
+endif
+ifeq ($(CONFIG_MCU_MSP430F47183),y)
+MCU=msp430f47183
+endif
+ifeq ($(CONFIG_MCU_MSP430F47186),y)
+MCU=msp430f47186
+endif
+ifeq ($(CONFIG_MCU_MSP430F47187),y)
+MCU=msp430f47187
+endif
+ifeq ($(CONFIG_MCU_MSP430F47193),y)
+MCU=msp430f47193
+endif
+ifeq ($(CONFIG_MCU_MSP430F47196),y)
+MCU=msp430f47196
+endif
+ifeq ($(CONFIG_MCU_MSP430F47197),y)
+MCU=msp430f47197
+endif
+ifeq ($(CONFIG_MCU_MSP430F477),y)
+MCU=msp430f477
+endif
+ifeq ($(CONFIG_MCU_MSP430F478),y)
+MCU=msp430f478
+endif
+ifeq ($(CONFIG_MCU_MSP430F4783),y)
+MCU=msp430f4783
+endif
+ifeq ($(CONFIG_MCU_MSP430F4784),y)
+MCU=msp430f4784
+endif
+ifeq ($(CONFIG_MCU_MSP430F479),y)
+MCU=msp430f479
+endif
+ifeq ($(CONFIG_MCU_MSP430F4793),y)
+MCU=msp430f4793
+endif
+ifeq ($(CONFIG_MCU_MSP430F4794),y)
+MCU=msp430f4794
+endif
+ifeq ($(CONFIG_MCU_MSP430F5131),y)
+MCU=msp430f5131
+endif
+ifeq ($(CONFIG_MCU_MSP430F5132),y)
+MCU=msp430f5132
+endif
+ifeq ($(CONFIG_MCU_MSP430F5151),y)
+MCU=msp430f5151
+endif
+ifeq ($(CONFIG_MCU_MSP430F5152),y)
+MCU=msp430f5152
+endif
+ifeq ($(CONFIG_MCU_MSP430F5171),y)
+MCU=msp430f5171
+endif
+ifeq ($(CONFIG_MCU_MSP430F5172),y)
+MCU=msp430f5172
+endif
+ifeq ($(CONFIG_MCU_MSP430F5212),y)
+MCU=msp430f5212
+endif
+ifeq ($(CONFIG_MCU_MSP430F5213),y)
+MCU=msp430f5213
+endif
+ifeq ($(CONFIG_MCU_MSP430F5214),y)
+MCU=msp430f5214
+endif
+ifeq ($(CONFIG_MCU_MSP430F5217),y)
+MCU=msp430f5217
+endif
+ifeq ($(CONFIG_MCU_MSP430F5218),y)
+MCU=msp430f5218
+endif
+ifeq ($(CONFIG_MCU_MSP430F5219),y)
+MCU=msp430f5219
+endif
+ifeq ($(CONFIG_MCU_MSP430F5222),y)
+MCU=msp430f5222
+endif
+ifeq ($(CONFIG_MCU_MSP430F5223),y)
+MCU=msp430f5223
+endif
+ifeq ($(CONFIG_MCU_MSP430F5224),y)
+MCU=msp430f5224
+endif
+ifeq ($(CONFIG_MCU_MSP430F5227),y)
+MCU=msp430f5227
+endif
+ifeq ($(CONFIG_MCU_MSP430F5228),y)
+MCU=msp430f5228
+endif
+ifeq ($(CONFIG_MCU_MSP430F5229),y)
+MCU=msp430f5229
+endif
+ifeq ($(CONFIG_MCU_MSP430F5304),y)
+MCU=msp430f5304
+endif
+ifeq ($(CONFIG_MCU_MSP430F5308),y)
+MCU=msp430f5308
+endif
+ifeq ($(CONFIG_MCU_MSP430F5309),y)
+MCU=msp430f5309
+endif
+ifeq ($(CONFIG_MCU_MSP430F5310),y)
+MCU=msp430f5310
+endif
+ifeq ($(CONFIG_MCU_MSP430F5324),y)
+MCU=msp430f5324
+endif
+ifeq ($(CONFIG_MCU_MSP430F5325),y)
+MCU=msp430f5325
+endif
+ifeq ($(CONFIG_MCU_MSP430F5326),y)
+MCU=msp430f5326
+endif
+ifeq ($(CONFIG_MCU_MSP430F5327),y)
+MCU=msp430f5327
+endif
+ifeq ($(CONFIG_MCU_MSP430F5328),y)
+MCU=msp430f5328
+endif
+ifeq ($(CONFIG_MCU_MSP430F5329),y)
+MCU=msp430f5329
+endif
+ifeq ($(CONFIG_MCU_MSP430F5333),y)
+MCU=msp430f5333
+endif
+ifeq ($(CONFIG_MCU_MSP430F5335),y)
+MCU=msp430f5335
+endif
+ifeq ($(CONFIG_MCU_MSP430F5336),y)
+MCU=msp430f5336
+endif
+ifeq ($(CONFIG_MCU_MSP430F5338),y)
+MCU=msp430f5338
+endif
+ifeq ($(CONFIG_MCU_MSP430F5340),y)
+MCU=msp430f5340
+endif
+ifeq ($(CONFIG_MCU_MSP430F5341),y)
+MCU=msp430f5341
+endif
+ifeq ($(CONFIG_MCU_MSP430F5342),y)
+MCU=msp430f5342
+endif
+ifeq ($(CONFIG_MCU_MSP430F5418),y)
+MCU=msp430f5418
+endif
+ifeq ($(CONFIG_MCU_MSP430F5418A),y)
+MCU=msp430f5418a
+endif
+ifeq ($(CONFIG_MCU_MSP430F5419),y)
+MCU=msp430f5419
+endif
+ifeq ($(CONFIG_MCU_MSP430F5419A),y)
+MCU=msp430f5419a
+endif
+ifeq ($(CONFIG_MCU_MSP430F5435),y)
+MCU=msp430f5435
+endif
+ifeq ($(CONFIG_MCU_MSP430F5435A),y)
+MCU=msp430f5435a
+endif
+ifeq ($(CONFIG_MCU_MSP430F5436),y)
+MCU=msp430f5436
+endif
+ifeq ($(CONFIG_MCU_MSP430F5436A),y)
+MCU=msp430f5436a
+endif
+ifeq ($(CONFIG_MCU_MSP430F5437),y)
+MCU=msp430f5437
+endif
+ifeq ($(CONFIG_MCU_MSP430F5437A),y)
+MCU=msp430f5437a
+endif
+ifeq ($(CONFIG_MCU_MSP430F5438),y)
+MCU=msp430f5438
+endif
+ifeq ($(CONFIG_MCU_MSP430F5438A),y)
+MCU=msp430f5438a
+endif
+ifeq ($(CONFIG_MCU_MSP430F5500),y)
+MCU=msp430f5500
+endif
+ifeq ($(CONFIG_MCU_MSP430F5501),y)
+MCU=msp430f5501
+endif
+ifeq ($(CONFIG_MCU_MSP430F5502),y)
+MCU=msp430f5502
+endif
+ifeq ($(CONFIG_MCU_MSP430F5503),y)
+MCU=msp430f5503
+endif
+ifeq ($(CONFIG_MCU_MSP430F5504),y)
+MCU=msp430f5504
+endif
+ifeq ($(CONFIG_MCU_MSP430F5505),y)
+MCU=msp430f5505
+endif
+ifeq ($(CONFIG_MCU_MSP430F5506),y)
+MCU=msp430f5506
+endif
+ifeq ($(CONFIG_MCU_MSP430F5507),y)
+MCU=msp430f5507
+endif
+ifeq ($(CONFIG_MCU_MSP430F5508),y)
+MCU=msp430f5508
+endif
+ifeq ($(CONFIG_MCU_MSP430F5509),y)
+MCU=msp430f5509
+endif
+ifeq ($(CONFIG_MCU_MSP430F5510),y)
+MCU=msp430f5510
+endif
+ifeq ($(CONFIG_MCU_MSP430F5513),y)
+MCU=msp430f5513
+endif
+ifeq ($(CONFIG_MCU_MSP430F5514),y)
+MCU=msp430f5514
+endif
+ifeq ($(CONFIG_MCU_MSP430F5515),y)
+MCU=msp430f5515
+endif
+ifeq ($(CONFIG_MCU_MSP430F5517),y)
+MCU=msp430f5517
+endif
+ifeq ($(CONFIG_MCU_MSP430F5519),y)
+MCU=msp430f5519
+endif
+ifeq ($(CONFIG_MCU_MSP430F5521),y)
+MCU=msp430f5521
+endif
+ifeq ($(CONFIG_MCU_MSP430F5522),y)
+MCU=msp430f5522
+endif
+ifeq ($(CONFIG_MCU_MSP430F5524),y)
+MCU=msp430f5524
+endif
+ifeq ($(CONFIG_MCU_MSP430F5525),y)
+MCU=msp430f5525
+endif
+ifeq ($(CONFIG_MCU_MSP430F5526),y)
+MCU=msp430f5526
+endif
+ifeq ($(CONFIG_MCU_MSP430F5527),y)
+MCU=msp430f5527
+endif
+ifeq ($(CONFIG_MCU_MSP430F5528),y)
+MCU=msp430f5528
+endif
+ifeq ($(CONFIG_MCU_MSP430F5529),y)
+MCU=msp430f5529
+endif
+ifeq ($(CONFIG_MCU_MSP430F5630),y)
+MCU=msp430f5630
+endif
+ifeq ($(CONFIG_MCU_MSP430F5631),y)
+MCU=msp430f5631
+endif
+ifeq ($(CONFIG_MCU_MSP430F5632),y)
+MCU=msp430f5632
+endif
+ifeq ($(CONFIG_MCU_MSP430F5633),y)
+MCU=msp430f5633
+endif
+ifeq ($(CONFIG_MCU_MSP430F5634),y)
+MCU=msp430f5634
+endif
+ifeq ($(CONFIG_MCU_MSP430F5635),y)
+MCU=msp430f5635
+endif
+ifeq ($(CONFIG_MCU_MSP430F5636),y)
+MCU=msp430f5636
+endif
+ifeq ($(CONFIG_MCU_MSP430F5637),y)
+MCU=msp430f5637
+endif
+ifeq ($(CONFIG_MCU_MSP430F5638),y)
+MCU=msp430f5638
+endif
+ifeq ($(CONFIG_MCU_MSP430F6433),y)
+MCU=msp430f6433
+endif
+ifeq ($(CONFIG_MCU_MSP430F6435),y)
+MCU=msp430f6435
+endif
+ifeq ($(CONFIG_MCU_MSP430F6436),y)
+MCU=msp430f6436
+endif
+ifeq ($(CONFIG_MCU_MSP430F6438),y)
+MCU=msp430f6438
+endif
+ifeq ($(CONFIG_MCU_MSP430F6630),y)
+MCU=msp430f6630
+endif
+ifeq ($(CONFIG_MCU_MSP430F6631),y)
+MCU=msp430f6631
+endif
+ifeq ($(CONFIG_MCU_MSP430F6632),y)
+MCU=msp430f6632
+endif
+ifeq ($(CONFIG_MCU_MSP430F6633),y)
+MCU=msp430f6633
+endif
+ifeq ($(CONFIG_MCU_MSP430F6634),y)
+MCU=msp430f6634
+endif
+ifeq ($(CONFIG_MCU_MSP430F6635),y)
+MCU=msp430f6635
+endif
+ifeq ($(CONFIG_MCU_MSP430F6636),y)
+MCU=msp430f6636
+endif
+ifeq ($(CONFIG_MCU_MSP430F6637),y)
+MCU=msp430f6637
+endif
+ifeq ($(CONFIG_MCU_MSP430F6638),y)
+MCU=msp430f6638
+endif
+ifeq ($(CONFIG_MCU_MSP430F6720),y)
+MCU=msp430f6720
+endif
+ifeq ($(CONFIG_MCU_MSP430F6721),y)
+MCU=msp430f6721
+endif
+ifeq ($(CONFIG_MCU_MSP430F6723),y)
+MCU=msp430f6723
+endif
+ifeq ($(CONFIG_MCU_MSP430F6724),y)
+MCU=msp430f6724
+endif
+ifeq ($(CONFIG_MCU_MSP430F6725),y)
+MCU=msp430f6725
+endif
+ifeq ($(CONFIG_MCU_MSP430F6726),y)
+MCU=msp430f6726
+endif
+ifeq ($(CONFIG_MCU_MSP430F6730),y)
+MCU=msp430f6730
+endif
+ifeq ($(CONFIG_MCU_MSP430F6731),y)
+MCU=msp430f6731
+endif
+ifeq ($(CONFIG_MCU_MSP430F6733),y)
+MCU=msp430f6733
+endif
+ifeq ($(CONFIG_MCU_MSP430F6734),y)
+MCU=msp430f6734
+endif
+ifeq ($(CONFIG_MCU_MSP430F6735),y)
+MCU=msp430f6735
+endif
+ifeq ($(CONFIG_MCU_MSP430F6736),y)
+MCU=msp430f6736
+endif
+ifeq ($(CONFIG_MCU_MSP430FE423),y)
+MCU=msp430fe423
+endif
+ifeq ($(CONFIG_MCU_MSP430FE4232),y)
+MCU=msp430fe4232
+endif
+ifeq ($(CONFIG_MCU_MSP430FE423A),y)
+MCU=msp430fe423a
+endif
+ifeq ($(CONFIG_MCU_MSP430FE4242),y)
+MCU=msp430fe4242
+endif
+ifeq ($(CONFIG_MCU_MSP430FE425),y)
+MCU=msp430fe425
+endif
+ifeq ($(CONFIG_MCU_MSP430FE4252),y)
+MCU=msp430fe4252
+endif
+ifeq ($(CONFIG_MCU_MSP430FE425A),y)
+MCU=msp430fe425a
+endif
+ifeq ($(CONFIG_MCU_MSP430FE427),y)
+MCU=msp430fe427
+endif
+ifeq ($(CONFIG_MCU_MSP430FE4272),y)
+MCU=msp430fe4272
+endif
+ifeq ($(CONFIG_MCU_MSP430FE427A),y)
+MCU=msp430fe427a
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4250),y)
+MCU=msp430fg4250
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4260),y)
+MCU=msp430fg4260
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4270),y)
+MCU=msp430fg4270
+endif
+ifeq ($(CONFIG_MCU_MSP430FG437),y)
+MCU=msp430fg437
+endif
+ifeq ($(CONFIG_MCU_MSP430FG438),y)
+MCU=msp430fg438
+endif
+ifeq ($(CONFIG_MCU_MSP430FG439),y)
+MCU=msp430fg439
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4616),y)
+MCU=msp430fg4616
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4617),y)
+MCU=msp430fg4617
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4618),y)
+MCU=msp430fg4618
+endif
+ifeq ($(CONFIG_MCU_MSP430FG4619),y)
+MCU=msp430fg4619
+endif
+ifeq ($(CONFIG_MCU_MSP430FG477),y)
+MCU=msp430fg477
+endif
+ifeq ($(CONFIG_MCU_MSP430FG478),y)
+MCU=msp430fg478
+endif
+ifeq ($(CONFIG_MCU_MSP430FG479),y)
+MCU=msp430fg479
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5720),y)
+MCU=msp430fr5720
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5721),y)
+MCU=msp430fr5721
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5722),y)
+MCU=msp430fr5722
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5723),y)
+MCU=msp430fr5723
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5724),y)
+MCU=msp430fr5724
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5725),y)
+MCU=msp430fr5725
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5726),y)
+MCU=msp430fr5726
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5727),y)
+MCU=msp430fr5727
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5728),y)
+MCU=msp430fr5728
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5729),y)
+MCU=msp430fr5729
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5730),y)
+MCU=msp430fr5730
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5731),y)
+MCU=msp430fr5731
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5732),y)
+MCU=msp430fr5732
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5733),y)
+MCU=msp430fr5733
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5734),y)
+MCU=msp430fr5734
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5735),y)
+MCU=msp430fr5735
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5736),y)
+MCU=msp430fr5736
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5737),y)
+MCU=msp430fr5737
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5738),y)
+MCU=msp430fr5738
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5739),y)
+MCU=msp430fr5739
+endif
+ifeq ($(CONFIG_MCU_MSP430FR5969),y)
+MCU=msp430fr5969
+endif
+ifeq ($(CONFIG_MCU_MSP430FW423),y)
+MCU=msp430fw423
+endif
+ifeq ($(CONFIG_MCU_MSP430FW425),y)
+MCU=msp430fw425
+endif
+ifeq ($(CONFIG_MCU_MSP430FW427),y)
+MCU=msp430fw427
+endif
+ifeq ($(CONFIG_MCU_MSP430FW428),y)
+MCU=msp430fw428
+endif
+ifeq ($(CONFIG_MCU_MSP430FW429),y)
+MCU=msp430fw429
+endif
+ifeq ($(CONFIG_MCU_MSP430G2001),y)
+MCU=msp430g2001
+endif
+ifeq ($(CONFIG_MCU_MSP430G2101),y)
+MCU=msp430g2101
+endif
+ifeq ($(CONFIG_MCU_MSP430G2102),y)
+MCU=msp430g2102
+endif
+ifeq ($(CONFIG_MCU_MSP430G2111),y)
+MCU=msp430g2111
+endif
+ifeq ($(CONFIG_MCU_MSP430G2112),y)
+MCU=msp430g2112
+endif
+ifeq ($(CONFIG_MCU_MSP430G2113),y)
+MCU=msp430g2113
+endif
+ifeq ($(CONFIG_MCU_MSP430G2121),y)
+MCU=msp430g2121
+endif
+ifeq ($(CONFIG_MCU_MSP430G2131),y)
+MCU=msp430g2131
+endif
+ifeq ($(CONFIG_MCU_MSP430G2132),y)
+MCU=msp430g2132
+endif
+ifeq ($(CONFIG_MCU_MSP430G2152),y)
+MCU=msp430g2152
+endif
+ifeq ($(CONFIG_MCU_MSP430G2153),y)
+MCU=msp430g2153
+endif
+ifeq ($(CONFIG_MCU_MSP430G2201),y)
+MCU=msp430g2201
+endif
+ifeq ($(CONFIG_MCU_MSP430G2202),y)
+MCU=msp430g2202
+endif
+ifeq ($(CONFIG_MCU_MSP430G2203),y)
+MCU=msp430g2203
+endif
+ifeq ($(CONFIG_MCU_MSP430G2210),y)
+MCU=msp430g2210
+endif
+ifeq ($(CONFIG_MCU_MSP430G2211),y)
+MCU=msp430g2211
+endif
+ifeq ($(CONFIG_MCU_MSP430G2212),y)
+MCU=msp430g2212
+endif
+ifeq ($(CONFIG_MCU_MSP430G2213),y)
+MCU=msp430g2213
+endif
+ifeq ($(CONFIG_MCU_MSP430G2221),y)
+MCU=msp430g2221
+endif
+ifeq ($(CONFIG_MCU_MSP430G2230),y)
+MCU=msp430g2230
+endif
+ifeq ($(CONFIG_MCU_MSP430G2231),y)
+MCU=msp430g2231
+endif
+ifeq ($(CONFIG_MCU_MSP430G2232),y)
+MCU=msp430g2232
+endif
+ifeq ($(CONFIG_MCU_MSP430G2233),y)
+MCU=msp430g2233
+endif
+ifeq ($(CONFIG_MCU_MSP430G2252),y)
+MCU=msp430g2252
+endif
+ifeq ($(CONFIG_MCU_MSP430G2253),y)
+MCU=msp430g2253
+endif
+ifeq ($(CONFIG_MCU_MSP430G2302),y)
+MCU=msp430g2302
+endif
+ifeq ($(CONFIG_MCU_MSP430G2303),y)
+MCU=msp430g2303
+endif
+ifeq ($(CONFIG_MCU_MSP430G2312),y)
+MCU=msp430g2312
+endif
+ifeq ($(CONFIG_MCU_MSP430G2313),y)
+MCU=msp430g2313
+endif
+ifeq ($(CONFIG_MCU_MSP430G2332),y)
+MCU=msp430g2332
+endif
+ifeq ($(CONFIG_MCU_MSP430G2333),y)
+MCU=msp430g2333
+endif
+ifeq ($(CONFIG_MCU_MSP430G2352),y)
+MCU=msp430g2352
+endif
+ifeq ($(CONFIG_MCU_MSP430G2353),y)
+MCU=msp430g2353
+endif
+ifeq ($(CONFIG_MCU_MSP430G2402),y)
+MCU=msp430g2402
+endif
+ifeq ($(CONFIG_MCU_MSP430G2403),y)
+MCU=msp430g2403
+endif
+ifeq ($(CONFIG_MCU_MSP430G2412),y)
+MCU=msp430g2412
+endif
+ifeq ($(CONFIG_MCU_MSP430G2413),y)
+MCU=msp430g2413
+endif
+ifeq ($(CONFIG_MCU_MSP430G2432),y)
+MCU=msp430g2432
+endif
+ifeq ($(CONFIG_MCU_MSP430G2433),y)
+MCU=msp430g2433
+endif
+ifeq ($(CONFIG_MCU_MSP430G2452),y)
+MCU=msp430g2452
+endif
+ifeq ($(CONFIG_MCU_MSP430G2453),y)
+MCU=msp430g2453
+endif
+ifeq ($(CONFIG_MCU_MSP430G2513),y)
+MCU=msp430g2513
+endif
+ifeq ($(CONFIG_MCU_MSP430G2533),y)
+MCU=msp430g2533
+endif
+ifeq ($(CONFIG_MCU_MSP430G2553),y)
+MCU=msp430g2553
+endif
+ifeq ($(CONFIG_MCU_MSP430L092),y)
+MCU=msp430l092
+endif
+ifeq ($(CONFIG_MCU_MSP430P112),y)
+MCU=msp430p112
+endif
+ifeq ($(CONFIG_MCU_MSP430P313),y)
+MCU=msp430p313
+endif
+ifeq ($(CONFIG_MCU_MSP430P315),y)
+MCU=msp430p315
+endif
+ifeq ($(CONFIG_MCU_MSP430P315S),y)
+MCU=msp430p315s
+endif
+ifeq ($(CONFIG_MCU_MSP430P325),y)
+MCU=msp430p325
+endif
+ifeq ($(CONFIG_MCU_MSP430P337),y)
+MCU=msp430p337
+endif
