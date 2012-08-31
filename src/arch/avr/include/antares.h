@@ -2,31 +2,12 @@
 //This sucks in the mcu-headers
 #ifndef _ANTARES_H
 #define _ANTARES_H
-#include <generated/autoconf.h>
-
-#ifdef CONFIG_ARCH_AVR
-//Suck in all the default headers
-#ifndef __ASSEMBLER__
-#include <string.h>
-#include <avr/io.h>
-#include <avr/eeprom.h>
-#include <avr/interrupt.h>
-#include <avr/pgmspace.h>
-#include <avr/wdt.h>
-#include <util/delay.h>
-#endif
-
 
 #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
 #define BUILD_BUG_ON_ZERO(e) (sizeof(struct { int:-!!(e); }))
 #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
 
-//#include <string.h>
-
-//In case of avr we use .initX sections for low and high init functions
-
-//Suck in all the default headers
 
 //In case of avr we use .initX sections for low and high init functions
 //APPS are called one by one in the main()
@@ -50,10 +31,6 @@ __attribute__((__section__(".init8"))) void fn(void)
 #define ANTARES_FINISH(fn) \
   __attribute__((naked))\
 __attribute__((__section__(".fini0"))) void fn(void)
-
-
-
-#endif
 
 
 #endif
