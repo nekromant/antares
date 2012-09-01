@@ -1,4 +1,4 @@
-include deploy/mspdebug/drv_selection.mk
+include $(ANTARES_DIR)/deploy/mspdebug/drv_selection.mk
 deploy_help+="\nmspdebug - deploy using mspdebug"
 
 root=$(call check_root,$(CONFIG_DEPLOY_ROOT))

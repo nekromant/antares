@@ -1,12 +1,13 @@
 include $(ANTARES_DIR)/src/arch/msp430/mcu_database.mk
 #Set our build goals
-BUILDGOALS=$(IMAGENAME).bin $(IMAGENAME).lss
+BUILDGOALS=$(IMAGENAME).bin $(IMAGENAME).lss $(IMAGENAME).elf
 
 # Do not combine objects into built-in.o
 # Failing to do so screws up things and breaks ANTARES_* macros
 # So it's 100% safe to set this to y
 LD_NO_COMBINE=y
 
+TARGET_ELFFILE=$(IMAGENAME).elf
 TARGET_BINFILE=$(IMAGENAME).bin
 TARGET_EEPFILE=$(IMAGENAME).eep
 
