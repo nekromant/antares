@@ -34,7 +34,12 @@ export SRCDIR ARCH TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
 include $(ANTARES_DIR)/make/host.mk
 include $(TMPDIR)/arch.mk
 include $(ANTARES_DIR)/make/Makefile.lib
+
+ifeq ($(PROJECT_SHIPS_ARCH),y)
+-include $(TOP_DIR)/arch/$(ARCH)/arch.mk
+else
 -include $(ANTARES_DIR)/src/arch/$(ARCH)/arch.mk
+endif
 
 ifeq ($(ANTARES_DIR),$(TOPDIR))
 $(info $(tb_red))

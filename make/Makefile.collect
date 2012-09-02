@@ -40,11 +40,16 @@ endef
 #TODO: Current generation method looks like smoking crap
 #TODO: May be we need something better later 
 
+ifeq ($(PROJECT_SHIPS_ARCH),y)
+$(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/arch,mk, "=" >))
+$(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/arch,kcnf,>))
+$(eval $(call unify_kcnf,arch,$(TOPDIR),arch,.))
+else
 #Architectures in-tree
 $(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,mk, "=" >))
 $(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,kcnf,>))
 $(eval $(call unify_kcnf,arch,$(SRCDIR),src/arch,antares))
-
+endif
 #Deploy methods in-tree
 $(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,mk, "+=" >))
 $(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,kcnf,>))

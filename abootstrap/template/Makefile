@@ -6,6 +6,12 @@ TOPDIR=.
 project_sources=src
 ANTARES_DIR:=./antares
 
+# Set to y, if your project ships it's own ARCH dir, 
+# and doesn't want to use in-tree arches. Normally you would
+# say n here. See docs for special uses.
+PROJECT_SHIPS_ARCH=n
+
+
 ifeq ($(ANTARES_INSTALL_DIR),)
 antares:
 	git clone $(GITURL) $(ANTARES_DIR)
