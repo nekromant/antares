@@ -79,8 +79,8 @@ menuconfig: collectinfo $(obj)/mconf $(obj)/conf versionupdate
 
 
 $(TOPDIR)/include/config/auto.conf: $(deps_config) .config
-	@echo $*
-	$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
+	$(SILENT_INFO) "Config changed, running silentoldconfig"
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
 
 config: $(obj)/conf
 	$(Q)$< --oldaskconfig $(Kconfig)
