@@ -17,7 +17,7 @@ mconf-objs     := mconf.o zconf.tab.o $(lxdialog)
 VERSION_MAJOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MAJOR )
 VERSION_MINOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
 VERSION_CODENAME := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
-VERSION_GIT = $(shell GIT_DIR=$(SRCDIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
+VERSION_GIT = $(shell GIT_DIR=$(ANTARES_DIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
 
 
 #	cp $@ $@_shipped
@@ -72,11 +72,8 @@ versionupdate:
 #FixThis: Properly learn the kconfig deps dance 
 menuconfig: collectinfo $(obj)/mconf $(obj)/conf versionupdate
 	$(Q) $(obj)/mconf $(Kconfig)
-	$(Q)mkdir -p include/generated
-	$(Q)mkdir -p include/config
-	$(Q)$< --$@ $(Kconfig)
-	@echo "Version information updated, configuration is now complete"
-
+	@echo "Antares configuration is now complete."
+	@echo "Run 'make build' to build everything now"
 
 $(TOPDIR)/include/config/auto.conf: $(deps_config) .config
 	$(SILENT_INFO) "Config changed, running silentoldconfig"
@@ -94,4 +91,4 @@ silentoldconfig: $(obj)/conf
 	$(Q)$< --$@ $(Kconfig)
 
 set_version: $(obj)/mconf  
-	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version $<  $(KVersion)
+	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version $< $(KVersion)

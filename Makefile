@@ -17,7 +17,7 @@ Kbuild:=Kconfig
 obj:=$(OBJDIR)/kconfig
 src:=$(SRCDIR)/kconfig
 Kconfig:=$(SRCDIR)/kcnf
-KVersion:=./version.kcnf
+KVersion:=$(ANTARES_DIR)/version.kcnf
 
 PHONY+=deftarget deploy build collectinfo clean
 MAKEFLAGS:=-r

@@ -1,5 +1,11 @@
-comment "STUB"
-comment "SDCC is NOT yet supported"
-comment "Cominng soon"
-comment "Or sooner if you help us out!"
+
+
+config SDCC_CFLAGS
+string "Extra SDCC CFLAGS"
+
+config SDCC_ASFLAGS
+string "Extra SDCC ASFLAGS"
+
+config SDCC_LDFLAGS
+string "Extra SDCC LDFLAGS"
 
