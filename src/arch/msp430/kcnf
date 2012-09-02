@@ -1,3 +1,4 @@
+
 choice
 
   depends on ARCH_MSP430
@@ -6,3 +7,7 @@ choice
 
 endchoice
 
+
+config F_CPU
+int "Target CPU Frequency in Hz"
+    help

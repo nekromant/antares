@@ -110,4 +110,6 @@ if LIB_URPC
 			checking and stuff. Frees up some bytes, so that 
 			we can fit into even and attiny MCU. You can safely
 			check this, after you have debugged everything. 
-	endif
+endif
+
+source "antares/src/lib/msp430/kcnf"

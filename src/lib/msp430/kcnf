@@ -1,0 +1,19 @@
+menuconfig MSP430_DELAYLIB
+bool "DelayLib"
+depends on ARCH_MSP430
+help
+	A small convienience library for programmable
+	delays. These are pretty inacurate SOFTWARE 
+	delays for MSP430 with no timers involved. Use
+	with care where appropriate. 
+	
+if MSP430_DELAYLIB
+
+   config MSP430_DELAYLIB_FRQ
+   int "Base CPU Frequency"
+   default 8000000
+
+   config MSP430_DELAYLIB_SCALING
+   bool "Delay scaling support"
+
+endif
