@@ -3,8 +3,10 @@ include $(SRCDIR)/make/Makefile.lib
 #We need this for MCU databases!
 include $(SRCDIR)/src/arch/$(ARCH)/arch.mk
 include $(TMPDIR)/deploy.mk
+include $(TMPDIR)/edeploy.mk
 
-include $(foreach dpl,$(DEPLOY),$(SRCDIR)/deploy/$(dpl)/Makefile)
+-include $(foreach dpl,$(DEPLOY),$(SRCDIR)/deploy/$(dpl)/Makefile)
+-include $(foreach dpl,$(DEPLOY),$(TOPDIR)/deploy/$(dpl)/Makefile)
 
 all: $(call unquote, $(CONFIG_DEPLOY_DEFAULT))
 	echo 1

@@ -50,17 +50,24 @@ $(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,mk, "+=" >))
 $(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,kcnf,>))
 $(eval $(call unify_kcnf,deploy,$(SRCDIR),deploy,antares))
 
+#Deploy methods in-project
+$(eval $(call generate_dirlist,edeploy,DEPLOY,$(TOPDIR)/deploy,mk, "+=" >))
+$(eval $(call generate_dirlist,edeploy,DEPLOY,$(TOPDIR)/deploy,kcnf,>))
+$(eval $(call unify_kcnf,edeploy,$(TOPDIR),deploy,.))
+
 
 define gendirs
 $(TMPDIR)/$(1).mk $(TMPDIR)/$(1).kcnf $(TMPDIR)/all-$(1).kcnf
 endef 
 
-#$(eval $(call gendirlist,arch,ARCH,src/arch,src/arch))
-$(eval $(call gendirlist,deploy,DEPLOY,deploy,deploy))
+genfiles+=$(call gendirs,arch)
+genfiles+=$(call gendirs,deploy)
+genfiles+=$(call gendirs,edeploy)
 
 checkdirs:
 	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
 	$(Q)[ -d $(TOPDIR)/include ] || mkdir -p $(TOPDIR)/include
+	$(Q)[ -d $(TOPDIR)/deploy ] || mkdir -p $(TOPDIR)/deploy
 	$(Q)[ -d $(CONFIG_IMAGE_DIR) ] || mkdir -p $(CONFIG_IMAGE_DIR)
 
 
@@ -75,9 +82,7 @@ checktools:
 	$(call check_tool,flex --version)
 	$(call check_tool,gperf --version)
 
-$(TMPDIR)/.collected:  checkdirs checktools \
-	     $(call gendirs,arch) \
-	     $(call gendirs,deploy)
+$(TMPDIR)/.collected:  checkdirs checktools $(genfiles)
 	     $(Q)-rm -f $(OBJDIR)/include/arch
 	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
 	     $(Q)touch $(TMPDIR)/.collected

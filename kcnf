@@ -39,6 +39,8 @@ menu "Deployment settings"
 comment "Pick the deployment methods you need below"
 
 source "tmp/all-deploy.kcnf"
+comment "Custom deployment methods"
+source "tmp/all-edeploy.kcnf"
 
 endmenu
 
