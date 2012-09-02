@@ -69,11 +69,18 @@ versionupdate:
 	$(Q)$(src)/config --set-str VERSION_GIT $(VERSION_GIT) 
 	$(SILENT_VER) $(src)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
 
-
-menuconfig: collectinfo $(obj)/mconf versionupdate
+#FixThis: Properly learn the kconfig deps dance 
+menuconfig: collectinfo $(obj)/mconf $(obj)/conf versionupdate
 	$(Q) $(obj)/mconf $(Kconfig)
+	$(Q)mkdir -p include/generated
+	$(Q)mkdir -p include/config
+	$(Q)$< --$@ $(Kconfig)
 	@echo "Version information updated, configuration is now complete"
 
+
+$(TOPDIR)/include/config/auto.conf: $(deps_config) .config
+	@echo $*
+	$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
 
 config: $(obj)/conf
 	$(Q)$< --oldaskconfig $(Kconfig)
@@ -86,17 +93,5 @@ silentoldconfig: $(obj)/conf
 	$(Q)mkdir -p include/config
 	$(Q)$< --$@ $(Kconfig)
 
-switch_profile: $(obj)/mconf  
-	$(Q)-cp .config .config.switch_save
-	$(src)/kcnf_list gen profiles/ > profiles.kcnf.inc
-	$(Q)$< profiles.kcnf
-	$(src)/kcnf_list process_profile profiles
-
 set_version: $(obj)/mconf  
 	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version $<  $(KVersion)
-
-select_defconfig: $(obj)/mconf
-	$(Q)-cp .config .config.switch_save
-	$(src)/kcnf_list fgen defconfigs/ > defconfig.kcnf.inc
-	$(Q)$< defconfig.kcnf 
-	$(src)/kcnf_list process_defconfig defconfigs

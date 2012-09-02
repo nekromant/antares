@@ -10,11 +10,19 @@ DISAS    := $(TOOL_PREFIX)objdump
 OBJDUMP  := $(TOOL_PREFIX)objdump
 SIZE     := $(TOOL_PREFIX)size
 
+
 COMPILER_TOOLS=CC="$(CC)" CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
 
+
+GENDEPFLAGS = -MD -MP -MF $$(@).d
+
 CFLAGS+=$(call unquote,$(CONFIG_CFLAGS)) -include $(TOPDIR)/include/generated/autoconf.h
+
 LDFLAGS+=$(call unquote,$(CONFIG_LDFLAGS))
+
 ASFLAGS+=$(call unquote,$(CONFIG_ASFLAGS))
+
+
 
 #FixMe: Hack
 ASFLAGS+=$(CFLAGS)
@@ -68,17 +76,18 @@ endif
 
 CFLAGS+=-I$(TOPDIR)/include -I$(ANTARES_DIR)/include
 
-ASFLAGS+=$(COMMONFLAGS)
-CFLAGS+=$(COMMONFLAGS) 
-LDFLAGS+=$(COMMONFLAGS)
+ASFLAGS+=$(COMMONFLAGS) $(GENDEPFLAGS)
+CFLAGS+=$(COMMONFLAGS) $(GENDEPFLAGS)
+LDFLAGS+=$(COMMONFLAGS) $(GENDEPFLAGS)
 
 
 ifneq ($(GCC_LDFILE),)
 ELFFLAGS+=-T $(GCC_LDFILE)
 endif
 
+
 export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
-export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
+export ASFLAGS CFLAGS LDFLAGS ELFFLAGS 
 
 builtin:
 	$(SILENT_INFO) Building antares library code and startup
@@ -90,7 +99,6 @@ builtin:
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
 	-C $(TOPDIR)/$(project_sources) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
-
 
 ifneq ($(LD_NO_COMBINE),y)
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin

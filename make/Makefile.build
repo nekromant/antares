@@ -1,5 +1,5 @@
 #This is a makefile used in the actual build
-#I didn't get enough dao to understand fully kbuild's magic and adopt it completely to avr
+#I didn't get enough dao to understand fully kbuild's magic and adopt it completely to small uCs like avr
 #And ethersex's methods of compiling sucked, so I invented my own build script
 #Yep, there goes some NIH syndrome =)
 .SUFFIXES:
@@ -16,6 +16,8 @@ objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 
+#suck in dep files (if any)
+-include $(OBJDIR)/*.d
 
 # include $(SRCDIR)/toolchain/
 
@@ -38,14 +40,13 @@ PHONY:= build clean
 	-f $(ANTARES_DIR)/make/Makefile.build -r build	
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c 
-	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $^  
+	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.S 
-	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $^  
+	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $<
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.s 
-	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $^  
-
+	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
 
 build: $(OBJDIR)/built-in.o

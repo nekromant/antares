@@ -26,8 +26,9 @@ IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILE
 
 export SRCDIR ARCH TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR
 
--include $(TOPDIR)/.config
 -include $(ANTARES_DIR)/.version
+-include $(TOPDIR)/.config
+-include $(TOPDIR)/include/config/auto.conf.cmd
 
 .DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 
@@ -78,7 +79,7 @@ mrproper: clean
 
 distclean: mrproper
 
-build: collectinfo silentoldconfig collectinfo $(BUILDGOALS)
+build:  collectinfo $(TOPDIR)/include/config/auto.conf collectinfo $(BUILDGOALS)
 
 deploy: build
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
