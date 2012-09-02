@@ -1,4 +1,7 @@
 subdirs-$(CONFIG_ARCH_MSP430)+=msp430
+subdirs-$(CONFIG_ARCH_AVR)+=avr
+#TODO: Move these to generic, rework, nuke, cleanup
+
 objects-$(CONFIG_LIB_SNPRINTF)+=snprintf.o
 objects-$(CONFIG_LIB_NLIBSTUBS)+=newlib-dummies.o
 objects-$(CONFIG_LIB_PRINTK)+=printk.o

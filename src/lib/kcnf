@@ -113,3 +113,4 @@ if LIB_URPC
 endif
 
 source "antares/src/lib/msp430/kcnf"
+source "antares/src/lib/avr/kcnf"

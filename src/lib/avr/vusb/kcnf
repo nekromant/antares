@@ -1,6 +1,6 @@
 menuconfig CONTRIB_VUSB
 bool "VUSB Stack"
-
+depends on ARCH_AVR
 
 if CONTRIB_VUSB
 

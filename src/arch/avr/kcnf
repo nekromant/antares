@@ -22,13 +22,6 @@ depends on AVR_BLDR
 hex "Bootloader address"
 
 
-menuconfig CONFIG_AVR_EXTRA
-bool "Extra AVR Goodies"
-
-if CONFIG_AVR_EXTRA
-source "antares/src/arch/avr/vusb/kcnf"
-endif
-
 endif
 
 
