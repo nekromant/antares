@@ -4,6 +4,13 @@ depends on ARCH_AVR
 
   if DEPLOY_AVRDUDE
 
+  config DEPLOY_AVRDUDE_OVR
+  bool "Override part info for avrdude"
+  
+  config DEPLOY_AVRDUDE_PART
+  string "Avrdude part name"
+  depends on DEPLOY_AVRDUDE_OVR
+  
   choice 
   prompt "AVR programmer"
   
