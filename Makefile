@@ -42,7 +42,7 @@ $(info Please, do not run make in the antares directory)
 $(info Use an out-of-tree project directory instead.)
 $(info Have a look at the documentation on how to do that)
 $(info $(col_rst))
-$(error aborted)
+$(error Cowardly refusing to go further)
 endif
 
 
