@@ -89,6 +89,9 @@ deploy-%: build
 	@echo "Your Antares firmware is now deployed"
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy post
 
+tags:
+	$(SILENT_TAGS)etags `find $(TOPDIR) $(ANTARES_DIR)/ -name "*.c" -o -name "*.cpp" -o -name "*.h"|grep -v kconfig`
+
 
 #Help needs a dedicated rule, so that it won't invoke build as it normally does
 deploy-help:

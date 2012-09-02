@@ -64,6 +64,7 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_PARSE    = @echo '  $(tb_cyn)[PARSE]$(col_rst)    '
    SILENT_OBJCOPY  = @echo '  $(tb_blu)[OBJCOPY]$(col_rst)  ' $(@F);
    SILENT_BISON    = @echo '  $(tb_pur)[BISON]$(col_rst)    ' $(@F);
+   SILENT_TAGS     = @echo '  $(tb_pur)[TAGS]$(col_rst)     ' Generating TAGS file ;
    SILENT_FLEX     = @echo '  $(tb_pur)[FLEX]$(col_rst)     ' $(@F);
    SILENT_CLEAN    = @echo '  $(tb_pur)[CLEAN]$(col_rst)    ' cleaning up build directory and temporary files;
    SILENT_MRPROPER = @echo '  $(tb_pur)[MRPROPER]$(col_rst) ' purging everything;
