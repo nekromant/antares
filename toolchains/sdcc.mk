@@ -36,12 +36,12 @@ export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
 builtin:
 	$(SILENT_INFO) Building antares library code and startup
 	$(Q) mkdir -p $(OBJDIR)/build/app
-	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
-	-C $(ANTARES_DIR)/src \
+	$(Q) $(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
+	-C $(OBJDIR)/build \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 	$(SILENT_INFO) Building application code
-	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
-	-C $(TOPDIR)/$(project_sources) \
+	$(Q) $(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
+	-C $(abspath $(OBJDIR)/build/app) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
 

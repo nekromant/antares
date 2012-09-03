@@ -17,7 +17,6 @@ O=o
 
 COMPILER_TOOLS=CC="$(CC)" CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
 
-
 GENDEPFLAGS = -MD -MP -MF $$(@).d
 
 CFLAGS+=$(call unquote,$(CONFIG_CFLAGS)) -include $(TOPDIR)/include/generated/autoconf.h
@@ -101,7 +100,7 @@ builtin:
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 	$(SILENT_INFO) Building application code
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
-	-C $(TOPDIR)/$(project_sources) \
+	-C $(abspath $(OBJDIR)/build/app) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
 ifneq ($(LD_NO_COMBINE),y)

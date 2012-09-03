@@ -31,37 +31,36 @@ clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 PHONY:= build clean 
 
 %/built-in.$(O): $(TOPDIR)/include/generated/autoconf.h
-	$(eval PHONY+=$*/built-in.$(O))
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
-	$(Q)mkdir -p $*
-	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
+	$(eval PHONY+=$(NEXT)/built-in.$(O))
+	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
+	$(Q)cd $(OBJDIR) && $(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
 	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
-	-C $* \
+	-C $(OBJDIR)/$(NEXT) \
 	-f $(ANTARES_DIR)/make/Makefile.build -r build	
 
-$(OBJDIR)/%.$(O): $(SRCDIR)/%.c 
+%.$(O): $(SRCDIR)/%.c 
 	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
-$(OBJDIR)/%.$(O): $(SRCDIR)/%.S 
+%.$(O): $(SRCDIR)/%.S 
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $<
 
-$(OBJDIR)/%.$(O): $(SRCDIR)/%.s 
+%.$(O): $(SRCDIR)/%.s 
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
 
-build: $(OBJDIR)/built-in.$(O)
+build: built-in.$(O)
 
 ifneq ($(LD_NO_COMBINE),y)
 ifeq ($(objects-y),)
-$(OBJDIR)/built-in.$(O): $(gen-y)
+built-in.$(O): $(gen-y)
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 else
-$(OBJDIR)/built-in.$(O): $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
+built-in.$(O): $(gen-y) $(objects-y)
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
 else
-$(OBJDIR)/built-in.$(O): $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
-# 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
+built-in.$(O): $(gen-y) $(objects-y)
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif
 
