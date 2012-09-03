@@ -57,12 +57,19 @@ ifeq ($(CONFIG_TOOLCHAIN_GCC),y)
 include $(ANTARES_DIR)/toolchains/gcc.mk
 endif
 
+ifeq ($(CONFIG_TOOLCHAIN_SDCC),y)
+include $(ANTARES_DIR)/toolchains/sdcc.mk
+endif
+
+
 include $(ANTARES_DIR)/make/Makefile.collect
 
 -include src/arch/$(ARCH)/arch.mk
 
 include $(ANTARES_DIR)/kconfig/kconfig.mk
 
+# For compiler portability
+export O
 
 .SUFFIXES:
 

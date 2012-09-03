@@ -11,10 +11,11 @@ include $(SRCDIR)/Makefile
 
 
 RELPATH = $(patsubst $(ANTARES_DIR)/%,%,$(SRCDIR))
-
-objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
-PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
-clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
+#For retarded sdcc cases
+objects-y:=$(patsubst %.o,%.$(O),$(objects-y))
+objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
+PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
+clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 
 #suck in dep files (if any)
 -include $(OBJDIR)/*.d
@@ -27,11 +28,10 @@ clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.o)
 # $(info ====> $(CFLAGS))
 # $(info $(sources-y))
 
-
 PHONY:= build clean 
 
-%/built-in.o: $(TOPDIR)/include/generated/autoconf.h
-	$(eval PHONY+=$*/built-in.o)
+%/built-in.$(O): $(TOPDIR)/include/generated/autoconf.h
+	$(eval PHONY+=$*/built-in.$(O))
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
 	$(Q)mkdir -p $*
 	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
@@ -39,32 +39,32 @@ PHONY:= build clean
 	-C $* \
 	-f $(ANTARES_DIR)/make/Makefile.build -r build	
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c 
+$(OBJDIR)/%.$(O): $(SRCDIR)/%.c 
 	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.S 
+$(OBJDIR)/%.$(O): $(SRCDIR)/%.S 
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $<
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.s 
+$(OBJDIR)/%.$(O): $(SRCDIR)/%.s 
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
 
-build: $(OBJDIR)/built-in.o
+build: $(OBJDIR)/built-in.$(O)
 
 ifneq ($(LD_NO_COMBINE),y)
 ifeq ($(objects-y),)
-$(OBJDIR)/built-in.o: $(gen-y)
+$(OBJDIR)/built-in.$(O): $(gen-y)
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 else
-$(OBJDIR)/built-in.o: $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
+$(OBJDIR)/built-in.$(O): $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
 else
-$(OBJDIR)/built-in.o: $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
+$(OBJDIR)/built-in.$(O): $(gen-y) $(addprefix $(OBJDIR)/,$(objects-y))
 # 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif
 
 
-.PHONY: $(PHONY) %/built-in.o
+.PHONY: $(PHONY) %/built-in.$(O)
 .PRECIOUS: $(build_objects)

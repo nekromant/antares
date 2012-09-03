@@ -2,9 +2,11 @@ choice
 prompt "Toolchain selection"
 
 config TOOLCHAIN_GCC
+depends on ARCH_AVR || ARCH_ARM || ARCH_MSP430
 bool "GCC-based toolchain"
 
 config TOOLCHAIN_SDCC
+depends on ARCH_8051
 bool "SDCC-based toolchain"
 
 endchoice
