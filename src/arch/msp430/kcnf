@@ -6,8 +6,3 @@ choice
   source "antares/src/arch/msp430/mcu_database.kcnf"
 
 endchoice
-
-
-config F_CPU
-int "Target CPU Frequency in Hz"
-    help
