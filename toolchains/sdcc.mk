@@ -19,7 +19,7 @@ LDFLAGS+=$(call unquote,$(CONFIG_SDCC_LDFLAGS))
 #TODO: Move this to subarch makefiles, and hook to kconfig
 COMMONFLAGS+=-mmcs51
 COMMONFLAGS+=--model-small
-COMMONFLAGS+=--code-loc 0x2000 --data-loc 0x30 --xram-loc 0x6000
+#COMMONFLAGS+=--code-loc 0x2000 --data-loc 0x30 --xram-loc 0x6000
 
 
 ASFLAGS+=$(call unquote,$(CONFIG_SDCC_ASFLAGS))

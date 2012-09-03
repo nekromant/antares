@@ -1,1 +1,7 @@
+choice
+prompt "Pick an MCU family"
+
+config 8051_STC
+bool "STC 8051 family"
+endchoice
 
