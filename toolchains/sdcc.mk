@@ -11,17 +11,18 @@ O=rel
 COMPILER_TOOLS=CC="$(CC)" CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
 
 
-#GENDEPFLAGS = -MD -MP -MF $$(@).d
+GENDEPFLAGS= -Wp "-MD -MP -MF $(OBJDIR)/$(@).d"
 
 #sdcc does NOT support -include directive. Bad
 
 CFLAGS+=$(call unquote,$(CONFIG_SDCC_CFLAGS))
-CFLAGS+=--model-small
-CFLAGS+=-mmcs51
+
+
 LDFLAGS+=$(call unquote,$(CONFIG_SDCC_LDFLAGS))
 
+#TODO: Move this to subarch makefiles, and hook to kconfig
+CFLAGS+=-mmcs51
 CFLAGS+=--model-small
-
 CFLAGS+=--code-loc 0x2000 --data-loc 0x30 --xram-loc 0x6000
 
 
@@ -30,7 +31,7 @@ ASFLAGS+=$(call unquote,$(CONFIG_SDCC_ASFLAGS))
 
 CFLAGS+=-I$(TOPDIR)/include -I$(ANTARES_DIR)/include
 ASFLAGS+=$(COMMONFLAGS) $(GENDEPFLAGS)
-CFLAGS+=$(COMMONFLAGS) $(GENDEPFLAGS)
+CFLAGS+=$(GENDEPFLAGS)
 
 export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS 

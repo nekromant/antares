@@ -19,6 +19,7 @@ src:=$(SRCDIR)/kconfig
 Kconfig:=$(SRCDIR)/kcnf
 KVersion:=$(ANTARES_DIR)/version.kcnf
 
+
 PHONY+=deftarget deploy build collectinfo clean
 MAKEFLAGS:=-r
 
