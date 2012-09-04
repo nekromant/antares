@@ -3,10 +3,9 @@ it is designed to be portable across a lot of MCU arches and
 adding another MCU is trivial. 
 I utilizes Kconfig from linux kernel, and a set of homebrew
 Makefiles, designed to easen the process. 
-Currently somewhat supported arches are:
-AVR ARM/STM32 MSP430
-This stuff is still pre-alpha quality, so if you want to
-give it a try - better drop me a line. DRAGONS AHEAD.
+Currently somewhat supported architecture and targts are:
+AVR ARM/STM32 MSP430 GBZ80
+This stuff is still pre-alpha quality, so if things don't work for you out of the box - drop me a line.
 
 Abstract.
 ---------
@@ -20,45 +19,47 @@ more time figuring out how to do that, then writing the code.
 While the above IDEs make it simpler to create some 'write&forget'
 projects fast, they suck when it comes to maintaining a lot of shared
 code between projects.   
+Things get even worse, when you face a problem, when your project has to support 2 different mcus with totally different 'conventional' IDEs/compilers. 
 The best way to manage a very configurable project with a lot of 
 library code is Kconfig as seen in linux kernel. Mostly because it
 handles dependencies of parameters and you won't eventually have a 
 huge mess in your config.h. 
+And the config can be used in Makefiles as well. 
+So, there we go. 
 
 Yet another arduino?
 --------------------
 It is not arduino. It doesn't aim to provide any crippled IDE
 for your projects. You are free to use whatever IDE/editor you
-like. VIM/emacs users welcome. Eclipse? You're welcome.  
+like. VIM/emacs users welcome. Eclipse? You're welcome. Kdevelop? Sure.  
 It doesn't make you think that you are writing in any 'innovative' 
-programming language, nor aims to provide an IDE. It;s mostly just 
+programming language, nor aims to provide an IDE. It's mostly just 
 plain C. Antares just handles configuring your project, building and 
-deploying. 
+deploying. Consider it an overgrown Makefile.
 Although antares comes with quite some library code, you are free
-to NOT use any of it. The choice is yours.
+to NOT use any of it. The choice is yours to make.
 
 So, in short antares is...
 --------------------------
-A set of Makefiles and a bunch of library code, that can be used 
+A set of Makefiles, scripts and a bunch of library code, that can be used 
 (and reused) in your projects, bundled with kconfig. 
 
 Supported architectures
 ------------------------
 Currently a few architectures are supported: 
-avr, msp430, arm(stm32), 8051
-(Or at least sheduled for 0.2 release, details when it comes out)
+avr, msp430, arm(stm32), 8051, gbz80
+Others are being added as the hardware comes along. 
 
 Supported operating systems
 ---------------------------
 Currently only Linux and FreeBSD have been tested. 
-Mac should (theoretically work) - if you have a second to run a quick
-test, please contact me and I will update this readme. 
-Windows *might* work, but it's currently NOT the platform antares is 
-targeted for.
+Mac should (theoretically) work - if you have a second to run a quick
+test, please contact me and I will update this README. (Or fix a bug or two) 
+Windows *might* work (cygwin), but it's currently NOT the platform antares is aimed to be used at.
 
 Is antares buildsystem okay to compile in multiple threads?
 -----------------------------------------------------------
-Absolutely. Feel free to supply the -jXX flag to speed things up. 
+Feel free to supply the -jXX flag to speed things up. It should work. If it doesn't - submit a bug report. 
 
 Any documentation?
 ------------------
@@ -78,3 +79,9 @@ Quickstart?
 
 Have a look here: 
 http://antares.ncrmnt.org/thebuggenie/wiki/Getting_Started_Quick_And_Dirty
+
+Who?
+----
+Andrew 'Necromant' Andrianov - Initial author of Antares, curently maintain most of the code. 
+Nikita 'webconn' Maslov - Testing, aproj wizard, bugfixing.
+Dmitry Suhotsky - Testing, occasional bugfixing.  
