@@ -1,7 +1,10 @@
+if ARCH_8051
+
 choice
 prompt "Pick an MCU family"
 
-config 8051_STC
+config ARCH_8051_STC
 bool "STC 8051 family"
 endchoice
 
+endif
