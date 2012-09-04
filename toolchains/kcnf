@@ -1,12 +1,17 @@
+config SHOW_ALL_TOOLCHAINS
+bool "Show all toolchains"
+
+#TODO: clang-llvm here
+
 choice 
 prompt "Toolchain selection"
 
 config TOOLCHAIN_GCC
-depends on ARCH_AVR || ARCH_ARM || ARCH_MSP430
+depends on SHOW_ALL_TOOLCHAINS || ARCH_AVR || ARCH_ARM || ARCH_MSP430
 bool "GCC-based toolchain"
 
 config TOOLCHAIN_SDCC
-depends on ARCH_8051
+depends on ARCH_8051 || ARCH_GBZ80 || SHOW_ALL_TOOLCHAINS
 bool "SDCC-based toolchain"
 
 endchoice

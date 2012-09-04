@@ -17,8 +17,6 @@ CFLAGS+=$(call unquote,$(CONFIG_SDCC_CFLAGS))
 LDFLAGS+=$(call unquote,$(CONFIG_SDCC_LDFLAGS))
 
 #TODO: Move this to subarch makefiles, and hook to kconfig
-COMMONFLAGS+=-mmcs51
-COMMONFLAGS+=--model-small
 #COMMONFLAGS+=--code-loc 0x2000 --data-loc 0x30 --xram-loc 0x6000
 
 
@@ -32,6 +30,9 @@ LDFLAGS+=$(COMMONFLAGS)
 
 export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS 
+
+
+#We now need to parse opts from kconfig
 
 builtin:
 	$(SILENT_INFO) Building antares library code and startup
@@ -49,6 +50,5 @@ $(IMAGENAME).ihx: builtin
 	$(SILENT_LD) $(CC) $(LDFLAGS) -o $(@) \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.rel` \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.rel`
-
 
 PHONY+=builtin
