@@ -1,8 +1,8 @@
-
+if ARCH_MSP430
 choice
 
-  depends on ARCH_MSP430
   prompt "Select MCU variant"
   source "antares/src/arch/msp430/mcu_database.kcnf"
 
 endchoice
+endif
