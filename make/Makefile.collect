@@ -38,13 +38,14 @@ endef
 
 
 #TODO: Current generation method looks like smoking crap
-#TODO: May be we need something better later 
+#TODO: Maybe we need something better later 
 
 ifeq ($(PROJECT_SHIPS_ARCH),y)
 $(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,mk, "=" >))
 $(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,kcnf,>))
 $(eval $(call unify_kcnf,arch,$(TOPDIR),src/arch,.))
 else
+
 #Architectures in-tree
 $(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,mk, "=" >))
 $(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,kcnf,>))

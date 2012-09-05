@@ -92,15 +92,16 @@ export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS 
 
 builtin:
-	$(SILENT_INFO) Building antares library code and startup
 	$(Q) mkdir -p $(OBJDIR)/build/app
-	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
-	-C $(ANTARES_DIR)/src \
-	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 	$(SILENT_INFO) Building application code
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
 	-C $(abspath $(OBJDIR)/build/app) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
+	$(SILENT_INFO) Building antares library code and startup
+	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
+	-C $(abspath $(TOPDIR)/build) \
+	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
+
 
 ifneq ($(LD_NO_COMBINE),y)
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
