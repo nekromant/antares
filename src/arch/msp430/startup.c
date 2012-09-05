@@ -1,4 +1,5 @@
 #include <arch/antares.h>
+#include <intrinsics.h>
 
 ANTARES_INIT_LOW(antares_low_init)
 {
@@ -9,7 +10,7 @@ ANTARES_INIT_LOW(antares_low_init)
 /* The first thing we do is: Turn on interrupts. */
 ANTARES_INIT_HIGH(antares_high_init)
 {
-    /* TODO: Enable interrupts */
+        __eint();
 }
 
 /* This is a dummy app, so that we can call it from main, to start the loop
