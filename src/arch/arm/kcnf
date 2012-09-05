@@ -3,6 +3,7 @@ choice
 	prompt "MCU variant"
 	config MCU_STM32
 	bool "STM32"
+	select NEED_GENERATE
 endchoice
 
 

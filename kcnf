@@ -1,8 +1,5 @@
 mainmenu "Antares Firmware Config"
 
-config NEED_GENERATE
-bool
-
 menu "Target platform settings"
 	choice
 	prompt "Target architecture"
@@ -76,6 +73,13 @@ menu "Build System Tweaks"
   help
    Directory to store output images, elfs
    disassembly and such stuff
+
+  config NEED_GENERATE
+  bool "Do code-generation pass"
+  help
+   Autoselected by stuff that needs it.
+   If your project needs code generation BEFORE
+   actual build (gen-y) tick it
    
   config BUILD_VERBOSE
   bool "Verbose build"

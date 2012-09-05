@@ -31,7 +31,7 @@ PHONY:= build clean generate .genned
 .genned: $(gen-y)
 	$(Q) touch $(@)
 
-%/.genned: 
+%/.genned: $(TOPDIR)/include/generated/autoconf.h
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
 	$(eval PHONY+=$(NEXT)/built-in.$(O))
 	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
