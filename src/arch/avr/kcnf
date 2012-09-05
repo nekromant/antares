@@ -21,6 +21,20 @@ config AVR_BLDADDR
 depends on AVR_BLDR
 hex "Bootloader address"
 
+choice 
+prompt "vfprintf implementation"
+
+config AVR_VFPRINTF_NONE
+bool "none/default"
+
+config AVR_VFPRINTF_MIN
+bool "minimal"
+
+config AVR_VFPRINTF_FULL
+bool "full"
+
+endchoice
+
 
 endif
 

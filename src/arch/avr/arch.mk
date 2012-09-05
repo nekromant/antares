@@ -24,8 +24,16 @@ ELFFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 ifeq ($(CONFIG_AVR_BLDR),y)
 ELFFLAGS+=-Wl,--section-start=.text=$(CONFIG_AVR_BLDADDR)
 CFLAGS+=-fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions -Wl,--section-start=.text=1800
-
 endif
+
+ifeq ($(CONFIG_AVR_VFPRINTF_MIN),y)
+ELFFLAGS+= -Wl,-u,vfprintf -lprintf_min
+endif
+
+ifeq ($(CONFIG_AVR_VFPRINTF_FULL),y)
+ELFFLAGS+= -Wl,-u,vfprintf -lprintf_flt -lm
+endif
+
 
 HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 HEX_EEPROM_FLAGS = -j .eeprom
