@@ -1,0 +1,20 @@
+This project is no way perfect, and there are quite a few BUGS, 
+that still need to be adressed. 
+
+* Buildsystem: The current set of Makefiles is way TOO hacky in 
+  places and looks as if it was coded by "an undergrad on exess 
+  coffeine" (c) Alan Cox. This should be dealt with. For now - 
+  it works, so let it be. 
+
+* Library code. We need MOAR library code. It should be opensource
+  and PORTABLE (e.g. SDCC and GCC at the very least). Some arches, 
+  like STM32 supply a whole set of library code, but that can be 
+  only used only for that MCUs. Using it for anything else is 
+  unethical at the very least, and breaks the license. (In case of 
+  stellarisware).
+
+* Testing framework. We need a set of tests for the library code, 
+  that can be used to test for regressions. 
+
+* CLANG support. People are hypnotised by this word. We should try 
+  it sometime.
