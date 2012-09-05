@@ -1,5 +1,8 @@
 mainmenu "Antares Firmware Config"
 
+config NEED_GENERATE
+bool
+
 menu "Target platform settings"
 	choice
 	prompt "Target architecture"

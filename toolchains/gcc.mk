@@ -93,6 +93,15 @@ export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
 
 builtin:
 	$(Q) mkdir -p $(OBJDIR)/build/app
+ifeq ($(CONFIG_NEED_GENERATE),y)
+	$(SILENT_INFO) Generating required headers
+	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
+	-C $(abspath $(OBJDIR)/build/app) \
+	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r generate
+	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
+	-C $(abspath $(TOPDIR)/build) \
+	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r generate
+endif
 	$(SILENT_INFO) Building application code
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build/app) SRCDIR=$(TOPDIR)/$(project_sources) \
 	-C $(abspath $(OBJDIR)/build/app) \

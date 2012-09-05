@@ -1,6 +1,7 @@
 menuconfig CONTRIB_VUSB
 bool "VUSB Stack"
 depends on ARCH_AVR
+select NEED_GENERATE
 
 if CONTRIB_VUSB
 

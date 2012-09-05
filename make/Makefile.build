@@ -14,6 +14,7 @@ RELPATH = $(patsubst $(ANTARES_DIR)/%,%,$(SRCDIR))
 #For retarded sdcc cases
 objects-y:=$(patsubst %.o,%.$(O),$(objects-y))
 objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
+gen-y+=$(foreach dir,$(subdirs-y),$(dir)/.genned)
 PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 
@@ -25,16 +26,25 @@ clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 # sources-y:=$(addprefix $(SRCDIR)/,$(objects-y))
 # objects-y:=$(addprefix $(OBJDIR)/,$(objects-y))
 
-# $(info ====> $(CFLAGS))
-# $(info $(sources-y))
+PHONY:= build clean generate .genned
 
-PHONY:= build clean 
+.genned: $(gen-y)
+	$(Q) touch $(@)
+
+%/.genned: 
+	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
+	$(eval PHONY+=$(NEXT)/built-in.$(O))
+	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
+	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
+	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
+	-C $(OBJDIR)/$(NEXT) \
+	-f $(ANTARES_DIR)/make/Makefile.build -r generate	
 
 %/built-in.$(O): $(TOPDIR)/include/generated/autoconf.h
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
 	$(eval PHONY+=$(NEXT)/built-in.$(O))
 	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
-	$(Q)cd $(OBJDIR) && $(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
+	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
 	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
 	-C $(OBJDIR)/$(NEXT) \
 	-f $(ANTARES_DIR)/make/Makefile.build -r build	
@@ -48,19 +58,20 @@ PHONY:= build clean
 %.$(O): $(SRCDIR)/%.s 
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
-
 build: built-in.$(O)
+
+generate: .genned
 
 ifneq ($(LD_NO_COMBINE),y)
 ifeq ($(objects-y),)
-built-in.$(O): $(gen-y)
+built-in.$(O): 
 	$(SILENT_AR) $(AR) c$(ARFLAGS) $@
 else
-built-in.$(O): $(gen-y) $(objects-y)
+built-in.$(O): $(objects-y)
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
 else
-built-in.$(O): $(gen-y) $(objects-y)
+built-in.$(O): $(objects-y)
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif
 
