@@ -7,6 +7,7 @@
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
 
 
+#ifdef CONFIG_ANTARES_STARTUP
 //In case of avr we use .initX sections for low and high init functions
 //APPS are called one by one in the main()
 #define ANTARES_INIT_LOW(fn) \
@@ -25,5 +26,15 @@ __attribute__((__section__(".init8"))) void fn(void)
 #define ANTARES_FINISH(fn) \
   __attribute__((naked))\
 __attribute__((__section__(".fini0"))) void fn(void)
+
+#else
+
+#define ANTARES_APP(fn) void fn()
+#define ANTARES_INIT_LOW(fn) void fn()
+#define ANTARES_INIT_HIGH(fn) void fn()	      
+#define ANTARES_FINISH(fn) void fn()
+
+#endif
+
 
 #endif
