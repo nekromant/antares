@@ -1,4 +1,4 @@
-/* Converted from original STC's include file via keil2sdcc.pl
+/* Converted from original STC's include file via keil2sdcc.pl */
 
 //--------------------------------------------------------------------------------
 //新一代 1T 8051系列 单片机内核特殊功能寄存器 C51 Core SFRs
