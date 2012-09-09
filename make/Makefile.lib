@@ -74,6 +74,7 @@ ifneq ($(CONFIG_BUILD_VERBOSE),y)
    SILENT_DISAS    = @echo '  $(tb_blu)[DISAS]$(col_rst)    ' $(@:$(BUILD_DIR)/%.bin=%);
    SILENT_OBJDUMP  = @echo '  $(tb_blu)[OBJDUMP]$(col_rst)  ' $(OBJDUMP);
    SILENT_HOSTCC   = @echo '  $(tb_ylw)[HOSTCC]$(col_rst)   ' $(@:$(BUILD_DIR)/%.o=%.c);
+SILENT_HEX2BIN   = @echo '  $(tb_pur)[HEX2BIN]$(col_rst)   ' $(@);
 
    #Shut up this crap
    MAKEFLAGS+=--no-print-directory
