@@ -25,8 +25,6 @@ LDFLAGS+=$(call unquote,$(CONFIG_LDFLAGS))
 
 ASFLAGS+=$(call unquote,$(CONFIG_ASFLAGS))
 
-
-
 #FixMe: Hack
 ASFLAGS+=$(CFLAGS)
 OBJCOPYFLAGS+=-Obinary
@@ -110,7 +108,6 @@ endif
 	$(Q)$(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \
 	-C $(abspath $(TOPDIR)/build) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
-
 
 ifneq ($(LD_NO_COMBINE),y)
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin

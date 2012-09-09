@@ -91,14 +91,3 @@ $(foreach dir, $(subdirs),$(eval include $(dir)Makefile) $(call includedir,$(dir
 endef
 
 check_root=$(if $(1),sudo,)
-
-# 
-# 
-# $(info ==> $(CFLAGS))
-
-
-# -include $(TMPDIR)/arch.mk
-
-# $(info ~==>1 $(CFLAGS))
-# IF U ARE PORTING TO A NEW TOOLCHAIN, THIS IS WHAT YOU ARE SEARCHING FOR
-# PLACE your toolchain name here
