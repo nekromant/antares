@@ -1,0 +1,12 @@
+menuconfig DEPLOY_DFU-PROGRAMMER
+bool "dfu-programmer"
+depends on ARCH_8051_AT89
+
+if DEPLOY_DFU-PROGRAMMER
+
+choice 
+prompt "Target device"
+source "antares/deploy/dfu-programmer/proglist.kcnf"
+endchoice
+
+endif
