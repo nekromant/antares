@@ -1,8 +1,8 @@
-menuconfig DEPLOY_DFU-PROGRAMMER
+menuconfig DEPLOY_DFU_PROGRAMMER
 bool "dfu-programmer"
 depends on ARCH_8051_AT89
 
-if DEPLOY_DFU-PROGRAMMER
+if DEPLOY_DFU_PROGRAMMER
 
 choice 
 prompt "Target device"

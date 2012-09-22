@@ -21,7 +21,7 @@ gen_mk()
 echo "# Automatically generated. Not recommended to edit"
 while read lnn; do
 for ln in $lnn; do
-up=`echo $ln | tr [:lower:] [:upper:]`
+up=`echo $ln | tr [:lower:] [:upper:]|sed 's/-/_/g'`
 echo "ifeq (\$(CONFIG_${tag}_${up}),y)"
 echo "${tag}$*$ln"
 echo "endif"
@@ -35,7 +35,7 @@ gen_kcnf()
 echo "# Automatically generated. Not recommended to edit" 
 while read lnn; do
 for ln in $lnn; do
-up=`echo $ln | tr [:lower:] [:upper:]`
+up=`echo $ln | tr [:lower:] [:upper:]|sed 's/-/_/g'`
 echo "config ${tag}_${up}" 
 echo "bool \"$ln\"" 
 done
