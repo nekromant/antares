@@ -5,6 +5,10 @@ prompt "Pick an MCU family"
 
 config ARCH_8051_STC
 bool "STC 8051 family"
+
+config ARCH_8051_AT89
+bool "Atmel AT89 family"
+
 endchoice
 
 endif
