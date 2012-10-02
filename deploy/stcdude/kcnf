@@ -1,0 +1,28 @@
+menuconfig DEPLOY_STCDUDE
+bool "stcdude"
+depends on ARCH_8051_STC
+
+  if DEPLOY_STCDUDE
+
+  config DEPLOY_STCDUDE_BAUDLOW
+  int "Handshake baudrate"
+  default 1200
+
+  config DEPLOY_STCDUDE_BAUDHIGH
+  int "Upload baudrate"
+  default 57600
+
+
+  config DEPLOY_STCDUDE_PORT
+  string "Serial port to use"
+
+  config DEPLOY_STCDUDE_COMMANDLINE
+  string "avrdude additional commandline (read help)"
+  help
+    Filename and ops will be autofilled. 
+    Anything not related to filename and MCU should go in here
+
+  endif	     
+
+
+
