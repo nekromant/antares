@@ -3,8 +3,6 @@ It is designed to be portable across a lot of MCUs and adding another
 MCU is trivial. 
 I uses Kconfig as seen in linux kernel and a set of homebrew Makefiles
 designed to easen the development process. 
-Currently somewhat supported architectures and targets are:
-AVR, ARM(STM32), MSP430, 8051(STC)
 This stuff is still pre-alpha quality, so if things don't work for you
 out of the box - drop me a line.
 
@@ -49,7 +47,7 @@ used (and reused) in your projects, bundled with kconfig.
 Supported architectures
 ------------------------
 Currently a few architectures are supported: 
-avr, msp430, arm(stm32), 8051 (stc)
+avr, msp430, arm(stm32), 8051 (at89, stc)
 Others are being added as the hardware comes along. 
 If you want more - patches are always welcome.
 
