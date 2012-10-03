@@ -22,6 +22,10 @@ endmenu
 
 
 menu "Libraries and drivers"
+
+config SHOW_BROKEN
+bool "Show broken, incomplete and experimental stuff"
+
 source "antares/src/lib/kcnf"
 endmenu
 
