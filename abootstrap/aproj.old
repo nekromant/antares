@@ -1,0 +1,435 @@
+#!/bin/bash
+
+# Antares uC build system
+# Script for init Antares system in one of the user's dirs
+# Supports interactive and classic modes of operation
+#
+# Author: Maslov Nikita aka WebConn
+# Date: July 2012
+
+yes=1
+no=2
+na=3
+
+antaresdirs="/opt/antares /usr/local/share/antares /usr/share/antares ~/.antares"
+
+# Stage 0. Print header
+cecho()
+{
+    message=$1
+    color=$2
+    attrs=${3:-""}
+
+    echo -en $color
+    echo $attrs $message
+    tput sgr0
+    return
+}
+
+red='\E[31m'
+green='\E[32m'
+yellow='\E[33m'
+blue='\E[34m'
+magenta='\E[35m'
+cyan='\E[36m'
+
+# Stage 0. System variables
+
+ANTARES_VERSION="0.2 Azra"
+ANTARES_COMMIT="xxxxxx"
+ANTARES_STATUS="alpha"
+
+# Stage 1. Show intro text
+
+echo 
+cecho "---------------------" $red
+cecho "Antares uC build system" $yellow
+echo
+cecho 'Version:' $yellow "-n"; echo -n \ ; cecho " $ANTARES_VERSION (status: $ANTARES_STATUS)" $red
+cecho 'Git commit:' $yellow "-n"; echo -n \ ; cecho " $ANTARES_COMMIT" $red
+cecho "---------------------" $red
+tput sgr0
+echo 
+
+# End of header
+
+IFS=" "
+
+arg_echo()
+
+{
+    echo -ne "\t"
+    echo -n "$1"
+    echo -ne $3
+    echo "$2"
+    return
+}
+
+list_configs()
+
+{
+    exit 0
+    return
+}
+
+debug()
+{
+    if [[ $ARG_VERBOSE == "y" ]]; then
+        cecho "[debug] $1" $yellow 
+    fi
+    return
+}
+
+getanswr()
+{
+    echo -n "$1 [Y/n/q]"
+    echo -ne " "
+    read -n 1 answ
+    case $answ in
+        "Y" | "y" | "yes" ) return $yes ;;
+        "N" | "n" | "no" ) return $no ;;
+        "q" | "Q" ) exit 0 ;;
+        * ) return $na ;;
+    esac
+}
+
+question()
+{
+    getanswr "$1"
+    ret=$?
+    while [[ $ret = $na ]]; do
+        echo
+        echo "Wrong answer: must be Y or n"
+        getanswr "$1"
+        ret=$?
+    done
+    echo
+    return $ret
+}
+
+show_help()
+{
+    echo "aproj is a tool to init Antares environment in your project directory."
+    echo "Usage: (interactive mode)"
+    echo -e "\taproj [-d dir]"
+    echo
+    echo "Usage: (automatic mode)"
+    echo -e "\t aproj -n [args]"
+    echo
+    echo "Command line arguments:"
+    echo
+    arg_echo "-h, --help" "Show this message" "\t\t"
+    arg_echo "-n, --no-interactive" "Run this wizard in automatic mode (for geeks and scripts :))" "\t"
+    echo
+    arg_echo "-d, --dir [dir]" "Set Antares installation directory" "\t\t"
+    arg_echo "-l, --list-configs" "Show list of config templates in Antares" "\t"
+    arg_echo "-r, --new-repo" "Create new Git repository in project directory" "\t\t"
+    arg_echo "-a, --attach-repo" "Attach Antares to your project's Git repository" "\t"
+    arg_echo "-c, --config [file]" "Add config template [file] to the project (from list)" "\t"
+    arg_echo "    --cleanup" "Remove Antares environment from this dir" "\t\t"
+    arg_echo "-v, --verbose" "Show debugging output" "\t\t"
+    echo
+    echo "If you use Antares for a first time, you should run this command in interactive mode to learn how to use Antares:"
+    echo -e "\taproj"
+    echo
+    echo "Another help you can find in Antares documentation"
+    exit 0
+    return
+}
+
+cleanup()
+{
+    question "Do you really want to remove Antares from your project?"
+    if [[ $? = $yes ]]; then
+        debug "Removing files: Makefile, kcnf, .antares"
+        rm -rf Makefile kcnf antares tmp kconfig build include lex.backup images
+        question "Do you want to remove your .config file?"
+        if [[ $? = $yes ]]; then
+            debug "Removing .config file"
+            rm .config*
+        else
+            debug "Saving .config file"
+            cp .config antares.config
+            echo "Your Antares' config file copy is in: antares.config"
+        fi
+    fi
+    exit 0
+}
+
+get_antares_dir()
+{
+    echo -ne "Type path to Antares installation directory and press Enter: "
+    read dir
+    if [[ -d $dir ]]; then
+        export ANTARES_INSTALL_DIR=$dir
+    else
+        echo "It is not a directory"
+    fi
+}
+
+
+
+antares_dir()
+{
+if [[ -z $ANTARES_INSTALL_DIR ]]; then
+
+    
+    for dir in $antaresdirs; do
+        debug "Checking path $dir"
+        if [[ -d $dir ]]; then
+            export ANTARES_INSTALL_DIR="$dir"
+            
+            echo -ne "Looking for Antares installation directory... "
+            echo "found in $dir"
+            
+            break
+        fi
+    done
+
+    if [[ -z $ANTARES_INSTALL_DIR ]]; then
+        
+        echo -ne "Looking for Antares installation directory... "
+        echo "not found!"
+        echo
+        while [[ -z $ANTARES_INSTALL_DIR ]]; do
+            get_antares_dir
+        done
+    fi
+
+else
+    if [[ -d $ANTARES_INSTALL_DIR ]]; then
+        echo "Defined Antares installation directory: $ANTARES_INSTALL_DIR"
+    else
+        export ANTARES_INSTALL_DIR=""
+        echo "Defined path to Antares directory is not correct."
+        echo
+        while [[ -z $ANTARES_INSTALL_DIR ]]; do
+            get_antares_dir
+        done
+    fi
+fi
+
+debug "Set Antares installation directory path: $ANTARES_INSTALL_DIR"
+}
+
+declare -i i
+i=2
+
+# Stage 0. Parse command line arguments
+
+for arg in $@; do
+
+    if [[ "${arg:0:1}" == "-" ]]; then
+        
+        case "${arg:1:1}" in
+
+            "l" ) list_configs ;;
+            "h" ) show_help ;;
+            "d" ) ARG_DIR=""; ARG_ADD=ARG_DIR ;;
+            "r" ) ARG_NEW_REPO="y" ;;
+            "a" ) ARG_CONNECT_REPO="y" ;;
+            "c" ) ARG_ADD=""; ARG_ADD=ARG_CONFIG_FILE ;;
+            "n" ) ARG_NO_INTERACTIVE="y" ;;
+            "v" ) ARG_VERBOSE="y" ;;
+
+            "-" )
+
+                case "${arg:2}" in
+                    
+                    "help" ) show_help ;;
+                    "list-configs" ) list_configs ;;
+                    "dir" ) export ANTARES_INSTALL_DIR=${@:$i:1}; i+=2 ;;
+                    "new-repo" ) ARG_NEW_REPO="y" ;;
+                    "attach-repo" ) ARG_CONNECT_REPO="y" ;;
+                    "config" ) ARG_CONFIG_FILE=${@:$i:1}; i+=2 ;;
+                    "no-interactive" ) ARG_NO_INTERACTIVE="y" ;;
+                    "verbose" ) ARG_VERBOSE="y" ;;
+                    "cleanup" ) cleanup ;;
+
+                esac
+            ;;
+
+        esac
+        
+    else
+        eval $ARG_ADD=$arg
+    fi
+
+done
+
+if [[ -n "$ARG_DIR" ]]; then
+    export ANTARES_INSTALL_DIR=$ARG_DIR
+fi
+
+# Stage 1. Run manual or interactive mode??
+
+if [[ $ARG_NO_INTERACTIVE = "y" ]]; then
+    
+
+
+# Stage 2 (manual mode) Looking for Antares directory
+
+antares_dir
+# Stage 2.5 (manual mode). Are you sure, that this directory is really with Antares??? (TODO)
+
+# Stage 3 (manual mode). Attach config if required
+
+if [[ -n $ARG_CONFIG_FILE ]]; then
+    if [[ -f $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE ]]; then
+        debug "Config file $ARG_CONFIG_FILE found"
+        cp $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE .config
+    else
+        question "Config file $ARG_CONFIG_FILE not found! Do you want to select another?"
+        if [[ $? -eq $yes ]]; then
+            echo -e "\n"
+            echo "Type the number of config you want to use and press Enter:"
+            echo
+            IFS=", "
+            select conf in `ls -m $ANTARES_INSTALL_DIR/defconfigs`; do
+                ARG_CONFIG_FILE=$conf
+                break
+            done
+            cp $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE .config
+        else
+            debug "Your config file is empty"
+            touch .config
+            ARG_CONFIG_FILE=""
+        fi
+    fi
+else
+    debug "Your config file is empty"
+    touch .config
+fi
+
+# Stage 4. Init Antares in this directory
+
+debug "Initialising Antares in this directory"
+
+# TODO: Make it more friendly
+cp $ANTARES_INSTALL_DIR/abootstrap/template/* . -Rf
+make -s antares
+
+# Stage 5. Actions with repositories
+
+if [[ -e "/usr/bin/git" || -e "/usr/local/bin/git" ]]; then # TODO: Add manual git setting feature
+
+if [[ $ARG_CONNECT_REPO == "y" ]]; then
+    debug "Antares files added to .gitignore of your project"
+    cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
+elif [[ $ARG_NEW_REPO == "y" ]]; then
+    debug "Creating new Git repository in this directory"
+    git init .
+    cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
+fi
+
+else
+
+if [[ $ARG_CONNECT_REPO == "y" || $ARG_NEW_REPO == "y" ]]; then
+    echo "Looks like there's no Git installed on this machine..."
+fi
+
+fi
+
+# Stage 6. PROFIT!!!
+echo "Antares initialisation completed. Have fun! :)"
+echo
+
+exit 0
+
+else
+
+# INTERACTIVE MODE COMES HERE
+
+# Stage 1. Looking for Antares direcory
+
+echo
+cecho "Stage 1. Looking for Antares installation directory" $magenta
+echo
+
+antares_dir
+
+# Stage 2. Attaching .config file
+
+echo 
+cecho "Stage 2. Configuration file" $magenta
+echo
+
+echo
+echo "You should select the config file template for your project"
+echo 
+echo "Config file (.config) is a file that contains properties of your project"
+echo "(for example, platform configuration, attached software libraries, etc.)"
+echo "You can edit this file by using command \"make menuconfig\" in your project root directory"
+echo "Now you can use one of the templates created by Antares' authors"
+echo
+
+question "Do you want to use config file template?"
+if [[ $? = $yes ]]; then
+    IFS=", "
+    echo
+    echo "Select one of the templates, type its number and press Enter:"
+    select conf in `ls -m $ANTARES_INSTALL_DIR/defconfigs`; do
+        ARG_CONFIG_FILE=$conf
+        break
+    done
+    cp $ANTARES_INSTALL_DIR/defconfigs/$ARG_CONFIG_FILE .config
+else
+    touch .config
+    debug "Your config file is empty"
+fi
+
+# Stage 3. Working with repositories
+
+echo
+cecho "Stage 3. Git repository of your project" $magenta
+echo
+
+if [[ -d .git ]]; then # if Git repository found in this dir
+    echo "Looks like you have Git repository in your project"
+    echo
+    question "Do you want Antares to add its files to .gitignore?"
+    if [[ $? = $yes ]]; then
+        debug "Copying Antares ignore file to your .gitignore"
+        cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
+    else
+        debug "Warning! Antares didn't add something in your .gitignore"
+    fi
+else # if there's no Git repository
+    echo "Looks like you have not Git repository in your project"
+    echo
+    question "Do you want Antares to create Git repository?"
+    if [[ $? = $yes ]]; then
+        debug "Creating Git repository"
+        git init .
+        question "Add Antares files to .gitignore (recommended)?"
+        if [[ $? = $yes ]]; then
+            debug "Copying Antares ignore file to your .gitignore"
+            cat $ANTARES_INSTALL_DIR/abootstrap/gitignores >> .gitignore
+        else
+            debug "Warning! Antares did't add something in your .gitignore"
+        fi
+    else
+        debug "Git repository wasn't created"
+    fi
+fi
+
+# Stage 4. Creating Antares environment
+
+echo
+cecho "Stage 4. Creating Antares environment"
+echo
+
+# TODO: Make it more friendly
+cp $ANTARES_INSTALL_DIR/abootstrap/template/* . -Rf
+make -s antares
+
+echo "Antares environment created."
+echo
+echo "If you want to remove Antares environment, run \"aproj --cleanup\" in this directory."
+echo "To start working with Antares, run \"make menuconfig\" in this directory and make changes in your config file."
+echo "Have fun! :)"
+echo
+
+exit 0
+
+fi

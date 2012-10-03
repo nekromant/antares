@@ -1,1 +1,0 @@
-objects-y+=test.o

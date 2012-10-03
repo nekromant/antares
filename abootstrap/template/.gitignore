@@ -1,7 +1,0 @@
-*~
-include/generated/*
-tmp/*
-images/*
-*.o
-kconfig/*
-kconfig/lxdialog/*
