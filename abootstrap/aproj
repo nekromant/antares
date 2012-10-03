@@ -27,6 +27,7 @@ echo "Pick an example project you want to start with"
 select p in `find .  -iname .config|sed 's/\/\.config//'`; do
     cd $PDIR
     cp -Rf $EXAMPLES_DIR/$p/* .
+    cp  $EXAMPLES_DIR/$p/.config .config
     cp $EXAMPLES_DIR/.gitignore .
     git init .
     git add .gitignore Makefile src/ kcnf
