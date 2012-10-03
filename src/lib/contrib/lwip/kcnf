@@ -1,0 +1,10 @@
+menuconfig CONTRIB_LWIP
+bool "Lightweight TCP/IP stack"
+depends on SHOW_BROKEN
+
+if CONTRIB_LWIP
+
+config LWIP_IPV6
+bool "Enable ipv6 support"
+
+endif

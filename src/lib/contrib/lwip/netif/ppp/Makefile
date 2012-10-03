@@ -1,0 +1,13 @@
+objects-y+=auth.o
+objects-y+=chap.o
+objects-y+=chpms.o
+objects-y+=fsm.o
+objects-y+=ipcp.o
+objects-y+=lcp.o
+objects-y+=magic.o
+objects-y+=md5.o
+objects-y+=pap.o
+objects-y+=ppp.o
+objects-y+=ppp_oe.o
+objects-y+=randm.o
+objects-y+=vj.o

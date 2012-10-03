@@ -1,4 +1,5 @@
 menuconfig LIB_NLIBSTUBS
+depends on ARCH_ARM
 bool "Configure newlib stubs"
 
 if LIB_NLIBSTUBS
@@ -82,6 +83,7 @@ bool "printk and dbg() macro support"
 
 menuconfig LIB_URPC
 bool "uRPC framework"
+depends on SHOW_BROKEN
 
 if LIB_URPC
 	
@@ -115,3 +117,4 @@ endif
 source "antares/src/lib/msp430/kcnf"
 source "antares/src/lib/8051/kcnf"
 source "antares/src/lib/avr/kcnf"
+source "antares/src/lib/contrib/kcnf"
