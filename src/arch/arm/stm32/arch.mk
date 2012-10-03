@@ -23,16 +23,26 @@ ifeq ($(CONFIG_STM32_FULL_ASSERT),y)
 endif
 
 
+#Handle default code placement
+
+ifneq ($(CONFIG_STM32_OVERRIDE_BASES),y)
+	GFLAGS+=-DCONFIG_STM32_FLASH_BASE=0x08000000
+	GFLAGS+=-DCONFIG_STM32_RAM_BASE=0x2000000
+endif
+
+ifneq ($(CONFIG_STM32_SET_OFFSETS),y)
+	GFLAGS+=-DCONFIG_STM32_FLASH_OFFSET=0x0
+	GFLAGS+=-DCONFIG_STM32_RAM_OFFSET=0x0
+endif
 
 #FixMe: ...
 CFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
 ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
-
-#FixMe: ...
+CFLAGS+=$(GFLAGS)
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include
 CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include/assert.h
 
 # Let the magic of gcc preprocessor commence!
 $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
-	$(SILENT_GEN) cat "$^" | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
+	$(SILENT_GEN) cat "$^" | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h $(GFLAGS) -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
 
