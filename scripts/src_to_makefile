@@ -1,0 +1,66 @@
+#!/bin/bash
+# -r for recursive
+
+
+
+if [ "$1" == "-r" ]; then
+    recursive=1
+fi
+
+
+function gfp_info() {
+
+# Thanks to catkin for the massive improvements to this function
+# http://www.linuxquestions.org/questions/user/catkin-444761/
+
+  local FILE=$1
+  
+  # remove trailing slash
+  FILE=${FILE%/}
+
+  # Get the basename of the file
+  local file_basename="${FILE##*/}"
+
+  # extracts the directory component of the full path
+  local DC="${FILE%$file_basename}"
+
+  if [ $DC ]; then  
+    cd "$DC"
+  fi
+
+  # Assign present working dir to $fileap; pwd returns the
+  # absolute path
+  local fileap=$(pwd -P)
+	
+  # Append base filename to absolute path
+  local ap_with_basename=$fileap/$file_basename
+
+  # Change back to directory we started in
+  cd "-" &>/dev/null
+  
+  AP="${fileap}"
+  APFN="${ap_with_basename}"
+  FBN="${file_basename}"
+
+  return 0
+
+}
+
+gfp_info $0
+self="$APFN"
+ 
+ls *.c|sed 's/\.c/\.o/'|while read line; do 
+    echo objects-y+=$line; 
+done
+
+find . -maxdepth 1 -type d|while read line; do
+if [ "$line" != "." ]; then
+    line=`echo $line|sed 's/\.\///'`
+    echo "subdirs-y+=$line"
+    if [ "$recursive" == "1" ]; then
+	cd $line
+	$self -r > Makefile
+	cd ..
+    fi
+fi
+done
