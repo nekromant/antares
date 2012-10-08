@@ -24,12 +24,10 @@
 #define NO_SYS_NO_TIMERS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMCPY(dst,src,len)
 #define MEMCPY(dst,src,len) CONFIG_LWIP_MEMCPY(dst,src,len)
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_SMEMCPY(dst,src,len)
 #define SMEMCPY(dst,src,len) CONFIG_LWIP_SMEMCPY(dst,src,len)
 #endif
@@ -52,7 +50,6 @@
 #define MEM_ALIGNMENT CONFIG_LWIP_MEM_ALIGNMENT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEM_SIZE
 #define MEM_SIZE CONFIG_LWIP_MEM_SIZE
 #endif
@@ -64,9 +61,7 @@
 #endif
 
 #ifdef CONFIG_LWIP_MEMP_OVERFLOW_CHECK
-#define MEMP_OVERFLOW_CHECK 1 
-#else
-#define MEMP_OVERFLOW_CHECK 0 
+#define MEMP_OVERFLOW_CHECK CONFIG_LWIP_MEMP_OVERFLOW_CHECK
 #endif
 
 #ifdef CONFIG_LWIP_MEMP_SANITY_CHECK
@@ -101,120 +96,94 @@
 
 
 /* Internal Memory Pool Sizes*/
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_PBUF
 #define MEMP_NUM_PBUF CONFIG_LWIP_MEMP_NUM_PBUF
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_RAW_PCB
 #define MEMP_NUM_RAW_PCB CONFIG_LWIP_MEMP_NUM_RAW_PCB
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_UDP_PCB
 #define MEMP_NUM_UDP_PCB CONFIG_LWIP_MEMP_NUM_UDP_PCB
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_TCP_PCB
 #define MEMP_NUM_TCP_PCB CONFIG_LWIP_MEMP_NUM_TCP_PCB
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_TCP_PCB_LISTEN
 #define MEMP_NUM_TCP_PCB_LISTEN CONFIG_LWIP_MEMP_NUM_TCP_PCB_LISTEN
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_TCP_SEG
 #define MEMP_NUM_TCP_SEG CONFIG_LWIP_MEMP_NUM_TCP_SEG
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_REASSDATA
 #define MEMP_NUM_REASSDATA CONFIG_LWIP_MEMP_NUM_REASSDATA
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_FRAG_PBUF
 #define MEMP_NUM_FRAG_PBUF CONFIG_LWIP_MEMP_NUM_FRAG_PBUF
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_ARP_QUEUE
 #define MEMP_NUM_ARP_QUEUE CONFIG_LWIP_MEMP_NUM_ARP_QUEUE
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_IGMP_GROUP
 #define MEMP_NUM_IGMP_GROUP CONFIG_LWIP_MEMP_NUM_IGMP_GROUP
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_SYS_TIMEOUT
 #define MEMP_NUM_SYS_TIMEOUT CONFIG_LWIP_MEMP_NUM_SYS_TIMEOUT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_NETBUF
 #define MEMP_NUM_NETBUF CONFIG_LWIP_MEMP_NUM_NETBUF
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_NETCONN
 #define MEMP_NUM_NETCONN CONFIG_LWIP_MEMP_NUM_NETCONN
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_TCPIP_MSG_API
 #define MEMP_NUM_TCPIP_MSG_API CONFIG_LWIP_MEMP_NUM_TCPIP_MSG_API
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_TCPIP_MSG_INPKT
 #define MEMP_NUM_TCPIP_MSG_INPKT CONFIG_LWIP_MEMP_NUM_TCPIP_MSG_INPKT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_SNMP_NODE
 #define MEMP_NUM_SNMP_NODE CONFIG_LWIP_MEMP_NUM_SNMP_NODE
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_SNMP_ROOTNODE
 #define MEMP_NUM_SNMP_ROOTNODE CONFIG_LWIP_MEMP_NUM_SNMP_ROOTNODE
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_SNMP_VARBIND
 #define MEMP_NUM_SNMP_VARBIND CONFIG_LWIP_MEMP_NUM_SNMP_VARBIND
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_NUM_SNMP_VALUE
 #define MEMP_NUM_SNMP_VALUE CONFIG_LWIP_MEMP_NUM_SNMP_VALUE
 #endif
 
 #ifdef CONFIG_LWIP_MEMP_NUM_NETDB
-#define MEMP_NUM_NETDB 1 
-#else
-#define MEMP_NUM_NETDB 0 
+#define MEMP_NUM_NETDB CONFIG_LWIP_MEMP_NUM_NETDB
 #endif
 
 #ifdef CONFIG_LWIP_MEMP_NUM_LOCALHOSTLIST
-#define MEMP_NUM_LOCALHOSTLIST 1 
-#else
-#define MEMP_NUM_LOCALHOSTLIST 0 
+#define MEMP_NUM_LOCALHOSTLIST CONFIG_LWIP_MEMP_NUM_LOCALHOSTLIST
 #endif
 
 #ifdef CONFIG_LWIP_MEMP_NUM_PPPOE_INTERFACES
-#define MEMP_NUM_PPPOE_INTERFACES 1 
-#else
-#define MEMP_NUM_PPPOE_INTERFACES 0 
+#define MEMP_NUM_PPPOE_INTERFACES CONFIG_LWIP_MEMP_NUM_PPPOE_INTERFACES
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PBUF_POOL_SIZE
 #define PBUF_POOL_SIZE CONFIG_LWIP_PBUF_POOL_SIZE
 #endif
@@ -227,7 +196,6 @@
 #define LWIP_ARP 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_ARP_TABLE_SIZE
 #define ARP_TABLE_SIZE CONFIG_LWIP_ARP_TABLE_SIZE
 #endif
@@ -250,15 +218,12 @@
 #define ETHARP_SUPPORT_VLAN 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_ETHERNET
 #define LWIP_ETHERNET CONFIG_LWIP_ETHERNET
 #endif
 
 #ifdef CONFIG_LWIP_ETH_PAD_SIZE
-#define ETH_PAD_SIZE 1 
-#else
-#define ETH_PAD_SIZE 0 
+#define ETH_PAD_SIZE CONFIG_LWIP_ETH_PAD_SIZE
 #endif
 
 #ifdef CONFIG_LWIP_ETHARP_SUPPORT_STATIC_ENTRIES
@@ -293,12 +258,10 @@
 #define IP_FRAG 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_IP_REASS_MAXAGE
 #define IP_REASS_MAXAGE CONFIG_LWIP_IP_REASS_MAXAGE
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_IP_REASS_MAX_PBUFS
 #define IP_REASS_MAX_PBUFS CONFIG_LWIP_IP_REASS_MAX_PBUFS
 #endif
@@ -309,12 +272,10 @@
 #define IP_FRAG_USES_STATIC_BUF 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_IP_FRAG_MAX_MTU
 #define IP_FRAG_MAX_MTU CONFIG_LWIP_IP_FRAG_MAX_MTU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_IP_DEFAULT_TTL
 #define IP_DEFAULT_TTL CONFIG_LWIP_IP_DEFAULT_TTL
 #endif
@@ -339,7 +300,6 @@
 #define LWIP_ICMP 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_ICMP_TTL
 #define ICMP_TTL CONFIG_LWIP_ICMP_TTL
 #endif
@@ -364,7 +324,6 @@
 #define LWIP_RAW 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_RAW_TTL
 #define RAW_TTL CONFIG_LWIP_RAW_TTL
 #endif
@@ -377,7 +336,6 @@
 #define LWIP_DHCP 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DHCP_DOES_ARP_CHECK
 #define DHCP_DOES_ARP_CHECK CONFIG_LWIP_DHCP_DOES_ARP_CHECK
 #endif
@@ -396,7 +354,6 @@
 #define LWIP_DHCP_AUTOIP_COOP 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DHCP_AUTOIP_COOP_TRIES
 #define LWIP_DHCP_AUTOIP_COOP_TRIES CONFIG_LWIP_DHCP_AUTOIP_COOP_TRIES
 #endif
@@ -433,17 +390,14 @@
 #define SNMP_SAFE_REQUESTS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_SNMP_MAX_OCTET_STRING_LEN
 #define SNMP_MAX_OCTET_STRING_LEN CONFIG_LWIP_SNMP_MAX_OCTET_STRING_LEN
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_SNMP_MAX_TREE_DEPTH
 #define SNMP_MAX_TREE_DEPTH CONFIG_LWIP_SNMP_MAX_TREE_DEPTH
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_SNMP_MAX_VALUE_SIZE
 #define SNMP_MAX_VALUE_SIZE CONFIG_LWIP_SNMP_MAX_VALUE_SIZE
 #endif
@@ -464,17 +418,14 @@
 #define LWIP_DNS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DNS_TABLE_SIZE
 #define DNS_TABLE_SIZE CONFIG_LWIP_DNS_TABLE_SIZE
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DNS_MAX_NAME_LENGTH
 #define DNS_MAX_NAME_LENGTH CONFIG_LWIP_DNS_MAX_NAME_LENGTH
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DNS_MAX_SERVERS
 #define DNS_MAX_SERVERS CONFIG_LWIP_DNS_MAX_SERVERS
 #endif
@@ -485,7 +436,6 @@
 #define DNS_DOES_NAME_CHECK 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DNS_MSG_SIZE
 #define DNS_MSG_SIZE CONFIG_LWIP_DNS_MSG_SIZE
 #endif
@@ -516,7 +466,6 @@
 #define LWIP_UDPLITE 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_UDP_TTL
 #define UDP_TTL CONFIG_LWIP_UDP_TTL
 #endif
@@ -535,32 +484,26 @@
 #define LWIP_TCP 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_TTL
 #define TCP_TTL CONFIG_LWIP_TCP_TTL
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_WND
 #define TCP_WND CONFIG_LWIP_TCP_WND
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_MAXRTX
 #define TCP_MAXRTX CONFIG_LWIP_TCP_MAXRTX
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_SYNMAXRTX
 #define TCP_SYNMAXRTX CONFIG_LWIP_TCP_SYNMAXRTX
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_QUEUE_OOSEQ
 #define TCP_QUEUE_OOSEQ CONFIG_LWIP_TCP_QUEUE_OOSEQ
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_MSS
 #define TCP_MSS CONFIG_LWIP_TCP_MSS
 #endif
@@ -571,22 +514,18 @@
 #define TCP_CALCULATE_EFF_SEND_MSS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_SND_BUF
 #define TCP_SND_BUF CONFIG_LWIP_TCP_SND_BUF
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_SND_QUEUELEN
 #define TCP_SND_QUEUELEN CONFIG_LWIP_TCP_SND_QUEUELEN
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_SNDLOWAT
 #define TCP_SNDLOWAT CONFIG_LWIP_TCP_SNDLOWAT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_SNDQUEUELOWAT
 #define TCP_SNDQUEUELOWAT CONFIG_LWIP_TCP_SNDQUEUELOWAT
 #endif
@@ -597,12 +536,10 @@
 #define TCP_LISTEN_BACKLOG 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_DEFAULT_LISTEN_BACKLOG
 #define TCP_DEFAULT_LISTEN_BACKLOG CONFIG_LWIP_TCP_DEFAULT_LISTEN_BACKLOG
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_OVERSIZE
 #define TCP_OVERSIZE CONFIG_LWIP_TCP_OVERSIZE
 #endif
@@ -613,7 +550,6 @@
 #define LWIP_TCP_TIMESTAMPS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_WND_UPDATE_THRESHOLD
 #define TCP_WND_UPDATE_THRESHOLD CONFIG_LWIP_TCP_WND_UPDATE_THRESHOLD
 #endif
@@ -644,12 +580,10 @@
 
 
 /* Pbuf options*/
-// Doing it manually
 #ifdef CONFIG_LWIP_PBUF_LINK_HLEN
 #define PBUF_LINK_HLEN CONFIG_LWIP_PBUF_LINK_HLEN
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PBUF_POOL_BUFSIZE
 #define PBUF_POOL_BUFSIZE CONFIG_LWIP_PBUF_POOL_BUFSIZE
 #endif
@@ -698,7 +632,6 @@
 #define LWIP_LOOPBACK_MAX_PBUFS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_NETIF_LOOPBACK_MULTITHREADING
 #define LWIP_NETIF_LOOPBACK_MULTITHREADING CONFIG_LWIP_NETIF_LOOPBACK_MULTITHREADING
 #endif
@@ -885,7 +818,6 @@
 #define LWIP_SO_RCVBUF 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_RECV_BUFSIZE_DEFAULT
 #define RECV_BUFSIZE_DEFAULT CONFIG_LWIP_RECV_BUFSIZE_DEFAULT
 #endif
@@ -922,7 +854,6 @@
 #define LINK_STATS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_ETHARP_STATS
 #define ETHARP_STATS CONFIG_LWIP_ETHARP_STATS
 #endif
@@ -933,7 +864,6 @@
 #define IP_STATS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_IPFRAG_STATS
 #define IPFRAG_STATS CONFIG_LWIP_IPFRAG_STATS
 #endif
@@ -944,32 +874,26 @@
 #define ICMP_STATS 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_IGMP_STATS
 #define IGMP_STATS CONFIG_LWIP_IGMP_STATS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_UDP_STATS
 #define UDP_STATS CONFIG_LWIP_UDP_STATS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_TCP_STATS
 #define TCP_STATS CONFIG_LWIP_TCP_STATS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEM_STATS
 #define MEM_STATS CONFIG_LWIP_MEM_STATS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MEMP_STATS
 #define MEMP_STATS CONFIG_LWIP_MEMP_STATS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_SYS_STATS
 #define SYS_STATS CONFIG_LWIP_SYS_STATS
 #endif
@@ -1054,7 +978,6 @@
 #define PPPOE_SUPPORT 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPPOS_SUPPORT
 #define PPPOS_SUPPORT CONFIG_LWIP_PPPOS_SUPPORT
 #endif
@@ -1105,42 +1028,34 @@
 #define MD5_SUPPORT 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_FSM_DEFTIMEOUT
 #define FSM_DEFTIMEOUT CONFIG_LWIP_FSM_DEFTIMEOUT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_FSM_DEFMAXTERMREQS
 #define FSM_DEFMAXTERMREQS CONFIG_LWIP_FSM_DEFMAXTERMREQS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_FSM_DEFMAXCONFREQS
 #define FSM_DEFMAXCONFREQS CONFIG_LWIP_FSM_DEFMAXCONFREQS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_FSM_DEFMAXNAKLOOPS
 #define FSM_DEFMAXNAKLOOPS CONFIG_LWIP_FSM_DEFMAXNAKLOOPS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_UPAP_DEFTIMEOUT
 #define UPAP_DEFTIMEOUT CONFIG_LWIP_UPAP_DEFTIMEOUT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_UPAP_DEFREQTIME
 #define UPAP_DEFREQTIME CONFIG_LWIP_UPAP_DEFREQTIME
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_CHAP_DEFTIMEOUT
 #define CHAP_DEFTIMEOUT CONFIG_LWIP_CHAP_DEFTIMEOUT
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_CHAP_DEFTRANSMITS
 #define CHAP_DEFTRANSMITS CONFIG_LWIP_CHAP_DEFTRANSMITS
 #endif
@@ -1151,57 +1066,46 @@
 #define LCP_ECHOINTERVAL 0 
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_LCP_MAXECHOFAILS
 #define LCP_MAXECHOFAILS CONFIG_LWIP_LCP_MAXECHOFAILS
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MAXIDLEFLAG
 #define PPP_MAXIDLEFLAG CONFIG_LWIP_PPP_MAXIDLEFLAG
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MTU
 #define PPP_MTU CONFIG_LWIP_PPP_MTU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MAXMTU
 #define PPP_MAXMTU CONFIG_LWIP_PPP_MAXMTU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MINMTU
 #define PPP_MINMTU CONFIG_LWIP_PPP_MINMTU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MRU
 #define PPP_MRU CONFIG_LWIP_PPP_MRU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MAXMRU
 #define PPP_MAXMRU CONFIG_LWIP_PPP_MAXMRU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_DEFMRU
 #define PPP_DEFMRU CONFIG_LWIP_PPP_DEFMRU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_PPP_MINMRU
 #define PPP_MINMRU CONFIG_LWIP_PPP_MINMRU
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MAXNAMELEN
 #define MAXNAMELEN CONFIG_LWIP_MAXNAMELEN
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_MAXSECRETLEN
 #define MAXSECRETLEN CONFIG_LWIP_MAXSECRETLEN
 #endif
@@ -1252,12 +1156,10 @@
 
 
 /* Debugging options*/
-// Doing it manually
 #ifdef CONFIG_LWIP_DBG_MIN_LEVEL
 #define LWIP_DBG_MIN_LEVEL CONFIG_LWIP_DBG_MIN_LEVEL
 #endif
 
-// Doing it manually
 #ifdef CONFIG_LWIP_DBG_TYPES_ON
 #define LWIP_DBG_TYPES_ON CONFIG_LWIP_DBG_TYPES_ON
 #endif
