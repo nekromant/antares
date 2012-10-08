@@ -3,5 +3,13 @@ bool "Lightweight TCP/IP stack"
 depends on SHOW_BROKEN
 
 if CONTRIB_LWIP
+
+config LWIP_INCLUDE_EXTRA
+bool "Include lwipextra.h for extra options"
+help
+	Use doc/lib/lwip/lwipextra.h as a starting
+	point
+
+
 source "antares/src/lib/contrib/lwip/lwip.kcnf"
 endif
