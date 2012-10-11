@@ -1,0 +1,7 @@
+config LIB_STC_IAP
+depends on ARCH_8051_STC
+bool "STC IAP/ISP routines"
+help
+	A handful of functions to work with internal eeprom
+	and iap stuff on these mcus
+	See <arch/lib/stc/iap.h>

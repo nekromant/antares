@@ -413,7 +413,7 @@ static void conf_write_string(int headerfile, const char *name,
 		fprintf(out, "CONFIG_%s=", name);
 	break;
 	case 2: //verilog
-		fprintf(out, "'define CONFIG_%s ", name);
+		fprintf(out, "`define CONFIG_%s ", name);
 	break;
 	}
 	  //if (quote) 

@@ -11,4 +11,10 @@ bool "Atmel AT89 family"
 
 endchoice
 
+config F_CPU
+int "CPU Frequency in Hz"
+help
+	Affects some libraries, like soft-delays, iap, etc...
+	
+
 endif
