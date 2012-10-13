@@ -15,6 +15,31 @@ config F_CPU
 int "CPU Frequency in Hz"
 help
 	Affects some libraries, like soft-delays, iap, etc...
-	
+
+choice 
+prompt "Memory model"
+
+config MODEL_SMALL
+bool "Small"
+
+config MODEL_MEDIUM
+bool "Medium"
+
+config MODEL_LARGE
+bool "Large"
+
+config MODEL_HUGE
+bool "Huge"
+
+endchoice 
+
+config XRAM_SIZE
+int "XRAM size"
+default 128
+
+
+config IRAM_SIZE
+int "IRAM size"
+default 128	
 
 endif

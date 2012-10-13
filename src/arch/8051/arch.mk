@@ -7,9 +7,25 @@ BUILDGOALS=$(IMAGENAME).ihx $(IMAGENAME).bin
 LD_NO_COMBINE=y
 
 COMMONFLAGS+=-mmcs51
-#TODO: menuconfigg'ed stack model and other shit
-COMMONFLAGS+=--model-small
 
+ifeq ($(CONFIG_MODEL_SMALL),y)
+COMMONFLAGS+=--model-small
+endif
+
+ifeq ($(CONFIG_MODEL_MEDIUM),y)
+COMMONFLAGS+=--model-medium
+endif
+
+ifeq ($(CONFIG_MODEL_LARGE),y)
+COMMONFLAGS+=--model-large
+endif
+
+ifeq ($(CONFIG_MODEL_HUGE),y)
+COMMONFLAGS+=--model-huge
+endif
+
+COMMONFLAGS+=--iram-size $(CONFIG_IRAM_SIZE)
+COMMONFLAGS+=--xram-size $(CONFIG_XRAM_SIZE)
 
 
 ifeq ($(CONFIG_ARCH_8051_STC),y)
