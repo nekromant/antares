@@ -6,9 +6,21 @@
 /* Packet is event data */
 #define FLAG_URPC_EVENT        2
 
-/* Very small size model */
-typedef  unsigned char urpc_id_t;
+#if CONFIG_URPC_SZB == 1
 typedef unsigned char urpc_size_t;
+#elif CONFIG_URPC_SZB == 2
+typedef uint16_t urpc_size_t;
+#elif CONFIG_URPC_SZB == 4
+typedef uint32_t urpc_size_t;
+#endif
+
+#if CONFIG_URPC_IDB == 1
+typedef unsigned char urpc_id_t;
+#elif CONFIG_URPC_IDB == 2
+typedef uint16_t urpc_id_t;
+#elif CONFIG_URPC_IDB == 4
+typedef uint32_t urpc_id_t;
+#endif
 
 
 /* 'data' actually serves to be the pointer to the first byte 
