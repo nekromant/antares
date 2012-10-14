@@ -17,8 +17,6 @@ checkout_examples(){
 if [ "$1" == "update" ]; then
     echo "Pulling new examples (if any) from git"
     cd $EXAMPLES_DIR && git pull
-else
-	exit
 fi
 
 PDIR=`pwd`

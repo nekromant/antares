@@ -32,7 +32,6 @@ struct urpc_packet {
 	unsigned char data;
 };
 
-
 struct urpc_object {
 	const char flags;
 	const char* name;
