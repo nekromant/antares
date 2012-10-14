@@ -1,11 +1,21 @@
 #include <lib/urpc.h>
-#include <string.h>
 
 #define STATE_DISCOVERY  1 
 
+#if defined(CONFIG_ARCH_LE)
+#define ENDIANNESS "l"
+#elif defined(CONFIG_ARCH_BE)
+#define ENDIANNESS "b"
+#else  
+#define ENDIANNESS "?"
+#endif
+
+
+#define TAG STAG ITAG ENDIANNESS
+
 static unsigned char state;
 static unsigned char objid;
-static const char urpc_name[] = "elvelyn";
+static const char urpc_mode[] = TAG;
 
 /* TODO: Optional packet queue */
 #ifndef CONFIG_URPC_ISR_CONTEXT
@@ -46,7 +56,7 @@ void urpc_handle_incoming(struct urpc_packet* pck) {
 void urpc_discovery() {
 	struct urpc_object *obj;
 	obj = &urpc_exports[0];
-	urpc_tx_data(0,urpc_name,strlen(urpc_name)+1);
+	urpc_tx_data(0,urpc_mode,4);
 	state = STATE_DISCOVERY;
 	objid=0;
 

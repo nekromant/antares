@@ -8,18 +8,28 @@
 
 #if CONFIG_URPC_SZB == 1
 typedef unsigned char urpc_size_t;
+#define STAG "1"
 #elif CONFIG_URPC_SZB == 2
 typedef uint16_t urpc_size_t;
+#define STAG "2"
 #elif CONFIG_URPC_SZB == 4
 typedef uint32_t urpc_size_t;
+#define STAG "4"
+#else
+#error "Something nasty just happened"
 #endif
 
 #if CONFIG_URPC_IDB == 1
 typedef unsigned char urpc_id_t;
+#define ITAG "1"
 #elif CONFIG_URPC_IDB == 2
 typedef uint16_t urpc_id_t;
+#define ITAG "2"
 #elif CONFIG_URPC_IDB == 4
+#define ITAG "4"
 typedef uint32_t urpc_id_t;
+#else
+#error "Something nasty just happened"
 #endif
 
 
