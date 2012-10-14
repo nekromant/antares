@@ -81,39 +81,7 @@ bool "Simple XMODEM implementation"
 config LIB_PRINTK
 bool "printk and dbg() macro support"
 
-menuconfig LIB_URPC
-bool "uRPC framework"
-depends on SHOW_BROKEN
-
-if LIB_URPC
-	
-	comment "These options are used for very memory constrained systems"
-	comment "where one would normally want some more control over things"
-	
-	config URPC_DEBUG
-	bool "Enable uRPC debugging"
-		help 
-		Enables a shitload of annoying messages
-	
-	config URPC_LUT
-	bool "Enable lookup cache"
-		help
-		Without it, Each method call, triggers a linear search in
-		the linked list of methods. Uses very little memory, but 
-		slow when there are many methods. Might be a good idea on 
-		some systems. 
-		This creates a lookup table, therefore speeds things up. 
-		Uses (count(events+methods)*sizeof(void*)) memory.
-	
-	config URPC_NO_SEATBELTS
-	bool "Disable safety checks"
-		help
-			Disable some internal sanity checks, e.g. bounds 
-			checking and stuff. Frees up some bytes, so that 
-			we can fit into even and attiny MCU. You can safely
-			check this, after you have debugged everything. 
-endif
-
+source "antares/src/lib/urpc/kcnf"
 source "antares/src/lib/msp430/kcnf"
 source "antares/src/lib/8051/kcnf"
 source "antares/src/lib/avr/kcnf"

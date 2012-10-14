@@ -1,0 +1,54 @@
+menuconfig LIB_URPC
+bool "URPC Framework (EXPERIMENTAL)"
+
+if LIB_URPC
+
+menu "Library tuning"
+
+config URPC_SZB
+int "Number of bytes for urpc_size_t"
+default 1
+
+config URPC_IDB
+int "Number of bytes for urpc_id_t"
+default 1
+
+endmenu
+
+choice 
+prompt "URPC Implementation"
+
+config URPC_TINY
+bool "TinyRPC"
+help
+     A very basic implementation, with a static
+     export table, no compiler magic, etc. 
+     Designed to be suitable for very small systems,
+     e.g. 8051 micros.
+
+endchoice
+
+choice 
+prompt "Transport layer"
+
+config URPC_T_SERIAL
+bool "Simple Serial Transport"
+help
+	A simple, quick and dirty serial transport
+	with no checksumming. You should provide your
+	own 'putchar' and call 'gotchar' whenever a
+	character is received.
+endchoice
+
+
+config URPC_ISR_CONTEXT
+bool "Run methods in ISR context"
+depends on URPC_TINY
+help
+	If set to 'y' methods may be run in ISR
+	context, if the underlying transport layer
+	does the call to urpc_handle_incoming there.
+	You can set that to 'n' and do the processing
+	in the loop later.
+endif
+
