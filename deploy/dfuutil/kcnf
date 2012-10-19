@@ -1,0 +1,10 @@
+menuconfig DEPLOY_DFUUTIL
+bool "dfu-util"
+depends on ARCH_ARM
+
+if DEPLOY_DFU
+  
+  config DEPLOY_DFU_ARGS
+  string "Extra args to dfu-util (if any)"
+
+endif
