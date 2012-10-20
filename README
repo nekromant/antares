@@ -1,7 +1,7 @@
 ANTARES is an all-in-one buildsystem, aimed at baremetal targets.
 It is designed to be portable across a lot of MCUs and adding another 
 MCU is trivial. 
-I uses Kconfig as seen in linux kernel and a set of homebrew Makefiles
+It uses Kconfig as seen in linux kernel and a set of homebrew Makefiles
 designed to easen the development process. 
 This stuff is still pre-alpha quality, so if things don't work for you
 out of the box - drop me a line.
@@ -10,7 +10,7 @@ Abstract.
 ---------
 Traditional buildsystems (cmake, scons, autotools etc.) are very
 painful to use when it comes to bare metal targets.
-Proprietary crippled IDEs from vendors like IAR/CodeComposer, etc.
+Proprietary crippled IDEs from vendors like IAR/CodeComposer/Keil, etc.
 provide their own project management, but they are generally a pain 
 to use, espesially if you are mostly used to VIM/emacs (like me).
 You can, of course, hook iar c to Makefiles, but you'll still spend
@@ -18,7 +18,8 @@ more time figuring out how to do that, then writing the code.
 While the above IDEs make it simpler to create some 'write&forget'
 projects fast, they suck when it comes to maintaining a lot of shared
 code between different projects (and that is what really lazy coders
-(like me) want).   
+(like me) want).
+
 The best way to manage a very configurable project with a lot of 
 library code is Kconfig as seen in linux kernel. Mostly because it
 handles dependencies of parameters and you won't eventually have a 
@@ -95,11 +96,11 @@ different license. Figuring out the licensing stuff is also WiP.
 ----------------------------------
 ST Peripheral Libraries. Proprietary (BSD-like?) license
 VUSB (Dual, GPLv2+obdev exception and proprietary)
+lwIP (BSD-like) 
 
 Quickstart?
 -----------
-Have a look here: 
-http://antares.ncrmnt.org/thebuggenie/wiki/Getting_Started_Quick_And_Dirty
+Have a look at docs/en/quickstart
 
 Who?
 ----
