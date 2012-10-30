@@ -8,29 +8,40 @@
 
 #if CONFIG_URPC_SZB == 1
 typedef unsigned char urpc_size_t;
-#define STAG "1"
+#define STAG 0x1
 #elif CONFIG_URPC_SZB == 2
 typedef uint16_t urpc_size_t;
-#define STAG "2"
+#define STAG 0x2
 #elif CONFIG_URPC_SZB == 4
 typedef uint32_t urpc_size_t;
-#define STAG "4"
+#define STAG 0x4
 #else
 #error "Something nasty just happened"
 #endif
 
 #if CONFIG_URPC_IDB == 1
 typedef unsigned char urpc_id_t;
-#define ITAG "1"
+#define ITAG 0x1
 #elif CONFIG_URPC_IDB == 2
 typedef uint16_t urpc_id_t;
-#define ITAG "2"
+#define ITAG 0x2
 #elif CONFIG_URPC_IDB == 4
-#define ITAG "4"
+#define ITAG 0x4
 typedef uint32_t urpc_id_t;
 #else
 #error "Something nasty just happened"
 #endif
+
+
+#if defined(CONFIG_ARCH_LE)
+#define ENDIANNESS 'l'
+#elif defined(CONFIG_ARCH_BE)
+#define ENDIANNESS 'b'
+#else  
+#define ENDIANNESS '?'
+#endif
+
+#define URPC_MODE_TAG { STAG , ITAG, ENDIANNESS, 0x0 }
 
 
 /* 'data' actually serves to be the pointer to the first byte 

@@ -16,6 +16,8 @@
 
 #define SYNC '['
 #define STOP ']'
+#define ACK  'A'
+#define NACK 'N'
 
 static unsigned char buf[16];
 static int ptr=0;
@@ -24,14 +26,28 @@ static char sz=0;
 static unsigned char csum;
 
 void putchar(char data);
+static void putdata(const char* data, int len);
 
-static void csum_add(unsigned char* data, int len) {
+static void csum_add(unsigned char* data, int len) 
+{
 	while (len--) {
 		csum+=data[len];
 	}
 }
 
-void gotchar(char b) {
+
+static const char mode[] = URPC_MODE_TAG;
+
+
+void serialdiscovery() 
+{
+	putchar(SYNC);
+	putdata(mode, 4);
+	putchar(STOP);
+}
+
+void gotchar(char b) 
+{
 	switch (state) {
 	case 0:
 		if (b==SYNC) state=1;
@@ -44,9 +60,10 @@ void gotchar(char b) {
 			csum=0;
 			csum_add(buf,buf[0]);
 			if (csum==buf[buf[0]]) {
-				if (buf[0]==0)
+				if (buf[0]==0) {
+					serialdiscovery();
 					urpc_discovery(); 
-				else
+				} else
 					urpc_handle_incoming((struct urpc_packet*)&buf[1]); 
 			}
 				
@@ -54,7 +71,8 @@ void gotchar(char b) {
 	}
 }
 
-static void putdata(const char* data, int len) {
+static void putdata(const char* data, int len) 
+{
 	while (len--) {
 		putchar(*data);
 		csum+=*data++;
@@ -70,24 +88,28 @@ static void putstr(const char* data) {
 }
 
 
-void urpc_tx_data(struct urpc_object* obj, char* data, int sz) {
+void urpc_tx_data(struct urpc_object* obj, char* data, int sz) 
+{
 	urpc_id_t id;
-	urpc_size_t len;
+	urpc_size_t len=0;
 	csum=0;
 	putchar(SYNC);
 	len = (urpc_size_t) sz + sizeof(urpc_size_t);
 	if (obj) {
 		id = URPC_OBJ_ID(obj);
-		putdata(&id,sizeof(urpc_id_t));
 		len+=sizeof(urpc_id_t);
 	}
 	putdata(&len,sizeof(urpc_size_t));
+	if (obj)
+		putdata(&id,sizeof(urpc_id_t));
 	putdata(data,sz);
 	putchar(csum);
 	putchar(STOP);
 }
 
-void urpc_tx_object(struct urpc_object* obj) {
+/* [ len | id | flags | name | data | reply | csum ] */
+void urpc_tx_object(struct urpc_object* obj) 
+{
 	urpc_id_t id;
 	urpc_size_t len;
 	len = strlen(obj->name) + strlen(obj->data) + strlen(obj->reply) + 4;
@@ -96,9 +118,9 @@ void urpc_tx_object(struct urpc_object* obj) {
 	csum=0;
 	putchar(SYNC);
 	putdata(&len,sizeof(urpc_size_t));
-	putchar(obj->flags);
 	id = URPC_OBJ_ID(obj);
 	putdata(&id,sizeof(urpc_id_t));
+	putchar(obj->flags);
 	csum+=obj->flags;
 	putstr(obj->name);
 	putstr(obj->data);
