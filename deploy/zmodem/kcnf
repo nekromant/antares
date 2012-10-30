@@ -8,16 +8,12 @@ bool "zmodem"
   
   config DEPLOY_ZMODEM_SPEED
   int "Serial port speed"
-  
-  config DEPLOY_ZMODEM_ISTR
-  bool "Send a string prior to transfer"
-  
-  if DEPLOY_ZMODEM_ISTR
+ 
+  config DEPLOY_ZMODEM_PRESTR
+  string "Send this string before actual transfer"
 
-  config DEPLOY_ZMODEM_STR
-  string "Init string"
-
-  endif
+  config DEPLOY_ZMODEM_POSTSTR
+  string "Send this string after actual transfer"
 
   endif
 
