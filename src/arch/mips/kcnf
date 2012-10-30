@@ -1,0 +1,15 @@
+if ARCH_MIPS
+choice 
+	prompt "MCU variant"
+	config MCU_1890
+	bool "1890VM2T"
+	select NEED_GENERATE
+endchoice
+
+
+if MCU_1890
+source "antares/src/arch/mips/1890/kcnf"
+endif
+
+
+endif
