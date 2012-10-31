@@ -29,6 +29,7 @@ endchoice
 
 config STM32_HSE_VALUE
 int "HSE (Crystal) value in Hz"
+default 8000000
 help
 	Use this to set the crystal freq accordingly. 
 	It is used in some periph libs, and in regular 
