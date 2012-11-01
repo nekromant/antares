@@ -1,1 +1,2 @@
-comment "Any opts?"
+config 1890_LD_C
+bool "Use C-startup capable LD file"

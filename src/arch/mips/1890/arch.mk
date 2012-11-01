@@ -1,9 +1,8 @@
-# We do need a custom LD file here
-# There's a bug in LD: it can't use symbols in memory sections, 
-# therefore we can't calc the offsets from kconfig at the runtime.
-# I solved that by running gcc preprocessor against an ld file template
+ifeq ($(CONFIG_1890_LD_C),y)
+GCC_LDFILE=$(ANTARES_DIR)/src/arch/mips/1890/cram.lds
+else
 GCC_LDFILE=$(ANTARES_DIR)/src/arch/mips/1890/generic.lds
-#GCC_LDFILE=$(TMPDIR)/ldfile.lds
+endif
 
 ASFLAGS=        -D_ASMLANGUAGE -pedantic-errors \
                 -W -Wall -x assembler-with-cpp -fno-pic 
