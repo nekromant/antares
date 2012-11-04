@@ -18,6 +18,35 @@ depends on ARCH_AVR
   
   endchoice
 
+  menu "Fuse settings"
+
+  config DEPLOY_AVRDUDE_FSLOW
+  bool "Deploy fuse bits with a slow bit clock"
+
+  config DEPLOY_AVRDUDE_FL
+  bool "Write low fuse bits"
+
+  config DEPLOY_AVRDUDE_FH
+  bool "Write high fuse bits"
+
+  config DEPLOY_AVRDUDE_FE
+  bool "Write extended fuse bits"
+
+  config DEPLOY_AVRDUDE_FLV
+  depends on DEPLOY_AVRDUDE_FL
+  hex "low fuse bits"
+
+  config DEPLOY_AVRDUDE_FHV
+  depends on DEPLOY_AVRDUDE_FH
+  hex "high fuse bits"
+
+  config DEPLOY_AVRDUDE_FEV
+  depends on DEPLOY_AVRDUDE_FE
+  hex "extended fuse bits"
+
+
+  endmenu
+
 
   config DEPLOY_AVRDUDE_COMMANDLINE
   string "avrdude additional commandline (read help)"
