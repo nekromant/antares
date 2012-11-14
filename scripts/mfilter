@@ -1,0 +1,7 @@
+#!/bin/bash
+#This script finds a dummy define and gets it's contents
+#usage: mfilter DEFINE
+#input from stdin
+#output to stdout
+
+cat | grep "$1"| sed "s/$1(\([a-zA-Z]*\).*)/\1/"
