@@ -1,7 +1,6 @@
-#This is a makefile used in the actual build
-#I didn't get enough dao to understand fully kbuild's magic and adopt it completely to small uCs like avr
-#And ethersex's methods of compiling sucked, so I invented my own build script
-#Yep, there goes some NIH syndrome =)
+#This is a makefile used in the actual build stuff. The rest is defined in per
+#toolchain files and in arch.mk of the target arch. 
+
 .SUFFIXES:
 
 include $(TOPDIR)/.config
@@ -21,12 +20,40 @@ clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 #suck in dep files (if any)
 -include $(OBJDIR)/*.d
 
-# include $(SRCDIR)/toolchain/
-
-# sources-y:=$(addprefix $(SRCDIR)/,$(objects-y))
-# objects-y:=$(addprefix $(OBJDIR)/,$(objects-y))
-
 PHONY:= build clean generate .genned
+
+define recurse_make
+	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
+	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
+	-C $(OBJDIR)/$(NEXT) \
+	-f $(ANTARES_DIR)/make/Makefile.build -r $(1)	
+endef
+
+# This adds extra processing for source files. 
+# We can add as many hooks here, as we want this way. 
+# Just note, that each one slows down build
+
+define extra_proc
+extras+=%.$(O).adeps
+PRECIOUS+=%.$(O).adeps
+%.$(O).$(1): $(SRCDIR)/%.s
+	$(2)
+	$(SILENT_EXTRA) touch $$(@)
+%.$(O).$(1): $(SRCDIR)/%.c
+	$(2)	
+	$(SILENT_EXTRA) touch $$(@)
+%.$(O).$(1): $(SRCDIR)/%.S
+	$(2)
+	$(SILENT_EXTRA) touch $$(@)
+endef
+
+#TODO: May be move extra processing receipes away
+
+ifeq ($(CONFIG_ANTARES_STARTUPDEP),y)
+$(eval $(call extra_proc,adeps,\
+	$(Q) cat $$< | $(ANTARES_DIR)/scripts/mfilter ANTARES_DEPENDS > $$(@)\
+	))
+endif
 
 .genned: $(gen-y)
 	$(Q) touch $(@)
@@ -35,27 +62,21 @@ PHONY:= build clean generate .genned
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
 	$(eval PHONY+=$(NEXT)/built-in.$(O))
 	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
-	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
-	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
-	-C $(OBJDIR)/$(NEXT) \
-	-f $(ANTARES_DIR)/make/Makefile.build -r generate	
+	$(call recurse_make,generate)
 
 %/built-in.$(O): $(TOPDIR)/include/generated/autoconf.h
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
 	$(eval PHONY+=$(NEXT)/built-in.$(O))
 	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
-	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
-	SRCDIR=$(SRCDIR)/$(NEXT) TMPDIR=$(TMPDIR) \
-	-C $(OBJDIR)/$(NEXT) \
-	-f $(ANTARES_DIR)/make/Makefile.build -r build	
+	$(call recurse_make,build)
 
-%.$(O): $(SRCDIR)/%.c 
+%.$(O): $(SRCDIR)/%.c $(extras)
 	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
 
-%.$(O): $(SRCDIR)/%.S 
+%.$(O): $(SRCDIR)/%.S $(extras)
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $<
 
-%.$(O): $(SRCDIR)/%.s 
+%.$(O): $(SRCDIR)/%.s $(extras)
 	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
 
 build: built-in.$(O)
@@ -75,6 +96,5 @@ built-in.$(O): $(objects-y)
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif
 
-
 .PHONY: $(PHONY) %/built-in.$(O)
-.PRECIOUS: $(build_objects)
+.PRECIOUS: $(PRECIOUS) 
