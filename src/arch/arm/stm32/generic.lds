@@ -57,6 +57,9 @@ _estack = CONFIG_STM32_RAM_BASE + CONFIG_STM32_RAM_LEN;
 
 /* include the sections management sub-script for FLASH mode */
 
+
+
+
 /* Sections Definitions */
 
 SECTIONS
@@ -81,20 +84,27 @@ SECTIONS
     /* the program code is stored in the .text section, which goes to Flash */
     .text :
     {
-            . = ALIGN(4);
-            
+	. = ALIGN(4);
         *(.text)                   /* remaining code */
+        /* Support for antares startup code */
+        *(.text.antares_initlabel)
+        *(.text.antares_init_low)
+        *(.text.antares_enable_isr)
+        *(.text.antares_init_high)
+	*(.text.antares_first_app)
+        *(.text.antares_app)
+        *(.text.antares_app_end)
         *(.text.*)                   /* remaining code */
         *(.rodata)                 /* read-only data (constants) */
         *(.rodata*)
         *(.glue_7)
         *(.glue_7t)
-
-            . = ALIGN(4);
+         . = ALIGN(4);
          _etext = .;
             /* This is used by the startup in order to initialize the .data secion */
          
     } >FLASH
+
     
   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
     .ARM : {

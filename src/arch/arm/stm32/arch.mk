@@ -45,7 +45,7 @@ endif
 
 #FixMe: ...
 CFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
-ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
+ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb -xassembler-with-cpp
 CFLAGS+=$(GFLAGS)
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include
 CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include/assert.h

@@ -35,7 +35,21 @@
 
 .global	g_pfnVectors
 .global	Default_Handler
+	
+/* Antares startup and app code is glued in several subsections */
+.section  .text.antares_initlabel
+.type  antares_initlabel, %function
+antares_initlabel:
 
+.section  .text.antares_first_app
+.type  antares_first_app, %function
+antares_first_app:
+	
+.section  .text.antares_app_end
+.type  antares_app_end, %function
+antares_app_end:
+	b antares_first_app
+	
 /* start address for the initialization values of the .data section. 
 defined in linker script */
 .word	_sidata
@@ -90,10 +104,22 @@ LoopFillZerobss:
 	ldr	r3, = _ebss
 	cmp	r2, r3
 	bcc	FillZerobss
+
+#ifdef CONFIG_STM32_LIB_SYSTEM
 /* Call the clock system intitialization function.*/
-  bl  SystemInit  
+/* Do it only when sysInit is enabled */
+	bl  SystemInit
+#endif
+	
+#ifdef CONFIG_ANTARES_STARTUP
+	b antares_initlabel
+#endif
+	
+#ifndef CONFIG_ANTARES_STARTUP
 /* Call the application's entry point.*/
-	bl	main
+	bl  main
+#endif
+	
 	bx	lr    
 .size	Reset_Handler, .-Reset_Handler
 
