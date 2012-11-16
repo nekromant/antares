@@ -17,6 +17,14 @@ checkout_examples(){
 if [ "$1" == "update" ]; then
     echo "Pulling new examples (if any) from git"
     cd $EXAMPLES_DIR && git pull
+    exit
+fi
+
+N=`ls -la|wc -l`
+if [ "$N" -gt "3" ]; then
+    echo "Looks like the folder is not empty"
+    echo "Please, run this app in an empty folder"
+    exit 1;
 fi
 
 PDIR=`pwd`
@@ -29,6 +37,7 @@ select p in `find .  -iname .config|sed 's/\/\.config//'`; do
     cp $EXAMPLES_DIR/.gitignore .
     git init .
     git add .gitignore Makefile src/ kcnf
+    make
     echo "Template installed, repo created. Please do the initial git commit now"
     exit 0
 done
