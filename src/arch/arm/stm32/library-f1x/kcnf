@@ -1,0 +1,79 @@
+menuconfig STM32F1X_PLIBS
+bool "STM32F1X periph libraries"
+depends on STM32F1X
+
+if STM32F1X_PLIBS
+	config	STM32_LIB_SYSTEM
+	bool	"SystemInit"
+	select STM32_LIB_RCC	
+	help
+		System library that brings up the clocking
+	
+	config	STM32_LIB_ADC
+	bool "ADC"
+	
+	config	STM32_LIB_BKP
+	bool "BKP"
+	
+	config	STM32_LIB_CAN
+	bool "CAN"
+	
+	config	STM32_LIB_CEC
+	bool "CEC"
+	
+	config	STM32_LIB_CRC
+	bool "CRC"	
+		
+	config	STM32_LIB_DAC
+	bool "DAC"	
+
+	config	STM32_LIB_DBGMCU
+	bool "DBGMCU"	
+
+	config	STM32_LIB_DMA
+	bool "DMA"	
+	
+	config	STM32_LIB_EXTI
+	bool "EXTI"	
+
+	config	STM32_LIB_FLASH
+	bool "FLASH"	
+
+	config	STM32_LIB_FSMC
+	bool "FSMC"
+	
+	config	STM32_LIB_GPIO
+	bool "GPIO"	
+
+	config	STM32_LIB_I2C
+	bool "I2C"	
+
+	config	STM32_LIB_IWDG
+	bool "IWDG"
+
+	config	STM32_LIB_PWR
+	bool "PWR"	
+	
+	config	STM32_LIB_RCC
+	bool "RCC"	
+	
+	config	STM32_LIB_RTC
+	bool "RTC"
+	
+	config	STM32_LIB_SDIO
+	bool "SDIO"	
+
+	config	STM32_LIB_SPI
+	bool "SPI"	
+
+	config	STM32_LIB_TIM
+	bool "TIM"	
+
+	config	STM32_LIB_USART
+	bool "USART"	
+
+	config	STM32_LIB_WWDG
+	bool "WWDG"		
+
+endif
+

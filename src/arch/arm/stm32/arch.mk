@@ -24,12 +24,13 @@ else ifeq ($(CONFIG_STM32F10X_XL),y)
 	CFLAGS+=-DSTM32F10X_XL
 else ifeq ($(CONFIG_STM32F10X_CL),y)
 	CFLAGS+=-DSTM32F10X_CL
+else ifeq ($(CONFIG_STM32F4X),y)
+	CFLAGS+=-DSTM32F4X
 endif
 
 ifeq ($(CONFIG_STM32_FULL_ASSERT),y)
 	CFLAGS+=-DFULL_ASSERT
 endif
-
 
 #Handle default code placement
 
@@ -43,12 +44,25 @@ ifneq ($(CONFIG_STM32_SET_OFFSETS),y)
 	GFLAGS+=-DCONFIG_STM32_RAM_OFFSET=0x0
 endif
 
-#FixMe: ...
-CFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb
-ASFLAGS+=-fno-common -mcpu=cortex-m3 -mthumb -xassembler-with-cpp
+#STM32F4x series have cortex-m4 inside
+#TODO: asserts for STM32F4X
+ifeq ($(CONFIG_STM32F1X),y)
+CFLAGS+=-mcpu=cortex-m3 -mthumb
+ASFLAGS+=-mcpu=cortex-m3 -mthumb
+CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x
+else ifeq ($(CONFIG_STM32F4X),y)
+CFLAGS+=-mcpu=cortex-m4 -mthumb
+ASFLAGS+=-mcpu=cortex-m4 -mthumb
+CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x
+#CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x/assert.h
+endif
+
+
+CFLAGS+=-fno-common 
+ASFLAGS+=-fno-common  -xassembler-with-cpp
 CFLAGS+=$(GFLAGS)
-CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include
-CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include/assert.h
+
+
 
 # Let the magic of gcc preprocessor commence!
 $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)

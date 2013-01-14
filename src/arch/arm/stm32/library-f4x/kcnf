@@ -1,0 +1,105 @@
+menuconfig STM32F4X_PLIBS
+bool "STM32F4X periph libraries"
+depends on STM32F4X
+
+
+if STM32F4X_PLIBS
+
+
+config STM32_LIB_misc
+bool "misc"
+
+config STM32_LIB_stm32f4xx_adc
+bool "stm32f4xx_adc"
+
+config STM32_LIB_stm32f4xx_can
+bool "stm32f4xx_can"
+
+config STM32_LIB_stm32f4xx_crc
+bool "stm32f4xx_crc"
+
+config STM32_LIB_stm32f4xx_cryp
+bool "stm32f4xx_cryp"
+
+config STM32_LIB_stm32f4xx_cryp_aes
+bool "stm32f4xx_cryp_aes"
+
+config STM32_LIB_stm32f4xx_cryp_des
+bool "stm32f4xx_cryp_des"
+
+config STM32_LIB_stm32f4xx_cryp_tdes
+bool "stm32f4xx_cryp_tdes"
+
+config STM32_LIB_stm32f4xx_dac
+bool "stm32f4xx_dac"
+
+config STM32_LIB_stm32f4xx_dbgmcu
+bool "stm32f4xx_dbgmcu"
+
+config STM32_LIB_stm32f4xx_dcmi
+bool "stm32f4xx_dcmi"
+
+config STM32_LIB_stm32f4xx_dma
+bool "stm32f4xx_dma"
+
+config STM32_LIB_stm32f4xx_exti
+bool "stm32f4xx_exti"
+
+config STM32_LIB_stm32f4xx_flash
+bool "stm32f4xx_flash"
+
+config STM32_LIB_stm32f4xx_fsmc
+bool "stm32f4xx_fsmc"
+
+config STM32_LIB_stm32f4xx_gpio
+bool "stm32f4xx_gpio"
+
+config STM32_LIB_stm32f4xx_hash
+bool "stm32f4xx_hash"
+
+config STM32_LIB_stm32f4xx_hash_md5
+bool "stm32f4xx_hash_md5"
+
+config STM32_LIB_stm32f4xx_hash_sha1
+bool "stm32f4xx_hash_sha1"
+
+config STM32_LIB_stm32f4xx_i2c
+bool "stm32f4xx_i2c"
+
+config STM32_LIB_stm32f4xx_iwdg
+bool "stm32f4xx_iwdg"
+
+config STM32_LIB_stm32f4xx_pwr
+bool "stm32f4xx_pwr"
+
+config STM32_LIB_stm32f4xx_rcc
+bool "stm32f4xx_rcc"
+
+config STM32_LIB_stm32f4xx_rng
+bool "stm32f4xx_rng"
+
+config STM32_LIB_stm32f4xx_rtc
+bool "stm32f4xx_rtc"
+
+config STM32_LIB_stm32f4xx_sdio
+bool "stm32f4xx_sdio"
+
+config STM32_LIB_stm32f4xx_spi
+bool "stm32f4xx_spi"
+
+config STM32_LIB_stm32f4xx_syscfg
+bool "stm32f4xx_syscfg"
+
+config STM32_LIB_stm32f4xx_tim
+bool "stm32f4xx_tim"
+
+config STM32_LIB_stm32f4xx_usart
+bool "stm32f4xx_usart"
+
+config STM32_LIB_stm32f4xx_wwdg
+bool "stm32f4xx_wwdg"
+
+config STM32_LIB_system_stm32f4xx
+bool "system_stm32f4xx"
+
+endif

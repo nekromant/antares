@@ -1,29 +1,47 @@
+config STM32F4X
+bool
+
+config STM32F1X
+bool
+
 choice 
 prompt "STM32 Family"
 
 config STM32F10X_LD  
-bool "STM32 Low density devices"
+bool "STM32F1X Low density devices"
+select STM32F1X
 
 config STM32F10X_LD_VL 
-bool "STM32 Low density Value Line devices"
+bool "STM32F1X Low density Value Line devices"
+select STM32F1X
 
 config STM32F10X_MD 
-bool "STM32 Medium density devices"
+bool "STM32F1X Medium density devices"
+select STM32F1X
 
 config STM32F10X_MD_VL 
-bool "STM32 Medium density Value Line devices"
+bool "STM32F1X Medium density Value Line devices"
+select STM32F1X
 
 config STM32F10X_HD 
-bool "STM32 High density devices "
+bool "STM32F1X High density devices "
+select STM32F1X
 
 config STM32F10X_HD_VL 
-bool "STM32 High density value line devices"
+bool "STM32F1X High density value line devices"
+select STM32F1X
 
 config STM32F10X_XL 
-bool "STM32 XL-density devices "
+bool "STM32F1X XL-density devices "
+select STM32F1X
 
 config STM32F10X_CL  
-bool "STM32 Connectivity line devices"
+bool "STM32F1X Connectivity line devices"
+select STM32F1X
+
+config STM32F4XXX
+bool "STM32F4X series"
+select STM32F4X
 
 endchoice
 
@@ -114,82 +132,10 @@ endif
 
 endmenu
 
-menuconfig STM32_PLIBS
-bool "Select STM32 libraries to build"
 
-if STM32_PLIBS
-	config	STM32_LIB_SYSTEM
-	bool	"SystemInit"
-	help
-		System library for configuring clocks and such stuff
-	
-	config	STM32_LIB_ADC
-	bool "ADC"
-	
-	config	STM32_LIB_BKP
-	bool "BKP"
-	
-	config	STM32_LIB_CAN
-	bool "CAN"
-	
-	config	STM32_LIB_CEC
-	bool "CEC"
-	
-	config	STM32_LIB_CRC
-	bool "CRC"	
-		
-	config	STM32_LIB_DAC
-	bool "DAC"	
+source "antares/src/arch/arm/stm32/library-f1x/kcnf"
+source "antares/src/arch/arm/stm32/library-f4x/kcnf"
 
-	config	STM32_LIB_DBGMCU
-	bool "DBGMCU"	
-
-	config	STM32_LIB_DMA
-	bool "DMA"	
-	
-	config	STM32_LIB_EXTI
-	bool "EXTI"	
-
-	config	STM32_LIB_FLASH
-	bool "FLASH"	
-
-	config	STM32_LIB_FSMC
-	bool "FSMC"
-	
-	config	STM32_LIB_GPIO
-	bool "GPIO"	
-
-	config	STM32_LIB_I2C
-	bool "I2C"	
-
-	config	STM32_LIB_IWDG
-	bool "IWDG"
-
-	config	STM32_LIB_PWR
-	bool "PWR"	
-	
-	config	STM32_LIB_RCC
-	bool "RCC"	
-	
-	config	STM32_LIB_RTC
-	bool "RTC"
-	
-	config	STM32_LIB_SDIO
-	bool "SDIO"	
-
-	config	STM32_LIB_SPI
-	bool "SPI"	
-
-	config	STM32_LIB_TIM
-	bool "TIM"	
-
-	config	STM32_LIB_USART
-	bool "USART"	
-
-	config	STM32_LIB_WWDG
-	bool "WWDG"		
-
-endif
 
 menuconfig STM32_EXTRA
 bool "STM32 Extra drivers"
@@ -198,7 +144,7 @@ if STM32_EXTRA
 	menuconfig STM32_SPIFLASH
 	bool "SPI Flash driver"
 	if STM32_SPIFLASH
-		comment "ST's driver is ugly. Only once dev is supported"
+		comment "ST's driver is ugly. Only one dev is supported"
 		comment "It should be rewritten in a more portable manner"
 		
 		config STM32_SPIFLASH_GPIN
