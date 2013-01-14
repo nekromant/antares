@@ -22,8 +22,8 @@
 #define BUTTON4_MASK            0x80
 
 
-#define GPIO_DIR    *(uint16_t*) GPIO_DIR_REG
-#define GPIO_STATE  *(uint16_t*) GPIO_STATE_REG
-#define BTN_STATE   *(uint16_t*) BUTTONS_STATE_REG
+#define GPIO_DIR    *(volatile uint16_t*) GPIO_DIR_REG
+#define GPIO_STATE  *(volatile uint16_t*) GPIO_STATE_REG
+#define BTN_STATE   *(volatile uint16_t*) BUTTONS_STATE_REG
 
 #endif
