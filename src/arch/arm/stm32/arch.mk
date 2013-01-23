@@ -50,11 +50,12 @@ ifeq ($(CONFIG_STM32F1X),y)
 CFLAGS+=-mcpu=cortex-m3 -mthumb
 ASFLAGS+=-mcpu=cortex-m3 -mthumb
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x
+CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x/assert.h
 else ifeq ($(CONFIG_STM32F4X),y)
 CFLAGS+=-mcpu=cortex-m4 -mthumb
 ASFLAGS+=-mcpu=cortex-m4 -mthumb
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x
-#CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x/assert.h
+CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x/assert.h
 endif
 
 
