@@ -159,11 +159,20 @@ if STM32_EXTRA
 		string "SPI device"
 		default "SPI1"		
 	endif
-	config STM32_UARTIO
-	bool "USART STDIO support"
+	menuconfig STM32_UARTIO
+	bool "USART STDIO driver for newlib"
 	help
 		Provides simple io routines to USART
+		use this for printk/printf to uart
 
+	if STM32_UARTIO
+
+	comment "Please, take care to initialise uart yourself"
+	config STM32_UARTIO_PORT
+	int "USART"
+	default 1
+
+	endif	
 	
 endif 
 

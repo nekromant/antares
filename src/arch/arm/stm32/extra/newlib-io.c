@@ -4,6 +4,9 @@
 #include <sys/unistd.h>
 #include "stm32f10x_usart.h"
 
+#define STDOUT_USART CONFIG_STM32_UARTIO_PORT
+#define STDERR_USART CONFIG_STM32_UARTIO_PORT
+#define STDIN_USART CONFIG_STM32_UARTIO_PORT
 
 #ifndef STDOUT_USART
 #define STDOUT_USART 1
@@ -85,7 +88,7 @@ int _read(int file, char *ptr, int len) {
 }
 
 
-
+#if 0
 int try_getc(int delay)
 {
 	int c;
@@ -118,3 +121,4 @@ int try_getc(int delay)
 	}
 	return -1;
 }
+#endif

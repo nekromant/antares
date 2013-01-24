@@ -66,20 +66,18 @@ if LIB_NLIBSTUBS
 	
 	endif
 
-config LIB_SNPRINTF
-bool "Portable vsprintf implementation"
-
-config LIB_NLDUMMY
-bool "Basic newlib stubs (for -lc)"
-
 config LIB_TMGR
 bool "Simple cron and uptime counter"
 
 config LIB_XMODEM
-bool "Simple XMODEM implementation"
+bool "Simple XMODEM implementation [BUGGY]"
 
 config LIB_PRINTK
 bool "printk and dbg() macro support"
+
+config LIB_PRINTK_TIMESTAMP
+depends on LIB_TMGR
+bool "timestamp printks"
 
 source "antares/src/lib/urpc/kcnf"
 source "antares/src/lib/msp430/kcnf"
