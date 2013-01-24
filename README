@@ -4,7 +4,7 @@ MCU is trivial.
 It uses Kconfig as seen in linux kernel and a set of homebrew Makefiles
 designed to easen the development process. 
 This stuff is still pre-alpha quality, so if things don't work for you
-out of the box - drop me a line.
+out of the box - drop me a line, or create an issue on github
 
 Abstract.
 ---------
@@ -17,33 +17,41 @@ You can, of course, hook iar c to Makefiles, but you'll still spend
 more time figuring out how to do that, then writing the code. 
 While the above IDEs make it simpler to create some 'write&forget'
 projects fast, they suck when it comes to maintaining a lot of shared
-code between different projects (and that is what really lazy coders
-(like me) want).
+code between different projects, different revisions of projects. etc
+(and that is what really lazy coders (like me) want).
 
 The best way to manage a very configurable project with a lot of 
 library code is Kconfig as seen in linux kernel. Mostly because it
 handles dependencies of parameters and you won't eventually have a 
 huge mess in your config.h (Lots of hatred go towards u-boot and its
-crappy buildsystem). 
+crappy buildsystem). But you won't rip kconfig from kernel for each 
+of your avr-led-blinker project, will you?
 So, there we go. 
 
 Yet another arduino?
 --------------------
+Let's be honest.
 It is not arduino. It doesn't aim to provide any crippled IDE for your
 projects. You are free to use whatever IDE/editor you like. VIM/emacs 
 users welcome. Eclipse? You're welcome. Kdevelop? Sure.  
-It doesn't make you think that you are writing in any 'innovative' 
-programming language, nor aims to provide an IDE. It's mostly just 
-plain C. Antares just handles configuring your project, building and 
-deploying and stays out of your way. Consider it an overgrown Makefile
-on steroids. Although antares comes with quite some library code, you 
-are free to NOT use any of it and exclude it from compilation. 
-The choice is yours to make.
+It doesn't end up with lies, trying make you think that you are writing 
+in any 'innovative' programming language, nor aims to provide an IDE. 
+It's mostly just plain C. Antares just handles configuring your project, 
+building and deploying and stays out of your way. Consider it an 
+overgrown Makefile on steroids. Although antares comes with quite some 
+library code, you are free to NOT use any of it and exclude it from 
+compilation. 
+The choice is yours to make, after all.
+
+Why not just stick to arduino?
+------------------------------
+Personal reasons. It's unportable, ugly, very little hardware is actually 
+supported. 
 
 So, in short antares is...
 --------------------------
 A set of Makefiles, scripts and a bunch of library code, that can be 
-used (and reused) in your projects, bundled with kconfig. 
+used (and reused) easily in your projects, bundled with kconfig. 
 
 Supported architectures
 ------------------------
@@ -64,13 +72,12 @@ antares is aimed to be used at.
 Is antares buildsystem okay to compile in multiple threads?
 -----------------------------------------------------------
 Feel free to supply the -jXX flag to speed things up. It should work. 
-If it doesn't - submit a bug report, and it will work.
+If it doesn't - submit a bug report, and it will work sooner or later.
 
 Any documentation?
 ------------------
-The documentation is maintained in 'thebuggenie wiki', avaliable in
+The documentation is maintained in doc/, avaliable in
 English and Russian.  
-Just navigate to antares.ncrmnt.org and press the 'DOCS' link. 
 
 Any 'official' development boards?
 ----------------------------------
@@ -98,6 +105,10 @@ ST Peripheral Libraries. Proprietary (BSD-like?) license
 VUSB (Dual, GPLv2+obdev exception and proprietary)
 lwIP (BSD-like) 
 
+Why there's so little library code for arch XXX?
+------------------------------------------------
+Patches welcome. 
+
 Quickstart?
 -----------
 Have a look at docs/en/quickstart
@@ -105,6 +116,5 @@ Have a look at docs/en/quickstart
 Who?
 ----
 Andrew 'Necromant' Andrianov - Initial author and core dev of Antares
-Nikita 'webconn' Maslov - Testing, aproj wizard, bugfixing.
-Dmitry Suhotsky - Testing, occasional bugfixing. 
-
+Nikita 'webconn' Maslov - Testing, first version of aproj wizard, bugfixing.
+Dmitry Suhotsky - Mostly testing in live environment 
