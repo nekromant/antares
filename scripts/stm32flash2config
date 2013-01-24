@@ -1,0 +1,50 @@
+#!/bin/bash
+
+sizeparse() 
+{
+    S=`echo $2|cut -d"K" -f 1`
+    S=$((S*1024))
+    printf "%s=0x%x\n" $1 $S
+}
+
+densityparse()
+{
+case $1 in
+    "0x0420" )
+	    echo CONFIG_STM32F10X_MD_VL=y
+	    ;;
+    "0x0412" )
+	    echo CONFIG_STM32F10X_LD=y
+	    ;;
+    "0x0410" )
+	    echo CONFIG_STM32F10X_MD=y
+	    ;;
+    "0x0413" )
+	    echo CONFIG_STM32F4XXX=y
+	    ;;
+    "0x0414" )
+	    echo CONFIG_STM32F10X_HD=y
+	    ;;
+    "0x0418" )
+	    echo CONFIG_STM32F10X_CL=y
+	    ;;
+    "0x0428" )
+	    echo CONFIG_STM32F10X_HD_VL=y
+	    ;;
+    "0x0430" )
+	    echo CONFIG_STM32F10X_XL=y
+	    ;;
+    
+esac
+}
+
+STR=`cat`
+RAM=`echo "$STR" | awk '/bootloader/ {print $3}'`
+FLASH=`echo "$STR" | awk '/Flash/ {print $3}'`
+DENSITY=`echo "$STR" | awk '/Device ID/ {print $4}'`
+
+echo "#AUTOMATICALLY PATCHED INFO FROM STM32FLASH"
+sizeparse CONFIG_STM32_RAM_LEN $RAM
+sizeparse CONFIG_STM32_FLASH_LEN $FLASH
+densityparse $DENSITY
+

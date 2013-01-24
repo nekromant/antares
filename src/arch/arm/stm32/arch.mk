@@ -72,5 +72,8 @@ $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
 list-interrupts:
 	$(SILENT)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
 
+stm32probe:
+	$(SILENT)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
 
-PHONY+=list-interrupts
+
+PHONY+=list-interrupts stm32probe
