@@ -4,9 +4,6 @@ depends on MCU_STM32
 
 if DEPLOY_STM32FLASH
 
-  config DEPLOY_AS_ROOT
-  bool "Run stm32 as root"
-  
   config DEPLOY_STM32FLASH_BIN
   string "stm32flash binary name"
   default "stm32flash"
