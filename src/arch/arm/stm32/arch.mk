@@ -69,3 +69,8 @@ CFLAGS+=$(GFLAGS)
 $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
 	$(SILENT_GEN) cat "$^" | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h $(GFLAGS) -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
 
+list-interrupts:
+	$(SILENT)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
+
+
+PHONY+=list-interrupts
