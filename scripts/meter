@@ -23,10 +23,10 @@ PRCNT="] $PRCNT% used"
 
 BANNER="$COLOR_BANNER$BANNER$COLOR_RESET: $VALUE/$MAX bytes"
 
-COLS=$((COLS-${#BANNER}+${#COLOR_BANNER}+${#COLOR_RESET}-4-${#PRCNT}))
+COLS=$((COLS-60))
 FCOLS=$((VALUE*COLS/MAX))
 
-echo -ne "$BANNER [$COLOR_BAR"
+echo -ne "$BANNER \r\t\t\t\t\t[$COLOR_BAR"
 
 for ((i=0; i<$FCOLS; i++)); do
     echo -n "#"

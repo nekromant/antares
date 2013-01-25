@@ -76,9 +76,15 @@ stm32probe:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
 
 sizecheck:
-	$(Q)$(ANTARES_DIR)/scripts/meter "Device FLASH" \
+	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
 	`stat $(IMAGENAME).bin -c %s` \
 	$(CONFIG_STM32_FLASH_LEN);
+	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
+	$(CONFIG_STM32_RAM_LEN);
+	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
+
+
 
 BUILDGOALS+=sizecheck
 PHONY+=list-interrupts stm32probe sizecheck
