@@ -39,6 +39,10 @@ HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
+FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 )))
+RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
+RAMEND=$(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
+RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART))))
 
 
 %.hex: %.elf
@@ -52,3 +56,19 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 		$(call colorize,$(t_cyn))
 		@echo "Created Intel HEX file for eeprom: $(@)"
 		$(call colorize,$(col_rst))
+
+
+sizecheck:
+	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
+	$(FLASHSIZE);
+	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
+	$(RAMSIZE);
+	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
+
+
+
+
+BUILDGOALS+=sizecheck
+PHONY+=list-interrupts stm32probe sizecheck
