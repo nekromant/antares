@@ -43,6 +43,7 @@ FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp 
 RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
 RAMEND=$(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
 RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART))))
+EEPROM_SIZE=$(shell echo $$((`echo -e "\#include <avr/io.h>\nEEPROM_SIZE" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
 
 
 %.hex: %.elf
@@ -65,6 +66,13 @@ sizecheck:
 	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
 	$(RAMSIZE);
+	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
+	$(RAMSIZE);
+	$(Q)$(ANTARES_DIR)/scripts/meter "EEPROM Usage" \
+	`stat $(IMAGENAME).eep -c %s` \
+	$(EEPROM_SIZE);
+
 	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
 
 
