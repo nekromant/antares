@@ -70,10 +70,15 @@ $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
 	$(SILENT_GEN) cat "$^" | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h $(GFLAGS) -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
 
 list-interrupts:
-	$(SILENT)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
 
 stm32probe:
-	$(SILENT)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
 
+sizecheck:
+	$(Q)$(ANTARES_DIR)/scripts/meter "Device FLASH" \
+	`stat $(IMAGENAME).bin -c %s` \
+	$(CONFIG_STM32_FLASH_LEN);
 
-PHONY+=list-interrupts stm32probe
+BUILDGOALS+=sizecheck
+PHONY+=list-interrupts stm32probe sizecheck
