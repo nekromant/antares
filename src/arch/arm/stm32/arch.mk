@@ -32,7 +32,7 @@ ifeq ($(CONFIG_STM32_FULL_ASSERT),y)
 	CFLAGS+=-DFULL_ASSERT
 endif
 
-#Handle default code placement
+# Handle default code placement. This looks like the same for st32f1x and stm32f4x
 
 ifneq ($(CONFIG_STM32_OVERRIDE_BASES),y)
 	GFLAGS+=-DCONFIG_STM32_FLASH_BASE=0x08000000
