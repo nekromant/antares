@@ -34,3 +34,22 @@ endif
 
 $(IMAGENAME).bin: $(IMAGENAME).ihx
 	$(SILENT_HEX2BIN)hex2bin $(<)
+
+BUILDGOALS+=checksize
+PHONY+=checksize
+
+#CONFIG IRAM/XRAM/FLASH
+checksize: $(IMAGENAME).bin
+	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
+	`stat $(IMAGENAME).bin -c %s` $(CONFIG_FLASH_SIZE)
+	$(Q)$(ANTARES_DIR)/scripts/meter "IRAM Usage" \
+	`cat $(IMAGENAME).mem |grep EXTERN|awk '{print $$3}'` \
+	$(CONFIG_IRAM_SIZE)
+	$(Q)$(ANTARES_DIR)/scripts/meter "XRAM Usage" \
+	`cat $(IMAGENAME).mem |grep PAGE|awk '{print $$4}'` \
+	$(CONFIG_XRAM_SIZE)
+
+
+
+
+

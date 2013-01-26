@@ -34,12 +34,17 @@ bool "Huge"
 endchoice 
 
 config XRAM_SIZE
-int "XRAM size"
+int "XRAM size (bytes)"
 default 128
 
 
 config IRAM_SIZE
-int "IRAM size"
+int "IRAM size (bytes)"
 default 128	
+
+config FLASH_SIZE
+int "FLASH size (bytes)"
+default 4096	
+
 
 endif
