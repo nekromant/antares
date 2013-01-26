@@ -43,10 +43,10 @@ checksize: $(IMAGENAME).bin
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
 	`stat $(IMAGENAME).bin -c %s` $(CONFIG_FLASH_SIZE)
 	$(Q)$(ANTARES_DIR)/scripts/meter "IRAM Usage" \
-	`cat $(IMAGENAME).mem |grep EXTERN|awk '{print $$3}'` \
+	"`cat $(IMAGENAME).mem |grep EXTERN|awk '{print $$5}'`" \
 	$(CONFIG_IRAM_SIZE)
 	$(Q)$(ANTARES_DIR)/scripts/meter "XRAM Usage" \
-	`cat $(IMAGENAME).mem |grep PAGE|awk '{print $$4}'` \
+	"`cat $(IMAGENAME).mem |grep PAGE|awk '{print $$6}'`" \
 	$(CONFIG_XRAM_SIZE)
 
 

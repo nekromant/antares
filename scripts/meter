@@ -9,8 +9,17 @@ COLOR_ERROR="\e[31;5m"
 COLS=`tput cols`
 BANNER=$1
 
+if [ "$2" == "" ]; then
+let VALUE=0
+else
 let VALUE=$2
+fi
+
+if [ "$3" == "" ]; then
+let MAX=1
+else
 let MAX=$3
+fi
 
 if [ $MAX -lt $VALUE ]; then
     echo -e "!!!WARNING!!! $COLOR_ERROR$BANNER overflow$COLOR_RESET !!!WARNING!!!"
