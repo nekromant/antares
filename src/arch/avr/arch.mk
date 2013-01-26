@@ -43,7 +43,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 )))
 RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
 RAMEND=$(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
-RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART))))
+RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART) + 1 )))
 #No way to get eeprom sizes this way, parse avrdude.conf?
 
 
