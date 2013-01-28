@@ -44,7 +44,8 @@ FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp 
 RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
 RAMEND=$(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
 RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART) + 1 )))
-#No way to get eeprom sizes this way, parse avrdude.conf?
+EESIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nE2END" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 )))
+
 
 
 %.hex: %.elf
@@ -61,13 +62,13 @@ sizecheck:
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
 	$(FLASHSIZE);
+	$(Q)$(ANTARES_DIR)/scripts/meter "EEPROM Usage" \
+	`stat $(IMAGENAME).eep.bin -c %s` \
+	$(EESIZE);
 	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
 	$(RAMSIZE);
 	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
-	$(Q) echo "EEPROM data is " \
-	`stat $(IMAGENAME).eep.bin -c %s` bytes \
-	$(EEPROM_SIZE);
 
 BUILDGOALS+=sizecheck
 PHONY+=list-interrupts stm32probe sizecheck
