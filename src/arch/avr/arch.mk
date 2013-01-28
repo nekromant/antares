@@ -24,6 +24,10 @@ ELFFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 ifeq ($(CONFIG_AVR_BLDR),y)
 ELFFLAGS+=-Wl,--section-start=.text=$(CONFIG_AVR_BLDADDR)
 CFLAGS+=-fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions -Wl,--section-start=.text=$(CONFIG_AVR_BLDADDR)
+APPSIZE=-$(CONFIG_AVR_BLDADDR)
+FBANNER=BOOT FLASH usage
+else
+FBANNER=FLASH usage
 endif
 
 ifeq ($(CONFIG_AVR_VFPRINTF_MIN),y)
@@ -40,7 +44,7 @@ HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
-FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 )))
+FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 $(APPSIZE) )))
 RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
 RAMEND=$(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
 RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART) + 1 )))
@@ -59,7 +63,7 @@ EESIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nE2END" | avr-cpp -mmcu=
 
 
 sizecheck:
-	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
+	$(Q)$(ANTARES_DIR)/scripts/meter "$(FBANNER)" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
 	$(FLASHSIZE);
 	$(Q)$(ANTARES_DIR)/scripts/meter "EEPROM Usage" \
