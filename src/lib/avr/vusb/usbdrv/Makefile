@@ -32,7 +32,4 @@ usbconfig:
 	$(call vusb_def_string,USB_CFG_DEVICE_NAME)
 	$(call vusb_def_string,USB_CFG_SERIAL_NUMBER)
 	$(call append,#include <arch/vusb/usbconfig.h>)
-	
-# $(info $(call vusb_def_string,USB_CFG_VENDOR_NAME))
-# $(info $(call vusb_def_string,USB_CFG_DEVICE_NAME))
-# $(info $(call vusb_def_string,USB_CFG_SERIAL_NUMBER))
+
