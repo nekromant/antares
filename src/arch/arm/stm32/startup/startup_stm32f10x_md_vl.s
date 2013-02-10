@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file      startup_stm32f10x_md_vl.s
   * @author    MCD Application Team
-  * @version   V3.5.0
-  * @date      11-March-2011
+  * @version   V3.6.1
+  * @date      09-March-2012
   * @brief     STM32F10x Medium Density Value Line Devices vector table for RIDE7
   *            toolchain.
   *            This module performs:
@@ -18,14 +18,20 @@
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
     
@@ -37,20 +43,6 @@
 .global  g_pfnVectors
 .global  Default_Handler
 
-/* Antares startup and app code is glued in several subsections */
-.section  .text.antares_initlabel
-.type  antares_initlabel, %function
-antares_initlabel:
-
-.section  .text.antares_first_app
-.type  antares_first_app, %function
-antares_first_app:
-	
-.section  .text.antares_app_end
-.type  antares_app_end, %function
-antares_app_end:
-	b antares_first_app
-	
 /* start address for the initialization values of the .data section. 
 defined in linker script */
 .word  _sidata
@@ -105,22 +97,10 @@ LoopFillZerobss:
   ldr   r3, = _ebss
   cmp   r2, r3
   bcc   FillZerobss
-
-#ifdef CONFIG_STM32_LIB_SYSTEM
 /* Call the clock system intitialization function.*/
-/* Do it only when sysInit is enabled */
-  bl  SystemInit
-#endif
-	
-#ifdef CONFIG_ANTARES_STARTUP
- b antares_initlabel
-#endif
-	
-#ifndef CONFIG_ANTARES_STARTUP
+  bl  SystemInit   
 /* Call the application's entry point.*/
-  bl  main
-#endif
-	
+  bl    main
   bx    lr    
 .size   Reset_Handler, .-Reset_Handler
 
@@ -422,4 +402,4 @@ g_pfnVectors:
   .weak  TIM7_IRQHandler
   .thumb_set TIM7_IRQHandler,Default_Handler  
   
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f10x.h
   * @author  MCD Application Team
-  * @version V3.5.0
-  * @date    11-March-2011
+  * @version V3.6.1
+  * @date    09-March-2012
   * @brief   CMSIS Cortex-M3 Device Peripheral Access Layer Header File. 
   *          This file contains all the peripheral register's definitions, bits 
   *          definitions and memory mapping for STM32F10x Connectivity line, 
@@ -28,14 +28,20 @@
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -52,7 +58,7 @@
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif /* __cplusplus */
   
 /** @addtogroup Library_configuration_section
   * @{
@@ -96,14 +102,14 @@
  #error "Please select first the target STM32F10x device used in your application (in stm32f10x.h file)"
 #endif
 
-#if !defined  USE_STDPERIPH_DRIVER
+#if !defined  (USE_STDPERIPH_DRIVER)
 /**
  * @brief Comment the line below if you will not use the peripherals drivers.
    In this case, these drivers will not be included and the application code will 
    be based on direct access to peripherals registers 
    */
   /*#define USE_STDPERIPH_DRIVER*/
-#endif
+#endif /* USE_STDPERIPH_DRIVER */
 
 /**
  * @brief In the following line adjust the value of External High Speed oscillator (HSE)
@@ -120,23 +126,26 @@
  #endif /* STM32F10X_CL */
 #endif /* HSE_VALUE */
 
-
 /**
  * @brief In the following line adjust the External High Speed oscillator (HSE) Startup 
    Timeout value 
    */
-#define HSE_STARTUP_TIMEOUT   ((uint16_t)0x0500) /*!< Time out for HSE start up */
+#if !defined  (HSE_STARTUP_TIMEOUT) 
+  #define HSE_STARTUP_TIMEOUT    ((uint16_t)0x0500)   /*!< Time out for HSE start up */
+#endif /* HSE_STARTUP_TIMEOUT */
 
-#define HSI_VALUE    ((uint32_t)8000000) /*!< Value of the Internal oscillator in Hz*/
+#if !defined  (HSI_VALUE)   
+  #define HSI_VALUE    ((uint32_t)8000000) /*!< Value of the Internal oscillator in Hz*/
+#endif /* HSI_VALUE */
 
 /**
  * @brief STM32F10x Standard Peripheral Library version number
    */
-#define __STM32F10X_STDPERIPH_VERSION_MAIN   (0x03) /*!< [31:24] main version */                                  
-#define __STM32F10X_STDPERIPH_VERSION_SUB1   (0x05) /*!< [23:16] sub1 version */
-#define __STM32F10X_STDPERIPH_VERSION_SUB2   (0x00) /*!< [15:8]  sub2 version */
-#define __STM32F10X_STDPERIPH_VERSION_RC     (0x00) /*!< [7:0]  release candidate */ 
-#define __STM32F10X_STDPERIPH_VERSION       ( (__STM32F10X_STDPERIPH_VERSION_MAIN << 24)\
+#define __STM32F10X_STDPERIPH_VERSION_MAIN   (0x03) /*!< [31:24] main version */
+#define __STM32F10X_STDPERIPH_VERSION_SUB1   (0x06) /*!< [23:16] sub1 version */
+#define __STM32F10X_STDPERIPH_VERSION_SUB2   (0x01) /*!< [15:8]  sub2 version */
+#define __STM32F10X_STDPERIPH_VERSION_RC     (0x00) /*!< [7:0]  release candidate */
+#define __STM32F10X_STDPERIPH_VERSION        ((__STM32F10X_STDPERIPH_VERSION_MAIN << 24)\
                                              |(__STM32F10X_STDPERIPH_VERSION_SUB1 << 16)\
                                              |(__STM32F10X_STDPERIPH_VERSION_SUB2 << 8)\
                                              |(__STM32F10X_STDPERIPH_VERSION_RC))
@@ -153,12 +162,13 @@
  * @brief Configuration of the Cortex-M3 Processor and Core Peripherals 
  */
 #ifdef STM32F10X_XL
- #define __MPU_PRESENT             1 /*!< STM32 XL-density devices provide an MPU */
+ #define __MPU_PRESENT             1      /*!< STM32 XL-density devices provide an MPU      */
 #else
- #define __MPU_PRESENT             0 /*!< Other STM32 devices does not provide an MPU */
+ #define __MPU_PRESENT             0      /*!< Other STM32 devices does not provide an MPU  */
 #endif /* STM32F10X_XL */
-#define __NVIC_PRIO_BITS          4 /*!< STM32 uses 4 Bits for the Priority Levels    */
-#define __Vendor_SysTickConfig    0 /*!< Set to 1 if different SysTick Config is used */
+#define __CM3_REV                 0x0200  /*!< Core Revision r2p0                           */
+#define __NVIC_PRIO_BITS          4       /*!< STM32 uses 4 Bits for the Priority Levels    */
+#define __Vendor_SysTickConfig    0       /*!< Set to 1 if different SysTick Config is used */
 
 /**
  * @brief STM32F10x Interrupt Number Definition, according to the selected device 
@@ -2021,7 +2031,7 @@ typedef struct
 #define  RCC_AHBENR_FLITFEN                  ((uint16_t)0x0010)            /*!< FLITF clock enable */
 #define  RCC_AHBENR_CRCEN                    ((uint16_t)0x0040)            /*!< CRC clock enable */
 
-#if defined (STM32F10X_HD) || defined  (STM32F10X_CL) || defined  (STM32F10X_HD_VL)
+#if defined (STM32F10X_HD) || defined (STM32F10X_XL) || defined  (STM32F10X_CL) || defined  (STM32F10X_HD_VL)
  #define  RCC_AHBENR_DMA2EN                  ((uint16_t)0x0002)            /*!< DMA2 clock enable */
 #endif
 
@@ -4091,6 +4101,11 @@ typedef struct
 
 #define  DAC_CR_DMAEN2                       ((uint32_t)0x10000000)        /*!< DAC channel2 DMA enabled */
 
+#if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
+ #define  DAC_CR_DMAUDRIE1                   ((uint32_t)0x00002000)        /*!< DAC channel1 DMA underrun interrupt enable */
+ #define  DAC_CR_DMAUDRIE2                   ((uint32_t)0x20000000)        /*!< DAC channel2 DMA underrun interrupt enable */
+#endif
+
 /*****************  Bit definition for DAC_SWTRIGR register  ******************/
 #define  DAC_SWTRIGR_SWTRIG1                 ((uint8_t)0x01)               /*!< DAC channel1 software trigger */
 #define  DAC_SWTRIGR_SWTRIG2                 ((uint8_t)0x02)               /*!< DAC channel2 software trigger */
@@ -4691,6 +4706,10 @@ typedef struct
 #define  FSMC_BTR1_DATAST_1                  ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BTR1_DATAST_2                  ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BTR1_DATAST_3                  ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BTR1_DATAST_4                  ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BTR1_DATAST_5                  ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BTR1_DATAST_6                  ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BTR1_DATAST_7                  ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BTR1_BUSTURN                   ((uint32_t)0x000F0000)        /*!< BUSTURN[3:0] bits (Bus turnaround phase duration) */
 #define  FSMC_BTR1_BUSTURN_0                 ((uint32_t)0x00010000)        /*!< Bit 0 */
@@ -4732,6 +4751,10 @@ typedef struct
 #define  FSMC_BTR2_DATAST_1                  ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BTR2_DATAST_2                  ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BTR2_DATAST_3                  ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BTR2_DATAST_4                  ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BTR2_DATAST_5                  ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BTR2_DATAST_6                  ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BTR2_DATAST_7                  ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BTR2_BUSTURN                   ((uint32_t)0x000F0000)        /*!< BUSTURN[3:0] bits (Bus turnaround phase duration) */
 #define  FSMC_BTR2_BUSTURN_0                 ((uint32_t)0x00010000)        /*!< Bit 0 */
@@ -4773,6 +4796,10 @@ typedef struct
 #define  FSMC_BTR3_DATAST_1                  ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BTR3_DATAST_2                  ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BTR3_DATAST_3                  ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BTR3_DATAST_4                  ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BTR3_DATAST_5                  ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BTR3_DATAST_6                  ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BTR3_DATAST_7                  ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BTR3_BUSTURN                   ((uint32_t)0x000F0000)        /*!< BUSTURN[3:0] bits (Bus turnaround phase duration) */
 #define  FSMC_BTR3_BUSTURN_0                 ((uint32_t)0x00010000)        /*!< Bit 0 */
@@ -4814,6 +4841,10 @@ typedef struct
 #define  FSMC_BTR4_DATAST_1                  ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BTR4_DATAST_2                  ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BTR4_DATAST_3                  ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BTR4_DATAST_4                  ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BTR4_DATAST_5                  ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BTR4_DATAST_6                  ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BTR4_DATAST_7                  ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BTR4_BUSTURN                   ((uint32_t)0x000F0000)        /*!< BUSTURN[3:0] bits (Bus turnaround phase duration) */
 #define  FSMC_BTR4_BUSTURN_0                 ((uint32_t)0x00010000)        /*!< Bit 0 */
@@ -4855,6 +4886,10 @@ typedef struct
 #define  FSMC_BWTR1_DATAST_1                 ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BWTR1_DATAST_2                 ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BWTR1_DATAST_3                 ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BWTR1_DATAST_4                 ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BWTR1_DATAST_5                 ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BWTR1_DATAST_6                 ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BWTR1_DATAST_7                 ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BWTR1_CLKDIV                   ((uint32_t)0x00F00000)        /*!< CLKDIV[3:0] bits (Clock divide ratio) */
 #define  FSMC_BWTR1_CLKDIV_0                 ((uint32_t)0x00100000)        /*!< Bit 0 */
@@ -4890,6 +4925,10 @@ typedef struct
 #define  FSMC_BWTR2_DATAST_1                 ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BWTR2_DATAST_2                 ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BWTR2_DATAST_3                 ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BWTR2_DATAST_4                 ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BWTR2_DATAST_5                 ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BWTR2_DATAST_6                 ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BWTR2_DATAST_7                 ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BWTR2_CLKDIV                   ((uint32_t)0x00F00000)        /*!< CLKDIV[3:0] bits (Clock divide ratio) */
 #define  FSMC_BWTR2_CLKDIV_0                 ((uint32_t)0x00100000)        /*!< Bit 0 */
@@ -4925,6 +4964,10 @@ typedef struct
 #define  FSMC_BWTR3_DATAST_1                 ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BWTR3_DATAST_2                 ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BWTR3_DATAST_3                 ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BWTR3_DATAST_4                 ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BWTR3_DATAST_5                 ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BWTR3_DATAST_6                 ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BWTR3_DATAST_7                 ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BWTR3_CLKDIV                   ((uint32_t)0x00F00000)        /*!< CLKDIV[3:0] bits (Clock divide ratio) */
 #define  FSMC_BWTR3_CLKDIV_0                 ((uint32_t)0x00100000)        /*!< Bit 0 */
@@ -4960,6 +5003,10 @@ typedef struct
 #define  FSMC_BWTR4_DATAST_1                 ((uint32_t)0x00000200)        /*!< Bit 1 */
 #define  FSMC_BWTR4_DATAST_2                 ((uint32_t)0x00000400)        /*!< Bit 2 */
 #define  FSMC_BWTR4_DATAST_3                 ((uint32_t)0x00000800)        /*!< Bit 3 */
+#define  FSMC_BWTR4_DATAST_4                 ((uint32_t)0x00001000)        /*!< Bit 4 */
+#define  FSMC_BWTR4_DATAST_5                 ((uint32_t)0x00002000)        /*!< Bit 5 */
+#define  FSMC_BWTR4_DATAST_6                 ((uint32_t)0x00004000)        /*!< Bit 6 */
+#define  FSMC_BWTR4_DATAST_7                 ((uint32_t)0x00008000)        /*!< Bit 7 */
 
 #define  FSMC_BWTR4_CLKDIV                   ((uint32_t)0x00F00000)        /*!< CLKDIV[3:0] bits (Clock divide ratio) */
 #define  FSMC_BWTR4_CLKDIV_0                 ((uint32_t)0x00100000)        /*!< Bit 0 */
@@ -7800,6 +7847,11 @@ typedef struct
 /******************  Bit definition for FLASH_KEYR register  ******************/
 #define  FLASH_KEYR_FKEYR                    ((uint32_t)0xFFFFFFFF)        /*!< FPEC Key */
 
+/******************  FLASH Keys  **********************************************/
+#define RDP_Key                  ((uint16_t)0x00A5)
+#define FLASH_KEY1               ((uint32_t)0x45670123)
+#define FLASH_KEY2               ((uint32_t)0xCDEF89AB)
+
 /*****************  Bit definition for FLASH_OPTKEYR register  ****************/
 #define  FLASH_OPTKEYR_OPTKEYR               ((uint32_t)0xFFFFFFFF)        /*!< Option Byte Key */
 
@@ -8321,7 +8373,7 @@ typedef struct
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* __STM32F10x_H */
 
@@ -8333,4 +8385,4 @@ typedef struct
   * @}
   */
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
