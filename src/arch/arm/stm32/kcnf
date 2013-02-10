@@ -135,6 +135,7 @@ endmenu
 
 source "antares/src/arch/arm/stm32/library-f1x/kcnf"
 source "antares/src/arch/arm/stm32/library-f4x/kcnf"
+source "antares/src/arch/arm/stm32/usb-f1x/kcnf"
 
 
 menuconfig STM32_EXTRA
