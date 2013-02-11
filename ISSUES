@@ -1,3 +1,16 @@
+0.2 GOALS
+---------
+* Move to kconfig-frontends instead of the current hacky system
+* STM32: bump stlibs to 3.6.1 (DONE!)
+* STM32: Fix ANTARES_INIT_* macros for stm32
+* STM32: ANTARES_INIT_* on stm32 && -Os do not work
+* STM32: STM32F4X support requires additional care
+* STM32: STM32F1X USB device library (WIP!)
+* STM32: STM32F4X USB device library. 
+* MSP430: Find a way to get flash/ram size for target mcu at compile-time
+
+
+
 This project is no way perfect, and there are quite a few BUGS, 
 that still need to be adressed. 
 
