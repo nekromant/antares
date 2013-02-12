@@ -36,7 +36,7 @@ endif
 
 ifneq ($(CONFIG_STM32_OVERRIDE_BASES),y)
 	GFLAGS+=-DCONFIG_STM32_FLASH_BASE=0x08000000
-	GFLAGS+=-DCONFIG_STM32_RAM_BASE=0x2000000
+	GFLAGS+=-DCONFIG_STM32_RAM_BASE=0x20000000
 endif
 
 ifneq ($(CONFIG_STM32_SET_OFFSETS),y)
@@ -51,7 +51,8 @@ CFLAGS+=-mcpu=cortex-m3 -mthumb
 ASFLAGS+=-mcpu=cortex-m3 -mthumb
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x
 CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x/assert.h
-else ifeq ($(CONFIG_STM32F4X),y)
+
+ifeq ($(CONFIG_STM32F4X),y)
 CFLAGS+=-mcpu=cortex-m4 -mthumb
 ASFLAGS+=-mcpu=cortex-m4 -mthumb
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x
