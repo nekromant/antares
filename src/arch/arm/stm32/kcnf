@@ -4,12 +4,19 @@ bool
 config STM32F1X
 bool
 
+config HAS_USB
+bool 
+
+config HAS_OTG
+bool
+
 choice 
 prompt "STM32 Family"
 
 config STM32F10X_LD  
 bool "STM32F1X Low density devices"
 select STM32F1X
+select HAS_USB
 
 config STM32F10X_LD_VL 
 bool "STM32F1X Low density Value Line devices"
@@ -18,6 +25,7 @@ select STM32F1X
 config STM32F10X_MD 
 bool "STM32F1X Medium density devices"
 select STM32F1X
+select HAS_USB
 
 config STM32F10X_MD_VL 
 bool "STM32F1X Medium density Value Line devices"
@@ -26,6 +34,7 @@ select STM32F1X
 config STM32F10X_HD 
 bool "STM32F1X High density devices "
 select STM32F1X
+select HAS_USB
 
 config STM32F10X_HD_VL 
 bool "STM32F1X High density value line devices"
@@ -34,14 +43,17 @@ select STM32F1X
 config STM32F10X_XL 
 bool "STM32F1X XL-density devices "
 select STM32F1X
+select HAS_USB
 
 config STM32F10X_CL  
 bool "STM32F1X Connectivity line devices"
 select STM32F1X
+select HAS_OTG
 
 config STM32F4XXX
 bool "STM32F4X series"
 select STM32F4X
+select HAS_USB
 
 endchoice
 
