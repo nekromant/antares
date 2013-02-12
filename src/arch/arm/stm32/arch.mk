@@ -51,6 +51,7 @@ CFLAGS+=-mcpu=cortex-m3 -mthumb
 ASFLAGS+=-mcpu=cortex-m3 -mthumb
 CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x
 CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f1x/assert.h
+endif
 
 ifeq ($(CONFIG_STM32F4X),y)
 CFLAGS+=-mcpu=cortex-m4 -mthumb
