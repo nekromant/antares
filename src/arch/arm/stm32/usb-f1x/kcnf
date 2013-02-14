@@ -203,9 +203,201 @@ if STM32F1X_USB
    default "NOP_Process"
    endif   
 
+   endmenu
+
+   menu "Device Descriptor"
+
+   config STM32_USB_BCDUSB_LO
+   hex "bcdUSB (Low)"
+   range 0x0 0xff
+   default 0x0
+
+   config STM32_USB_BCDUSB_HI
+   hex "bcdUSB (High)"
+   range 0x0 0xff
+   default 0x2
+
+   config STM32_USB_BCDDEV_LO
+   hex "bcdDevice (Low)"
+   range 0x0 0xff
+   default 0x0
+
+   config STM32_USB_BCDDEV_HI
+   hex "bcdDevice (High)"
+   range 0x0 0xff
+   default 0x2
+
+
+   config STM32_USB_DEVCLASS
+   hex "Device Class"
+   range 0x0 0xff
+   default 0x2
+
+   config STM32_USB_DEVCLASS
+   hex "Device Class"
+   range 0x0 0xff
+   default 0x2
    
+   config STM32_USB_DEVSUBCLASS
+   hex "Device SubClass"
+   range 0x0 0xff
+   default 0x0
+
+   config STM32_USB_DEVPROTO
+   hex "Device Protocol"
+   range 0x0 0xff
+   default 0x0
+   
+   config STM32_USB_VID_LO
+   hex "Vendor ID (Low byte)"
+   range 0x0 0xff
+   default 0x83
+
+   config STM32_USB_VID_HI
+   hex "Vendor ID (High byte)"
+   range 0x0 0xff
+   default 0x04
+
+   config STM32_USB_PID_LO
+   hex "Product ID (Low byte)"
+   range 0x0 0xff
+   default 0x40
+
+   config STM32_USB_PID_HI
+   hex "Product ID (High byte)"
+   range 0x0 0xff
+   default 0x57
+   
+   config STM32_USB_CONFNUM
+   int "Number of configurations"
+   range 0 255
+   default 1
+   
+   config STM32_USB_MIDX
+   int "Manufacturer string index"
+   range 0 255
+   default 1
+
+   config STM32_USB_PIDX
+   int "Product string index"
+   range 0 255
+   default 2
+
+   config STM32_USB_SIDX
+   int "Serial number string index"
+   range 0 255
+   default 3
+
    endmenu
    
+   menu "Standard Requests"
+   config STM32_USB_RQ_usb_device_getconfiguration_en
+   bool "Implement usb_device_getconfiguration"
+   if STM32_USB_RQ_usb_device_getconfiguration_en
+   config STM32_USB_RQ_usb_device_getconfiguration
+   string "usb_device_getconfiguration handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_setconfiguration_en
+   bool "Implement usb_device_setconfiguration"
+   if STM32_USB_RQ_usb_device_setconfiguration_en
+   config STM32_USB_RQ_usb_device_setconfiguration
+   string "usb_device_setconfiguration handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_getinterface_en
+   bool "Implement usb_device_getinterface"
+   if STM32_USB_RQ_usb_device_getinterface_en
+   config STM32_USB_RQ_usb_device_getinterface
+   string "usb_device_getinterface handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_setinterface_en
+   bool "Implement usb_device_setinterface"
+   if STM32_USB_RQ_usb_device_setinterface_en
+   config STM32_USB_RQ_usb_device_setinterface
+   string "usb_device_setinterface handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_getstatus_en
+   bool "Implement usb_device_getstatus"
+   if STM32_USB_RQ_usb_device_getstatus_en
+   config STM32_USB_RQ_usb_device_getstatus
+   string "usb_device_getstatus handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_clearfeature_en
+   bool "Implement usb_device_clearfeature"
+   if STM32_USB_RQ_usb_device_clearfeature_en
+   config STM32_USB_RQ_usb_device_clearfeature
+   string "usb_device_clearfeature handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_setendpointfeature_en
+   bool "Implement usb_device_setendpointfeature"
+   if STM32_USB_RQ_usb_device_setendpointfeature_en
+   config STM32_USB_RQ_usb_device_setendpointfeature
+   string "usb_device_setendpointfeature handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_setdevicefeature_en
+   bool "Implement usb_device_setdevicefeature"
+   if STM32_USB_RQ_usb_device_setdevicefeature_en
+   config STM32_USB_RQ_usb_device_setdevicefeature
+   string "usb_device_setdevicefeature handler"
+   default "NOP_Process"
+   endif
+   config STM32_USB_RQ_usb_device_setdeviceaddress_en
+   bool "Implement usb_device_setdeviceaddress"
+   if STM32_USB_RQ_usb_device_setdeviceaddress_en
+   config STM32_USB_RQ_usb_device_setdeviceaddress
+   string "usb_device_setdeviceaddress handler"
+   default "NOP_Process"
+   endif
+
+   endmenu
+
+   menu "Interfaces and altsettings"
+
+   config STM32_USB_ALTNUM
+   int "Number of altsettings"
+   default 1
+
+   config STM32_USB_IFACENUM
+   int "Number of interfaces"
+   default 1
+
+   endmenu
+   
+   menu "String Descriptors"
+   
+
+   config STM32_USB_STR_DSC_DYNAMIC
+   bool "Support dynamic string descriptors"
+   help
+	This option adds support for dynamic string descriptor
+	generation. 
+	With this enabled, you should implement the following callback
+	uint8_t* usb_device_get_dynamic_string(uint8_t idx);
+	which will be called when the host asks for a string index, that is 
+	not present in the static table. 
+	Return a pointer to an ASCII string (it will be compiled to unicode)
+	or NULL, if that index does not exist. 
+
+   
+   config STM32_USB_STR_DSC_COUNT
+   int "String Descriptor count"
+   range 0 256
+   default 3
+   help
+	The number of USB String descriptors from the 
+	following table to be compiled in the firmware
+	Default is only for vendor, product, serial
+
+   source "antares/src/arch/arm/stm32/usb-f1x/strings.kcnf"
+   
+   endmenu
+
    endif
 
    
