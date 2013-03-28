@@ -1,10 +1,17 @@
 This project is no way perfect, and there are quite a few BUGS, 
 that still need to be adressed. 
+If you feel like you have the guts, you can pick any of these tasks
+at hand. 
 
 * Buildsystem: The current set of Makefiles is way TOO hacky in 
   places and looks as if it was coded by "an undergrad on exess 
   coffeine" (c) Alan Cox. This should be dealt with. For now - 
   it works, so let it be. 
+
+* Kconfig: There is a project called kconfig-frontends that has all
+  the stuff needed. The current kconfig is old and bundled in a very 
+  ugly fasion, so as a major milestone it should get nuked, as well as 
+  gperf and bison dependencies. 
 
 * Library code. We need MOAR library code. It should be opensource
   and PORTABLE (e.g. SDCC and GCC at the very least). Some arches, 
@@ -12,6 +19,17 @@ that still need to be adressed.
   only used only for that MCUs. Using it for anything else is 
   unethical at the very least, and breaks the license. (In case of 
   stellarisware).
+
+* Add license-y variable to Makefiles
+  A good idea is to stack licenses of the code, and provide a small
+  'legal advice', on what you can and can't do with the resulting
+  code, as well as give a summary of licenses involved and their
+  compatibility.  
+
+* Implement generating ARCH_HAS_XXX for different architectures.
+  Just to match the linux kernel mechanism to expose things like
+  antares startup code where it is supported, and hide where it
+  can't be implemented technically (e.g. sdcc targets)
 
 * Testing framework. We need a set of tests for the library code, 
   that can be used to test for regressions. 
