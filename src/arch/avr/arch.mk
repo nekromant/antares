@@ -38,6 +38,10 @@ ifeq ($(CONFIG_AVR_VFPRINTF_FULL),y)
 ELFFLAGS+= -Wl,-u,vfprintf -lprintf_flt -lm
 endif
 
+ifeq ($(CONFIG_AVR_OLD_DELAY),y)
+	CFLAGS+=-D__DELAY_BACKWARD_COMPATIBLE__
+endif
+
 
 HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 HEX_EEPROM_FLAGS = -j .eeprom

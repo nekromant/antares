@@ -21,6 +21,12 @@ config AVR_BLDADDR
 depends on AVR_BLDR
 hex "Bootloader address"
 
+config AVR_OLD_DELAY
+bool "Use backwards-compatible delay implementation"
+help
+	Use it if you want pass variables to 
+	_delay_ms and friends
+
 choice 
 prompt "vfprintf implementation"
 
