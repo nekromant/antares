@@ -8,9 +8,9 @@ ANTARES_INIT_LOW(antares_low_init)
 
 
 /* The first thing we do is: Turn on interrupts. */
-ANTARES_INIT_HIGH(antares_high_init)
-{
-        __eint();
+__attribute__((naked))							
+__attribute__((__section__(".init7"))) void high_enable_isr(void) {		
+	__eint();								
 }
 
 /* This is a dummy app, so that we can call it from main, to start the loop
@@ -24,7 +24,7 @@ ANTARES_APP(antares_first_app)
 
 ANTARES_FINISH(antares_exit)
 {
-    asm("jmp antares_first_app");
+    asm("jmp .init8");
 }
 
 int main()
