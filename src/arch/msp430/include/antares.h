@@ -1,7 +1,10 @@
 #ifndef _ANTARES_H
 #define _ANTARES_H
 
-/* We use .initX sections for low and high init functions
+#include <generic/macros.h>
+
+/*
+ * We use .initX sections for low and high init functions
  * APPS are called one by one in the main()
  */
 
@@ -16,6 +19,7 @@
  * achieve more
  */
 
+#ifdef CONFIG_ANTARES_STARTUP
 
 #define ANTARES_INIT_LOW(fn)						\
 	void fn();							\
@@ -51,7 +55,14 @@
 	__attribute__((__section__(".fini0"))) void fn ## _finish(void) { \
 		fn();							\
 	}								\
-	void fn() 						\
-	
+	void fn() 						
 
+#else
+
+#define ANTARES_APP(fn) void fn()
+#define ANTARES_INIT_LOW(fn) void fn()
+#define ANTARES_INIT_HIGH(fn) void fn()	      
+#define ANTARES_FINISH(fn) void fn()
+
+#endif	
 #endif

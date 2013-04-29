@@ -1,11 +1,6 @@
 #include <arch/antares.h>
 #include <intrinsics.h>
 
-ANTARES_INIT_LOW(antares_low_init)
-{
-	/* Dummy */
-}
-
 
 /* The first thing we do is: Turn on interrupts. */
 __attribute__((naked))							
@@ -16,11 +11,6 @@ __attribute__((__section__(".init7"))) void high_enable_isr(void) {
 /* This is a dummy app, so that we can call it from main, to start the loop
  * over again. Since startup is the first one, we get it to run first
  */
-
-ANTARES_APP(antares_first_app)
-{
-  /* DUMMY */
-}
 
 ANTARES_FINISH(antares_exit)
 {
