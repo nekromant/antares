@@ -55,15 +55,16 @@ uint8_t* usb_device_getconfigdescriptor(uint16_t len);
 uint8_t* usb_device_getstringdescriptor(uint16_t len);
 uint8_t* usb_device_get_dynamic_string(uint8_t idx);
 
-void    usb_rq_getconfiguration_callback();
-void    usb_rq_setconfiguration_callback();
-void    usb_rq_getinterface_callback();
-void    usb_rq_setinterface_callback();
-void    usb_rq_getstatus_callback();
-void    usb_rq_clearfeature_callback();
-void    usb_rq_setendpointfeature_callback();
-void    usb_rq_setdevicefeature_callback();
-void    usb_rq_setdeviceaddress_callback();
+
+void    usb_device_getconfiguration_callback();
+void    usb_device_setconfiguration_callback();
+void    usb_device_getinterface_callback();
+void    usb_device_setinterface_callback();
+void    usb_device_getstatus_callback();
+void    usb_device_clearfeature_callback();
+void    usb_device_setendpointfeature_callback();
+void    usb_device_setdevicefeature_callback();
+void    usb_device_setdeviceaddress_callback();
 
 #endif /* __USB_DESC_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
