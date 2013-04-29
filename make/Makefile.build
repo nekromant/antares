@@ -2,6 +2,7 @@
 #toolchain files and in arch.mk of the target arch. 
 
 .SUFFIXES:
+.PHONY: $(PHONY)
 
 include $(TOPDIR)/.config
 include $(ANTARES_DIR)/make/Makefile.lib
@@ -13,8 +14,9 @@ RELPATH = $(patsubst $(ANTARES_DIR)/%,%,$(SRCDIR))
 #For retarded sdcc cases
 objects-y:=$(patsubst %.o,%.$(O),$(objects-y))
 objects-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
+recurse+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O)-recurse)
 gen-y+=$(foreach dir,$(subdirs-y),$(dir)/.genned)
-PHONY+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
+PHONY+=$(recurse)
 clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 
 #suck in dep files (if any)
@@ -64,11 +66,14 @@ endif
 	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
 	$(call recurse_make,generate)
 
-%/built-in.$(O): $(TOPDIR)/include/generated/autoconf.h
+%/built-in.$(O)-recurse: $(TOPDIR)/include/generated/autoconf.h
 	$(eval NEXT=$(subst $(OBJDIR)/,,$*))
 	$(eval PHONY+=$(NEXT)/built-in.$(O))
 	$(Q)mkdir -p $(OBJDIR)/$(NEXT)
 	$(call recurse_make,build)
+
+%/built-in.$(O): $(TOPDIR)/include/generated/autoconf.h %/built-in.$(O)-recurse 
+	@echo > /dev/null
 
 %.$(O): $(SRCDIR)/%.c $(extras)
 	$(SILENT_CC) $(CC) $(CFLAGS) $(GENDEPFLAGS) -c  -o $(@) $< 
@@ -80,6 +85,7 @@ endif
 	$(SILENT_AS) $(AS) $(ASFLAGS) $(GENDEPFLAGS) -c -o $(@) $< 
 
 build: built-in.$(O)
+	@echo > /dev/null
 
 generate: .genned
 
@@ -92,9 +98,9 @@ built-in.$(O): $(objects-y)
 	$(SILENT_LD) $(LD) -r -o $(@) $^ 
 endif
 else
-built-in.$(O): $(objects-y)
+built-in.$(O): $(objects-y) $(recurse)
 	$(SILENT_GEN) echo "$(objects-y)" > $@
 endif
 
-.PHONY: $(PHONY) %/built-in.$(O)
+
 .PRECIOUS: $(PRECIOUS) 
