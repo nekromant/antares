@@ -1,0 +1,2 @@
+#!/bin/bash
+FLASHSIZE=$(echo $(( `echo -e "#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$1 | sed '$!d'` + 1 )))
