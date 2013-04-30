@@ -9,11 +9,31 @@ help
 	
 if MSP430_DELAYLIB
 
+   config MSP430_DELAYLIB_SUMMARY
+   bool "Enable debug"
+   help
+	Enables delaylib_print_summary(); that outputs 
+	current delaylib settings. Disabling replaces
+	the function with emptiness.
+	User must call the function whenever he needs it
+
+   config MSP430_DELAYLIB_DYNAMIC
+   bool "Dynamic delays"
+   help
+	Enables you to change current frequency for delays via
+	delaylib_set_clock() and delaylib_get_clock(); 
+
    config MSP430_DELAYLIB_FRQ
-   int "Base CPU Frequency"
+   int "CPU Frequency in HZ"
+   depends on !MSP430_DELAYLIB_DYNAMIC
    default 8000000
 
-   config MSP430_DELAYLIB_SCALING
-   bool "Delay scaling support"
+   config MSP430_DELAYLIB_UNITSIZE
+   int "Time unit size"
+   depends on MSP430_DELAYLIB_DYNAMIC
+   default 1000
+   help
+	Delay will be calculated using this unit chunk
+	as base. 
 
 endif
