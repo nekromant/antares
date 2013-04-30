@@ -1,0 +1,9 @@
+Delaylib
+--------
+
+Delaylib is implemented for most architectures and is designed to provide *surprise* delays.
+Basically, it all gets down to portable delay_ms, delay_s and delay_us functions. 
+Please do not rely on these for precisions. 
+Normally they can take variables as arguments. 
+Some architectures that support changing frequency automatically also expose a 
+delaylib_set_clock function, that should be called by user when the frequency is changed.
