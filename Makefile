@@ -10,6 +10,9 @@ ANTARES_DIR?=$(TOPDIR)
 TMPDIR?=tmp
 ARCH?=avr
 
+#enforce bash, since other shells may break things
+SHELL:=$(shell which bash)
+
 ANTARES_DIR:=$(abspath $(ANTARES_DIR))
 TMPDIR:=$(abspath $(TMPDIR))
 TOPDIR:=$(abspath $(TOPDIR))
