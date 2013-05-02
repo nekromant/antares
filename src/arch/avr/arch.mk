@@ -79,4 +79,4 @@ sizecheck:
 	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
 
 BUILDGOALS+=sizecheck
-PHONY+=list-interrupts stm32probe sizecheck
+PHONY+=sizecheck
