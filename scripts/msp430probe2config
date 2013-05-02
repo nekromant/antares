@@ -13,7 +13,7 @@ cat $1| grep 'Code size'|awk '{printf "%x\n", $4}'
 echo -n "CONFIG_MSP430_RAM_START="
 cat $1| grep 'RAM  start'|awk '{print $4}'
 
-echo -n "CONFIG_MSP430_RAM_SIZE="
+echo -n "CONFIG_MSP430_RAM_SIZE=0x"
 cat $1| grep 'RAM  size'|awk '{printf "%x\n", $4}'
 
 
