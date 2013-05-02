@@ -5,4 +5,21 @@ choice
   source "antares/src/arch/msp430/mcu_database.kcnf"
 
 endchoice
+
+config MSP430_CODE_START
+hex "Code memory start address"
+default 0
+
+config MSP430_CODE_SIZE
+hex "Code memory size"
+default 0
+
+config MSP430_RAM_START
+hex "RAM memory start address"
+default 0
+
+config MSP430_RAM_SIZE
+hex "RAM memory size"
+default 0
+
 endif

@@ -19,3 +19,42 @@ ELFFLAGS+= -mmcu=$(MCU)
 		$(call colorize,$(t_cyn))
 		@echo "Created Intel HEX file: $(@)"
 		$(call colorize,$(col_rst))
+
+list-interrupts: 
+	$(Q)for p in `echo | $(CPP) -v 2>&1|grep "/include"`; do \
+	 if [ -f $$p/$(MCU).h ]; then \
+	  cat $$p/$(MCU).h|grep VECTOR | \
+		awk '{printf $$2"\t"; $$1=$$2=$$3="";print $$0}'; \
+	 fi \
+	done	
+
+#HACK!
+include $(ANTARES_DIR)/deploy/mspdebug/drv_selection.mk
+root=$(call check_root,$(CONFIG_DEPLOY_ROOT))
+
+probe:
+ifeq ($(CONFIG_DEPLOY_MSPDEBUG),y)
+	$(Q)cp $(TOPDIR)/.config $(TOPDIR)/.config.probe
+	$(Q)$(root) mspdebug $(MSPDEBUGDRV) exit > $(TMPDIR)/probedata
+	$(ANTARES_DIR)/scripts/msp430probe2config $(TMPDIR)/probedata > $(TMPDIR)/probedata.config
+	$(Q)cat $(TMPDIR)/probedata
+	$(Q)echo "#Autodected the following config"
+	$(Q)cat $(TMPDIR)/probedata.config
+	$(Q)echo "Does this config look good to you? [y/n]"
+	$(Q)read -N1 c > /dev/null;[ "$c"=="y" ] && cat $(TMPDIR)/probedata.config >> $(TOPDIR)/.config
+	$(Q)echo " you said, so be the configuration updated"
+	$(Q)echo "backup saved as .config.probe"
+else
+	$(Q)echo "FATAL: probing requires mspdebug deployment"
+endif
+
+sizecheck:
+	$(Q)$(ANTARES_DIR)/scripts/meter "Code usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
+	$(CONFIG_MSP430_CODE_SIZE);
+	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
+	$(CONFIG_MSP430_RAM_SIZE);
+
+BUILDGOALS+=sizecheck
+PHONY+=list-interrupts probe sizecheck

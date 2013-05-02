@@ -1,6 +1,7 @@
 TOOL_PREFIX=$(call unquote,$(CONFIG_TOOLCHAIN_PREFIX))
 
 CC       := $(TOOL_PREFIX)gcc
+CPP	 := $(TOOL_PREFIX)cpp
 CXX      := $(TOOL_PREFIX)g++
 LD       := $(TOOL_PREFIX)ld
 AR       := $(TOOL_PREFIX)ar
