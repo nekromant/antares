@@ -1,10 +1,16 @@
 if ARCH_MSP430
+
+comment "Run 'make probe' for autodetection"
+
 choice
 
   prompt "Select MCU variant"
   source "antares/src/arch/msp430/mcu_database.kcnf"
 
 endchoice
+
+
+comment "These do NOT affect code placement"
 
 config MSP430_CODE_START
 hex "Code memory start address"

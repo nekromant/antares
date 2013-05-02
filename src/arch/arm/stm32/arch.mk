@@ -74,7 +74,7 @@ $(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
 list-interrupts:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
 
-stm32probe:
+probe:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
 
 sizecheck:
@@ -89,4 +89,4 @@ sizecheck:
 
 
 BUILDGOALS+=sizecheck
-PHONY+=list-interrupts stm32probe sizecheck
+PHONY+=list-interrupts probe sizecheck

@@ -4,7 +4,7 @@ For stm32 we have a few X-tra special make targets.
       will give you a list of interrupt vector names avaliable for
       your selected mcu. Just for a quick reference
 
-'make stm32probe'
+'make probe'
       will invoke stm32flash, probe the connected mcu and patch the config
       to have the proper sizes for RAM, FLASH. It will also detect and set 
       the density/line for all STM32 devices supported with antares

@@ -4,6 +4,9 @@ bool
 config STM32F1X
 bool
 
+
+comment "Run 'make probe' to detect some things automatically"
+
 choice 
 prompt "STM32 Family"
 
