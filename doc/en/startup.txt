@@ -1,0 +1,103 @@
+Antares startup code
+---------------------
+
+#include <arch/antares.h>
+CONFIG_ANTARES_STARTUP=y
+
+This file describes what antares startup code does, and what are the
+benefits it brings.  It should work on any architecture that has the
+gcc compiler avaliable.
+
+At the time of writing this document these are: ARM, MSP430, AVR
+
+Why?
+----
+
+When we white an application that has several init functions, we do
+something like this: 
+
+int main()
+{
+	init_spi()
+	init_console();
+	#ifdef CONFIG_SOMESTUFF
+	enabled_liba();
+	#endif
+	...
+} 
+
+This is simple, yet not very comfortable, since to add or change
+something we have to edit at least two files: the one that holds the
+definition, the one where it is called, and a header file as well. 
+Unless, it is a led-blinker project that has everything in main.c
+
+Antares ships a way to group initialisation routines semiautomatically
+like device_initcall() does in linux kernel.
+
+Let's imagine out app in the following way. 
+
+antares_init_low(); // Low level stuff, before interrupts are globally enabled
+antares_init_high(); //High level stuff, after interrupts are globally enabled
+while (1)
+{
+	antares_app(); //Application code
+};
+
+Think of the functions above as groups of code, we can add our functions to. 
+
+To add something to antares_init_low() group use macro ANTARES_INIT_LOW
+
+example: 
+
+ANTARES_INIT_LOW(led_blink) 
+{
+	DDRA=0xff;
+	PORTA=0xf0;
+}
+
+In this way we can define as many init functions as we want, and they
+will be grouped at the right place. Multiple
+ANTARES_INIT_LOW/INIT_HIGH/APP definitions are allowed.
+
+Any code added via ANTARES_APP() will be executed in an endless loop
+one by one. So unless you know, what you are doing - do NOT put any
+any endless loops there.
+
+Known issues
+------------
+
+No dependency handling. Whatsoever. The order in which functions will
+be called is determined merely by the link order at compile-time.
+
+How does this thing work?
+-------------------------
+
+The ANTARES_* macros define a function with your code and a dummy
+naked function, that only calls the defined function, but also puts it into
+a corresponding section. Example for msp430
+
+#define ANTARES_INIT_LOW(fn)						\
+	void fn();							\
+	__attribute__((naked))						\
+	__attribute__((__section__(".init5"))) void fn ## _low(void) {	\
+		fn();							\
+	};								\
+	void fn() 
+
+As you see, ANTARES_INIT_LOW will make us func() and func_low()
+without any prologue/epilogue that will be placed in .init5. Since
+dummies are naked, they do not return, therefore they are executed one
+by one.
+
+Since naked functions are somewhat limited, e.g. no if, local
+variables, etc. What's even more, if we try - no warning may pop up,
+but we will end up with weird bugs. Therefore placing a function call
+there is safer.
+
+
+SDCC?
+------
+
+Unfortunately, with SDCC it's very tricky, or impossible to implement this. Mostly because a single compiled file is treated like an whole link object, the a proper #pragma will dump the whole file contents into a section. 
+Anyway, I didn't see a way to make it work. If you manage to make that - drop me a patch. 
+
