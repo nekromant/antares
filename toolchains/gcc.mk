@@ -60,6 +60,11 @@ ifeq ($(CONFIG_GCC_LC),y)
 ELFFLAGS+=-lc
 endif
 
+ifeq ($(CONFIG_GCC_G),y)
+COMMONFLAGS+=-g
+endif
+
+
 ifeq ($(CONFIG_GCC_LM),y)
 ELFFLAGS+=-lm
 endif
