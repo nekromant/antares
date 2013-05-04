@@ -48,6 +48,9 @@ bool "Do not link agains standart libraries"
 	Adds -nostdlib to gcc flags
 
 
+config GCC_G
+bool "Generate debug symbols"
+
 config GCC_LC
 bool "Link agains -lc"
 
