@@ -1,7 +1,7 @@
 
-VERSION_MAJOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MAJOR )
-VERSION_MINOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
-VERSION_CODENAME := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
+VERSION_MAJOR := $(shell $(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_MAJOR )
+VERSION_MINOR := $(shell $(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
+VERSION_CODENAME := $(shell $(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
 VERSION_GIT = $(shell GIT_DIR=$(ANTARES_DIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
 
 
@@ -26,11 +26,11 @@ $(error Sorry)
 endif
 
 versionupdate:
-	$(Q)$(src)/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
-	$(Q)$(src)/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
-	$(Q)$(src)/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
-	$(Q)$(src)/config --set-str VERSION_GIT $(VERSION_GIT) 
-	$(SILENT_VER) $(src)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
+	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
+	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
+	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
+	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_GIT $(VERSION_GIT) 
+	$(SILENT_VER) $(ANTARES_DIR)/kconfig/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
 
 
 define frontend_template

@@ -13,13 +13,21 @@ ARCH?=avr
 #enforce bash, since other shells may break things
 SHELL:=$(shell which bash)
 
+define check_alt
+which $(1) 2>/dev/null|| which $(2) 2>/dev/null || echo "fail"
+endef
+
+#Nasty OS X compat
+STAT:=$(shell $(call check_alt,gstat,stat))
+export STAT
+ECHO:=$(shell $(call check_alt,gecho,echo))
+export ECHO
+
+
 ANTARES_DIR:=$(abspath $(ANTARES_DIR))
 TMPDIR:=$(abspath $(TMPDIR))
 TOPDIR:=$(abspath $(TOPDIR))
 
-Kbuild:=Kconfig
-obj:=$(OBJDIR)/kconfig
-src:=$(SRCDIR)/kconfig
 Kconfig:=$(SRCDIR)/kcnf
 KVersion:=$(ANTARES_DIR)/version.kcnf
 
