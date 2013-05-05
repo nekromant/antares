@@ -40,7 +40,7 @@ BUILDGOALS+=checksize
 PHONY+=checksize
 
 #CONFIG IRAM/XRAM/FLASH
-checksize: $(IMAGENAME).bin
+checksize: $(filter-out checksize,$(BUILDGOALS))
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
 	`$(STAT) $(IMAGENAME).bin -c %s` $(CONFIG_FLASH_SIZE)
 	$(Q)$(ANTARES_DIR)/scripts/meter "IRAM Usage" \

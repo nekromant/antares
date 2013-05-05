@@ -66,7 +66,7 @@ EESIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nE2END" | avr-cpp -mmcu=
 		$(SILENT_OBJCOPY) $(OBJCOPY) $(HEX_EEPROM_FLAGS) -O binary $< $@ || exit 0
 
 
-sizecheck:
+sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
 	$(Q)$(ANTARES_DIR)/scripts/meter "$(FBANNER)" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
 	$(FLASHSIZE);

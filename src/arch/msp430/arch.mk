@@ -48,7 +48,8 @@ else
 	$(Q)echo "FATAL: probing requires mspdebug deployment"
 endif
 
-sizecheck:
+
+sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
 	$(Q)$(ANTARES_DIR)/scripts/meter "Code usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
 	$(CONFIG_MSP430_CODE_SIZE);

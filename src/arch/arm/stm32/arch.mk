@@ -68,8 +68,8 @@ CFLAGS+=$(GFLAGS)
 
 
 # Let the magic of gcc preprocessor commence!
-$(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN)
-	$(SILENT_GEN) cat "$^" | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h $(GFLAGS) -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
+$(TMPDIR)/ldfile.lds: $(GCC_LDFILE_IN) silentoldconfig
+	$(SILENT_GEN) cat $(GCC_LDFILE_IN) | $(CC) -E -P -include $(TOPDIR)/include/generated/autoconf.h $(GFLAGS) -include $(ANTARES_DIR)/include/lib/sizes.h - > $(@)
 
 list-interrupts:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
@@ -77,7 +77,7 @@ list-interrupts:
 probe:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
 
-sizecheck:
+sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
 	`$(STAT) $(IMAGENAME).bin -c %s` \
 	$(CONFIG_STM32_FLASH_LEN);
