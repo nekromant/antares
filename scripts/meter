@@ -41,14 +41,16 @@ FCOLS=$((VALUE*COLS/MAX))
 
 $ECHO -ne "$BANNER \r\t\t\t\t\t[$COLOR_BAR"
 
+TMP=""
 for ((i=0; i<$FCOLS; i++)); do
-    $ECHO -n "#"
+    TMP="${TMP}#"
 done
-$ECHO -ne "$COLOR_RESET"
+$ECHO -ne "${TMP}$COLOR_RESET"
 
+TMP=""
 COLS=$((COLS-FCOLS))
 for ((i=0; i<$COLS; i++)); do
-    $ECHO -n "-"
+    TMP="${TMP}-"
 done
 
-$ECHO -e "$PRCNT"
+$ECHO -e "${TMP}${PRCNT}"
