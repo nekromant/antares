@@ -49,7 +49,7 @@ source "tmp/all-edeploy.kcnf"
 endmenu
 
 
-menu "Build System Tweaks"
+menu "Build System Configuration"
 
   config MAKE_DEFTARGET
   string "Default make target"
@@ -61,6 +61,17 @@ menu "Build System Tweaks"
   help
     The deployment target(s) will be run, if you type
     'make deploy' instead of 
+
+  config NOCOLOR
+  bool "Do not use color in terminal"
+  default n
+
+  config THREADED
+  bool "Explicitly set number of threads"
+
+  config THREADS
+  depends on THREADED
+  int "Number of threads to use (-jX)"
 
   config IMAGE_FILENAME
   string "Output image name"

@@ -1,4 +1,4 @@
-#Coloring support
+ifneq ($(CONFIG_NOCOLOR),y)
 t_blk=$(shell $(ECHO) -e '\e[0;30m')
 t_red=$(shell $(ECHO) -e '\e[0;31m')
 t_grn=$(shell $(ECHO) -e '\e[0;32m')
@@ -35,9 +35,14 @@ bg_pur=$(shell $(ECHO) -e '\e[45m')
 bg_cyn=$(shell $(ECHO) -e '\e[46m')
 bg_wht=$(shell $(ECHO) -e '\e[47m')
 col_rst=$(shell $(ECHO) -e '\e[0m')
+endif
 
-unquote=$(subst ",,$(1))
 
+ifeq (0,${MAKELEVEL})
+ifeq ($(CONFIG_THREADED),y)
+	MAKEFLAGS+=-j$(CONFIG_THREADS)
+endif
+endif
 
 Q:=
 #When the build is ! 'even more verbose' we place @ istread of Q
@@ -137,3 +142,5 @@ else
 $(1)+=\#define $(3) $(5)\n
 endif
 endef
+
+unquote=$(subst ",,$(1))
