@@ -82,14 +82,17 @@ collectinfo: $(TMPDIR)/.collected
 
 
 define check_tool
-	$(SILENT_CHECK) $(1); which $(1) >> /dev/null || (echo "Missing $(1), please check docs"; exit 1);
+	$(SILENT_CHECK) which $(1) >/dev/null || (echo "Missing $(1)! Please install it to continue"; exit 1)
 endef
 
 
 required_tools+=bash
+required_tools+=sed
+required_tools+=awk
+
 
 checktools:
-	$(foreach t,$(required_tools),$(call check_tool,$(t)))
+	$(foreach t,$(required_tools),$(call check_tool,$(t))$(newline))
 
 $(TMPDIR)/.collected:  checkdirs checktools $(genfiles)
 	     $(Q)-rm -f $(OBJDIR)/include/arch
