@@ -9,12 +9,10 @@ out of the box - drop me a line, or create an issue on github
 Abstract.
 ---------
 Traditional buildsystems (cmake, scons, autotools etc.) are very
-painful to use when it comes to bare metal targets.
+painful to use when it comes to bare metal targets. 
 Proprietary crippled IDEs from vendors like IAR/CodeComposer/Keil, etc.
 provide their own project management, but they are generally a pain 
-to use, espesially if you are mostly used to VIM/emacs (like me).
-You can, of course, hook iar c to Makefiles, but you'll still spend
-more time figuring out how to do that, then writing the code. 
+to use espesially if you are mostly used to VIM/emacs (like me).
 While the above IDEs make it simpler to create some 'write&forget'
 projects fast, they suck when it comes to maintaining a lot of shared
 code between different projects, different revisions of projects. etc
@@ -39,14 +37,14 @@ in any 'innovative' programming language, nor aims to provide an IDE.
 It's mostly just plain C. Antares just handles configuring your project, 
 building and deploying and stays out of your way. Consider it an 
 overgrown Makefile on steroids. Although antares comes with quite some 
-library code, you are free to NOT use any of it and exclude it from 
+library code, you are free NOT to use any of it and exclude it from 
 compilation. 
 The choice is yours to make, after all.
 
 Why not just stick to arduino?
 ------------------------------
 Personal reasons. It's unportable, ugly, very little hardware is actually 
-supported. 
+supported. Most tasty chips are NOT supported at all.
 
 So, in short antares is...
 --------------------------
@@ -62,12 +60,11 @@ If you want more - patches are always welcome.
 
 Supported host operating systems
 --------------------------------
-Currently only Linux and FreeBSD have been tested. 
-Mac should (theoretically) work - if you have a second to run a quick
-test, please contact me and I will update this README. 
-(Or fix a bug or two to make it run) 
+Currently only Linux and FreeBSD have been tested.
+Mac OS X has been recently proved to work fine after a few patches
 Windows *might* work (cygwin), but it's currently NOT the platform 
-antares is aimed to be used at. 
+antares is aimed to be used at. If it turns out to be rather simple
+to add support - patches welcome.
 
 Is antares buildsystem okay to compile in multiple threads?
 -----------------------------------------------------------
@@ -118,3 +115,4 @@ Who?
 Andrew 'Necromant' Andrianov - Initial author and core dev of Antares
 Nikita 'webconn' Maslov - Testing, first version of aproj wizard, bugfixing.
 Dmitry Suhotsky - Mostly testing in live environment 
+Drakmail - Mac OS X testing
