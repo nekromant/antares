@@ -43,7 +43,7 @@
 
 .global  g_pfnVectors
 .global  Default_Handler
-
+	
 /* start address for the initialization values of the .data section. 
 defined in linker script */
 .word  _sidata
@@ -55,6 +55,7 @@ defined in linker script */
 .word  _sbss
 /* end address for the .bss section. defined in linker script */
 .word  _ebss
+	
 /* stack used for SystemInit_ExtMemCtl; always internal RAM used */
 
 .equ  BootRAM,        0xF1E0F85F
@@ -99,13 +100,40 @@ LoopFillZerobss:
   ldr  r3, = _ebss
   cmp  r2, r3
   bcc  FillZerobss
-/* Call the clock system intitialization function.*/
-  bl  SystemInit   
-/* Call the application's entry point.*/
-  bl  main
-  bx  lr    
-.size  Reset_Handler, .-Reset_Handler
 
+#ifdef CONFIG_STM32_LIB_SYSTEM
+/* Call the clock system intitialization function.*/
+/* Do it only when sysInit is enabled */
+  bl SystemInit
+#endif
+
+#ifdef CONFIG_ANTARES_STARTUP
+  b.w antares_initlabel		
+#endif
+
+#ifndef CONFIG_ANTARES_STARTUP
+/* Call the application's entry point.*/
+  bl main
+#endif
+	
+  bx    lr    
+
+.size   Reset_Handler, .-Reset_Handler
+
+
+/* Antares startup and app code is glued in several subsections */
+.section .text.antares_initlabel
+antares_initlabel:
+
+.section .text.antares_first_app
+antares_first_app:
+	
+.section .text.antares_app_end
+
+antares_app_end:	
+bl antares_first_app
+
+	
 /**
  * @brief  This is the code that gets called when the processor receives an 
  *         unexpected interrupt.  This simply enters an infinite loop, preserving
