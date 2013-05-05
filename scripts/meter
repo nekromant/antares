@@ -6,6 +6,10 @@ COLOR_RESET="\e[0m"
 COLOR_ERROR="\e[31;5m"
 
 
+if [ "$ECHO" == "" ]; then
+    ECHO=echo
+fi
+
 COLS=`tput cols`
 BANNER=$1
 
@@ -22,8 +26,8 @@ let MAX=$3
 fi
 
 if [ $MAX -lt $VALUE ]; then
-    echo -e "!!!WARNING!!! $COLOR_ERROR$BANNER overflow$COLOR_RESET !!!WARNING!!!"
-    echo -e "You want $COLOR_BANNER$VALUE$COLOR_RESET bytes, but device has only $COLOR_BANNER$MAX$COLOR_RESET"
+    $ECHO -e "!!!WARNING!!! $COLOR_ERROR$BANNER overflow$COLOR_RESET !!!WARNING!!!"
+    $ECHO -e "You want $COLOR_BANNER$VALUE$COLOR_RESET bytes, but device has only $COLOR_BANNER$MAX$COLOR_RESET"
     exit 1; #Make the makfiles produce an error
 fi
 
@@ -35,16 +39,16 @@ BANNER="$COLOR_BANNER$BANNER$COLOR_RESET: $VALUE/$MAX bytes"
 COLS=$((COLS-60))
 FCOLS=$((VALUE*COLS/MAX))
 
-echo -ne "$BANNER \r\t\t\t\t\t[$COLOR_BAR"
+$ECHO -ne "$BANNER \r\t\t\t\t\t[$COLOR_BAR"
 
 for ((i=0; i<$FCOLS; i++)); do
-    echo -n "#"
+    $ECHO -n "#"
 done
-echo -ne "$COLOR_RESET"
+$ECHO -ne "$COLOR_RESET"
 
 COLS=$((COLS-FCOLS))
 for ((i=0; i<$COLS; i++)); do
-    echo -n "-"
+    $ECHO -n "-"
 done
 
-echo -e "$PRCNT"
+$ECHO -e "$PRCNT"
