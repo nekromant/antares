@@ -1,6 +1,8 @@
 config TOOLCHAIN_PREFIX
 string "Toolchain prefix"
-default "somearch-gnueabi-"
+default "avr-" if ARCH_AVR
+default "arm-none-eabi-" if ARCH_ARM
+default "msp430-" if ARCH_MSP430
 
 #  config CC
 #  string "C Compiler (cc)"
@@ -43,7 +45,7 @@ choice
 endchoice
 
 config GCC_NOSTDLIBS
-bool "Do not link agains standart libraries"
+bool "Do not link against stdlib"
 	help
 	Adds -nostdlib to gcc flags
 
@@ -68,7 +70,7 @@ bool "CodeMonkey buster! (tm)"
 help
   Adds -Wall -Werror flags. (trollface.jpg) A true paranoid
   behaviour. But that helps to keep some bad code from noobz 
-  out of the main tree. Partly
+  out of the main tree. Sometimes
 
 comment "Fine tuning"
 
