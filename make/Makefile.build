@@ -76,13 +76,13 @@ endif
 	@echo > /dev/null
 
 %.$(O): $(SRCDIR)/%.c $(extras)
-	$(SILENT_CC) $(CC) $(CFLAGS)  -c  -o $(@) $< 
+	$(SILENT_CC) $(CC) $(CFLAGS) $(GENDEPFLAGS) -c  -o $(@) $< 
 
 %.$(O): $(SRCDIR)/%.S $(extras)
-	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $<
+	$(SILENT_AS) $(AS) $(ASFLAGS) $(GENDEPFLAGS) -c -o $(@) $<
 
 %.$(O): $(SRCDIR)/%.s $(extras)
-	$(SILENT_AS) $(AS) $(ASFLAGS) -c -o $(@) $< 
+	$(SILENT_AS) $(AS) $(ASFLAGS) $(GENDEPFLAGS) -c -o $(@) $< 
 
 build: built-in.$(O)
 	@echo > /dev/null

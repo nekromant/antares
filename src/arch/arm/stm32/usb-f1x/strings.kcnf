@@ -1,0 +1,769 @@
+config STM32_USB_STR_DSC1
+string "String index 1"
+
+config STM32_USB_STR_DSC2
+string "String index 2"
+
+config STM32_USB_STR_DSC3
+string "String index 3"
+
+config STM32_USB_STR_DSC4
+string "String index 4"
+
+config STM32_USB_STR_DSC5
+string "String index 5"
+
+config STM32_USB_STR_DSC6
+string "String index 6"
+
+config STM32_USB_STR_DSC7
+string "String index 7"
+
+config STM32_USB_STR_DSC8
+string "String index 8"
+
+config STM32_USB_STR_DSC9
+string "String index 9"
+
+config STM32_USB_STR_DSC10
+string "String index 10"
+
+config STM32_USB_STR_DSC11
+string "String index 11"
+
+config STM32_USB_STR_DSC12
+string "String index 12"
+
+config STM32_USB_STR_DSC13
+string "String index 13"
+
+config STM32_USB_STR_DSC14
+string "String index 14"
+
+config STM32_USB_STR_DSC15
+string "String index 15"
+
+config STM32_USB_STR_DSC16
+string "String index 16"
+
+config STM32_USB_STR_DSC17
+string "String index 17"
+
+config STM32_USB_STR_DSC18
+string "String index 18"
+
+config STM32_USB_STR_DSC19
+string "String index 19"
+
+config STM32_USB_STR_DSC20
+string "String index 20"
+
+config STM32_USB_STR_DSC21
+string "String index 21"
+
+config STM32_USB_STR_DSC22
+string "String index 22"
+
+config STM32_USB_STR_DSC23
+string "String index 23"
+
+config STM32_USB_STR_DSC24
+string "String index 24"
+
+config STM32_USB_STR_DSC25
+string "String index 25"
+
+config STM32_USB_STR_DSC26
+string "String index 26"
+
+config STM32_USB_STR_DSC27
+string "String index 27"
+
+config STM32_USB_STR_DSC28
+string "String index 28"
+
+config STM32_USB_STR_DSC29
+string "String index 29"
+
+config STM32_USB_STR_DSC30
+string "String index 30"
+
+config STM32_USB_STR_DSC31
+string "String index 31"
+
+config STM32_USB_STR_DSC32
+string "String index 32"
+
+config STM32_USB_STR_DSC33
+string "String index 33"
+
+config STM32_USB_STR_DSC34
+string "String index 34"
+
+config STM32_USB_STR_DSC35
+string "String index 35"
+
+config STM32_USB_STR_DSC36
+string "String index 36"
+
+config STM32_USB_STR_DSC37
+string "String index 37"
+
+config STM32_USB_STR_DSC38
+string "String index 38"
+
+config STM32_USB_STR_DSC39
+string "String index 39"
+
+config STM32_USB_STR_DSC40
+string "String index 40"
+
+config STM32_USB_STR_DSC41
+string "String index 41"
+
+config STM32_USB_STR_DSC42
+string "String index 42"
+
+config STM32_USB_STR_DSC43
+string "String index 43"
+
+config STM32_USB_STR_DSC44
+string "String index 44"
+
+config STM32_USB_STR_DSC45
+string "String index 45"
+
+config STM32_USB_STR_DSC46
+string "String index 46"
+
+config STM32_USB_STR_DSC47
+string "String index 47"
+
+config STM32_USB_STR_DSC48
+string "String index 48"
+
+config STM32_USB_STR_DSC49
+string "String index 49"
+
+config STM32_USB_STR_DSC50
+string "String index 50"
+
+config STM32_USB_STR_DSC51
+string "String index 51"
+
+config STM32_USB_STR_DSC52
+string "String index 52"
+
+config STM32_USB_STR_DSC53
+string "String index 53"
+
+config STM32_USB_STR_DSC54
+string "String index 54"
+
+config STM32_USB_STR_DSC55
+string "String index 55"
+
+config STM32_USB_STR_DSC56
+string "String index 56"
+
+config STM32_USB_STR_DSC57
+string "String index 57"
+
+config STM32_USB_STR_DSC58
+string "String index 58"
+
+config STM32_USB_STR_DSC59
+string "String index 59"
+
+config STM32_USB_STR_DSC60
+string "String index 60"
+
+config STM32_USB_STR_DSC61
+string "String index 61"
+
+config STM32_USB_STR_DSC62
+string "String index 62"
+
+config STM32_USB_STR_DSC63
+string "String index 63"
+
+config STM32_USB_STR_DSC64
+string "String index 64"
+
+config STM32_USB_STR_DSC65
+string "String index 65"
+
+config STM32_USB_STR_DSC66
+string "String index 66"
+
+config STM32_USB_STR_DSC67
+string "String index 67"
+
+config STM32_USB_STR_DSC68
+string "String index 68"
+
+config STM32_USB_STR_DSC69
+string "String index 69"
+
+config STM32_USB_STR_DSC70
+string "String index 70"
+
+config STM32_USB_STR_DSC71
+string "String index 71"
+
+config STM32_USB_STR_DSC72
+string "String index 72"
+
+config STM32_USB_STR_DSC73
+string "String index 73"
+
+config STM32_USB_STR_DSC74
+string "String index 74"
+
+config STM32_USB_STR_DSC75
+string "String index 75"
+
+config STM32_USB_STR_DSC76
+string "String index 76"
+
+config STM32_USB_STR_DSC77
+string "String index 77"
+
+config STM32_USB_STR_DSC78
+string "String index 78"
+
+config STM32_USB_STR_DSC79
+string "String index 79"
+
+config STM32_USB_STR_DSC80
+string "String index 80"
+
+config STM32_USB_STR_DSC81
+string "String index 81"
+
+config STM32_USB_STR_DSC82
+string "String index 82"
+
+config STM32_USB_STR_DSC83
+string "String index 83"
+
+config STM32_USB_STR_DSC84
+string "String index 84"
+
+config STM32_USB_STR_DSC85
+string "String index 85"
+
+config STM32_USB_STR_DSC86
+string "String index 86"
+
+config STM32_USB_STR_DSC87
+string "String index 87"
+
+config STM32_USB_STR_DSC88
+string "String index 88"
+
+config STM32_USB_STR_DSC89
+string "String index 89"
+
+config STM32_USB_STR_DSC90
+string "String index 90"
+
+config STM32_USB_STR_DSC91
+string "String index 91"
+
+config STM32_USB_STR_DSC92
+string "String index 92"
+
+config STM32_USB_STR_DSC93
+string "String index 93"
+
+config STM32_USB_STR_DSC94
+string "String index 94"
+
+config STM32_USB_STR_DSC95
+string "String index 95"
+
+config STM32_USB_STR_DSC96
+string "String index 96"
+
+config STM32_USB_STR_DSC97
+string "String index 97"
+
+config STM32_USB_STR_DSC98
+string "String index 98"
+
+config STM32_USB_STR_DSC99
+string "String index 99"
+
+config STM32_USB_STR_DSC100
+string "String index 100"
+
+config STM32_USB_STR_DSC101
+string "String index 101"
+
+config STM32_USB_STR_DSC102
+string "String index 102"
+
+config STM32_USB_STR_DSC103
+string "String index 103"
+
+config STM32_USB_STR_DSC104
+string "String index 104"
+
+config STM32_USB_STR_DSC105
+string "String index 105"
+
+config STM32_USB_STR_DSC106
+string "String index 106"
+
+config STM32_USB_STR_DSC107
+string "String index 107"
+
+config STM32_USB_STR_DSC108
+string "String index 108"
+
+config STM32_USB_STR_DSC109
+string "String index 109"
+
+config STM32_USB_STR_DSC110
+string "String index 110"
+
+config STM32_USB_STR_DSC111
+string "String index 111"
+
+config STM32_USB_STR_DSC112
+string "String index 112"
+
+config STM32_USB_STR_DSC113
+string "String index 113"
+
+config STM32_USB_STR_DSC114
+string "String index 114"
+
+config STM32_USB_STR_DSC115
+string "String index 115"
+
+config STM32_USB_STR_DSC116
+string "String index 116"
+
+config STM32_USB_STR_DSC117
+string "String index 117"
+
+config STM32_USB_STR_DSC118
+string "String index 118"
+
+config STM32_USB_STR_DSC119
+string "String index 119"
+
+config STM32_USB_STR_DSC120
+string "String index 120"
+
+config STM32_USB_STR_DSC121
+string "String index 121"
+
+config STM32_USB_STR_DSC122
+string "String index 122"
+
+config STM32_USB_STR_DSC123
+string "String index 123"
+
+config STM32_USB_STR_DSC124
+string "String index 124"
+
+config STM32_USB_STR_DSC125
+string "String index 125"
+
+config STM32_USB_STR_DSC126
+string "String index 126"
+
+config STM32_USB_STR_DSC127
+string "String index 127"
+
+config STM32_USB_STR_DSC128
+string "String index 128"
+
+config STM32_USB_STR_DSC129
+string "String index 129"
+
+config STM32_USB_STR_DSC130
+string "String index 130"
+
+config STM32_USB_STR_DSC131
+string "String index 131"
+
+config STM32_USB_STR_DSC132
+string "String index 132"
+
+config STM32_USB_STR_DSC133
+string "String index 133"
+
+config STM32_USB_STR_DSC134
+string "String index 134"
+
+config STM32_USB_STR_DSC135
+string "String index 135"
+
+config STM32_USB_STR_DSC136
+string "String index 136"
+
+config STM32_USB_STR_DSC137
+string "String index 137"
+
+config STM32_USB_STR_DSC138
+string "String index 138"
+
+config STM32_USB_STR_DSC139
+string "String index 139"
+
+config STM32_USB_STR_DSC140
+string "String index 140"
+
+config STM32_USB_STR_DSC141
+string "String index 141"
+
+config STM32_USB_STR_DSC142
+string "String index 142"
+
+config STM32_USB_STR_DSC143
+string "String index 143"
+
+config STM32_USB_STR_DSC144
+string "String index 144"
+
+config STM32_USB_STR_DSC145
+string "String index 145"
+
+config STM32_USB_STR_DSC146
+string "String index 146"
+
+config STM32_USB_STR_DSC147
+string "String index 147"
+
+config STM32_USB_STR_DSC148
+string "String index 148"
+
+config STM32_USB_STR_DSC149
+string "String index 149"
+
+config STM32_USB_STR_DSC150
+string "String index 150"
+
+config STM32_USB_STR_DSC151
+string "String index 151"
+
+config STM32_USB_STR_DSC152
+string "String index 152"
+
+config STM32_USB_STR_DSC153
+string "String index 153"
+
+config STM32_USB_STR_DSC154
+string "String index 154"
+
+config STM32_USB_STR_DSC155
+string "String index 155"
+
+config STM32_USB_STR_DSC156
+string "String index 156"
+
+config STM32_USB_STR_DSC157
+string "String index 157"
+
+config STM32_USB_STR_DSC158
+string "String index 158"
+
+config STM32_USB_STR_DSC159
+string "String index 159"
+
+config STM32_USB_STR_DSC160
+string "String index 160"
+
+config STM32_USB_STR_DSC161
+string "String index 161"
+
+config STM32_USB_STR_DSC162
+string "String index 162"
+
+config STM32_USB_STR_DSC163
+string "String index 163"
+
+config STM32_USB_STR_DSC164
+string "String index 164"
+
+config STM32_USB_STR_DSC165
+string "String index 165"
+
+config STM32_USB_STR_DSC166
+string "String index 166"
+
+config STM32_USB_STR_DSC167
+string "String index 167"
+
+config STM32_USB_STR_DSC168
+string "String index 168"
+
+config STM32_USB_STR_DSC169
+string "String index 169"
+
+config STM32_USB_STR_DSC170
+string "String index 170"
+
+config STM32_USB_STR_DSC171
+string "String index 171"
+
+config STM32_USB_STR_DSC172
+string "String index 172"
+
+config STM32_USB_STR_DSC173
+string "String index 173"
+
+config STM32_USB_STR_DSC174
+string "String index 174"
+
+config STM32_USB_STR_DSC175
+string "String index 175"
+
+config STM32_USB_STR_DSC176
+string "String index 176"
+
+config STM32_USB_STR_DSC177
+string "String index 177"
+
+config STM32_USB_STR_DSC178
+string "String index 178"
+
+config STM32_USB_STR_DSC179
+string "String index 179"
+
+config STM32_USB_STR_DSC180
+string "String index 180"
+
+config STM32_USB_STR_DSC181
+string "String index 181"
+
+config STM32_USB_STR_DSC182
+string "String index 182"
+
+config STM32_USB_STR_DSC183
+string "String index 183"
+
+config STM32_USB_STR_DSC184
+string "String index 184"
+
+config STM32_USB_STR_DSC185
+string "String index 185"
+
+config STM32_USB_STR_DSC186
+string "String index 186"
+
+config STM32_USB_STR_DSC187
+string "String index 187"
+
+config STM32_USB_STR_DSC188
+string "String index 188"
+
+config STM32_USB_STR_DSC189
+string "String index 189"
+
+config STM32_USB_STR_DSC190
+string "String index 190"
+
+config STM32_USB_STR_DSC191
+string "String index 191"
+
+config STM32_USB_STR_DSC192
+string "String index 192"
+
+config STM32_USB_STR_DSC193
+string "String index 193"
+
+config STM32_USB_STR_DSC194
+string "String index 194"
+
+config STM32_USB_STR_DSC195
+string "String index 195"
+
+config STM32_USB_STR_DSC196
+string "String index 196"
+
+config STM32_USB_STR_DSC197
+string "String index 197"
+
+config STM32_USB_STR_DSC198
+string "String index 198"
+
+config STM32_USB_STR_DSC199
+string "String index 199"
+
+config STM32_USB_STR_DSC200
+string "String index 200"
+
+config STM32_USB_STR_DSC201
+string "String index 201"
+
+config STM32_USB_STR_DSC202
+string "String index 202"
+
+config STM32_USB_STR_DSC203
+string "String index 203"
+
+config STM32_USB_STR_DSC204
+string "String index 204"
+
+config STM32_USB_STR_DSC205
+string "String index 205"
+
+config STM32_USB_STR_DSC206
+string "String index 206"
+
+config STM32_USB_STR_DSC207
+string "String index 207"
+
+config STM32_USB_STR_DSC208
+string "String index 208"
+
+config STM32_USB_STR_DSC209
+string "String index 209"
+
+config STM32_USB_STR_DSC210
+string "String index 210"
+
+config STM32_USB_STR_DSC211
+string "String index 211"
+
+config STM32_USB_STR_DSC212
+string "String index 212"
+
+config STM32_USB_STR_DSC213
+string "String index 213"
+
+config STM32_USB_STR_DSC214
+string "String index 214"
+
+config STM32_USB_STR_DSC215
+string "String index 215"
+
+config STM32_USB_STR_DSC216
+string "String index 216"
+
+config STM32_USB_STR_DSC217
+string "String index 217"
+
+config STM32_USB_STR_DSC218
+string "String index 218"
+
+config STM32_USB_STR_DSC219
+string "String index 219"
+
+config STM32_USB_STR_DSC220
+string "String index 220"
+
+config STM32_USB_STR_DSC221
+string "String index 221"
+
+config STM32_USB_STR_DSC222
+string "String index 222"
+
+config STM32_USB_STR_DSC223
+string "String index 223"
+
+config STM32_USB_STR_DSC224
+string "String index 224"
+
+config STM32_USB_STR_DSC225
+string "String index 225"
+
+config STM32_USB_STR_DSC226
+string "String index 226"
+
+config STM32_USB_STR_DSC227
+string "String index 227"
+
+config STM32_USB_STR_DSC228
+string "String index 228"
+
+config STM32_USB_STR_DSC229
+string "String index 229"
+
+config STM32_USB_STR_DSC230
+string "String index 230"
+
+config STM32_USB_STR_DSC231
+string "String index 231"
+
+config STM32_USB_STR_DSC232
+string "String index 232"
+
+config STM32_USB_STR_DSC233
+string "String index 233"
+
+config STM32_USB_STR_DSC234
+string "String index 234"
+
+config STM32_USB_STR_DSC235
+string "String index 235"
+
+config STM32_USB_STR_DSC236
+string "String index 236"
+
+config STM32_USB_STR_DSC237
+string "String index 237"
+
+config STM32_USB_STR_DSC238
+string "String index 238"
+
+config STM32_USB_STR_DSC239
+string "String index 239"
+
+config STM32_USB_STR_DSC240
+string "String index 240"
+
+config STM32_USB_STR_DSC241
+string "String index 241"
+
+config STM32_USB_STR_DSC242
+string "String index 242"
+
+config STM32_USB_STR_DSC243
+string "String index 243"
+
+config STM32_USB_STR_DSC244
+string "String index 244"
+
+config STM32_USB_STR_DSC245
+string "String index 245"
+
+config STM32_USB_STR_DSC246
+string "String index 246"
+
+config STM32_USB_STR_DSC247
+string "String index 247"
+
+config STM32_USB_STR_DSC248
+string "String index 248"
+
+config STM32_USB_STR_DSC249
+string "String index 249"
+
+config STM32_USB_STR_DSC250
+string "String index 250"
+
+config STM32_USB_STR_DSC251
+string "String index 251"
+
+config STM32_USB_STR_DSC252
+string "String index 252"
+
+config STM32_USB_STR_DSC253
+string "String index 253"
+
+config STM32_USB_STR_DSC254
+string "String index 254"
+
+config STM32_USB_STR_DSC255
+string "String index 255"
+
+config STM32_USB_STR_DSC256
+string "String index 256"
+
+
