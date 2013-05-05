@@ -79,7 +79,7 @@ probe:
 
 sizecheck:
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
-	`stat $(IMAGENAME).bin -c %s` \
+	`$(STAT) $(IMAGENAME).bin -c %s` \
 	$(CONFIG_STM32_FLASH_LEN);
 	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \

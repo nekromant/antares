@@ -85,10 +85,17 @@ define check_tool
 	$(SILENT_CHECK) which $(1) >/dev/null || (echo "Missing $(1)! Please install it to continue"; exit 1)
 endef
 
+define check_alt
+which $(1) 2>/dev/null|| which $(2) 2>/dev/null || echo "fail"
+endef
+
+STAT:=$(shell $(call check_alt,gstat,stat))
+export STAT
 
 required_tools+=bash
 required_tools+=sed
 required_tools+=awk
+
 
 
 checktools:
