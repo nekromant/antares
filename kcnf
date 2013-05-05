@@ -85,13 +85,6 @@ menu "Build System Tweaks"
    If your project needs code generation BEFORE
    actual build (gen-y) tick it
    
-  config BUILD_THREADED
-  bool "Use multiple threads by default"
-
-  config BUILD_THREADS
-  int "Number of threads to use"
-  default 1
-
   config BUILD_VERBOSE
   bool "Verbose build"
 

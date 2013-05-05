@@ -84,11 +84,6 @@ endif
 
 SILENT_INFO	   = @echo '  $(tb_grn)[INFO]$(col_rst)     ' 
 
-
-ifeq ($(CONFIG_BUILD_THREADED),y)
-   MAKEFLAGS+=-j$(CONFIG_BUILD_THREADS)
-endif
-
 define ldmakes
 $(eval subdirs=$(addprefix $(1),$(filter %/,$(objects-y))))
 $(eval objects+=$(addprefix $(BUILD_DIR)$(1), $(filter %.o,$(objects-y))))
