@@ -80,14 +80,16 @@ checkdirs:
 
 collectinfo: $(TMPDIR)/.collected
 
+
 define check_tool
-	$(SILENT_CHECK) $(1); $(1) >> /dev/null || (echo "Missing $(1), please check docs"; exit 1)
+	$(SILENT_CHECK) $(1); which $(1) >> /dev/null || (echo "Missing $(1), please check docs"; exit 1);
 endef
 
+
+required_tools+=bash
+
 checktools:
-	$(call check_tool,bison --version)
-	$(call check_tool,flex --version)
-	$(call check_tool,gperf --version)
+	$(foreach t,$(required_tools),$(call check_tool,$(t)))
 
 $(TMPDIR)/.collected:  checkdirs checktools $(genfiles)
 	     $(Q)-rm -f $(OBJDIR)/include/arch

@@ -1,18 +1,3 @@
-.PHONY: conf mconf
-
-HOST_CC:=gcc
-
-.SECONDEXPANSION: 
-check-lxdialog:= $(src)/lxdialog/check-lxdialog.sh
-
-HOST_EXTRACFLAGS = $(shell $(check-lxdialog) -ccflags)
-HOST_LOADLIBES   = $(shell $(check-lxdialog) -ldflags $(HOST_CC))
-HOST_EXTRACFLAGS += -DLOCALE
-
-lxdialog := lxdialog/checklist.o lxdialog/util.o lxdialog/inputbox.o
-lxdialog += lxdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o
-conf-objs	:= conf.o  zconf.tab.o
-mconf-objs     := mconf.o zconf.tab.o $(lxdialog)
 
 VERSION_MAJOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MAJOR )
 VERSION_MINOR := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
@@ -20,47 +5,25 @@ VERSION_CODENAME := $(shell $(src)/config --file "$(SRCDIR)/.version" --state VE
 VERSION_GIT = $(shell GIT_DIR=$(ANTARES_DIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
 
 
-#	cp $@ $@_shipped
-# TODO: use shipped versions here
+define KCONF_WARNING
 
-%.tab.c: %.y
-	$(SILENT_BISON)bison -l -b $* -p $(notdir $*) $<
+			$(t_red)WARNING!$(col_rst)
 
-lex.%.c: %.l
-	$(SILENT_FLEX)flex -L -P$(notdir $*) -o$@ $<
+	Antares now uses kconfig-frontends instead of bundled hacky kconfig
+		(Bundled version sucked anyway) 
+	You do not seem to have these installed.
+	You can download kconfig-frontends from their homepage here
+	http://ymorin.is-a-geek.org/projects/kconfig-frontends
 
-%.hash.c: %.gperf
-	$(SILENT_GPERF)gperf < $< > $@
-
-$(obj)/zconf.tab.o: $(src)/lex.zconf.c $(src)/zconf.hash.c
-
-$(obj)/kconfig_load.o: $(src)/lkc_defs.h
-
-#Guess we won't need this stuff
-$(obj)/zconf.tab.c: $(src)/zconf.y
-
-$(obj)/lex.zconf.c: $(src)/zconf.l
-
-$(obj)/zconf.hash.c: $(src)/zconf.gperf
-
-$(obj)/lkc_defs.h: $(src)/lkc_proto.h
-	$(Q)sed < $< > $@ 's/P(\([^,]*\),.*/#define \1 (\*\1_p)/'
+endef
 
 
-$(obj)/%.o: $(src)/%.c
-	 $(SILENT_HOSTCC)$(HOST_CC) -c $(HOST_EXTRACFLAGS) $< -o $@
+HAVE_KCONFIG=$(shell which kconfig-conf 2>/dev/null || echo no)
 
-$(obj)/conf: $(addprefix $(obj)/,$(conf-objs))
-	 $(SILENT_HOSTCC)$(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
-
-
-$(obj)/mconf: $(addprefix $(obj)/,$(mconf-objs))
-	 $(SILENT_HOSTCC)$(HOST_CC) $^ -o $@ $(HOST_LOADLIBES)
-
-kconfig-clean:
-	$(Q)-rm $(obj)/*.o
-	$(Q)-rm $(obj)/lxdialog/*.o
-	$(Q)-rm $(src)/zconf.tab.c* $(src)/lex.zconf.c* $(src)/zconf.hash.c*
+ifeq ($(HAVE_KCONFIG),no)
+$(info $(KCONF_WARNING))
+$(error Sorry)
+endif
 
 versionupdate:
 	$(Q)$(src)/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
@@ -69,26 +32,34 @@ versionupdate:
 	$(Q)$(src)/config --set-str VERSION_GIT $(VERSION_GIT) 
 	$(SILENT_VER) $(src)/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
 
-#FixThis: Properly learn the kconfig deps dance 
-menuconfig: collectinfo $(obj)/mconf $(obj)/conf versionupdate
-	$(Q) $(obj)/mconf $(Kconfig)
-	@echo "Antares configuration is now complete."
-	@echo "Run 'make build' to build everything now"
+
+define frontend_template
+$(1): collectinfo versionupdate
+	$$(Q) kconfig-$(2) $(Kconfig)
+	$$(Q)echo "Antares configuration is now complete."
+	$$(Q)echo "Run 'make build' to build everything now"
+endef
+
+$(eval $(call frontend_template,menuconfig,mconf))
+$(eval $(call frontend_template,gconfig,gconf))
+$(eval $(call frontend_template,qconfig,qconf))
+$(eval $(call frontend_template,nconfig,nconf))
+
 
 $(TOPDIR)/include/config/auto.conf: $(deps_config) .config
 	$(SILENT_INFO) "Config changed, running silentoldconfig"
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
 
-config: $(obj)/conf
-	$(Q)$< --oldaskconfig $(Kconfig)
+config: 
+	$(Q)kconfig-conf --oldaskconfig $(Kconfig)
 
-oldconfig: $(obj)/conf
-	$(Q)$< --$@ $(Kconfig)
+oldconfig:
+	$(Q)kconfig-conf --$@ $(Kconfig)
 
-silentoldconfig: $(obj)/conf
+silentoldconfig: 
 	$(Q)mkdir -p include/generated
 	$(Q)mkdir -p include/config
-	$(Q)$< --$@ $(Kconfig)
+	$(Q)kconfig-conf --$@ $(Kconfig)
 
-set_version: $(obj)/mconf  
-	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version $< $(KVersion)
+set_version:
+	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version kconfig-mconf $(KVersion)
