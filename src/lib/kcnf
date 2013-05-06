@@ -79,6 +79,7 @@ config LIB_PRINTK_TIMESTAMP
 depends on LIB_TMGR
 bool "timestamp printks"
 
+source "antares/src/lib/stlinky/kcnf"
 source "antares/src/lib/urpc/kcnf"
 source "antares/src/lib/msp430/kcnf"
 source "antares/src/lib/8051/kcnf"

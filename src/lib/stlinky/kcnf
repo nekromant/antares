@@ -1,0 +1,15 @@
+config LIB_STLINKY
+bool "STLinky serial terminal"
+help
+	A hacky serial terminal over ST-Link
+
+config LIB_STLINKY_BSIZE
+depends on LIB_STLINKY
+int "RX/TX Buffer sizes"
+range 1 255
+
+config LIB_STLINKY_NLIB
+depends on LIB_STLINKY
+bool "Provide newlib _read/_write"
+
+
