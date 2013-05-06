@@ -91,7 +91,7 @@ required_tools+=awk
 
 
 
-checktools:
+checktools: 
 	$(foreach t,$(required_tools),$(call check_tool,$(t))$(newline))
 
 $(TMPDIR)/.collected:  checkdirs checktools $(genfiles)

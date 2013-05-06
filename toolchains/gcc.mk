@@ -95,7 +95,7 @@ endif
 export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS GENDEPFLAGS
 
-builtin:
+builtin: collectinfo 
 	$(Q) mkdir -p $(OBJDIR)/build/app
 ifeq ($(CONFIG_NEED_GENERATE),y)
 	$(SILENT_INFO) Generating required headers
@@ -116,10 +116,10 @@ endif
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
 ifneq ($(LD_NO_COMBINE),y)
-$(IMAGENAME).elf: $(GCC_LDFILE) builtin
+$(IMAGENAME).elf: collectinfo $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
 else
-$(IMAGENAME).elf: $(GCC_LDFILE) builtin
+$(IMAGENAME).elf: collectinfo $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`

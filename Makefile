@@ -98,7 +98,7 @@ mrproper: clean
 distclean: mrproper
 
 build:  collectinfo $(TOPDIR)/include/config/auto.conf collectinfo $(BUILDGOALS)
-	echo > /dev/null
+	@echo > /dev/null
 
 deploy: build
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
