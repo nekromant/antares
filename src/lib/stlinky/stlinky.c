@@ -10,9 +10,9 @@ void stlinky_init(struct stlinky* st)
 	st->bufsize = CONFIG_LIB_STLINKY_BSIZE;
 }
 
-size_t stlinky_tx(volatile struct stlinky* st, char* buf, size_t siz)
+int stlinky_tx(volatile struct stlinky* st, char* buf, int siz)
 {
-	size_t sz = min_t(size_t, CONFIG_LIB_STLINKY_BSIZE, siz);
+	int sz = min_t(int, CONFIG_LIB_STLINKY_BSIZE, siz);
 	while(st->txsize != 0);;; 
 	memcpy((char*) st->txbuf, buf, sz);
 	st->txsize = (unsigned char) sz;
@@ -20,13 +20,13 @@ size_t stlinky_tx(volatile struct stlinky* st, char* buf, size_t siz)
 }
 
 /* TODO: We loose data here if we read less than avaliable */ 
-size_t stlinky_rx(volatile struct stlinky* st, char* buf, size_t siz)
+int stlinky_rx(volatile struct stlinky* st, char* buf, int siz)
 {
-	size_t ret;
+	int ret;
 	while(st->rxsize == 0);;; 
-	size_t sz = min_t(size_t, (size_t) st->rxsize, siz);
+	int sz = min_t(int, (int) st->rxsize, siz);
 	memcpy(buf, (char*) st->rxbuf, sz);
-	ret = (size_t) (st->rxsize);
+	ret = (int) (st->rxsize);
 	st->rxsize = 0;
 	return ret;
 }
@@ -47,11 +47,22 @@ ANTARES_INIT_LOW(stlinky_terminal) {
 }
 
 int _write(int file, char *ptr, int len) {
-        return (int) stlinky_tx(&sterm, ptr, len);
+        return stlinky_tx(&sterm, ptr, len);
 }
 
 int _read(int file, char *ptr, int len) {
-	return (int) stlinky_rx(&sterm, ptr, len);
+	return stlinky_rx(&sterm, ptr, len);
 }
 
+#if 0
+ANTARES_APP(echo_app) 
+{
+	while(1) {
+	char tmp[64];
+	int len = stlinky_rx(&sterm, tmp, 64);
+	if (len)
+		stlinky_tx(&sterm, tmp, len);
+	}
+}
+#endif
 #endif

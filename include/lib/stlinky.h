@@ -23,9 +23,9 @@ struct stlinky {
 
 void stlinky_init(struct stlinky* st);
 
-size_t stlinky_tx(volatile struct stlinky* st, char* buf, size_t sz);
+int stlinky_tx(volatile struct stlinky* st, char* buf, int sz);
 
-size_t stlinky_rx(volatile struct stlinky* st, char* buf, size_t sz);
+int stlinky_rx(volatile struct stlinky* st, char* buf, int sz);
 
 void stlinky_wait_for_terminal(volatile struct stlinky* st);
 
