@@ -72,12 +72,24 @@ bool "Simple cron and uptime counter"
 config LIB_XMODEM
 bool "Simple XMODEM implementation [BUGGY]"
 
-config LIB_PRINTK
+menuconfig LIB_PRINTK
 bool "printk and dbg() macro support"
 
+if LIB_PRINTK
+
 config LIB_PRINTK_TIMESTAMP
-depends on LIB_TMGR
-bool "timestamp printks"
+depends on LIB_TMGR && LIB_PRINTK
+bool "Add a timestamp to printks"
+
+config LIB_PRINTK_PREFIX
+depends on LIB_PRINTK 
+bool "Add a prefix to all printks"
+
+config LIB_PRINTK_PREFIX_V
+depends on LIB_PRINTK_PREFIX
+string "Prefix"
+
+endif
 
 source "antares/src/lib/stlinky/kcnf"
 source "antares/src/lib/urpc/kcnf"
