@@ -1,0 +1,105 @@
+Deployment
+-----------
+
+
+Usage
+-----
+
+This part covers the deployment mechanism of antares.  Basically, what
+does 'deployment' stands for? 
+
+Deployment is how the firmware that you have compiled gets to the
+target device where it is ment to be run. In the most simple case,
+this goes down to 'make flash', or arduino's 'Upload' button, which in
+turn runs avrdude, stm32flash, dfu-util or whatsoever. 
+
+To deploy a firmware via an enabled method run 
+
+make deploy-methodname
+
+where methodname is the name of the deployment method, like avrdude.
+
+To see available methods you can always run 
+
+make deploy-help
+
+For a method to appear in this list it has to be enabled in menuconfig
+
+Going further
+-------------
+
+Real life is sometimes more tricky than that. In real life you
+sometimes have to copy the firmware to some other machine, run
+avrdude/stm32flash/whatsoever there, possibly power-cycling the target
+board somehow...
+
+So, how can antares possibly cover all that scenarios, without getting
+overbloated? By allowing you to write your own project-specific
+deployment methods and placing them in 'deploy/' of your project. 
+ 
+Deployment goes down to writing a small makefile, and an optional kcnf
+file to present any options needed. Antares has most of the usual
+deployment methods available in $ANTARES_INSTALL_DIR/deploy/ You can
+copy any of theese to $TOP_DIR/deploy/ of your project so that it will
+act as good start. 
+
+Structure of a deploy method
+----------------------------
+
+Let us imagine this directory structure. 
+
+deploy/
+	mytool/
+		Makefile
+		kcnf
+
+	
+mytool is the name of the method. As a convention, all your kconfig stuff
+for this method MUST be prefixed with DEPLOY_MYTOOL 
+
+Your kcnf file MUST be wrapped in 'menuconfig' like this:
+
+menuconfig DEPLOY_MYTOOL
+bool "Deploy using mytool"
+
+# 
+endmenu
+
+And the name MUST match the capitalized directory name.  Put whatever
+parameters you need in the kcnf or none, but leave this very boolean
+menuconfig there, since this will be the switch that will enable your
+deployment method.
+
+Now, let's have a look at a typical Makefile for deployment: 
+
+Each Makefile should start with additions to deploy_help. 
+Note the newline! Example is below
+
+deploy_help+="\nstlink - deploy via st-util (st-flash looks broken)"
+
+Next go any of your receipes for deployment. You can add as many as
+you want in one Makefile. You can use any of the $(CONFIG_) variables
+as you like.
+
+Compiled images should be accessed via $(IMAGENAME). Like
+$(IMAGENAME).elf or $(IMAGENAME).bin or whatever. $(IMAGENAME) will
+always expand to the absolute path of the images created. You don't
+need to specify any dependencies, unless you need to, since all these
+targets already depend on 'build'.
+
+To get rid of double quotes set around strings in kcnf you can call
+unquote. Example:
+
+myvar=$(call unquote,$(CONFIG_MYVAR))
+
+
+Testing
+--------
+
+If you have done everything right, your new deployment method should appear in menuconfig/nconfig/qconfig/gconfig next time you run it. Enable it and run make deploy-help to test
+
+
+Automation
+-----------
+
+'make deploy' runs the default deployment method, that is set in buoldsystem tweaks  
