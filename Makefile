@@ -104,7 +104,7 @@ deploy: build
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy $(call unquote,$(CONFIG_DEPLOY_DEFTARGET))
 	@echo "Your Antares firmware is now deployed"
 
-deploy-%: build
+real-deploy-%: build
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy $*
 	@echo "Your Antares firmware is now deployed"
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy post
@@ -116,5 +116,15 @@ tags:
 #Help needs a dedicated rule, so that it won't invoke build as it normally does
 deploy-help:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy help
+
+#For deployment autocompletion
+define deploy_dummy
+deploy-$(1): real-deploy-$(1)
+	@echo > /dev/null
+PHONY+=deploy-$(1)
+endef
+
+-include $(TMPDIR)/deploy.mk
+$(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 .PHONY: $(PHONY)
