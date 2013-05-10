@@ -78,5 +78,9 @@ sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
 	$(RAMSIZE);
 	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
 
+list-interrupts:
+	echo "#include <avr/interrupt.h>" | $(TOOL_PREFIX)gcc -mmcu=$(MCU) -dM -E -|grep "_vect" | grep -v "_num" | awk '{printf $$2"\n"}'
+
+
 BUILDGOALS+=sizecheck
 PHONY+=sizecheck
