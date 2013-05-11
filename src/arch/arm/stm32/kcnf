@@ -68,19 +68,23 @@ help
 	'SystemInit' function
 
 choice
-prompt "Target frequency (for SysInit)"
+prompt "Target frequency"
 
 config STM32_FREQ_72
 bool "72 Mhz"
+depends on !STM32F10X_LD_LV && !STM32F10X_MD_VL && !STM32F10X_HD_VL
 
 config STM32_FREQ_56
 bool "56 Mhz"
+depends on !STM32F10X_LD_LV && !STM32F10X_MD_VL && !STM32F10X_HD_VL
 
 config STM32_FREQ_48
 bool "48 Mhz"
+depends on !STM32F10X_LD_LV && !STM32F10X_MD_VL && !STM32F10X_HD_VL
 
 config STM32_FREQ_36
 bool "36 Mhz"
+depends on !STM32F10X_LD_LV && !STM32F10X_MD_VL && !STM32F10X_HD_VL
 
 config STM32_FREQ_24
 bool "24 Mhz"
