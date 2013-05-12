@@ -99,7 +99,7 @@ LoopFillZerobss:
   cmp  r2, r3
   bcc  FillZerobss
 	
-#ifdef CONFIG_STM32_LIB_SYSTEM
+#ifdef CONFIG_STM32_LIB_system_stm32f4xx
 /* Call the clock system intitialization function.*/
 /* Do it only when sysInit is enabled */
   bl SystemInit
