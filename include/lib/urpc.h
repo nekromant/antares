@@ -61,14 +61,16 @@ struct urpc_object {
 	void (*method)(char* data); 
 };
 
-#define URPC_OBJ_ID(obj) \
+#define URPC_OBJ_ID(obj)						\
 	(((char*)obj - (char*)&urpc_exports[0])/sizeof(struct urpc_object))
 
-/* Transport layer */
+/* Transport layer should implement these*/
 void urpc_tx_data(struct urpc_object* obj, char* data, int sz);
 void urpc_tx_object(struct urpc_object* obj);
 /* Callback */
 void urpc_handle_incoming(struct urpc_packet* pck);
+
+
 
 void urpc_discovery();
 void urpc_loop(); /* Processing loop */

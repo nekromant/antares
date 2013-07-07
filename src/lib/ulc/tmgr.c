@@ -1,9 +1,10 @@
 #include <lib/tasks.h>
 
+
 static volatile unsigned int uptime = 0;
+static volatile unsigned int rate = 0;
 static int num_handlers = 0;
 static handler_t * first = 0;
-
 
 void tmgr_msleep(unsigned int  time)
 {
@@ -11,15 +12,16 @@ void tmgr_msleep(unsigned int  time)
   while ( uptime < end );;
 }
 
+void tmgr_set_rate(unsigned int nrate)
+{
+	rate = nrate;
+	/* TODO: Reschedule pending tasks based on new rate */
+}
+
+
 unsigned int tmgr_get_uptime()
 {
 	return uptime;
-}
-
-void sleep_ticks(unsigned int ticks)
-{
-	unsigned int start = uptime;
-	while (uptime - start < ticks);
 }
 
 int tmgr_register(handler_t * data)
