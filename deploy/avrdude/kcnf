@@ -1,6 +1,6 @@
 menuconfig DEPLOY_AVRDUDE
 bool "avrdude"
-depends on ARCH_AVR
+depends on ARCH_AVR || ARCH_PIC32
 
   if DEPLOY_AVRDUDE
 
@@ -17,6 +17,30 @@ depends on ARCH_AVR
   source "antares/deploy/avrdude/proglist.kcnf"
   
   endchoice
+
+  menuconfig  DEPLOY_AVRDUDE_SER
+  bool "Specify serial port params"
+  
+  if DEPLOY_AVRDUDE_SER
+
+  config DEPLOY_AVRDUDE_RESET
+  bool "Reset device to bootloader via sighup"
+  default n
+  help
+	Some devices (chipkit) need sighup to reset to
+	bootloader mode. Checking this will issue reset
+	prior to doing anything
+
+  config DEPLOY_AVRDUDE_PORT
+  string "Port"
+  default "/dev/ttyUSB0"
+
+  config DEPLOY_AVRDUDE_BAUDRATE
+  int "Port speed"
+  default 115200
+
+  endif
+
 
   menu "Fuse settings"
 
