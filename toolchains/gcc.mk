@@ -10,13 +10,25 @@ OBJCOPY  := $(TOOL_PREFIX)objcopy
 DISAS    := $(TOOL_PREFIX)objdump
 OBJDUMP  := $(TOOL_PREFIX)objdump
 SIZE     := $(TOOL_PREFIX)size
+BIN2HEX  := $(TOOL_PREFIX)bin2hex
+
 
 # This is for portability across sdcc and states the naming of intermediate files
 # sdcc has this set to .rel (and that's quite retarded)
 O=o
 
 
-COMPILER_TOOLS=CC="$(CC)" CXX="$(CXX)" LD="$(LD)" AR="$(AR)" AS="$(AS)" OBJCOPY="$(OBJCOPY)" OBJDUMP="$(OBJDUMP)" DISAS="$(DISAS)" SIZE="$(SIZE)"
+COMPILER_TOOLS:=\
+		BIN2HEX="$(BIN2HEX)" \
+		CC="$(CC)" \
+		CXX="$(CXX)" \
+		LD="$(LD)" \
+		AR="$(AR)" \
+		AS="$(AS)" \
+		OBJCOPY="$(OBJCOPY)" \
+		OBJDUMP="$(OBJDUMP)" \
+		DISAS="$(DISAS)" \
+		SIZE="$(SIZE)"
 
 GENDEPFLAGS = -MD -MP -MF $$(@).d
 
@@ -92,7 +104,8 @@ ELFFLAGS+=-T $(GCC_LDFILE)
 endif
 
 
-export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
+export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS 
+export LD_NO_COMBINE BIN2HEX
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS GENDEPFLAGS
 
 builtin: $(TMPDIR)/.collected $(TOPDIR)/include/generated/autoconf.h
