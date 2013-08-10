@@ -20,8 +20,8 @@ endif
 
 RESETCMD:=
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_RESET),y)
-	RESETCMD:= $(root) $(ANTARES_INSTALL_DIR)/scripts/serial_reset.sh \
-		$(CONFIG_DEPLOY_AVRDUDE_PORT); sleep 1
+	RESETCMD:= $(Q)$(root) $(ANTARES_INSTALL_DIR)/scripts/serial_reset.sh \
+		$(CONFIG_DEPLOY_AVRDUDE_PORT)
 endif
 
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_SER),y)

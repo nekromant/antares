@@ -24,6 +24,10 @@ ifeq ($(CONFIG_USE_MAX32_LD),y)
 GCC_LDFILE=$(ANTARES_INSTALL_DIR)/src/arch/pic32/chipKIT-MAX32-application-32MX795F512L.ld
 endif
 
+MCHIP_PATH=$(shell dirname `which $(CC)`)
+
+#FLASHSIZE= $(shell echo $$((`echo -e "\#include <bmx.h>\nFLASH_SZ" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 $(APPSIZE) )))
+
 
 #FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 $(APPSIZE) )))
 #RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
@@ -34,7 +38,7 @@ endif
 
 
 %.hex: %.elf
-		$(SILENT_OBJCOPY) $(BIN2HEX) -a $<	
+		$(SILENT_OBJCOPY) $(OBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $< $@	
 
 %.eep: %.elf
 		$(SILENT_OBJCOPY) $(OBJCOPY) $(HEX_EEPROM_FLAGS) -O ihex $< $@ || exit 0

@@ -12,7 +12,7 @@ endchoice
 #TODO: generalisation?
 config  USE_UNO32_LD
 bool "Use LD script for ChipKit UNO32 (avrdude)"
-depends on MCU_32MX320F128L
+depends on MCU_32MX320F128H
 
 config  USE_MAX32_LD
 bool "Use LD script for ChipKit MAX32 (avrdude)"
