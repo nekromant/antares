@@ -1,0 +1,11 @@
+Okay. you have created something, and you want to mainline that. 
+Prior to sending a patch, run though this checklist: 
+1. Does your patch break any of the antares_examples projects? 
+   These are our test cases that should _AT LEAST_ compile. 
+   You can give them a quick run using make compile in ~/.antares_examples
+
+2. Did you test your code to actually work?
+
+3. Do your patches follow linux kernel submitting patches guidelines? 
+
+Tick all three and send 'em in
