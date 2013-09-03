@@ -78,7 +78,7 @@ endif
 %.$(O): $(SRCDIR)/%.c $(extras)
 	$(SILENT_CC) $(CC) $(CFLAGS) $(GENDEPFLAGS) -c  -o $(@) $< 
 
-%.$(O): $(SRCDIR)/%.s $(extras)
+%.$(O): $(SRCDIR)/%.S $(extras)
 	$(SILENT_AS) $(AS) $(ASFLAGS) $(GENDEPFLAGS) -c -o $(@) $< 
 
 build: built-in.$(O)
