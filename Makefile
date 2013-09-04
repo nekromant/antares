@@ -46,7 +46,7 @@ export SRCDIR ARCH TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR TOOL_PREFIX
 .DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 
 include $(ANTARES_DIR)/make/host.mk
-include $(TMPDIR)/arch.mk
+-include $(TMPDIR)/arch.mk
 include $(ANTARES_DIR)/make/Makefile.lib
 
 ifeq ($(PROJECT_SHIPS_ARCH),y)
