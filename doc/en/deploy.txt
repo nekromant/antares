@@ -10,8 +10,8 @@ does 'deployment' stands for?
 
 Deployment is how the firmware that you have compiled gets to the
 target device where it is ment to be run. In the most simple case,
-this goes down to 'make flash', or arduino's 'Upload' button, which in
-turn runs avrdude, stm32flash, dfu-util or whatsoever. 
+this is done when you type 'make flash', or press arduino's 'Upload' button, 
+which in turn runs avrdude, stm32flash, dfu-util or whatsoever. 
 
 To deploy a firmware via an enabled method run 
 
@@ -34,13 +34,14 @@ avrdude/stm32flash/whatsoever there, possibly power-cycling the target
 board somehow...
 
 So, how can antares possibly cover all that scenarios, without getting
-overbloated? By allowing you to write your own project-specific
-deployment methods and placing them in 'deploy/' of your project. 
+overbloated with shit noone ever uses? By allowing you to write your 
+own project-specific deployment methods and placing them in 'deploy/' 
+of your project. 
  
 Deployment goes down to writing a small makefile, and an optional kcnf
 file to present any options needed. Antares has most of the usual
 deployment methods available in $ANTARES_INSTALL_DIR/deploy/ You can
-copy any of theese to $TOP_DIR/deploy/ of your project so that it will
+copy any of these to $TOP_DIR/deploy/ of your project so that it will
 act as good start. 
 
 Structure of a deploy method
@@ -102,4 +103,4 @@ If you have done everything right, your new deployment method should appear in m
 Automation
 -----------
 
-'make deploy' runs the default deployment method, that is set in buoldsystem tweaks  
+'make deploy' runs the default deployment method, that is set in 'buildsystem tweaks'  
