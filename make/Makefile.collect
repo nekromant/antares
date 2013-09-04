@@ -71,14 +71,14 @@ genfiles+=$(call gendirs,arch)
 genfiles+=$(call gendirs,deploy)
 genfiles+=$(call gendirs,edeploy)
 
-checkdirs:
+$(TMPDIR)/.dirchecked:
 	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
 	$(Q)[ -d $(TOPDIR)/include ] || mkdir -p $(TOPDIR)/include
 	$(Q)[ -d $(TOPDIR)/deploy ] || mkdir -p $(TOPDIR)/deploy
 	$(Q)[ -d $(CONFIG_IMAGE_DIR) ] || mkdir -p $(CONFIG_IMAGE_DIR)
+	$(Q)touch $(@)
 
-
-collectinfo: $(TMPDIR)/.collected
+collectinfo: $(TMPDIR)/.collected $(TMPDIR)/.version
 
 
 define check_tool
@@ -90,14 +90,14 @@ required_tools+=sed
 required_tools+=awk
 
 
-
-checktools: 
+$(TMPDIR)/.toolchecked: 
 	$(foreach t,$(required_tools),$(call check_tool,$(t))$(newline))
+	$(Q)touch $(@)
 
-$(TMPDIR)/.collected:  checkdirs checktools $(genfiles)
+$(TMPDIR)/.collected: $(TMPDIR)/.dirchecked $(TMPDIR)/.toolchecked $(genfiles)
 	     $(Q)-rm -f $(OBJDIR)/include/arch
 	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
-	     $(Q)touch $(TMPDIR)/.collected
+	     $(Q)touch $(@)
 
 
 PHONY+=collectinfo

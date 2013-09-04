@@ -97,7 +97,7 @@ mrproper: clean
 
 distclean: mrproper
 
-build:  collectinfo $(TOPDIR)/include/config/auto.conf collectinfo $(BUILDGOALS)
+build:  $(TOPDIR)/include/config/auto.conf $(BUILDGOALS)
 	@echo > /dev/null
 
 deploy: build

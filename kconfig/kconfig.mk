@@ -25,16 +25,16 @@ $(info $(KCONF_WARNING))
 $(error Sorry)
 endif
 
-versionupdate:
+$(TMPDIR)/.version: $(ANTARES_DIR)/.git $(ANTARES_DIR)/.version
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_GIT $(VERSION_GIT) 
 	$(SILENT_VER) $(ANTARES_DIR)/kconfig/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
-
+	$(Q)touch $(@)
 
 define frontend_template
-$(1): collectinfo versionupdate
+$(1): collectinfo
 	$$(Q) kconfig-$(2) $(Kconfig)
 	$$(Q)echo "Antares configuration is now complete."
 	$$(Q)echo "Run 'make build' to build everything now"
@@ -46,17 +46,20 @@ $(eval $(call frontend_template,qconfig,qconf))
 $(eval $(call frontend_template,nconfig,nconf))
 
 
-$(TOPDIR)/include/config/auto.conf: $(deps_config) .config
+$(TOPDIR)/include/config/auto.conf: $(deps_config) .config collectinfo 
 	$(SILENT_INFO) "Config changed, running silentoldconfig"
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
 
-config: collectinfo versionupdate
+$(TOPDIR)/include/generated/autoconf.h: silentoldconfig
+	$(Q)echo > /dev/null
+
+config: collectinfo
 	$(Q)kconfig-conf --oldaskconfig $(Kconfig)
 
-oldconfig: collectinfo versionupdate
+oldconfig: collectinfo
 	$(Q)kconfig-conf --$@ $(Kconfig)
 
-silentoldconfig: collectinfo versionupdate
+silentoldconfig: collectinfo
 	$(Q)mkdir -p include/generated
 	$(Q)mkdir -p include/config
 	$(Q)kconfig-conf --$@ $(Kconfig)

@@ -56,7 +56,7 @@ $(eval $(call extra_proc,adeps,\
 	))
 endif
 
-.genned: $(gen-y)
+.genned: $(TOPDIR)/include/generated/autoconf.h $(gen-y)
 	$(Q) touch $(@)
 
 %/.genned: $(TOPDIR)/include/generated/autoconf.h

@@ -34,7 +34,7 @@ export ASFLAGS CFLAGS LDFLAGS ELFFLAGS
 
 #We now need to parse opts from kconfig
 
-builtin: collectinfo
+builtin: $(TMPDIR)/.collected $(TOPDIR)/include/generated/autoconf.h
 	$(SILENT_INFO) Building antares library code and startup
 	$(Q) mkdir -p $(OBJDIR)/build/app
 	$(Q) $(MAKE) OBJDIR=$(abspath $(OBJDIR)/build) SRCDIR=$(ANTARES_DIR)/src \

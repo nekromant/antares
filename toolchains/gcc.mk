@@ -95,7 +95,7 @@ endif
 export CC CXX LD AR AS OBJCOPY DISAS OBJDUMP SIZE COMPILER_TOOLS LD_NO_COMBINE
 export ASFLAGS CFLAGS LDFLAGS ELFFLAGS GENDEPFLAGS
 
-builtin: collectinfo 
+builtin: $(TMPDIR)/.collected $(TOPDIR)/include/generated/autoconf.h
 	$(Q) mkdir -p $(OBJDIR)/build/app
 ifeq ($(CONFIG_NEED_GENERATE),y)
 	$(SILENT_INFO) Generating required headers
