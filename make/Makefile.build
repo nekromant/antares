@@ -2,7 +2,6 @@
 #toolchain files and in arch.mk of the target arch. 
 
 .SUFFIXES:
-.PHONY: $(PHONY)
 
 include $(TOPDIR)/.config
 include $(ANTARES_DIR)/make/Makefile.lib
@@ -22,7 +21,7 @@ clean-y+=$(foreach dir,$(subdirs-y),$(dir)/built-in.$(O))
 #suck in dep files (if any)
 -include $(OBJDIR)/*.d
 
-PHONY:= build clean generate .genned
+PHONY:= build clean generate .genned built-in.$(O)
 
 define recurse_make
 	$(Q)$(MAKE) TOPDIR=$(TOPDIR) OBJDIR=$(OBJDIR)/$(NEXT) \
@@ -102,3 +101,4 @@ endif
 
 
 .PRECIOUS: $(PRECIOUS) 
+.PHONY: $(PHONY)
