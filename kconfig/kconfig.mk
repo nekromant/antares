@@ -50,13 +50,13 @@ $(TOPDIR)/include/config/auto.conf: $(deps_config) .config
 	$(SILENT_INFO) "Config changed, running silentoldconfig"
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
 
-config: 
+config: collectinfo versionupdate
 	$(Q)kconfig-conf --oldaskconfig $(Kconfig)
 
-oldconfig:
+oldconfig: collectinfo versionupdate
 	$(Q)kconfig-conf --$@ $(Kconfig)
 
-silentoldconfig: 
+silentoldconfig: collectinfo versionupdate
 	$(Q)mkdir -p include/generated
 	$(Q)mkdir -p include/config
 	$(Q)kconfig-conf --$@ $(Kconfig)
