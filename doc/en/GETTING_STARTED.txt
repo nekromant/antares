@@ -30,11 +30,34 @@ At the time of writing kconfig-frontends have some problems compiling
 on OS X, so you may want to grab a stable working version from here: 
 https://github.com/LorenzMeier/Firmware/tree/master/misc/tools/kconfig-frontends
 
+
+Compiling kconfig-frontends
+---------------------------
+Unfortunately kconfig-frontends is not found in most distro repos, 
+so we'll have to compile by hand. Mac OS X users - see note above!
+Grab the latest tarball from 
+http://ymorin.is-a-geek.org/projects/kconfig-frontends
+
+unpack. 
+
+cd kconfig-frontends
+./configure --prefix=/usr
+
+You'll need a few dependencies, namely flex, bison, gperf and things
+like ncurses-dev for curses frontend, qt4-dev for qt ui and so on. 
+Please note, that kconfig frontends won't show up an error, if it can't
+compile some frontend. So pay attention to what configure says
+If something's missing - install and rerun ./configure
+
+make
+sudo make install
+
+
 Setup
 ------
 
 First, we need to clone antares to your local drive. 
-In this examples, we'll use ~/.antares
+In this examples, we'll use ~/.antares, but it can be any directory you like
 
 git clone git://github.com/nekromant/antares.git ~/.antares
 
@@ -46,12 +69,14 @@ and run
 sudo make install
 
 Or just copy aproj somewhere, where it will be in your $PATH. It's just a small
-bash script. 
-Finally, we need to tell the scripts where to find the global antares installation.  antares, so they won't try to checkout the git every time.
+bash script, nothing more.
+Finally, we need to tell the scripts where to find the global antares installation (~/.antares) so they won't try to checkout the git every time.
 To do so, we need to set environment variable ANTARES_INSTALL_DIR. 
 In most cases you'll need to add something like that tou your ~/.bashrc
 
 export ANTARES_INSTALL_DIR=~/.antares
+
+Remember to restart the shell aftrwards!
 
 Project examples
 ----------------
@@ -61,7 +86,7 @@ You can add your own examples there. To get and update project examples from the
 
 aproj update 
 
-This will pull you any new examples from antares-examples repository
+This will pull you any new examples from antares-examples repository. New ones appear there from time to time. These are the starting points for your own projects.  
 
 Bootstrapping a project
 ------------------------
@@ -129,17 +154,14 @@ a kcnf in the top level directory of your project. It's contents are wrapped int
 'Project settings' menu 
 
 
-Nore for distro maintainers 
+Note for distro maintainers 
 ---------------------------------------
 
-If you want to package antares fully - that's not a very good idea.. 
+If you want to package antares fully - that's not a very good idea... 
 As a max, you can package aproj script. Since normally you would want to add code you 
 want to share between projects to antares. 
 Therefore, the user needs write permissions there.  
 As tradeoff - install it to /usr/src
-
-
-
 
 Known problems
 ------------------
