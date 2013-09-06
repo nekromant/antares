@@ -43,8 +43,6 @@ export SRCDIR ARCH TMPDIR IMAGENAME ARCH TOPDIR ANTARES_DIR TOOL_PREFIX
 -include $(TOPDIR)/.config
 -include $(TOPDIR)/include/config/auto.conf.cmd
 
-.DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
-
 include $(ANTARES_DIR)/make/host.mk
 -include $(TMPDIR)/arch.mk
 include $(ANTARES_DIR)/make/Makefile.lib
@@ -94,6 +92,7 @@ mrproper: clean
 	$(Q)rm -f $(TOPDIR)/antares
 	$(Q)rm -Rf $(TOPDIR)/include/config
 	$(Q)rm -f $(TOPDIR)/include/arch
+	-$(Q)rm rm -f $(TOPDIR)/TAGS
 
 distclean: mrproper
 
@@ -110,7 +109,10 @@ real-deploy-%: build
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy post
 
 tags:
-	$(SILENT_TAGS)etags `find $(TOPDIR) $(ANTARES_DIR)/ -name "*.c" -o -name "*.cpp" -o -name "*.h"|grep -v kconfig`
+	$(SILENT_TAGS)etags `\
+	find $(TOPDIR) $(ANTARES_DIR)/ \
+	-name "*.c" -o -name "*.cpp" -o -name "*.h" \
+	| grep -v kconfig`
 
 
 #Help needs a dedicated rule, so that it won't invoke build as it normally does
@@ -128,3 +130,5 @@ endef
 $(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 .PHONY: $(PHONY)
+
+.DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
