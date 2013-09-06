@@ -17,6 +17,7 @@
 
 #endif
 
+#define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
 
 #define min_t(type, x, y) ({					\
 			type __min1 = (x);			\
