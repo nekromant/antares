@@ -3,6 +3,7 @@ string "Toolchain prefix"
 default "avr-" if ARCH_AVR
 default "arm-none-eabi-" if ARCH_ARM
 default "msp430-" if ARCH_MSP430
+default "" if ARCH_NATIVE
 
 #  config CC
 #  string "C Compiler (cc)"

@@ -7,7 +7,8 @@ choice
 prompt "Toolchain selection"
 
 config TOOLCHAIN_GCC
-depends on SHOW_ALL_TOOLCHAINS || ARCH_AVR || ARCH_ARM || ARCH_MSP430 || ARCH_MIPS
+depends on SHOW_ALL_TOOLCHAINS || ARCH_AVR || ARCH_ARM || ARCH_MSP430 || ARCH_MIPS || \
+	ARCH_NATIVE
 bool "GCC-based toolchain"
 
 config TOOLCHAIN_SDCC
