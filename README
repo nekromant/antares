@@ -2,7 +2,7 @@ ANTARES is an all-in-one buildsystem, aimed at baremetal targets.
 It is designed to be portable across a lot of MCUs and adding another 
 MCU is trivial. 
 It uses Kconfig as seen in linux kernel and a set of homebrew Makefiles
-designed to easen the development process. 
+designed to ease the development process. 
 This stuff is still pre-alpha quality, so if things don't work for you
 out of the box - drop me a line, or create an issue on github
 
@@ -12,7 +12,7 @@ Traditional buildsystems (cmake, scons, autotools etc.) are very
 painful to use when it comes to bare metal targets. 
 Proprietary crippled IDEs from vendors like IAR/CodeComposer/Keil, etc.
 provide their own project management, but they are generally a pain 
-to use espesially if you are mostly used to VIM/emacs (like me).
+to use especially if you are mostly used to VIM/emacs (like me).
 While the above IDEs make it simpler to create some 'write&forget'
 projects fast, they suck when it comes to maintaining a lot of shared
 code between different projects, different revisions of projects. etc
@@ -26,10 +26,10 @@ crappy buildsystem). But you won't rip kconfig from kernel for each
 of your avr-led-blinker project, will you?
 So, there we go. 
 
-Yet another arduino?
+Yet another Arduino?
 --------------------
 Let's be honest.
-It is not arduino. It doesn't aim to provide any crippled IDE for your
+It is not Arduino. It doesn't aim to provide any crippled IDE for your
 projects. You are free to use whatever IDE/editor you like. VIM/emacs 
 users welcome. Eclipse? You're welcome. Kdevelop? Sure.  
 It doesn't end up with lies, trying make you think that you are writing 
@@ -41,7 +41,7 @@ library code, you are free NOT to use any of it and exclude it from
 compilation. 
 The choice is yours to make, after all.
 
-Why not just stick to arduino?
+Why not just stick to Arduino?
 ------------------------------
 Personal reasons. It's unportable, ugly, very little hardware is actually 
 supported. Most tasty chips are NOT supported at all.
@@ -63,7 +63,7 @@ Supported host operating systems
 Currently only Linux and FreeBSD have been tested.
 Mac OS X has been recently proved to work fine after a few patches
 Windows *might* work (cygwin), but it's currently NOT the platform 
-antares is aimed to be used at. If it turns out to be rather simple
+antares is aimed to be used with. If it turns out to be rather simple
 to add support - patches welcome.
 
 Is antares buildsystem okay to compile in multiple threads?
@@ -102,7 +102,7 @@ ST Peripheral Libraries. Proprietary (BSD-like?) license
 VUSB (Dual, GPLv2+obdev exception and proprietary)
 lwIP (BSD-like) 
 
-Why there's so little library code for arch XXX?
+Why is there so little library code for arch XXX?
 ------------------------------------------------
 Patches welcome. 
 
