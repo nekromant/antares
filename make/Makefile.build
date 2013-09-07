@@ -37,7 +37,7 @@ endef
 define extra_proc
 extras+=%.$(O).adeps
 PRECIOUS+=%.$(O).adeps
-%.$(O).$(1): $(SRCDIR)/%.s
+%.$(O).$(1): $(SRCDIR)/%.S
 	$(2)
 	$(SILENT_EXTRA) touch $$(@)
 %.$(O).$(1): $(SRCDIR)/%.c
