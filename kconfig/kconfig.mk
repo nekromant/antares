@@ -1,8 +1,15 @@
-
+#Test if antares dir is a git repo
 VERSION_MAJOR := $(shell $(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_MAJOR )
 VERSION_MINOR := $(shell $(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_MINOR )
 VERSION_CODENAME := $(shell $(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_CODENAME )
-VERSION_GIT = $(shell GIT_DIR=$(ANTARES_DIR)/.git git rev-parse --verify HEAD --exec-path=$(src))
+
+# We can be a git repo or a tarball, here goes the tricky part
+# In case of tarball use the git revision info from .version
+VERSION_GIT=$(shell test -d "$(ANTARES_DIR)/.git" && \
+	GIT_DIR="$(ANTARES_DIR)/.git" git rev-parse --verify HEAD --exec-path=$(src) ||\
+	$(ANTARES_DIR)/kconfig/config --file "$(SRCDIR)/.version" --state VERSION_GIT)
+
+VERSION_GIT_DEP=$(shell test -d "$(ANTARES_DIR)/.git" && echo "$(ANTARES_DIR)/.git" )
 
 
 define KCONF_WARNING
@@ -25,11 +32,11 @@ $(info $(KCONF_WARNING))
 $(error Sorry)
 endif
 
-$(TMPDIR)/.version: $(ANTARES_DIR)/.git $(ANTARES_DIR)/.version
+$(TMPDIR)/.version: $(ANTARES_GIT_DEP) $(ANTARES_DIR)/.version
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_MAJOR "$(VERSION_MAJOR)"
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_MINOR "$(VERSION_MINOR)"
 	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_CODENAME "$(VERSION_CODENAME)"
-	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_GIT $(VERSION_GIT) 
+	$(Q)$(ANTARES_DIR)/kconfig/config --set-str VERSION_GIT "$(VERSION_GIT)" 
 	$(SILENT_VER) $(ANTARES_DIR)/kconfig/config --set-str VERSION_STRING "$(VERSION_MAJOR).$(VERSION_MINOR), $(VERSION_CODENAME)"
 	$(Q)touch $(@)
 
@@ -65,4 +72,6 @@ silentoldconfig: collectinfo
 	$(Q)kconfig-conf --$@ $(Kconfig)
 
 set_version:
+	$(Q)$(ANTARES_DIR)/kconfig/config --file $(ANTARES_DIR)/.version --set-str VERSION_GIT "$(VERSION_GIT)"
 	$(Q)KCONFIG_CONFIG=$(ANTARES_DIR)/.version kconfig-mconf $(KVersion)
+	$(Q)echo "N.B. Remember to amend the version changes to the release commit"

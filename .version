@@ -1,7 +1,6 @@
 #
-# Automatically generated make config: don't edit
-# Antares version: VERSION_STRING
-# Sun Sep  2 20:14:51 2012
+# Automatically generated file; DO NOT EDIT.
+# Configuration
 #
 
 #
@@ -14,3 +13,8 @@
 CONFIG_VERSION_MAJOR="0"
 CONFIG_VERSION_MINOR="2-rc1"
 CONFIG_VERSION_CODENAME="Insane Mushroom"
+
+#
+# Automatically filled in.
+#
+CONFIG_VERSION_GIT="7133d1f6f32c5cb0dc754216d0188ca2542b0cdb"

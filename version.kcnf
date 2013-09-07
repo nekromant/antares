@@ -14,4 +14,8 @@ comment "They use it once they want to increment the version"
   string "CodeName"
   default "Lucky Lady"
 
+  comment "Automatically filled in."
+  config VERSION_GIT
+  string "Git revision"
+
 #endmenu
