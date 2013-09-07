@@ -1,5 +1,5 @@
-#ifndef __STLINKY_H
-#define __STLINKY_H
+#ifndef STLINKY_H
+#define STLINKY_H
 
 
 #define STLINKY_MAGIC 0xDEADF00D

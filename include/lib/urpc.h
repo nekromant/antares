@@ -1,5 +1,5 @@
-#ifndef __URPC_H
-#define __URPC_H
+#ifndef URPC_H
+#define URPC_H
 
 /* Packet is method call */ 
 #define FLAG_URPC_METHOD       1
