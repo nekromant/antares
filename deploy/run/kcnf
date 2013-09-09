@@ -1,0 +1,13 @@
+menuconfig DEPLOY_RUN
+bool "run"
+depends on ARCH_NATIVE
+
+  if DEPLOY_RUN
+
+  config DEPLOY_RUN_ARGS
+  string "Command-line arguments"
+
+  endif
+
+
+
