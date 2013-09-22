@@ -4,42 +4,51 @@
 
 tag="$1"
 method="$2"
-shift; shift
-args="$*"
+shift; shift;
 
 gen_test()
 {
-get_mcu_list| while read lnn; do
-echo $lnn
-done
+    get_mcu_list| while read lnn; do
+    echo $lnn
+    done
 
 }
 
 
 gen_mk()
 {
-echo "# Automatically generated. Not recommended to edit"
-while read lnn; do
-for ln in $lnn; do
-up=`echo $ln | tr [:lower:] [:upper:]|sed 's/-/_/g'`
-echo "ifeq (\$(CONFIG_${tag}_${up}),y)"
-echo "${tag}$*$ln"
-echo "endif"
-done
-done
+    echo "# Automatically generated. Not recommended to edit"
+    while read lnn; do
+	for ln in $lnn; do
+	    up=`echo $ln | tr [:lower:] [:upper:]|sed 's/-/_/g'`
+	    echo "ifeq (\$(CONFIG_${tag}_${up}),y)"
+	    echo "${tag}$*$ln"
+	    echo "endif"
+	    echo ""
+	done
+    done
 }
 
 gen_kcnf()
 {
 #1st pass, gen the kcnf selection menu
-echo "# Automatically generated. Not recommended to edit" 
-while read lnn; do
-for ln in $lnn; do
-up=`echo $ln | tr [:lower:] [:upper:]|sed 's/-/_/g'`
-echo "config ${tag}_${up}" 
-echo "bool \"$ln\"" 
-done
-done
+    echo "# Automatically generated. Not recommended to edit" 
+    while read lnn; do
+	for ln in $lnn; do
+	    up=`echo $ln | tr [:lower:] [:upper:]|sed 's/-/_/g'`
+	    echo "config ${tag}_${up}" 
+	    echo "bool \"$ln\""
+#HACK: This should be nuked. This shouldn't be here!
+	    feats=$1
+	    if [ "${feats}" == "need_feats" ]; then
+		feats="`ARCH=$ln make --no-print-directory -f $ANTARES_DIR/make/Makefile.feats`"
+		for f in ${feats}; do 
+		    echo "select ${f}"
+		done
+	    fi
+	    echo ""
+	done
+    done
 }
 
 gen_${method} $*

@@ -1,0 +1,7 @@
+-include $(ANTARES_DIR)/src/arch/$(ARCH)/arch.mk
+
+.DEFAULT_GOAL := list-feats
+
+
+list-feats:
+	@$(if $(ARCH),echo "$(addprefix ARCH_HAS_,$(ARCH_FEATURES))",echo)

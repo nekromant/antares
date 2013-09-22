@@ -1,4 +1,8 @@
 include $(ANTARES_DIR)/src/arch/msp430/mcu_database.mk
+
+ARCH_FEATURES:=ANTARES_STARTUP
+
+
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).bin $(IMAGENAME).lss $(IMAGENAME).elf
 
