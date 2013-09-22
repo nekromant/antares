@@ -1,6 +1,9 @@
 mainmenu "Antares Firmware Config"
 
 menu "Target platform settings"
+     	config ARCH_HAS_ANTARES_STARTUP
+	bool
+
 	choice
 	prompt "Target architecture"
 		source tmp/arch.kcnf
@@ -8,6 +11,7 @@ menu "Target platform settings"
 	
 	config ANTARES_STARTUP
         bool "Antares startup code"
+	depends on ARCH_HAS_ANTARES_STARTUP
         default y
         help
          Provides a main() and an easy way to group

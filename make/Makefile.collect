@@ -3,6 +3,12 @@ junk=$(addprefix |grep -v ,$(junk_filter))
 
 ARCH?=arm
 
+#TODO: Current mk/kcnf generation looks like smoking crap
+#TODO: Mostly since it was written on excess coffeine after 3
+#TODO: days of sleep deprivation and looked cool at that time ;)
+#TODO: This file should be totally rewritten from scratch
+#TODO: In a cleaner way. So far - it does the job, so it stays as is.  
+
 #This gets read&run by top level, therefore must have extra stuff
 
 # 1 name, e.g. arch
@@ -16,8 +22,9 @@ ARCH?=arm
 define generate_dirlist
 $(TMPDIR)/$(1).$(4): $(3)
 	$(Q)[ -d $(TMPDIR) ] || mkdir -p $(TMPDIR)
-	$(SILENT_GEN2) [ -d "$(3)" ] && ls $(3) $(junk)| \
-		$(SRCDIR)/scripts/listgen $(2) $(4) $(5) $$@
+	$(SILENT_GEN2) [ -d "$(3)" ] && ls $(3) $(junk) | \
+		$(SRCDIR)/scripts/listgen $(2) $(4) \
+			$(5) $$@
 endef
 
 #Unifies several kcnf files into one include
@@ -36,29 +43,25 @@ $(TMPDIR)/all-$(1).kcnf: $(TMPDIR)/$(1).mk $(TMPDIR)/$(1).kcnf
 endef
 
 
-
-#TODO: Current generation method looks like smoking crap
-#TODO: Maybe we need something better later 
-
 ifeq ($(PROJECT_SHIPS_ARCH),y)
-$(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,mk, "=" >))
-$(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,kcnf,>))
+$(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,mk,"=" >))
+$(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,kcnf,need_feats >))
 $(eval $(call unify_kcnf,arch,$(TOPDIR),src/arch,.))
 else
 
 #Architectures in-tree
-$(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,mk, "=" >))
-$(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,kcnf,>))
+$(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,mk,"=" >))
+$(eval $(call generate_dirlist,arch,ARCH,$(SRCDIR)/src/arch,kcnf,need_feats >))
 $(eval $(call unify_kcnf,arch,$(SRCDIR),src/arch,antares))
 endif
 
 #Deploy methods in-tree
-$(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,mk, "+=" >))
+$(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,mk,"+=" >))
 $(eval $(call generate_dirlist,deploy,DEPLOY,$(SRCDIR)/deploy,kcnf,>))
 $(eval $(call unify_kcnf,deploy,$(SRCDIR),deploy,antares))
 
 #Deploy methods in-project
-$(eval $(call generate_dirlist,edeploy,DEPLOY,$(TOPDIR)/deploy,mk, "+=" >))
+$(eval $(call generate_dirlist,edeploy,DEPLOY,$(TOPDIR)/deploy,mk,"+=" >))
 $(eval $(call generate_dirlist,edeploy,DEPLOY,$(TOPDIR)/deploy,kcnf,>))
 $(eval $(call unify_kcnf,edeploy,$(TOPDIR),deploy,.))
 
