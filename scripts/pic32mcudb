@@ -1,0 +1,32 @@
+#!/bin/bash
+# Gens MCU list for xc32-gcc
+#CC=msp430-gcc
+
+
+get_mcu_list()
+{
+ls /opt/microchip/xc32/v1.21/pic32mx/lib/proc/
+}
+
+echo "Generating kconfig script..."
+#1st pass, gen the kcnf selection menu
+echo "# Automatically generated. Not recommended to edit" > mcu_selection.kcnf
+#echo "choice" >> mcu_selection.kcnf
+#echo "prompt \"Select MCU variant\"" >> mcu_selection.kcnf
+get_mcu_list| while read ln; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "config MCU_$up" >> mcu_selection.kcnf
+echo "bool \"$ln\"" >> mcu_selection.kcnf
+done
+
+#echo "endchoice" >> mcu_selection.kcnf
+
+echo "Generating mcu database Makefile..."
+echo "# Automatically generated. Not recommended to edit" > mcu_database.mk
+get_mcu_list| while read ln; do
+up=`echo $ln | tr [:lower:] [:upper:]`
+echo "ifeq (\$(CONFIG_MCU_$up),y)" >> mcu_database.mk
+echo "MCU=$ln" >> mcu_database.mk
+echo "endif" >> mcu_database.mk
+done
+echo "All done"

@@ -1,0 +1,28 @@
+if ARCH_PIC32
+
+choice
+depends on ARCH_PIC32
+prompt "Select MCU variant"
+  
+source "antares/src/arch/pic32/mcu_selection.kcnf"
+
+endchoice
+
+
+#TODO: generalisation?
+config  USE_UNO32_LD
+bool "Use LD script for ChipKit UNO32 (avrdude)"
+depends on MCU_32MX320F128H
+
+config  USE_MAX32_LD
+bool "Use LD script for ChipKit MAX32 (avrdude)"
+depends on MCU_32MX795F512L
+
+config F_CPU
+int "CPU frequency in Hz"
+default 8000000
+
+
+endif
+
+
