@@ -2,6 +2,9 @@ include $(ANTARES_DIR)/src/arch/pic32/mcu_database.mk
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).lss $(IMAGENAME).hex
 
+# Antares startup code is not yet ready
+#ARCH_FEATURES:= ANTARES_STARTUP
+
 # Do not combine objects into built-in.o
 # This screws up things on avr and breaks ANTARES_* macros
 # So it's 100% safe to set this to y
@@ -26,17 +29,6 @@ endif
 
 MCHIP_PATH=$(shell dirname `which $(CC)`)
 
-#FLASHSIZE= $(shell echo $$((`echo -e "\#include <bmx.h>\nFLASH_SZ" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 $(APPSIZE) )))
-
-
-#FLASHSIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nFLASHEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 $(APPSIZE) )))
-#RAMSTART= $(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMSTART" | avr-cpp -mmcu=$(MCU) | sed '$$!d'`)))
-#RAMEND=$(shell echo $$((`echo -e "\#include <avr/io.h>\nRAMEND" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` )))
-#RAMSIZE=$(shell echo $$(($(RAMEND)-$(RAMSTART) + 1 )))
-#EESIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nE2END" | avr-cpp -mmcu=$(MCU) | sed '$$!d'` + 1 )))
-
-
-
 %.hex: %.elf
 		$(SILENT_OBJCOPY) $(OBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $< $@	
 
@@ -46,23 +38,21 @@ MCHIP_PATH=$(shell dirname `which $(CC)`)
 %.eep.bin: %.elf
 		$(SILENT_OBJCOPY) $(OBJCOPY) $(HEX_EEPROM_FLAGS) -O binary $< $@ || exit 0
 
+FLASHSIZE=$(shell MCU=$(MCU);echo $${MCU:8:3}*1024|bc)
+
+#TODO: Find a way to find out target RAM size
 
 sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
-	$(Q) echo "Not yet implemented!"
+	$(Q)$(ANTARES_DIR)/scripts/meter "Flash usage" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
+	$(FLASHSIZE);
+	$(Q)echo "RAM Usage:" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` bytes 
+	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
 
-#	$(Q)$(ANTARES_DIR)/scripts/meter "$(FBANNER)" \
-#	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
-#	$(FLASHSIZE);
-#	$(Q)$(ANTARES_DIR)/scripts/meter "EEPROM Usage" \
-#	`$(STAT) $(IMAGENAME).eep.bin -c %s` \
-#	$(EESIZE);
-#	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
-#	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
-#	$(RAMSIZE);
-#	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"
 
-#list-interrupts:
-#	echo "#include <avr/interrupt.h>" | $(TOOL_PREFIX)gcc -mmcu=$(MCU) -dM -E -|grep "_vect" | grep -v "_num" | awk '{printf $$2"\n"}'
+list-interrupts:
+	@echo "Not implemented yet. Patches welcome"
 
 
 BUILDGOALS+=sizecheck
