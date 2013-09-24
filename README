@@ -54,7 +54,7 @@ used (and reused) easily in your projects, bundled with kconfig.
 Supported architectures
 ------------------------
 Currently a few architectures are supported: 
-avr, msp430, arm(stm32), 8051 (at89, stc)
+avr, msp430, arm(stm32), 8051 (at89, stc), pic32
 Others are being added as the hardware comes along. 
 If you want more - patches are always welcome.
 
