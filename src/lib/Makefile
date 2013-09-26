@@ -8,6 +8,7 @@ subdirs-$(CONFIG_LIB_STLINKY)+=stlinky
 objects-$(CONFIG_LIB_SNPRINTF)+=snprintf.o
 objects-$(CONFIG_LIB_NLIBSTUBS)+=newlib-dummies.o
 objects-$(CONFIG_LIB_PRINTK)+=printk.o
+objects-$(CONFIG_LIB_INITCALL)+=initcall.o
 objects-$(CONFIG_LIB_XMODEM)+=xmodem.o
 
 subdirs-y+=ulc

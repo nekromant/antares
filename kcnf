@@ -9,14 +9,6 @@ menu "Target platform settings"
 		source tmp/arch.kcnf
 	endchoice
 	
-	config ANTARES_STARTUP
-        bool "Antares startup code"
-	depends on ARCH_HAS_ANTARES_STARTUP
-        default y
-        help
-         Provides a main() and an easy way to group
-         initialisations with ANTARES_INIT/ANTARES_APP
-         macros with nearly no size impact.
 source tmp/all-arch.kcnf
 endmenu
 
