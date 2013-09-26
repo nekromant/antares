@@ -3,6 +3,8 @@ Antares startup code
 
 #include <arch/antares.h>
 CONFIG_ANTARES_STARTUP=y
+CONFIG_LIB_INITCALL=y
+
 
 This file describes what antares startup code does, and what are the
 benefits it brings.  It should work on any architecture that has the
@@ -63,11 +65,35 @@ Any code added via ANTARES_APP() will be executed in an endless loop
 one by one. So unless you know, what you are doing - do NOT put any
 any endless loops there.
 
-Known issues
-------------
+Dependency-handling
+-------------------
 
-No dependency handling. Whatsoever. The order in which functions will
-be called is determined merely by the link order at compile-time.
+As you have noticed, the bad stuff here is... No dependency handling. 
+Whatsoever. The order in which functions will be called is determined 
+merely by the link order at compile-time. This sucks, therefore there's 
+a better mechanism that comes at a little flash and ram overhead: 
+ANTARES_INITCALL_LOW() and ANTARES_INITCALL_HIGH()
+These work pretty much the same, but allow you to specify dependencies in
+a Makefile-like style
+example: 
+
+ANTARES_INITCALL_LOW(spi) 
+{
+	....			  
+}
+
+ANTARES_INITCALL_LOW(sd) 
+{
+	DEPENDS(spi);
+	....
+}
+ 
+Misc notes:
+* Each initialisation function will be called ONLY once
+* Circular deps WILL screw you up. Don't shoot in your leg.  
+* HIGH and LOW initcalls can't depend on each other
+* Enable initcall debugging to see resulting order
+
 
 How does this thing work?
 -------------------------
@@ -93,6 +119,7 @@ Since naked functions are somewhat limited, e.g. no if, local
 variables, etc. What's even more, if we try - no warning may pop up,
 but we will end up with weird bugs. Therefore placing a function call
 there is safer.
+
 
 
 SDCC?
