@@ -53,18 +53,23 @@ $(eval $(call frontend_template,qconfig,qconf))
 $(eval $(call frontend_template,nconfig,nconf))
 
 
-$(TOPDIR)/include/config/auto.conf: $(deps_config) .config collectinfo 
-	$(SILENT_INFO) "Config changed, running silentoldconfig"
-	$(Q)$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
-
-$(TOPDIR)/include/generated/autoconf.h: silentoldconfig
+$(TOPDIR)/include/config/auto.conf: $(TMPDIR)/.configured
 	$(Q)echo > /dev/null
+
+$(TOPDIR)/include/generated/autoconf.h: $(TMPDIR)/.configured
+	$(Q)echo > /dev/null
+
 
 config: collectinfo
 	$(Q)kconfig-conf --oldaskconfig $(Kconfig)
 
 oldconfig: collectinfo
 	$(Q)kconfig-conf --$@ $(Kconfig)
+
+$(TMPDIR)/.configured: $(deps_config) .config
+	$(SILENT_INFO) "Config changed, running silentoldconfig"
+	$(Q)$(MAKE) -f $(ANTARES_DIR)/Makefile silentoldconfig
+	$(Q)touch $(@)
 
 silentoldconfig: collectinfo
 	$(Q)mkdir -p include/generated

@@ -23,7 +23,6 @@ export STAT
 ECHO:=$(shell $(call check_alt,gecho,echo))
 export ECHO
 
-
 ANTARES_DIR:=$(abspath $(ANTARES_DIR))
 TMPDIR:=$(abspath $(TMPDIR))
 TOPDIR:=$(abspath $(TOPDIR))
@@ -96,7 +95,7 @@ mrproper: clean
 
 distclean: mrproper
 
-build:  $(TOPDIR)/include/config/auto.conf $(BUILDGOALS)
+build:  $(BUILDGOALS)
 	@echo > /dev/null
 
 deploy: build
@@ -113,6 +112,9 @@ tags:
 	find $(TOPDIR) $(ANTARES_DIR)/ \
 	-name "*.c" -o -name "*.cpp" -o -name "*.h" \
 	| grep -v kconfig`
+
+graph-%:
+	$(Q)$(ANTARES_DIR)/scripts/visualise_make $*
 
 
 #Help needs a dedicated rule, so that it won't invoke build as it normally does
@@ -131,4 +133,5 @@ $(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 .PHONY: $(PHONY)
 
+$(info $(PHONY))
 .DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
