@@ -4,7 +4,9 @@
 	* initial pic32 port
 	* Documentation and translation cleanup 
 	* Architecture features mechanism (ARCH_HAS_XXX)
+	* Major buildsystem cleanups
 	* 'Native' port
+	* lib: Add Xilinx SLave Serial upload driver
 	...
 
 0.2-rc1: First release. More or less stable
