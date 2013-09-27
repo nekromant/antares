@@ -1,8 +1,8 @@
 mainmenu "Antares Firmware Config"
 
+source antares/features.kcnf
+
 menu "Target platform settings"
-     	config ARCH_HAS_ANTARES_STARTUP
-	bool
 
 	choice
 	prompt "Target architecture"

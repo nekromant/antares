@@ -1,0 +1,7 @@
+config ARCH_HAS_ANTARES_STARTUP
+bool
+
+config ARCH_HAS_NEWLIB
+bool
+
+
