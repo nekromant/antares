@@ -56,9 +56,9 @@ void delaylib_print_summary()
 	printf("delaylib: cycles_per_s %lu cycles_per_ms %lu cycles_per_us %lu\n",
 	       CYCLES_PER_S, CYCLES_PER_MS, CYCLES_PER_US);
 #endif
-#endif
-
 }
+
+#endif
 
 
 
