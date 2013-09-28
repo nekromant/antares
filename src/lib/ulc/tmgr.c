@@ -1,6 +1,7 @@
 #include <lib/tmgr.h>
 
-static uptime_t sys_uptime = 0;
+static volatile uptime_t sys_uptime = 0;
+static volatile int32_t sys_fq = 0;
 
 static task_t *fast_queue = NULL;
 static task_t *main_queue = NULL;
@@ -28,18 +29,18 @@ void tmgr_tick(void)
     if(fast_queue != NULL)
     {
         // Attach fast queue to main queue
-        task_t * fast = fast_queue,
-               * current = main_queue,
-               ** last = &main_queue;
+        task_t *fast = fast_queue,
+               *current = main_queue,
+               **last = &main_queue;
 
         fast_queue = NULL;
 
-        while(fast->next != NULL)
+        while(fast != NULL)
         {
             while(current != NULL && current->time < fast->time)
             {
                 current = current->next;
-                last = &(last->next);
+                last = &((*last)->next);
             }
 
             fast->next = current;
@@ -72,9 +73,60 @@ uptime_t tmgr_get_uptime(void)
     return sys_uptime;
 }
 
-void tmgr_delay(uptime_t time)
+void tmgr_delay_ticks(uptime_t time)
 {
     time += sys_uptime;
 
     while(time > sys_uptime);
 }
+
+/**
+ * @}
+ */
+
+/**
+ * @section Time conversion functions
+ * @{
+ */
+void tmgr_set_fq(int32_t fq)
+{
+    sys_fq = fq;
+}
+
+int32_t tmgr_get_fq(void)
+{
+    return sys_fq;
+}
+
+int32_t tmgr_ticks_to_us(int32_t ticks)
+{
+    return 1000000U * ticks / sys_fq;
+}
+
+int32_t tmgr_ticks_to_ms(int32_t ticks)
+{
+    return 1000 * ticks / sys_fq;
+}
+
+int32_t tmgr_ticks_to_s(int32_t ticks)
+{
+    return ticks / sys_fq;
+}
+
+int32_t tmgr_us_to_ticks(int32_t us)
+{
+    return us * sys_fq / 1000000U;
+}
+
+int32_t tmgr_ms_to_ticks(int32_t ms)
+{
+    return ms * sys_fq / 1000;
+}
+
+int32_t tmgr_s_to_ticks(int32_t s)
+{
+    return s * sys_fq;
+}
+/**
+ * @}
+ */
