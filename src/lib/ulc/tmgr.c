@@ -1,123 +1,80 @@
-#include <lib/tasks.h>
+#include <lib/tmgr.h>
 
+static uptime_t sys_uptime = 0;
 
-static volatile unsigned int uptime = 0;
-static volatile unsigned int rate = 0;
-static int num_handlers = 0;
-static handler_t * first = 0;
+static task_t *fast_queue = NULL;
+static task_t *main_queue = NULL;
 
-void tmgr_msleep(unsigned int  time)
+/**
+ * @section Task Manager core
+ * @{
+ */
+
+void tmgr_timer(void)
 {
-  unsigned int end = uptime + time;
-  while ( uptime < end );;
+    sys_uptime++;
 }
 
-void tmgr_set_rate(unsigned int nrate)
+// TODO: make it atomic
+void tmgr_register(task_t * task)
 {
-	rate = nrate;
-	/* TODO: Reschedule pending tasks based on new rate */
-}
-
-
-unsigned int tmgr_get_uptime()
-{
-	return uptime;
-}
-
-int tmgr_register(handler_t * data)
-{
-    // 0. The most simplest case - too late to run handler
-    if(data->uptime < uptime) return TIME_OVER;
-    // 1. The simplest case - no handlers. So, let's add the first one
-    if(num_handlers == 0)
-    {
-        first = data;
-    }
-    // 2. The second case - there is only 1 handler.
-    else if(num_handlers == 1)
-    {
-        #ifdef REM_HANDLER_IF_DEFINED
-        if(first->handler == data->handler) // if this handler has been registered before
-        {
-            first->uptime = data->uptime;
-            return;
-        }
-        #endif
-        if(first->uptime > data->uptime) first->next = data;
-        else
-        {
-            data->next = first;
-            first = data;
-        }
-    }
-    // 3. There are many handlers - run sorting algorythm
-    else
-    {
-        int i = num_handlers;
-        handler_t * current = first;
-        handler_t * prev = 0;
-
-        while(i != 0)
-        {
-            #ifdef REM_HANDLER_IF_DEFINED
-            if(current->handler == data->handler) // remove this handler if registered
-            {
-                if(prev == 0) first = first->next;
-                else prev->next = current->next;
-                num_handlers--;
-            }
-            #endif
-            if(current->uptime <= data->uptime)
-            {
-                data->next = current;
-                if(prev == 0) first = data;
-                else prev->next = data;
-                i++;
-                break;
-            }
-            prev = current;
-            current = current->next;
-            i--;
-        }
-        if(i==0) prev->next = data;
-        #ifdef REM_HANDLER_IF_DEFINED
-        else
-        {
-            while(i != 0)
-            {
-                if(current->handler == data->handler)
-                {
-                    prev->next = current->next;
-                    num_handlers--;
-                    break;
-                }
-                prev = current;
-                current = current->next;
-                i--;
-            }
-        }
-        #endif
-    }
-
-    num_handlers++;
-    return 0;
+    task->next = fast_queue;
+    fast_queue = task;
 }
 
 void tmgr_tick(void)
 {
-    int i = num_handlers;
-    handler_t * current = first;
-    while(i != 0)
+    // 1. Check fast queue
+    if(fast_queue != NULL)
     {
-        if(current->uptime == uptime)
-        {
-            current->handler();
-        }
-        else if(current->uptime < uptime) break;
+        // Attach fast queue to main queue
+        task_t * fast = fast_queue,
+               * current = main_queue,
+               ** last = &main_queue;
 
-        current = current->next;
-        i--;
+        fast_queue = NULL;
+
+        while(fast->next != NULL)
+        {
+            while(current != NULL && current->time < fast->time)
+            {
+                current = current->next;
+                last = &(last->next);
+            }
+
+            fast->next = current;
+            *last = fast;
+            
+            fast = fast->next;
+        }
     }
-    num_handlers -= i;
-    uptime++;
+
+    // 2. Run main queue
+    if(main_queue != NULL)
+    {
+        while(main_queue != NULL && main_queue->time <= sys_uptime)
+        {
+            main_queue->func();
+            main_queue = main_queue->next;
+        }
+    }
+}
+
+/**
+ * @}
+ *
+ * @section Task Manager Uptime functions
+ * @{
+ */
+
+uptime_t tmgr_get_uptime(void)
+{
+    return sys_uptime;
+}
+
+void tmgr_delay(uptime_t time)
+{
+    time += sys_uptime;
+
+    while(time > sys_uptime);
 }
