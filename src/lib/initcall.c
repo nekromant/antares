@@ -3,6 +3,8 @@
 #define COMPONENT "init"
 #ifdef CONFIG_LIB_INITCALL_DEBUG
 #define DEBUG_LEVEL 4
+#else 
+#define DEBUG_LEVEL 0
 #endif
 
 #include <lib/printk.h>
