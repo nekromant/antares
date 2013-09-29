@@ -37,6 +37,6 @@ stm32probe:
 	@echo " you said, so be the configuration updated"
 	@echo "backup saved as .config.stm32probe"
 else
-	@echo "FATAL: please enable stm32flash deployment "
+	@echo "FATAL: please enable and configure stm32flash or stlink in 'deployment' for probing "
 endif
 endif
