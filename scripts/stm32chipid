@@ -1,0 +1,27 @@
+#!/bin/bash
+case $1 in
+    "0x0420" )
+	    echo CONFIG_STM32F10X_MD_VL=y
+	    ;;
+    "0x0412" )
+	    echo CONFIG_STM32F10X_LD=y
+	    ;;
+    "0x0410" )
+	    echo CONFIG_STM32F10X_MD=y
+	    ;;
+    "0x0413" )
+	    echo CONFIG_STM32F4XXX=y
+	    ;;
+    "0x0414" )
+	    echo CONFIG_STM32F10X_HD=y
+	    ;;
+    "0x0418" )
+	    echo CONFIG_STM32F10X_CL=y
+	    ;;
+    "0x0428" )
+	    echo CONFIG_STM32F10X_HD_VL=y
+	    ;;
+    "0x0430" )
+	    echo CONFIG_STM32F10X_XL=y
+	    ;; 
+esac

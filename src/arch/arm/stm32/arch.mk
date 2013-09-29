@@ -79,7 +79,7 @@ list-interrupts:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk list-interrupts
 
 probe:
-	$(Q)$(MAKE) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
+	$(Q)$(MAKE) SHELL=$(SHELL) -f $(ANTARES_DIR)/src/arch/arm/stm32/tools.mk stm32probe
 
 sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
