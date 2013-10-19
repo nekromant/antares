@@ -1,0 +1,28 @@
+choice
+    prompt "Cron method"
+
+    config LIB_TMGR_UPTIME
+    bool "Uptime"
+
+    config LIB_TMGR_COUNTDOWN
+    bool "Countdown"
+
+endchoice
+
+choice
+    prompt "Time variable size"
+
+    config LIB_TMGR_TIME_16
+    bool "16 bit"
+
+    config LIB_TMGR_TIME_32
+    bool "32 bit"
+
+    config LIB_TMGR_TIME_64
+    bool "64 bit"
+
+endchoice
+
+config LIB_TMGR_EXTRA
+bool "Build extra time conversion functions"
+default "y"
