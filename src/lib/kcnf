@@ -53,7 +53,8 @@ endif
 
 
 menuconfig LIB_NLIBSTUBS
-depends on ARCH_HAS_NEWLIB
+#TODO: Depend on ARCH_HAS_NEWLIB
+depends on ARCH_ARM
 bool "Configure newlib stubs"
 
 if LIB_NLIBSTUBS
