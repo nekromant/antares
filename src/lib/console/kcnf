@@ -16,6 +16,10 @@ config LIB_EARLYCON_STCUART
 bool "STC UART"
 depends on ARCH_8051_STC
 
+config LIB_EARLYCON_NATIVE
+bool "Native stdio wrapper"
+depends on ARCH_NATIVE
+
 endchoice
 
 config LIB_EARLYCON_ANNOUNCE
@@ -39,6 +43,7 @@ if LIB_EARLYCON_AVRSERIAL
    int "Serial speed"
    default 57600
    help
+
 
 endif
 
