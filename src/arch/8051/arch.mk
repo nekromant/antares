@@ -7,7 +7,7 @@ BUILDGOALS=$(IMAGENAME).ihx $(IMAGENAME).bin
 
 LD_NO_COMBINE=y
 
-COMMONFLAGS+=-mmcs51
+COMMONFLAGS+=-mmcs51 --stack-auto
 
 ifeq ($(CONFIG_MODEL_SMALL),y)
 COMMONFLAGS+=--model-small
@@ -28,13 +28,18 @@ endif
 COMMONFLAGS+=--iram-size $(CONFIG_IRAM_SIZE)
 COMMONFLAGS+=--xram-size $(CONFIG_XRAM_SIZE)
 
+CFLAGS+=-DF_CPU=$(CONFIG_F_CPU)
 
 ifeq ($(CONFIG_ARCH_8051_STC),y)
 include $(ANTARES_DIR)/src/arch/8051/stc/arch.mk
 endif
 
+#$(IMAGENAME).bin: $(IMAGENAME).ihx
+#	$(SILENT_HEX2BIN)hex2bin $(<)
+
 $(IMAGENAME).bin: $(IMAGENAME).ihx
-	$(SILENT_HEX2BIN)hex2bin $(<)
+	$(SILENT_HEX2BIN)srec_cat -Disable_Sequence_Warnings $(<) -Intel -output $(@) -Binary
+
 
 BUILDGOALS+=checksize
 PHONY+=checksize
