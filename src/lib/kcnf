@@ -51,6 +51,7 @@ if LIB_ANTARES_CORE
 
 endif
 
+source "antares/src/lib/console/kcnf"
 
 menuconfig LIB_NLIBSTUBS
 #TODO: Depend on ARCH_HAS_NEWLIB

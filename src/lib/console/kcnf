@@ -1,0 +1,36 @@
+menu "Console and IO"
+
+menuconfig LIB_EARLYCON
+bool "Early console"
+
+if LIB_EARLYCON
+
+choice 
+prompt "Select early console driver"
+
+config LIB_EARLYCON_AVRSERIAL
+bool "AVR Hardware serial port"
+
+endchoice
+endif
+
+config LIB_EARLYCON_ANNOUNCE
+bool "Earlycon diagnostic messages "
+
+if LIB_EARLYCON_AVRSERIAL
+
+   config LIB_EARLYCON_AVRSERIAL_PORT
+   int "AVR serial port to use"
+   default 0
+   help
+	Leave at 0 if device has only one port
+   
+   config LIB_EARLYCON_AVRSERIAL_BAUD
+   int "Serial speed"
+   default 57600
+   help
+
+endif
+
+
+endmenu
