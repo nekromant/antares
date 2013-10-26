@@ -51,7 +51,27 @@ if LIB_EARLYCON_STCUART
    config LIB_EARLYCON_STCUART_USE_P1
    bool "Use pin on P1 instead of P3"
    default n
-   
+
+   config LIB_EARLYCON_STCUART_IAPCHECK
+   bool "Auto-reboot to ISP mode"
+   default n
+   help
+	When N sequential 0x7f chars are received, device
+	will automatically reboot to ISP mode. 
+	Setting this to 'y' will allow you to transparently update
+	firmware on a running device without powercycling
+
+config LIB_EARLYCON_STCUART_IAPCNT
+   hex "ISP/IAP Magic byte count"
+   range 0x1 0xff
+   depends on LIB_EARLYCON_STCUART_IAPCHECK
+   default 0xff
+   help
+	Specify how many sequencial 0x7f chars should be received 
+	to trigger ISP mode
+	
+
+	
 endif
 
 

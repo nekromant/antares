@@ -16,13 +16,31 @@ static void serial_putchar(char c)
 	TI=0;
 }
 
+#ifdef CONFIG_LIB_EARLYCON_STCUART_IAPCHECK
+static unsigned char icount=0;
+static void iap_check(char c) {
+	if (c == 0x7f) { 
+		icount++;
+		if (icount == CONFIG_LIB_EARLYCON_STCUART_IAPCNT)
+			iap_reboot2isp();
+	}
+	else
+		icount=0;
+}  
+
+#else
+static void inline iap_check(char c) {
+
+}  
+#endif
 static int serial_getchar()
 {
-	int v;
+	char c;
 	while (!RI);;
-	v = (int) SBUF;
+	c = SBUF;
 	RI=0;
-	return v;
+	iap_check(c);
+	return c;
 }
 
 static int serial_avail() 
@@ -35,7 +53,7 @@ static void serial_init()
 	SCON = 0x50;
 	BRT = MAKEBRT(br); 
 	AUXR|=0x15;
-#ifdef CONFIG_LIB_EARLYCON_STC_USE_P1
+#ifdef CONFIG_LIB_EARLYCON_STCUART_USE_P1
 	AUXR|=0x80; /* Remap uart */
 #endif
 }
