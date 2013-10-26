@@ -11,3 +11,5 @@ profiles/*
 tmp/
 *.swp
 .*.swp
+tags
+
