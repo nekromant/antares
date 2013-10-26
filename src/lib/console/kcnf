@@ -12,10 +12,13 @@ config LIB_EARLYCON_AVRSERIAL
 bool "AVR Hardware serial port"
 
 endchoice
-endif
 
 config LIB_EARLYCON_ANNOUNCE
-bool "Earlycon diagnostic messages "
+bool "Earlycon diagnostic messages"
+
+config LIB_EARLYCON_ADDCR
+bool "Auto-add \\r for each \\n"
+default y
 
 if LIB_EARLYCON_AVRSERIAL
 
@@ -29,6 +32,8 @@ if LIB_EARLYCON_AVRSERIAL
    int "Serial speed"
    default 57600
    help
+
+endif
 
 endif
 

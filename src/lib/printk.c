@@ -7,13 +7,13 @@
 
 
 #ifdef CONFIG_LIB_EARLYCON
-#warning svf
 static FILE* p_stdin = &g_early_stdin;
 static FILE* p_stdout = &g_early_stdout;
 #else
 static FILE* p_stdin;
 static FILE* p_stdout;
 #endif
+
 
 void printk(const char *fmt, /*args*/ ...)
 {

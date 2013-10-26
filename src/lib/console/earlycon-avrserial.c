@@ -42,6 +42,11 @@ static int serial_getchar( void )
 	return (int) REG_UDR;	
 }
 
+static int serial_avail( void )
+{
+	return bit_is_set(REG_UCSRA, BIT_RXC);
+}
+
 static void serial_init(void)
 {
 #include <util/setbaud.h>
@@ -63,8 +68,8 @@ static void serial_init(void)
 
 
 struct early_console g_early_console = {
+	.havechar = serial_avail,
 	.rxchar = serial_getchar,
 	.txchar = serial_putchar,
-	.init = serial_init
-		
+	.init = serial_init		
 };
