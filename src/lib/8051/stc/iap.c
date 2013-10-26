@@ -28,9 +28,6 @@
 
 #define IAP_ENABLE (IAP_ENABLEB|IAP_SPEED)
 
-void iap_reboot2isp(){
-	IAP_CONTR=0x60;
-}
 
 void iap_disable() {
 	IAP_CONTR=0;
@@ -39,8 +36,6 @@ void iap_disable() {
 	IAP_ADDRH=0x80;
 	IAP_ADDRL=0x80;
 }
-
-
 
 unsigned char iap_readbyte(uint16_t addr) {
 	unsigned char ret;
@@ -73,12 +68,12 @@ void iap_erasepage(uint16_t addr) {
 	iap_disable();
 }
 
-void iap_writebyte(uint16_t addr, char data) {
+void iap_writebyte(uint16_t addr, char dat) {
 	IAP_CONTR = IAP_ENABLE;
 	IAP_CMD = CMD_WRITE;
 	IAP_ADDRL=addr;
 	IAP_ADDRH=addr>>8;
-	IAP_DATA=data;
+	IAP_DATA=dat;
 	IAP_TRIG=0x5a;
 	IAP_TRIG=0xa5;
 	__asm

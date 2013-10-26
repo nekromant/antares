@@ -1,5 +1,5 @@
-#ifndef __IAP_H
-#define __IAP_H
+#ifndef IAP_H
+#define IAP_H
 
 /* We need this for uint16_t */
 #include <stdint.h>
@@ -10,10 +10,11 @@
 #define CMD_WRITE 2
 #define CMD_ERASE 3
 
-void iap_reboot2isp();
+#define iap_reboot2isp() IAP_CONTR=0x60;
+
 void iap_disable();
 unsigned char iap_readbyte(uint16_t addr);
 void iap_erasepage(uint16_t addr);
-void iap_writebyte(uint16_t addr, char data);
+void iap_writebyte(uint16_t addr, char dat);
 
 #endif
