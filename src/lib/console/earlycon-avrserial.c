@@ -59,9 +59,9 @@ static void serial_init(void)
 #endif
 
 #ifdef CONFIG_LIB_EARLYCON_ANNOUNCE
-	printk("earlycon: using avr serial port %u speed %u\n", 
-	       SERIAL_NUM, 
-	       BAUD
+	printk("earlycon: using avr serial port %u at %u bps\n", 
+	       (unsigned int) SERIAL_NUM, 
+	       (unsigned int) BAUD
 		);
 #endif
 }
