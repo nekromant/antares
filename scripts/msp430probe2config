@@ -4,17 +4,18 @@ echo -n "CONFIG_MCU_"
 cat $1|grep Device:|awk '{printf $2}'
 echo "=y"
 
-echo -n "CONFIG_MSP430_CODE_START="
-cat $1| grep 'Code start address:'|awk '{print $4}'
 
-echo -n "CONFIG_MSP430_CODE_SIZE=0x"
-cat $1| grep 'Code size'|awk '{printf "%x\n", $4}'
+#echo -n "CONFIG_MSP430_CODE_START="
+#cat $1| grep 'Code start address:'|awk '{print $4}'
 
-echo -n "CONFIG_MSP430_RAM_START="
-cat $1| grep 'RAM  start'|awk '{print $4}'
+#echo -n "CONFIG_MSP430_CODE_SIZE=0x"
+#cat $1| grep 'Code size'|awk '{printf "%x\n", $4}'
 
-echo -n "CONFIG_MSP430_RAM_SIZE=0x"
-cat $1| grep 'RAM  size'|awk '{printf "%x\n", $4}'
+#echo -n "CONFIG_MSP430_RAM_START="
+#cat $1| grep 'RAM  start'|awk '{print $4}'
+
+#echo -n "CONFIG_MSP430_RAM_SIZE=0x"
+#cat $1| grep 'RAM  size'|awk '{printf "%x\n", $4}'
 
 
 

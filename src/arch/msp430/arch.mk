@@ -44,6 +44,7 @@ ifeq ($(CONFIG_DEPLOY_MSPDEBUG),y)
 	$(Q)cat $(TMPDIR)/probedata
 	$(Q)echo "#Autodected the following config"
 	$(Q)cat $(TMPDIR)/probedata.config
+	$(Q)echo
 	$(Q)echo "Does this config look good to you? [y/n]"
 	$(Q)read -N1 c > /dev/null;[ "$c"=="y" ] && cat $(TMPDIR)/probedata.config >> $(TOPDIR)/.config
 	$(Q)echo " you said, so be the configuration updated"
@@ -54,12 +55,10 @@ endif
 
 
 sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
-	$(Q)$(ANTARES_DIR)/scripts/meter "Code usage" \
-	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
-	$(CONFIG_MSP430_CODE_SIZE);
-	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
-	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
-	$(CONFIG_MSP430_RAM_SIZE);
+	$(Q)echo -e "FLASH usage:\t" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` bytes 
+	$(Q)echo -e "RAM usage:\t" \
+	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` bytes
 
 BUILDGOALS+=sizecheck
 PHONY+=list-interrupts probe sizecheck

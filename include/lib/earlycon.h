@@ -16,7 +16,7 @@ extern struct early_console g_early_console;
 
 /* TODO: Use ARCH_HAS_STDIO into account */
 
-#ifndef CONFIG_ARCH_8051
+#if !defined(CONFIG_ARCH_8051) && !defined(CONFIG_ARCH_MSP430)
 #include <stdio.h>
 extern FILE g_early_stdin;
 extern FILE g_early_stdout;
