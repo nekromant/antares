@@ -133,5 +133,4 @@ $(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 .PHONY: $(PHONY)
 
-$(info $(PHONY))
 .DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
