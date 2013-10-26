@@ -6,7 +6,7 @@ extern struct early_console g_early_console;
 static char initialized = 0;
 
 
-static inline void early_console_checkinit() {
+static void early_console_checkinit() {
 	if (!initialized && g_early_console.init) { 
 		initialized++;
 		g_early_console.init();

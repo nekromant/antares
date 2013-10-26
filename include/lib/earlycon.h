@@ -14,10 +14,12 @@ int early_avail();
 
 extern struct early_console g_early_console;
 
-/* TODO: Take ARCH_HAS_STDIO into account */
+/* TODO: Use ARCH_HAS_STDIO into account */
 
+#ifndef CONFIG_ARCH_8051
 #include <stdio.h>
 extern FILE g_early_stdin;
 extern FILE g_early_stdout;
+#endif
 
 #endif

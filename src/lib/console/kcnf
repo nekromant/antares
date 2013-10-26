@@ -10,15 +10,22 @@ prompt "Select early console driver"
 
 config LIB_EARLYCON_AVRSERIAL
 bool "AVR Hardware serial port"
+depends on ARCH_AVR
+
+config LIB_EARLYCON_STCUART
+bool "STC UART"
+depends on ARCH_8051_STC
 
 endchoice
 
 config LIB_EARLYCON_ANNOUNCE
 bool "Earlycon diagnostic messages"
+depends on LIB_PRINTK
 
 config LIB_EARLYCON_ADDCR
 bool "Auto-add \\r for each \\n"
 default y
+
 
 if LIB_EARLYCON_AVRSERIAL
 
@@ -34,6 +41,19 @@ if LIB_EARLYCON_AVRSERIAL
    help
 
 endif
+
+if LIB_EARLYCON_STCUART
+
+   config LIB_EARLYCON_STCUART_BAUD
+   int "Serial port speed"
+   default 57600
+
+   config LIB_EARLYCON_STCUART_USE_P1
+   bool "Use pin on P1 instead of P3"
+   default n
+   
+endif
+
 
 endif
 
