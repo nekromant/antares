@@ -6,6 +6,7 @@ struct xmodem_receiver {
 	int (*getchar)(void); 
 	void (*putchar)(char c);
 	int (*char_avail)();
+	void delay_1s(); 
 	int (*writer)(char* buffer, int size);
 };
 
@@ -13,6 +14,7 @@ struct xmodem_transmitter {
 	int (*getchar)(void); 
 	void (*putchar)(char c);
 	int (*char_avail)();
+	void delay_1s(); 
 	int (*reader)(char* buffer, int size);
 };
 
