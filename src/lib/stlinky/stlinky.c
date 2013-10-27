@@ -4,11 +4,14 @@
 #include <string.h>
 #include <lib/stlinky.h>
 
-void stlinky_init(struct stlinky* st)
-{
-	st->magic = STLINKY_MAGIC;
-	st->bufsize = CONFIG_LIB_STLINKY_BSIZE;
-}
+
+volatile struct stlinky g_stlinky_term = {
+	.magic = STLINKY_MAGIC,
+	.bufsize = CONFIG_LIB_STLINKY_BSIZE,
+	.txsize = 0,
+	.rxsize = 0
+};
+
 
 int stlinky_tx(volatile struct stlinky* st, char* buf, int siz)
 {
@@ -31,6 +34,11 @@ int stlinky_rx(volatile struct stlinky* st, char* buf, int siz)
 	return ret;
 }
 
+int stlinky_avail(volatile struct stlinky* st)
+{
+	return st->rxsize;
+}
+
 void stlinky_wait_for_terminal(volatile struct stlinky* st)
 {
 	st->txbuf[0]='\n';
@@ -40,29 +48,12 @@ void stlinky_wait_for_terminal(volatile struct stlinky* st)
 
 #ifdef CONFIG_LIB_STLINKY_NLIB
 
-static volatile struct stlinky sterm;
-
-ANTARES_INIT_LOW(stlinky_terminal) {
-	stlinky_init(&sterm);
-}
-
 int _write(int file, char *ptr, int len) {
-        return stlinky_tx(&sterm, ptr, len);
+        return stlinky_tx(&g_stlinky_term, ptr, len);
 }
 
 int _read(int file, char *ptr, int len) {
-	return stlinky_rx(&sterm, ptr, len);
+	return stlinky_rx(&g_stlinky_term, ptr, len);
 }
 
-#if 0
-ANTARES_APP(echo_app) 
-{
-	while(1) {
-	char tmp[64];
-	int len = stlinky_rx(&sterm, tmp, 64);
-	if (len)
-		stlinky_tx(&sterm, tmp, len);
-	}
-}
-#endif
 #endif

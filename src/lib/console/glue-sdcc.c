@@ -10,4 +10,8 @@ char getchar (void) {
 }
 
 
-
+/* Dummy */
+void early_console_glue_init()
+{
+	
+}

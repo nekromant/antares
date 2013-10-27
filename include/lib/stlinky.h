@@ -4,11 +4,9 @@
 
 #define STLINKY_MAGIC 0xDEADF00D
 
-/* NOTE: This is a potentially racy thing. 
- * We have no way to atomically check and acquire a lock.
- * Only one read/write can be actually atomic here. 
- * So instead, we let mcu and host to put buffers
- * txsize/rxsize manage stuff
+/* NOTE: Since rxsize/txsize will be always one
+   AXI transaction these will be hopefully atomic
+   Therefore we use them as a dumb locking mechanism
  */
 
 struct stlinky {
@@ -21,13 +19,15 @@ struct stlinky {
 	char rxbuf[CONFIG_LIB_STLINKY_BSIZE];
 } __attribute__ ((packed));;
 
-void stlinky_init(struct stlinky* st);
-
 int stlinky_tx(volatile struct stlinky* st, char* buf, int sz);
 
 int stlinky_rx(volatile struct stlinky* st, char* buf, int sz);
 
 void stlinky_wait_for_terminal(volatile struct stlinky* st);
+
+int stlinky_avail(volatile struct stlinky* st);
+
+extern volatile struct stlinky g_stlinky_term;
 
 #endif
 

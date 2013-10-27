@@ -8,6 +8,7 @@ struct early_console {
 	int (*havechar)(void);
 };
 
+void early_console_checkinit();
 void early_putc(char c);
 int early_getc();
 int early_avail();
@@ -18,8 +19,8 @@ extern struct early_console g_early_console;
 
 #if !defined(CONFIG_ARCH_8051) && !defined(CONFIG_ARCH_MSP430)
 #include <stdio.h>
-extern FILE g_early_stdin;
-extern FILE g_early_stdout;
+extern FILE *g_early_stdin;
+extern FILE *g_early_stdout;
 #endif
 
 #endif

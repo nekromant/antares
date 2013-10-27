@@ -20,6 +20,10 @@ config LIB_EARLYCON_NATIVE
 bool "Native stdio wrapper"
 depends on ARCH_NATIVE
 
+config LIB_EARLYCON_STLINKY
+bool "STLinky serial terminal"
+depends on LIB_STLINKY
+
 endchoice
 
 config LIB_EARLYCON_ANNOUNCE

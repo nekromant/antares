@@ -6,9 +6,13 @@ extern struct early_console g_early_console;
 static char initialized = 0;
 
 
-static void early_console_checkinit() {
+/* Initialise glue infrastructure */
+extern void early_console_glue_init();
+
+void early_console_checkinit() {
 	if (!initialized && g_early_console.init) { 
 		initialized++;
+		early_console_glue_init();
 		g_early_console.init();
 #ifdef CONFIG_LIB_EARLYCON_ANNOUNCE
 		printk("earlycon: early console enabled\n");
