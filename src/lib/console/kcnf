@@ -6,7 +6,7 @@ bool "Early console"
 if LIB_EARLYCON
 
 choice 
-prompt "Select early console driver"
+prompt "Select early console backend"
 
 config LIB_EARLYCON_AVRSERIAL
 bool "AVR Hardware serial port"
@@ -23,6 +23,25 @@ depends on ARCH_NATIVE
 config LIB_EARLYCON_STLINKY
 bool "STLinky serial terminal"
 depends on LIB_STLINKY
+
+endchoice
+
+
+
+choice
+prompt "Select glue driver"
+
+config LIB_EARLYCON_GLUE_AVR
+bool "AVR-libc glue driver"
+depends on ARCH_AVR
+
+config LIB_EARLYCON_GLUE_SDCC
+bool "SDCC stdio glue driver"
+depends on ARCH_8051
+
+config LIB_EARLYCON_GLUE_NEWLIB
+bool "Newlib stdio glue"
+depends on ARCH_ARM
 
 endchoice
 

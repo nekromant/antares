@@ -8,9 +8,9 @@ objects-$(CONFIG_LIB_EARLYCON_NATIVE)+=earlycon-host.o
 objects-$(CONFIG_LIB_EARLYCON_STLINKY)+=earlycon-stlinky.o
 
 #Libc/printk glue
-objects-$(CONFIG_ARCH_AVR)+=glue-avrlibc.o
-objects-$(CONFIG_ARCH_8051)+=glue-sdcc.o
-objects-$(CONFIG_ARCH_ARM)+=glue-newlib.o
+objects-$(CONFIG_LIB_EARLYCON_GLUE_AVR)+=glue-avrlibc.o
+objects-$(CONFIG_LIB_EARLYCON_GLUE_SDCC)+=glue-sdcc.o
+objects-$(CONFIG_LIB_EARLYCON_GLUE_NEWLIB)+=glue-newlib.o
 
 
 
