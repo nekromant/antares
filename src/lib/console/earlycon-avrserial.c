@@ -14,7 +14,7 @@
 #define REG_UBRRH UBRRH
 #define REG_UBRRL UBRRL
 #define BIT_TXC TXC
-#define BIT_U2X UX2
+#define BIT_U2X U2X
 #define BIT_RXC RXC
 #define BIT_UDRE UDRE
 #else
