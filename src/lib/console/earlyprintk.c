@@ -12,7 +12,9 @@ extern void early_console_glue_init();
 void early_console_checkinit() {
 	if (!initialized && g_early_console.init) { 
 		initialized++;
+#ifndef CONFIG_LIB_EARLYCON_GLUE_NONE
 		early_console_glue_init();
+#endif
 		g_early_console.init();
 #ifdef CONFIG_LIB_EARLYCON_ANNOUNCE
 		printk("earlycon: early console enabled\n");

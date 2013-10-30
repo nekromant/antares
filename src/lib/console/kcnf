@@ -24,12 +24,19 @@ config LIB_EARLYCON_STLINKY
 bool "STLinky serial terminal"
 depends on LIB_STLINKY
 
+config LIB_EARLYCON_MSP430SOFTSERIAL
+bool "MSP430 SoftSerial (TX Only)"
+depends on ARCH_MSP430
+
 endchoice
 
 
 
 choice
 prompt "Select glue driver"
+
+config LIB_EARLYCON_GLUE_NONE
+bool "None"
 
 config LIB_EARLYCON_GLUE_AVR
 bool "AVR-libc glue driver"
@@ -42,6 +49,10 @@ depends on ARCH_8051
 config LIB_EARLYCON_GLUE_NEWLIB
 bool "Newlib stdio glue"
 depends on ARCH_ARM
+
+config LIB_EARLYCON_GLUE_MSP430
+bool "MSP430 libc glue driver"
+depends on ARCH_MSP430
 
 endchoice
 
@@ -100,6 +111,24 @@ config LIB_EARLYCON_STCUART_IAPCNT
 	
 
 	
+endif
+
+if LIB_EARLYCON_MSP430SOFTSERIAL
+
+   comment "Go above 2400 at your own risk"
+
+   config LIB_EARLYCON_MSP430_SOFTSERIAL_PIN
+   int "TX Pin number"
+   default 1
+
+   config LIB_EARLYCON_MSP430_SOFTSERIAL_PORT
+   int "TX Port number"
+   default 1
+
+   config LIB_EARLYCON_MSP430_SOFTSERIAL_BAUD
+   int "Baudrate"
+   default 2400
+
 endif
 
 

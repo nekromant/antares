@@ -7,7 +7,7 @@
 
 
 /* TODO: Use ARCH_HAS_STDIO instead */
-#ifndef CONFIG_ARCH_8051
+#if !defined(CONFIG_ARCH_8051) && !defined(CONFIG_ARCH_MSP430)
 #define k_printf(fmt, ...) fprintf(*p_stdout, fmt, #__VA_ARGS__) 
 #define k_vprintf(fmt, ap) vfprintf(*p_stdout, fmt, ap)
 
