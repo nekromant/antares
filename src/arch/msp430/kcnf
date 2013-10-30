@@ -9,5 +9,8 @@ choice
 
 endchoice
 
+config F_CPU
+int "CPU Frequency in HZ (at startup)"
+default 1000000
 
 endif

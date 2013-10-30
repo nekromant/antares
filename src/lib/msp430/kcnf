@@ -23,11 +23,6 @@ if MSP430_DELAYLIB
 	Enables you to change current frequency for delays via
 	delaylib_set_clock() and delaylib_get_clock(); 
 
-   config MSP430_DELAYLIB_FRQ
-   int "CPU Frequency in HZ"
-   depends on !MSP430_DELAYLIB_DYNAMIC
-   default 8000000
-
    config MSP430_DELAYLIB_UNITSIZE
    int "Time unit size"
    depends on MSP430_DELAYLIB_DYNAMIC
