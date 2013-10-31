@@ -8,6 +8,12 @@ objects-$(CONFIG_LIB_EARLYCON_NATIVE)+=earlycon-host.o
 objects-$(CONFIG_LIB_EARLYCON_STLINKY)+=earlycon-stlinky.o
 objects-$(CONFIG_LIB_EARLYCON_MSP430SOFTSERIAL)+=earlycon-msp430softserial.o
 
+
+objects-$(CONFIG_LIB_EARLYCON_AVRSOFTSERIAL)+=earlycon-avrsoftserial.o
+cflags-$(CONFIG_LIB_EARLYCON_AVRSOFTSERIAL)+=\
+-DLIB_EARLYCON_AVR_SOFTSERIAL_PORT=$(call unquote,$(CONFIG_LIB_EARLYCON_AVR_SOFTSERIAL_PORT))
+
+
 #Libc/printk glue
 objects-$(CONFIG_LIB_EARLYCON_GLUE_AVR)+=glue-avrlibc.o
 objects-$(CONFIG_LIB_EARLYCON_GLUE_SDCC)+=glue-sdcc.o

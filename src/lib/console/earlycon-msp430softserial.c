@@ -17,21 +17,9 @@
 
 #define ZERO POUT  &=~TXD_PIN; __delay_cycles(CYCLES_PER_BIT);
 #define ONE  POUT  |=TXD_PIN; __delay_cycles(CYCLES_PER_BIT);
+#define PUTFUNC launchpad_putchar
 
-static void launchpad_putchar(char c)
-{
-	int i;
-	ZERO; /* Start */
-	for (i=0; i<8; i++)
-	{
-		if (c & (1<<i)) {
-			ONE;
-		} else {
-			ZERO;
-		}
-	}
-	ONE;
-}
+#include "softserial_helper.c"
 
 static void launchpad_init()
 {

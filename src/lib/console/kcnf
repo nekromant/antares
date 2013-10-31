@@ -28,6 +28,10 @@ config LIB_EARLYCON_MSP430SOFTSERIAL
 bool "MSP430 SoftSerial (TX Only)"
 depends on ARCH_MSP430
 
+config LIB_EARLYCON_AVRSOFTSERIAL
+bool "AVR SoftSerial (TX Only)"
+depends on ARCH_AVR
+
 endchoice
 
 
@@ -126,6 +130,24 @@ if LIB_EARLYCON_MSP430SOFTSERIAL
    default 1
 
    config LIB_EARLYCON_MSP430_SOFTSERIAL_BAUD
+   int "Baudrate"
+   default 2400
+
+endif
+
+if LIB_EARLYCON_AVRSOFTSERIAL
+
+   comment "Go above 2400 at your own risk"
+
+   config LIB_EARLYCON_AVR_SOFTSERIAL_PIN
+   int "TX Pin number"
+   default 1
+
+   config LIB_EARLYCON_AVR_SOFTSERIAL_PORT
+   string "TX Port Letter"
+   default "A"
+
+   config LIB_EARLYCON_AVR_SOFTSERIAL_BAUD
    int "Baudrate"
    default 2400
 
