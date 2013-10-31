@@ -1,0 +1,192 @@
+tmgr: Simple task manager and scheduler
+---------------------------------------
+
+Description
+-----------
+
+Task scheduler should be easily used if your program could be logically divided 
+into different threads or delayed function calls. In this case scheduler allows
+you to work with tasks in the easiest way.
+
+Features
+--------
+
+* Easy in understanding and usage
+
+* Cross-platform (written fully in C without assembler magic)
+
+* Easy to adjust (for example, set required size of time typedef)
+
+
+How to use?
+-----------
+
+1. Initialization
+-----------------
+
+Operation of scheduler consists of two periodic function calls:
+tmgr_tick() and tmgr_timer().
+
+tmgr_timer() function should be called in system timer interrupt hander which
+counts time quantums. Optimal time quantum size is 1 ms (author's opinion).
+In this case, frequency of timer interrupt handler calls is 1 kHz.
+tmgr_timer() function just counts system time, so it is fast and safe for
+interrupt context.
+
+tmgr_tick() function should be called in main program loop. In this function
+context all user's tasks will be executed, so it's not recommended to call this
+function in interrupt handles.
+
+Also you need to set system timer frequency (for time conversion functions) using
+tmgr_set_fq() call like this:
+
+        tmgr_set_fq(1000);
+
+It means than system timer runs at 1 kHz frequency (interrupt handler called
+1000 times in second). Initialization of system timer depends on current
+platform, so tmgr library will _not_ initialize it. It is an user's problem.
+
+tmgr_set_fq() receives as an argument one value of tmgr_time_t type (signed integer,
+size of this type should be set in menuconfig by user).
+
+A sample program that correctly runs scheduler base:
+
+#include <lib/tmgr.h>
+
+void timer_interrupt()
+{
+        /* This function means an abstract timer interrupt handler */
+        tmgr_timer();
+}
+
+int main(void)
+{
+        /* Platform-dependent initialization of system timer */
+        timer_init(1000);
+        /* Timer runs at 1000 Hz (time quantum is 1 ms) */
+        /* Giving this value to library */
+        tmgr_set_fq(1000);
+        
+        /* Run tick function in infinite loop */
+        while (1)
+                tmgr_tick();
+
+        return 0;
+}
+
+2. How to use scheduler
+-----------------------
+
+It's all quietly simple. Scheduler need to know what function do you want to
+run (prototype of task function: void task(void);) and the value of delay. Also
+it needs a piece of memory to save the task description, so one variable
+of tmgr_task_t type in _static_ memory is required. This type is a structure, 
+but you shouldn't change any value in it manually.
+
+To add your task in tmgr queue, just call:
+
+        tmgr_register(&my_task, my_func_name, delay);
+
+my_task is a static memory variable of tmgr_task_t type, my_func_name is
+the name of function you want to run, delay (obviously) is a delay value
+(in system timer's ticks).
+
+In real application, you should want to calculate the delay in s, ms etc.
+To convert value from "natural" units to ticks, there are few macroses:
+
+        tmgr_us_to_ticks(us)
+        tmgr_ms_to_ticks(ms)
+        tmgr_s_to_ticks(s)
+
+There are also macroses for convertions from ticks to natural units:
+        
+        tmgr_ticks_to_us(ticks)
+        tmgr_ticks_to_ms(ticks)
+        tmgr_ticks_to_s(ticks)
+
+Time values (ticks or natural) are stored in tmgr_time_t variables.
+
+So, this is correct way to run my_func with 500 ms delay:
+
+        static tmgr_task_t my_task;
+        tmgr_register(&my_task, my_func, tmgr_ms_to_ticks(500));
+
+
+3. Modes of operation
+---------------------
+
+There are two modes of operation: uptime counter and countdown mode.
+
+3.1. Uptime counter
+-------------------
+
+In this mode the base of time counting is system uptime value. You can get
+the current value of system uptime by calling
+
+        tmgr_get_uptime().
+
+Notice. This function is available only in uptime counter mode.
+
+This function returns the value of tmgr_time_t type (signed integer).
+
+This mode of operation is a little faster that countdown (because in the
+timer interrupt handler only one action is performed - increment of uptime
+value and in main loop, task runs if its "launch time" is equal to system
+uptime), but it has an obvious limitation related with uptime variable
+overflow.
+
+Uptime is stored in tmgr_time_t variable. By adjusting its size (tmgr_time_t),
+you can move the uptime limits. Available sizes are 16, 32 and 64 bits.
+
+The maximal time of stable operation in uptime counter move vs. tmgr_time_t size
+(system timers frequency = 1000 Hz):
+
+        16 bits - 32.767 s
+        32 bits - 2147483.65 s ~ 596 h ~ 25 days
+        64 bits - 10^11 days
+
+3.2. Countdown mode
+-------------------
+
+This mode is a little slower that uptime counter, because in system timer
+interrupt handler tmgr_timer() decrements values of each task's timer
+separately (and it need to perform N operations if there are N tasks
+in queue), but the limitation of system uptime is removed.
+
+In this mode you also can set tmgr_time_t size as you want.
+
+3.3. Summary
+------------
+
+If your arch can quickly perform operations with large integers or the
+real uptime of your device will not exceed the stability threshold, we
+recommend you to use uptime counter mode because it is faster and has
+more features (uptime value is useful for debugging, for example).
+The usage of countdown mode is justified if you will not run large
+number of tasks or if you create a device that will run without
+time limits.
+
+Notice. The usage of tmgr library is equal in both modes (excepts 
+tmgr_get_uptime() that is only first mode's feature), so you can change
+the mode of operation if you need almost without any change of source code.
+
+
+4. Extra features
+-----------------
+
+tmgr_delay(delay) - performs a simple delay (waiting in loop). To set delay
+in natural units, use time convertion macroses.
+
+        tmgr_delay(tmgr_ms_to_ticks(500));
+
+means 500 ms delay.
+
+Function receives one tmgr_time_t value.
+
+Notice. We DO NOT RECOMMEND to use this function, especially in task
+context, because it can break down the tasks queue (tasks could not
+run when delay is performed). Try to split your function into several
+subtasks.
+
+tmgr_get_fq() function just returns the value of system timer
+frequency which was set before. (in tmgr_time_t type)

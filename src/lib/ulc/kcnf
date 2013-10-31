@@ -1,5 +1,5 @@
 choice
-    prompt "Cron method"
+    prompt "Mode of operation"
 
     config LIB_TMGR_UPTIME
     bool "Uptime"
@@ -22,7 +22,3 @@ choice
     bool "64 bit"
 
 endchoice
-
-config LIB_TMGR_EXTRA
-bool "Build extra time conversion functions"
-default "y"
