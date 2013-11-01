@@ -1,5 +1,8 @@
 choice
     prompt "Mode of operation"
+    help
+        Select scheduler mode of operation;
+        for further information see doc/en/tmgr.txt
 
     config LIB_TMGR_UPTIME
     bool "Uptime"
@@ -11,6 +14,8 @@ endchoice
 
 choice
     prompt "Time variable size"
+    help
+        Size of tmgr_time_t type (signed integer)
 
     config LIB_TMGR_TIME_16
     bool "16 bit"
