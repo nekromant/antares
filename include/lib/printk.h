@@ -1,5 +1,5 @@
-#ifndef PRINTK_H
-#define PRINTK_H
+#ifndef LIB_PRINTK_H
+#define LIB_PRINTK_H
 
 #ifndef DEBUG_LEVEL
 #define DEBUG_LEVEL 4
@@ -9,7 +9,7 @@
 #define COMPONENT "???"
 #endif
 
-#define log(level, ...) __dbg_ # level (__VA_ARGS__)
+#define do_log(level, ...) __dbg_ # level (__VA_ARGS__)
 
 #define err(...) printk(COMPONENT ": " __VA_ARGS__)
 #define warn(...) __dbg_0(__VA_ARGS__)
@@ -65,7 +65,6 @@ void printk_P(const char *fmt, ...);
 #define printk_R(fmt, ...) printk_R(fmt, #__VA_ARGS__);
 
 #endif
-
 
 
 
