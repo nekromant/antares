@@ -5,7 +5,7 @@
 /* The first thing we do is: Turn on interrupts. */
 __attribute__((naked))							
 __attribute__((__section__(".init7"))) void high_enable_isr(void) {		
-	__eint();								
+	__eint(void);;								
 }
 
 /* 

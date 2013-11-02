@@ -3,4 +3,5 @@
  * writing without too many hacks
  */
 
+#include <generic/antares-nostartup.h>
 #include <generic/antares.h>

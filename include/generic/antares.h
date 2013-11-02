@@ -1,20 +1,17 @@
-#ifndef __ANTARES_H
-#define __ANTARES_H
+/* 
+ * Antares generic stuff and prototypes
+ */
+
+#ifndef ANTARES_GENERIC_H
+#define ANTARES_GENERIC_H
 
 #include <generic/macros.h>
 
-#warning "ANTARES_INIT*/ANTARES_APP macros are not supported on this platform/compiler. You will have to supply your own main code"
-
-#define ANTARES_INIT_LOW(fn) \
-	void fn(void) {
-
-#define ANTARES_INIT_HIGH(fn) \
-	void fn(void) {
-
-#define ANTARES_APP(fn) \
-	void fn(void) {
-
-#define ANTARES_FINISH(fn) \
-	void fn(void) {
+#if !defined(CONFIG_ANTARES_STARTUP) && defined(CONFIG_ARCH_HAS_ANTARES_STARTUP)
+#define ANTARES_APP(fn) void fn()
+#define ANTARES_INIT_LOW(fn) void fn()
+#define ANTARES_INIT_HIGH(fn) void fn()	      
+#define ANTARES_FINISH(fn) void fn()
+#endif
 
 #endif

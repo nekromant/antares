@@ -1,7 +1,7 @@
-#ifndef _ANTARES_H
-#define _ANTARES_H
+#ifndef ANTARES_H
+#define ANTARES_H
 
-#include <generic/macros.h>
+#include <generic/antares.h>
 
 /*
  * We use .initX sections for low and high init functions
@@ -41,31 +41,28 @@
 
 
 #define ANTARES_APP(fn)							\
-	void fn();						\
+	void fn();							\
 	__attribute__((naked))						\
 	__attribute__((__section__(".init8"))) void fn ## _app(void) {	\
 		fn();							\
 	};								\
-	void fn() 						\
+	void fn()							\
 	
 
 
 #define ANTARES_FINISH(fn)						\
-	void fn();						\
+	void fn();							\
 	__attribute__((naked))						\
 	__attribute__((__section__(".fini0"))) void fn ## _finish(void) { \
 		fn();							\
 	}								\
 	void fn() 
 
-#else
-
-#define ANTARES_APP(fn) void fn()
-#define ANTARES_INIT_LOW(fn) void fn()
-#define ANTARES_INIT_HIGH(fn) void fn()	      
-#define ANTARES_FINISH(fn) void fn()
-
 #endif
+
+#include <plib.h>
+#define ANTARES_ENABLE_IRQS() INTEnableSystemMultiVectoredInt();
+#define ANTARES_DISABLE_IRQS() INTDisableSystemMultiVectoredInt();
 
 
 #endif

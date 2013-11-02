@@ -1,12 +1,7 @@
-//Top level header
-//This sucks in the mcu-headers
-#ifndef _ANTARES_H
-#define _ANTARES_H
+#ifndef ANTARES_H
+#define ANTARES_H
 
-#include <generic/macros.h>
-
-#define ANTARES_DISABLE_IRQS() __disable_irq()
-#define ANTARES_ENABLE_IRQS() __enable_irq()
+#include <generic/antares.h>
 
 /* 
  * normal fn(); call would cause optimizer to screw things up for 
@@ -50,12 +45,11 @@
 		asm("bl " #fn);						\
 	}								\
 	void fn() 						
-#else
-
-#define ANTARES_INIT_LOW(fn) void fn(void)
-#define ANTARES_INIT_HIGH(fn) void fn(void)
-#define ANTARES_APP(fn) void fn(void)
 
 #endif
+
+
+#define ANTARES_DISABLE_IRQS() __disable_irq()
+#define ANTARES_ENABLE_IRQS() __enable_irq()
 
 #endif

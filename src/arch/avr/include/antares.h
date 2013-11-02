@@ -1,7 +1,7 @@
-#ifndef _ANTARES_H
-#define _ANTARES_H
+#ifndef ANTARES_H
+#define ANTARES_H
 
-#include <generic/macros.h>
+#include <generic/antares.h>
 
 /*
  * We use .initX sections for low and high init functions
@@ -58,14 +58,10 @@
 	}								\
 	void fn() 
 
-#else
-
-#define ANTARES_APP(fn) void fn()
-#define ANTARES_INIT_LOW(fn) void fn()
-#define ANTARES_INIT_HIGH(fn) void fn()	      
-#define ANTARES_FINISH(fn) void fn()
-
 #endif
 
+#include <avr/interrupt.h>
+#define ANTARES_DISABLE_IRQS() cli()
+#define ANTARES_ENABLE_IRQS() sei()
 
 #endif
