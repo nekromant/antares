@@ -157,4 +157,60 @@ endif
 endif
 
 
+menuconfig LIB_PRINTK
+bool "printk and dbg() macro support"
+
+if LIB_PRINTK
+
+      config LIB_PRINTK_TIMESTAMP
+      depends on LIB_TMGR && LIB_PRINTK
+      bool "Add a timestamp to printks"
+
+      config LIB_PRINTK_PREFIX
+      depends on LIB_PRINTK 
+      bool "Add a prefix to all printks"
+
+      config LIB_PRINTK_PREFIX_V
+      depends on LIB_PRINTK_PREFIX
+      string "Prefix"
+
+endif
+
+menuconfig LIB_PANIC
+bool "System panic support"
+help
+	Check this to properly handle panic();
+	When this is unchecked, panics result in
+	a plain and simple endless loop.
+	All asserts and BUG_ON macros eventually 
+	panic the system. 
+
+if LIB_PANIC
+   config LIB_PANIC_PRINTOUT
+   bool "Print panic reasons"
+   depends on LIB_PRINTK
+   help
+	Prints out useful info to console, 
+	before calling user hook
+
+   config LIB_PANIC_TRACE
+   bool "Always show assert/BUG_ON traces"
+   help
+	This is a global switch. It significally 
+	increases the firmware size. All assert and 
+	BUG_ON traps will show file and line info.
+	See panic.txt to find out how to limit this 
+	to one file.  
+
+   config LIB_PANIC_HOOK
+   bool "Provide a user hook to catch panics"
+   help
+	When this checked, implement a
+	void panic_user_hook(const char* why, ...); 
+	to catch and handle panics.
+
+endif
+
+
+
 endmenu

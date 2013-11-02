@@ -5,7 +5,6 @@
 #include <lib/tasks.h>
 #include <lib/earlycon.h>
 
-
 /* TODO: Use ARCH_HAS_STDIO instead */
 #if !defined(CONFIG_ARCH_8051) && !defined(CONFIG_ARCH_MSP430)
 #define k_printf(fmt, ...) fprintf(*p_stdout, fmt, #__VA_ARGS__) 
