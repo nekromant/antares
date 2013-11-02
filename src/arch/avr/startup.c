@@ -29,8 +29,11 @@ __attribute__((__section__(".init8"))) void __antares_app_start(void) {
 
 ANTARES_FINISH(antares_exit)
 {
-	/* Some MCUs require jmp, figure out how to do it */
+#ifdef __AVR_HAVE_JMP_CALL__
+	asm("jmp __antares_app_start");
+#else
 	asm("rjmp __antares_app_start");
+#endif
 }
 
 int main()
