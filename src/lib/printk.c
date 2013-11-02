@@ -22,7 +22,7 @@ static FILE **p_stdout = &g_early_stdout;
 	}						\
 
 
-#else
+#else /* CONFIG_LIB_EARLYCON */
 
 #define CHECK_STDOUT					\
 	{						\
@@ -34,11 +34,10 @@ static FILE **p_stdout = &g_early_stdout;
 
 static FILE **p_stdin;
 static FILE **p_stdout;
-#endif
+#endif /* CONFIG_LIB_EARLYCON */
 
 		
-
-#else
+#else /* No proper stdio */
 
 #define k_printf(fmt, ...) printf(fmt, #__VA_ARGS__) 
 #define k_vprintf(fmt, ap) printf(fmt, ap)
@@ -49,20 +48,55 @@ static FILE **p_stdout;
 #endif
 
 
+/* AVR Needs extra love for PROGMEM/EEMEM */
 
-void printk(const char *fmt, /*args*/ ...)
+#ifdef CONFIG_ARCH_AVR
+#define k_printf_P(fmt, ...) fprintf_P(*p_stdout, fmt, #__VA_ARGS__) 
+#define k_vprintf_P(fmt, ap) vfprintf_P(*p_stdout, fmt, ap)
+#define k_printf_E(fmt, ...) fprintf_E(*p_stdout, fmt, #__VA_ARGS__) 
+#define k_vprintf_E(fmt, ap) vfprintf_E(*p_stdout, fmt, ap)
+#endif
+
+
+static void printk_prefix()
 {
-	CHECK_STDOUT
+	CHECK_STDOUT;
+
 #ifdef CONFIG_LIB_PRINTK_PREFIX
+#ifdef CONFIG_ARCH_AVR
+	k_printf_P(PSTR(CONFIG_LIB_PRINTK_PREFIX_V));
+#else
 	k_printf(CONFIG_LIB_PRINTK_PREFIX_V);
 #endif
+#endif
+
 	
 #ifdef CONFIG_LIB_PRINTK_TIMESTAMP
+#ifdef CONFIG_ARCH_AVR
+	k_printf_P("[%d	] ", tmgr_get_uptime());
+#else
 	k_printf("[%d	] ", tmgr_get_uptime());
 #endif
-	
+#endif
+}
+
+
+void printk_R(const char *fmt, /*args*/ ...)
+{
+	printk_prefix();
 	va_list ap;
 	va_start(ap, fmt); 
 	k_vprintf(fmt, ap);
 	va_end(ap);
 }
+
+#ifdef CONFIG_ARCH_AVR
+void printk_P(const char *fmt, /*args*/ ...)
+{
+	printk_prefix();
+	va_list ap;
+	va_start(ap, fmt); 
+	k_vprintf_P(fmt, ap);
+	va_end(ap);
+}
+#endif

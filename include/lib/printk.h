@@ -46,6 +46,27 @@
 #endif
 
 
-void printk(const char *fmt, /*args*/ ...);
+void printk_R(const char *fmt, ...);
+
+
+/* 
+ * On AVR we use PROGMEM for printk fmt. 
+ */
+
+#ifdef CONFIG_ARCH_AVR
+#include <avr/pgmspace.h>
+void printk_P(const char *fmt, ...);
+#define printk(fmt, ...) printk_P(PSTR(fmt), #__VA_ARGS__);
+#define printk_R(fmt, ...) printk_R(PSTR(fmt), #__VA_ARGS__);
+
+#else
+
+#define printk(fmt, ...) printk_R(fmt, #__VA_ARGS__);
+#define printk_R(fmt, ...) printk_R(fmt, #__VA_ARGS__);
+
+#endif
+
+
+
 
 #endif
