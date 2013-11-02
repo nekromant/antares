@@ -131,11 +131,16 @@ menu "Device drivers"
 	  This driver implements bit-banged Xilinx Slave Serial configuraton mode
 	  and allows you to configure a wide range of FPGAs.
 
+    config LIB_SPISD
+    bool "SD/SDHC Card over SPI library"
+    help
+	This library allows easy interfacing with SD and SDHC cards over SPI
+
 endmenu 
 
 
 config LIB_XMODEM
-bool "Simple XMODEM implementation [BUGGY]"
+bool "Simple XMODEM implementation [BROKEN]"
 
 
 source "antares/src/lib/stlinky/kcnf"
