@@ -1,12 +1,15 @@
-0.2-rc2: 
+0.2-rc2:
 	* Buildsystem graphing
 	* initcall support
 	* initial pic32 port
-	* Documentation and translation cleanup 
+	* Documentation and translation cleanup
 	* Architecture features mechanism (ARCH_HAS_XXX)
 	* Major buildsystem cleanups
 	* 'Native' port
 	* lib: Add Xilinx SLave Serial upload driver
+	* lib: Implemented earlycon
+	* lib: printk to hook to earlycon by default
+	* lib: printk uses PROGMEM on AVR by default
 	...
 
 0.2-rc1: First release. More or less stable
