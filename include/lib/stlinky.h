@@ -19,7 +19,7 @@ struct stlinky {
 	char rxbuf[CONFIG_LIB_STLINKY_BSIZE];
 } __attribute__ ((packed));;
 
-int stlinky_tx(volatile struct stlinky* st, char* buf, int sz);
+int stlinky_tx(volatile struct stlinky* st, const char* buf, int sz);
 
 int stlinky_rx(volatile struct stlinky* st, char* buf, int sz);
 

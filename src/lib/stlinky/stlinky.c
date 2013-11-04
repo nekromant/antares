@@ -13,7 +13,7 @@ volatile struct stlinky g_stlinky_term = {
 };
 
 
-int stlinky_tx(volatile struct stlinky* st, char* buf, int siz)
+int stlinky_tx(volatile struct stlinky* st, const char* buf, int siz)
 {
 	int sz = min_t(int, CONFIG_LIB_STLINKY_BSIZE, siz);
 	while(st->txsize != 0);;; 
