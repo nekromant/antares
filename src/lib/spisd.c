@@ -1,20 +1,23 @@
 /**
-* 
-* Copyright (c) 2013 Andrew 'Necromant' Andrianov
-* Copyright (c) 2011 CC Dharmani, Chennai (India), www.dharmanitech.com
-* Distributed under the GNU GPL v2. For full terms see the file COPYING.
-*
-*/
+ *
+ * Simple SD/SDHC over SPI library
+ * Copyright (c) 2013 Andrew 'Necromant' Andrianov
+ * Copyright (c) 2011 CC Dharmani, Chennai (India), www.dharmanitech.com
+ * Distributed under the GNU GPL v2. For full terms see the file COPYING.
+ *
+ */
 
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include <lib/spisd.h>
 
 #define GO_IDLE_STATE            0
 #define SEND_OP_COND             1
 #define SEND_IF_COND		 8
 #define SEND_CSD                 9
+#define SEND_CID                 10
 #define STOP_TRANSMISSION        12
 #define SEND_STATUS              13
 #define SET_BLOCK_LEN            16
@@ -32,6 +35,150 @@
 
 
 
+#include <lib/printk.h>
+int sd_read_info(struct sd_card *sd, struct sd_info *info)
+{
+	int i;
+	uint8_t resp; 
+	if(!info)
+		return -1;
+
+	memset(info, 0, sizeof(*info));
+	
+	sd->cs(1);
+	
+	/* read cid register */
+	resp = sd_cmd(sd, SEND_CID, 0);
+	if (resp)
+	{
+		sd->cs(0);
+		return resp;
+	}
+	while (sd->xfer(0xff) != 0xfe);
+	for(i = 0; i < 18; ++i)
+	{
+		uint8_t b = sd->xfer(0xff);
+		
+		switch(i)
+		{
+		case 0:
+			info->manufacturer = b;
+			break;
+		case 1:
+		case 2:
+			info->oem[i - 1] = b;
+			break;
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			info->product[i - 3] = b;
+			break;
+		case 8:
+			info->revision = b;
+			break;
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+			info->serial |= (uint32_t) b << ((12 - i) * 8);
+			break;
+		case 13:
+			info->manufacturing_year = b << 4;
+			break;
+		case 14:
+			info->manufacturing_year |= b >> 4;
+			info->manufacturing_month = b & 0x0f;
+			break;
+		}
+	}
+
+	/* read csd register */
+	uint8_t csd_read_bl_len = 0;
+	uint8_t csd_c_size_mult = 0;
+	uint16_t csd_c_size = 0;
+	resp = sd_cmd(sd, SEND_CSD, 0);
+	if(resp)
+	{
+		sd->cs(0);
+		return resp;
+	}
+	
+	while (sd->xfer(0xff) != 0xfe);
+	for(i = 0; i < 18; ++i)
+	{
+		uint8_t b = sd->xfer(0xff);
+		
+		if(i == 14)
+		{
+			if(b & 0x40)
+				info->flag_copy = 1;
+			if(b & 0x20)
+				info->flag_write_protect = 1;
+			if(b & 0x10)
+				info->flag_write_protect_temp = 1;
+			info->format = (b & 0x0c) >> 2;
+		}
+		else
+		{
+			if(sd_is_shdc(sd))
+			{
+				switch(i)
+				{
+				case 7:
+					b &= 0x3f;
+				case 8:
+				case 9:
+					csd_c_size <<= 8;
+					csd_c_size |= b;
+					break;
+				}
+				if(i == 9)
+				{
+					++csd_c_size;
+					info->capacity = (uint64_t) csd_c_size * 512 * 1024;
+				}
+			}
+			else
+			{
+				switch(i)
+				{
+				case 5:
+					csd_read_bl_len = b & 0x0f;
+					break;
+				case 6:
+					csd_c_size = b & 0x03;
+					csd_c_size <<= 8;
+					break;
+				case 7:
+					csd_c_size |= b;
+					csd_c_size <<= 2;
+					break;
+				case 8:
+					csd_c_size |= b >> 6;
+					++csd_c_size;
+					break;
+				case 9:
+					csd_c_size_mult = b & 0x03;
+					csd_c_size_mult <<= 1;
+					break;
+				case 10:
+					csd_c_size_mult |= b >> 7;
+					info->capacity = (uint64_t) csd_c_size << (csd_c_size_mult + csd_read_bl_len + 2);
+
+					break;
+				}
+			}
+		}
+	}
+
+	sd->cs(0);
+
+	return 0;
+}
+
+
 /** 
  * Initialiaze the SD card
  * 
@@ -47,7 +194,7 @@ unsigned char sd_init(struct sd_card *sd)
         sd->flags=0;
         sd->set_speed(400); /* 400 kHz by default */
 
-        for(i=0; i<10; i++)
+        for(i=0; i<30; i++)
                 sd->xfer(0xff);
 
         sd->cs(1);
@@ -157,10 +304,18 @@ unsigned char sd_cmd(struct sd_card* sd, unsigned char cmd, unsigned long arg)
         sd->xfer(arg);
 
 	/* We need a valid CRC for CMD8 & CMD0 */
-        if(cmd == SEND_IF_COND)	
-                sd->xfer(0x87); 
-        else
-                sd->xfer(0x95);
+	switch(cmd)
+	{
+        case GO_IDLE_STATE:
+		sd->xfer(0x95);
+           break;
+        case SEND_IF_COND:
+		sd->xfer(0x87);
+           break;
+        default:
+		sd->xfer(0xff);
+		break;
+	}
 
         while((response = sd->xfer(0xff)) == 0xff) 
                 if(retry++ > 0xfe) break; 
@@ -178,7 +333,7 @@ unsigned char sd_cmd(struct sd_card* sd, unsigned char cmd, unsigned long arg)
         }
 
         sd->xfer(0xff); 
-        sd->cs(0);
+        //sd->cs(0);
 
         return response; 
 }
@@ -439,3 +594,5 @@ unsigned char sd_multiwrite(struct sd_card *sd,
 	
         return 0;
 }
+
+
