@@ -12,7 +12,7 @@ void do_panic(const char* why);
 void panic_user_hook(const char* why);
 
 
-#if defined(TRACE_ASSERTS) || defined(CONFIG_LIB_PANIC_DEBUG)
+#if defined(TRACE_ASSERTS) || defined(CONFIG_LIB_PANIC_TRACE)
 
 #define assert(expr) \
 	((expr) ? (void)0 : panic("assert '" QUOTE(expr)"' failed in " __FILE__ ":" \
