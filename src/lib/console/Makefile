@@ -7,6 +7,7 @@ objects-$(CONFIG_LIB_EARLYCON_STCUART)+=earlycon-stc.o
 objects-$(CONFIG_LIB_EARLYCON_NATIVE)+=earlycon-host.o
 objects-$(CONFIG_LIB_EARLYCON_STLINKY)+=earlycon-stlinky.o
 objects-$(CONFIG_LIB_EARLYCON_MSP430SOFTSERIAL)+=earlycon-msp430softserial.o
+objects-$(CONFIG_LIB_EARLYCON_STM32F1XSERIAL)+=earlycon-stm32f1xserial.o
 
 
 objects-$(CONFIG_LIB_EARLYCON_AVRSOFTSERIAL)+=earlycon-avrsoftserial.o

@@ -32,6 +32,10 @@ config LIB_EARLYCON_AVRSOFTSERIAL
 bool "AVR SoftSerial (TX Only)"
 depends on ARCH_AVR
 
+config LIB_EARLYCON_STM32F1XSERIAL
+bool "STM32F1X Hardware Serial Port"
+depends on ARCH_ARM
+
 endchoice
 
 
@@ -153,9 +157,13 @@ if LIB_EARLYCON_AVRSOFTSERIAL
 
 endif
 
-
+if LIB_EARLYCON_STM32F1XSERIAL
+comment "Experimental. Only USART1 at 115200 8n1"
+comment "TODO: Nice options here"
 endif
 
+
+endif
 
 menuconfig LIB_PRINTK
 bool "printk and dbg() macro support"
