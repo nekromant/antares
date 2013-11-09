@@ -7,7 +7,7 @@
 
 /* TODO: Use ARCH_HAS_STDIO instead */
 #if !defined(CONFIG_ARCH_8051) && !defined(CONFIG_ARCH_MSP430)
-#define k_printf(fmt, ...) fprintf(*p_stdout, fmt, #__VA_ARGS__) 
+#define k_printf(fmt, ...) fprintf(*p_stdout, fmt, ##__VA_ARGS__) 
 #define k_vprintf(fmt, ap) vfprintf(*p_stdout, fmt, ap)
 
 #ifdef CONFIG_LIB_EARLYCON
@@ -38,8 +38,8 @@ static FILE **p_stdout;
 		
 #else /* No proper stdio */
 
-#define k_printf(fmt, ...) printf(fmt, #__VA_ARGS__) 
-#define k_vprintf(fmt, ap) printf(fmt, ap)
+#define k_printf(fmt, ...) printf(fmt, ##__VA_ARGS__) 
+#define k_vprintf(fmt, ap) vprintf(fmt, ap)
 
 #define CHECK_STDOUT
 
@@ -50,9 +50,9 @@ static FILE **p_stdout;
 /* AVR Needs extra love for PROGMEM/EEMEM */
 
 #ifdef CONFIG_ARCH_AVR
-#define k_printf_P(fmt, ...) fprintf_P(*p_stdout, fmt, #__VA_ARGS__) 
+#define k_printf_P(fmt, ...) fprintf_P(*p_stdout, fmt, ##__VA_ARGS__) 
 #define k_vprintf_P(fmt, ap) vfprintf_P(*p_stdout, fmt, ap)
-#define k_printf_E(fmt, ...) fprintf_E(*p_stdout, fmt, #__VA_ARGS__) 
+#define k_printf_E(fmt, ...) fprintf_E(*p_stdout, fmt, ##__VA_ARGS__) 
 #define k_vprintf_E(fmt, ap) vfprintf_E(*p_stdout, fmt, ap)
 #endif
 
@@ -79,12 +79,11 @@ static void printk_prefix()
 #endif
 }
 
-
-void printk_R(const char *fmt, /*args*/ ...)
+void printk_R(const char *fmt, /*args*/ ...) 
 {
-	printk_prefix();
 	va_list ap;
 	va_start(ap, fmt); 
+	printk_prefix();
 	k_vprintf(fmt, ap);
 	va_end(ap);
 }
@@ -92,8 +91,8 @@ void printk_R(const char *fmt, /*args*/ ...)
 #ifdef CONFIG_ARCH_AVR
 void printk_P(const char *fmt, /*args*/ ...)
 {
-	printk_prefix();
 	va_list ap;
+	printk_prefix();
 	va_start(ap, fmt); 
 	k_vprintf_P(fmt, ap);
 	va_end(ap);
