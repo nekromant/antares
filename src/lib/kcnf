@@ -123,10 +123,7 @@ endmenu
 config LIB_XMODEM
 bool "Simple XMODEM implementation [BROKEN]"
 
-
+source "antares/src/lib/delaylib/kcnf"
 source "antares/src/lib/stlinky/kcnf"
 source "antares/src/lib/urpc/kcnf"
-source "antares/src/lib/msp430/kcnf"
-source "antares/src/lib/8051/kcnf"
-source "antares/src/lib/avr/kcnf"
 source "antares/src/lib/contrib/kcnf"

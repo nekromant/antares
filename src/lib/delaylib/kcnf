@@ -1,14 +1,42 @@
-menuconfig MSP430_DELAYLIB
+config LIB_DELAY_8051
+bool 
+
+config LIB_DELAY_MSP430
+bool 
+
+config LIB_DELAY_AVR
+bool 
+
+config LIB_DELAY_ARM
+bool 
+
+config LIB_DELAY_PIC32
+bool 
+
+
+menuconfig LIB_DELAY
 bool "DelayLib"
-depends on ARCH_MSP430
+select LIB_DELAY_8051  if ARCH_8051
+select LIB_DELAY_AVR   if ARCH_AVR
+select LIB_DELAY_ARM   if ARCH_ARM
+select LIB_DELAY_PIC32 if ARCH_PIC32
 help
 	A small convienience library for programmable
-	delays. These are pretty inacurate SOFTWARE 
-	delays for MSP430 with no timers involved. Use
-	with care where appropriate. 
-	
-if MSP430_DELAYLIB
+	delays. Use with care where appropriate. 
 
+
+if LIB_DELAY
+
+if ARCH_8051
+comment "Nothing to tune for 8051, everything should work out of the box"
+endif
+
+if ARCH_AVR
+comment "Nothing to tune for AVR, everything should work out of the box"
+endif
+
+	
+if ARCH_MSP430
    config MSP430_DELAYLIB_SUMMARY
    bool "Enable debug"
    help
@@ -31,4 +59,5 @@ if MSP430_DELAYLIB
 	Delay will be calculated using this unit chunk
 	as base. 
 
+endif
 endif

@@ -4,5 +4,6 @@ bool "3rd-party libraries"
 if CONTRIB
 
 source "antares/src/lib/contrib/lwip/kcnf"
+source "antares/src/lib/contrib/vusb/kcnf"
 
 endif
