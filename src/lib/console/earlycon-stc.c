@@ -1,6 +1,6 @@
 #include <arch/stc.h>
 #include <stdio.h>
-#include <arch/lib/stc/iap.h>
+#include <arch/stc/iap.h>
 #include <lib/earlycon.h>
 #include <lib/printk.h>
 
@@ -29,8 +29,8 @@ static void iap_check(char c) {
 }  
 
 #else
-static void inline iap_check(char c) {
-
+static void iap_check(char c) {
+	c;
 }  
 #endif
 static int serial_getchar()

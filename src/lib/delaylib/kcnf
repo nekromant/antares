@@ -16,10 +16,11 @@ bool
 
 menuconfig LIB_DELAY
 bool "DelayLib"
-select LIB_DELAY_8051  if ARCH_8051
-select LIB_DELAY_AVR   if ARCH_AVR
-select LIB_DELAY_ARM   if ARCH_ARM
-select LIB_DELAY_PIC32 if ARCH_PIC32
+select LIB_DELAY_8051   if ARCH_8051
+select LIB_DELAY_AVR    if ARCH_AVR
+select LIB_DELAY_ARM    if ARCH_ARM
+select LIB_DELAY_PIC32  if ARCH_PIC32
+select LIB_DELAY_MSP430 if ARCH_MSP430
 help
 	A small convienience library for programmable
 	delays. Use with care where appropriate. 
@@ -35,26 +36,18 @@ if ARCH_AVR
 comment "Nothing to tune for AVR, everything should work out of the box"
 endif
 
+
+if ARCH_AVR
+comment "Nothing to tune for ARM, everything should work out of the box"
+endif
+
 	
 if ARCH_MSP430
-   config MSP430_DELAYLIB_SUMMARY
-   bool "Enable debug"
-   help
-	Enables delaylib_print_summary(); that outputs 
-	current delaylib settings. Disabling replaces
-	the function with emptiness.
-	User must call the function whenever he needs it
-
-   config MSP430_DELAYLIB_DYNAMIC
-   bool "Dynamic delays"
-   help
-	Enables you to change current frequency for delays via
-	delaylib_set_clock() and delaylib_get_clock(); 
 
    config MSP430_DELAYLIB_UNITSIZE
    int "Time unit size"
-   depends on MSP430_DELAYLIB_DYNAMIC
-   default 1000
+   depends on F_DYNAMIC
+   default 1024
    help
 	Delay will be calculated using this unit chunk
 	as base. 

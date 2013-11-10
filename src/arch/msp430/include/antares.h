@@ -60,9 +60,18 @@
 #endif	
 
 #include <msp430.h> 
+#include <stdint.h>
 
-#define ANTARES_DISABLE_IRQS() __dint()
-#define ANTARES_ENABLE_IRQS()  __eint()
+#define ANTARES_DISABLE_IRQS() __disable_interrupt();     
+#define ANTARES_ENABLE_IRQS() __enable_interrupt();
 
+#ifdef CONFIG_F_DYNAMIC
+extern uint32_t msp430_core_clock;
+#define get_system_clock()    msp430_core_clock
+#define set_system_clock(clk) msp430_core_clock = clk;
+#else
+#define get_system_clock()    CONFIG_F_CPU
+#define set_system_clock(clk) ;
+#endif
 
 #endif

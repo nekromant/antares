@@ -37,7 +37,6 @@
 	void fn()							\
 	
 
-
 #define ANTARES_FINISH(fn)						\
 	void fn();						\
 	__attribute__((naked))						\
@@ -51,5 +50,10 @@
 
 #define ANTARES_DISABLE_IRQS() __disable_irq()
 #define ANTARES_ENABLE_IRQS() __enable_irq()
+
+
+extern uint32_t SystemCoreClock;
+#define get_system_clock()    SystemCoreClock
+#define set_system_clock(clk) SystemCoreClock = clk;
 
 #endif

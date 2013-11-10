@@ -13,4 +13,12 @@ config F_CPU
 int "CPU Frequency in HZ (at startup)"
 default 1000000
 
+config F_DYNAMIC
+bool "Support runtime frequency changes"
+default n
+help
+	Set this to y if you want to change frequency
+	in runtime and want underlying libraries to be 
+	aware of that
+
 endif

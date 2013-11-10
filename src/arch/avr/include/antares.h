@@ -64,4 +64,7 @@
 #define ANTARES_DISABLE_IRQS() cli()
 #define ANTARES_ENABLE_IRQS() sei()
 
+#define get_system_clock()    F_CPU
+#define set_system_clock(clk) ;
+
 #endif
