@@ -1,4 +1,6 @@
-include $(ANTARES_DIR)/src/arch/avr/mcu_database.mk
+
+ARCH_FEATURES=ANTARES_STARTUP
+
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).elf 
 
