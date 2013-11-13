@@ -2,12 +2,15 @@
 #include <unistd.h> 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <lib/earlycon.h>
 #include <lib/printk.h>
 
 static void stdio_putchar(char c)
 {
 	putchar(c);
+	fflush(stdout);
 }
 
 static int stdio_getchar()
@@ -21,15 +24,8 @@ static int stdio_getchar()
 
 static void stdio_init() 
 {
-	struct termios old = {0};
-        if (tcgetattr(0, &old) < 0)
-                perror("tcsetattr()");
-        old.c_lflag &= ~ICANON;
-        old.c_lflag &= ~ECHO;
-        old.c_cc[VMIN] = 1;
-        old.c_cc[VTIME] = 0;
-        if (tcsetattr(0, TCSANOW, &old) < 0)
-                perror("tcsetattr ICANON");	
+	fprintf(stderr, "earlycon: native init..\n");
+	fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
 }
 
 static int stdio_avail()
