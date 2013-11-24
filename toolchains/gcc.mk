@@ -38,6 +38,9 @@ LDFLAGS+=$(call unquote,$(CONFIG_LDFLAGS))
 
 ASFLAGS+=$(call unquote,$(CONFIG_ASFLAGS))
 
+ELFFLAGS+=$(call unquote,$(CONFIG_ELFFLAGS))
+
+
 #FixMe: Hack
 ASFLAGS+=$(CFLAGS)
 OBJCOPYFLAGS+=-Obinary
@@ -130,7 +133,7 @@ endif
 
 ifneq ($(LD_NO_COMBINE),y)
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
-	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
+	$(SILENT_LD) $(LD) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
 else
 $(IMAGENAME).elf: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \

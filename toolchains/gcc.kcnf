@@ -83,5 +83,8 @@ config ASFLAGS
 string "Additional Assembler flags (as)"
 
 config LDFLAGS
-string "Additional Linker flags (as)"
+string "Additional Linker flags (ld)"
+
+config ELFFLAGS
+string "Additional Linker flags (When linking final elf) (ld)"
 
