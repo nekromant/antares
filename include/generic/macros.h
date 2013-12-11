@@ -65,6 +65,14 @@
 #define QUOTE(str) #str
 #define EXPAND_AND_QUOTE(str) QUOTE(str)
 
+/* 
+ * Macrofied, so that we can later add implementations
+ * for compilers that don't know about 0b prefix 
+ * So far both gcc and sdcc can do this stuff
+ */
+
+#define BIN(x) 0b##x
+
 
 #endif
 
