@@ -104,13 +104,10 @@ if LIB_NLIBSTUBS
 	endif
 
 
-menu "Device drivers"
+source "antares/src/lib/wireless/kcnf"
 
-     config LIB_XSSCU
-     bool "Xilinx FPGA configuration upload driver"
-     help
-	  This driver implements bit-banged Xilinx Slave Serial configuraton mode
-	  and allows you to configure a wide range of FPGAs.
+
+menu "Data storage devices"
 
     config LIB_SPISD
     bool "SD/SDHC Card over SPI library"
@@ -120,8 +117,23 @@ menu "Device drivers"
 endmenu 
 
 
+menu "Misc drivers and libraries"
+
+     config LIB_XSSCU
+     bool "Xilinx FPGA configuration upload driver"
+     help
+	  This driver implements bit-banged Xilinx Slave Serial configuraton mode
+	  and allows you to configure a wide range of FPGAs.
+
+endmenu 
+
+menu "Data transfer protocols"
+
 config LIB_XMODEM
 bool "Simple XMODEM implementation [BROKEN]"
+
+endmenu
+
 
 source "antares/src/lib/delaylib/kcnf"
 source "antares/src/lib/stlinky/kcnf"

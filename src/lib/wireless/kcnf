@@ -1,0 +1,14 @@
+menu "Wireless devices"
+
+menuconfig LIB_RF24
+bool "nRF24L01 Support"
+
+if LIB_RF24
+   config LIB_RF24_DEBUG
+   int "Debugging verbosity (0-4)"
+   default 0
+   range 0 4 
+
+
+endif
+endmenu
