@@ -1,5 +1,6 @@
 #define a help message
 deploy_help+="\navrdude - Flash the firmware via avrdude"
+deploy_help+="\n Use WFUSES=y make deploy-avrdude to write fuses"
 #the deployment action
 
 include $(SRCDIR)/deploy/avrdude/proglist.mk
@@ -50,11 +51,8 @@ endif
 
 avrdude:
 	$(RESETCMD)
-	$(root) avrdude $(AVRDUDE_EXTRA) -c $(PROG) -p $(MCU) $(call unquote,$(CONFIG_DEPLOY_AVRDUDE_COMMANDLINE)) -U flash:w:$(TARGET_HEXFILE)
-
-
-avrdude-fuses:
-	$(RESETCMD)
+ifeq ($(WFUSES),y)
 	$(root) avrdude $(AVRDUDE_EXTRA) -c $(PROG) -p $(MCU) $(call unquote,$(CONFIG_DEPLOY_AVRDUDE_COMMANDLINE)) $(FUSES)
-
+endif
+	$(root) avrdude $(AVRDUDE_EXTRA) -c $(PROG) -p $(MCU) $(call unquote,$(CONFIG_DEPLOY_AVRDUDE_COMMANDLINE)) -U flash:w:$(TARGET_HEXFILE)
 

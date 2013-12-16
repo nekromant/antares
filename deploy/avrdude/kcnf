@@ -44,6 +44,10 @@ depends on ARCH_AVR || ARCH_PIC32
 
   menu "Fuse settings"
 
+  comment "To actually burn the fuses pass WFUSES=y env variable"
+  comment "e.g. make WFUSES=y deploy-avrdude"
+  comment "ProTIP: Tripple check fuse values to avoid bricking uC"
+
   config DEPLOY_AVRDUDE_FSLOW
   bool "Deploy fuse bits with a slow bit clock"
 
