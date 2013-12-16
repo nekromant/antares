@@ -1,3 +1,6 @@
+Antares
+=======
+
 ANTARES is an all-in-one buildsystem, aimed at baremetal targets.
 It is designed to be portable across a lot of MCUs and adding another 
 MCU is trivial. 
