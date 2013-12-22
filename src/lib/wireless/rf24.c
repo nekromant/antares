@@ -1278,3 +1278,23 @@ int rf24_test_rpd(struct rf24 *r)
 { 
 	return ( rf24_read_register(r, RPD) & 1 ) ;
 }
+
+/**
+ * Determine if an ack payload was received in the most recent call to
+ * write().
+ *
+ * Call read() to retrieve the ack payload.
+ *
+ * @warning Calling this function clears the internal flag which indicates
+ * a payload is available.  If it returns true, you must read the packet
+ * out as the very next interaction with the radio, or the results are
+ * undefined.
+ *
+ * @return True if an ack payload is available.
+ */
+inline int rf24_is_ack_payload_available(struct rf24 *r)
+{
+	int ret = r->flags & RF24_ACK_PAYLOAD_AVAIL;
+	r->flags &= ~RF24_ACK_PAYLOAD_AVAIL;
+	return ret;
+}

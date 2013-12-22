@@ -114,27 +114,7 @@ void rf24_power_up(struct rf24 *r) ;
 int rf24_available(struct rf24 *r, uint8_t* pipe_num);
 void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len );
 void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8_t len);
-
-/**
- * Determine if an ack payload was received in the most recent call to
- * write().
- *
- * Call read() to retrieve the ack payload.
- *
- * @warning Calling this function clears the internal flag which indicates
- * a payload is available.  If it returns true, you must read the packet
- * out as the very next interaction with the radio, or the results are
- * undefined.
- *
- * @return True if an ack payload is available.
- */
-inline int rf24_is_ack_payload_available(struct rf24 *r)
-{
-	int ret = r->flags & RF24_ACK_PAYLOAD_AVAIL;
-	r->flags &= ~RF24_ACK_PAYLOAD_AVAIL;
-	return ret;
-}
-
+inline int rf24_is_ack_payload_available(struct rf24 *r);
 void rf24_what_happened(struct rf24 *r, int *tx_ok, int *tx_fail, int *rx_ready);
 int rf24_test_carrier(struct rf24 *r);
 int rf24_test_rpd(struct rf24 *r) ;
