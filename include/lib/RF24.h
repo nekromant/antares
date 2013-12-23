@@ -37,6 +37,7 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
  * Driver for nRF24L01(+) 2.4GHz Wireless Transceiver
  */
 
+#define RF24_NUM_CHANNELS 128 
 
 #define RF24_WIDE_BAND           (1<<0)
 #define RF24_P_VARIANT           (1<<1)
@@ -44,10 +45,10 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
 #define RF24_DYNAMIC_PAYLOAD     (1<<3)
 
 
-#define rf24_is_wideband(rf24)         (rf24->flags & RF24_WIDE_BAND)
-#define rf24_is_p_variant(rf24)        (rf24->flags & RF24_P_VARIANT)
+#define rf24_is_wideband(rf24)         ((rf24)->flags & RF24_WIDE_BAND)
+#define rf24_is_p_variant(rf24)        ((rf24)->flags & RF24_P_VARIANT)
 
-#define rf24_has_dynamic_payload(rf24) (rf24->flags & RF24_DYNAMIC_PAYLOAD)
+#define rf24_has_dynamic_payload(rf24) ((rf24)->flags & RF24_DYNAMIC_PAYLOAD)
 struct rf24 {
 	void    (*csn)(int level);
 	void    (*ce)(int level);
@@ -58,6 +59,11 @@ struct rf24 {
 	uint8_t payload_size;
 	uint8_t ack_payload_length;
 	uint8_t pipe0_reading_address[5];
+};
+
+struct rf24_sweeper {
+	struct rf24* r; 
+	uint8_t values[RF24_NUM_CHANNELS];
 };
 
 
@@ -118,5 +124,10 @@ inline int rf24_is_ack_payload_available(struct rf24 *r);
 void rf24_what_happened(struct rf24 *r, int *tx_ok, int *tx_fail, int *rx_ready);
 int rf24_test_carrier(struct rf24 *r);
 int rf24_test_rpd(struct rf24 *r) ;
+
+void rf24_sweeper_init(struct rf24_sweeper *s, struct rf24 *r);
+void rf24_sweep(struct rf24_sweeper *s, int loops);
+void rf24_sweep_dump_results(struct rf24_sweeper *s);
+void rf24_sweep_dump_header();
 
 #endif

@@ -4,11 +4,28 @@ menuconfig LIB_RF24
 bool "nRF24L01 Support"
 
 if LIB_RF24
+
    config LIB_RF24_DEBUG
    int "Debugging verbosity (0-4)"
    default 0
    range 0 4 
 
+   config LIB_RF24_SWEEP
+   bool "RF Sweeper library"
+   default y
+   help
+	Utility functions to scan the spectrum, auto-pick unused channels, etc. 
 
+   choice
+   prompt "RF24 probe method"
+
+   config LIB_RF24_SWEEP_CARRIER
+   bool "Test for carrier"
+
+   config LIB_RF24_SWEEP_RPD
+   bool "Test for RPD ('+' hardware only)"
+
+   endchoice
 endif
+
 endmenu

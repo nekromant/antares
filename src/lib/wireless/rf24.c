@@ -4,7 +4,7 @@
 #include <arch/delay.h>
 #include <lib/panic.h>
 
-//#define DEBUG_LEVEL CONFIG_LIB_RF24_DEBUG
+#define DEBUG_LEVEL CONFIG_LIB_RF24_DEBUG
 #define COMPONENT "rf24"
 #include <lib/printk.h>
 
