@@ -17,6 +17,7 @@ TARGET_EEPFILE=$(IMAGENAME).eep
 TARGET_EEPFILE=$(IMAGENAME).eep.bin
 
 CFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
+LDFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 ELFFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 
 #avr-specifik voodoo for hex generation
