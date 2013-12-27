@@ -9,6 +9,16 @@
 #define COMPONENT "???"
 #endif
 
+#ifndef CONFIG_LIB_PRINTK
+#define printk_R(...) ;
+#define printk_P(...) ;
+#else
+void printk_R(const char *fmt, ...);
+void printk_P(const char *fmt, ...);
+#endif
+
+
+
 #define do_log(level, ...) __dbg_ # level (__VA_ARGS__)
 
 #define err(...)       printk(COMPONENT ": " __VA_ARGS__)
@@ -47,7 +57,6 @@
 #endif
 
 
-void printk_R(const char *fmt, ...);
 
 
 /* 
@@ -56,10 +65,8 @@ void printk_R(const char *fmt, ...);
 
 #ifdef CONFIG_ARCH_AVR
 #include <avr/pgmspace.h>
-void printk_P(const char *fmt, ...);
 #define printk(fmt, ...) printk_P(PSTR(fmt), ##__VA_ARGS__);
 #define panic_printk(fmt, ...) printk_P(fmt, ##__VA_ARGS__);
-
 #else
 
 #define printk(fmt, ...) printk_R(fmt, ##__VA_ARGS__);

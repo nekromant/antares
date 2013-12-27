@@ -6,7 +6,7 @@
 #ifdef CONFIG_LIB_PANIC
 void do_panic(const char* why);
 #else
-#define do_panic(why) while(1);;
+static inline void do_panic(why) { while(1);; };
 #endif
 
 void panic_user_hook(const char* why);
