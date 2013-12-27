@@ -27,6 +27,9 @@ help
 	Use it if you want pass variables to 
 	_delay_ms and friends
 
+config AVR_EXTRA_SIZE_OPT
+bool "Enable extra size optimisations"
+
 choice 
 prompt "vfprintf implementation"
 

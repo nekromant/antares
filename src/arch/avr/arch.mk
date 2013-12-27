@@ -34,6 +34,12 @@ else
 FBANNER=FLASH usage
 endif
 
+
+ifeq ($(CONFIG_AVR_EXTRA_SIZE_OPT),y)
+CFLAGS+= -mcall-prologues -fno-tree-scev-cprop -fno-split-wide-types -fpack-struct -fshort-enums
+CONFIG_LDFLAGS=-Wl,--relax
+endif
+
 ifeq ($(CONFIG_AVR_VFPRINTF_MIN),y)
 ELFFLAGS+= -Wl,-u,vfprintf -lprintf_min
 endif
