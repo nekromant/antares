@@ -10,6 +10,15 @@ if LIB_RF24
    default 0
    range 0 4 
 
+   config LIB_RF24_SIZEOPT
+   bool "Agressive size optimisation [DANGEROUS]"
+   help
+	This is a hacky option, that tries to make the 
+	library smaller (for bootloaders). On AVRs this can
+	reduce code size at up to one third. 
+	Note: Only ONE instance of rf24 is supported when 
+	running in this mode.
+
    config LIB_RF24_SWEEP
    bool "RF Sweeper library"
    default y

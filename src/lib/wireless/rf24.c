@@ -8,6 +8,42 @@
 #define COMPONENT "rf24"
 #include <lib/printk.h>
 
+
+/* Agressive and hacky size optimisation, 
+   mostly for avr
+*/
+
+#ifdef CONFIG_LIB_RF24_SIZEOPT
+/* 
+ *  r->csn(0) costs us 24 bytes 
+ *  rf24_csn() costs us 4 bytes 
+ *  ...
+ *  PROFIT!
+ */
+
+static struct rf24 *nrf;
+static void rf24_csn(uint8_t state) 
+{
+	nrf->csn(state);
+}
+static void rf24_ce(uint8_t state) 
+{
+	nrf->ce(state);
+}
+
+static uint8_t rf24_spi_xfer(uint8_t d) 
+{
+	return nrf->spi_xfer(d);
+}
+
+#else
+/* In case we're not that space-hungry */
+#define rf24_csn(v)       r->csn(v)
+#define rf24_ce(v)        r->ce(v)
+#define rf24_spi_xfer(v)  r->spi_xfer(v)
+
+#endif
+
 /**
  * Read a chunk of data in from a register
  *
@@ -21,12 +57,12 @@ uint8_t rf24_readout_register(struct rf24 *r,
 			      uint8_t reg, uint8_t* buf, uint8_t len)
 {
 	uint8_t status;
-	r->csn(0);
-	status = r->spi_xfer( R_REGISTER | ( REGISTER_MASK & reg ) );
+	rf24_csn(0);
+	status = rf24_spi_xfer( R_REGISTER | ( REGISTER_MASK & reg ) );
 	while ( len-- )
-		*buf++ = r->spi_xfer(0xff);
+		*buf++ = rf24_spi_xfer(0xff);
 
-	r->csn(1);
+	rf24_csn(1);
 	return status;
 }
 
@@ -39,10 +75,10 @@ uint8_t rf24_readout_register(struct rf24 *r,
  */
 uint8_t rf24_read_register(struct rf24 *r, uint8_t reg)
 {
-	r->csn(0);
-	r->spi_xfer( R_REGISTER | ( REGISTER_MASK & reg ) );
-	uint8_t result = r->spi_xfer(0xff);
-	r->csn(1);
+	rf24_csn(0);
+	rf24_spi_xfer( R_REGISTER | ( REGISTER_MASK & reg ) );
+	uint8_t result = rf24_spi_xfer(0xff);
+	rf24_csn(1);
 	return result;
 }
 
@@ -59,11 +95,11 @@ uint8_t rf24_read_register(struct rf24 *r, uint8_t reg)
 uint8_t rf24_writeout_register(struct rf24 *r, uint8_t reg, const uint8_t* buf, uint8_t len)
 {
 	uint8_t status;
-	r->csn(0);
-	status = r->spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
+	rf24_csn(0);
+	status = rf24_spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
 	while ( len-- )
-		r->spi_xfer(*buf++);
-	r->csn(1);
+		rf24_spi_xfer(*buf++);
+	rf24_csn(1);
 	return status;
 }
 
@@ -71,11 +107,11 @@ uint8_t rf24_writeout_address(struct rf24 *r, uint8_t reg, const uint8_t* buf, u
 {
 	uint8_t status;
 	const uint8_t *addr = &buf[len];
-	r->csn(0);
-	status = r->spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
+	rf24_csn(0);
+	status = rf24_spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
 	while ( len-- )
-		r->spi_xfer(*(--addr));
-	r->csn(1);
+		rf24_spi_xfer(*(--addr));
+	rf24_csn(1);
 	return status;
 }
 
@@ -92,10 +128,10 @@ uint8_t rf24_write_register(struct rf24 *r, uint8_t reg, uint8_t value)
 {
 	uint8_t status;
 	trace("write_register(%02x,%02x)\n", reg, value);
-	r->csn(0);
-	status = r->spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
-	r->spi_xfer(value);
-	r->csn(1);
+	rf24_csn(0);
+	status = rf24_spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
+	rf24_spi_xfer(value);
+	rf24_csn(1);
 	return status;
 }
 
@@ -118,13 +154,13 @@ uint8_t rf24_write_payload(struct rf24 *r, const void* buf, uint8_t len)
 	uint8_t data_len = min_t(uint8_t, len, r->payload_size);
 	uint8_t blank_len = rf24_has_dynamic_payload(r) ? 0 : r->payload_size - data_len;
 	dbg("Writing %u bytes %u blanks\n", data_len, blank_len);
-	r->csn(0);
-	status = r->spi_xfer( W_TX_PAYLOAD );
+	rf24_csn(0);
+	status = rf24_spi_xfer( W_TX_PAYLOAD );
 	while ( data_len-- )
-		r->spi_xfer(*current++);
+		rf24_spi_xfer(*current++);
 	while ( blank_len-- )
-		r->spi_xfer(0);
-	r->csn(1);
+		rf24_spi_xfer(0);
+	rf24_csn(1);
 	return status;
 }
 
@@ -145,13 +181,13 @@ uint8_t rf24_read_payload(struct rf24 *r, void* buf, uint8_t len)
 	uint8_t data_len = min_t(uint8_t, len, r->payload_size);
 	uint8_t blank_len = rf24_has_dynamic_payload(r) ? 0 : r->payload_size - data_len;
 	dbg("Reading %u bytes %u blanks\n", data_len, blank_len);
-	r->csn(0);
-	status = r->spi_xfer( R_RX_PAYLOAD );
+	rf24_csn(0);
+	status = rf24_spi_xfer( R_RX_PAYLOAD );
 	while ( data_len-- )
-		*current++ = r->spi_xfer(0xff);
+		*current++ = rf24_spi_xfer(0xff);
 	while ( blank_len-- )
-		r->spi_xfer(0xff);
-	r->csn(1);
+		rf24_spi_xfer(0xff);
+	rf24_csn(1);
 	return status;
 }
 
@@ -165,9 +201,9 @@ uint8_t rf24_flush_rx(struct rf24 *r)
 {
 	uint8_t status;
 
-	r->csn(0);
-	status = r->spi_xfer( FLUSH_RX );
-	r->csn(1);
+	rf24_csn(0);
+	status = rf24_spi_xfer( FLUSH_RX );
+	rf24_csn(1);
 
 	return status;
 }
@@ -181,9 +217,9 @@ uint8_t rf24_flush_tx(struct rf24 *r)
 {
 	uint8_t status;
 
-	r->csn(0);
-	status = r->spi_xfer( FLUSH_TX );
-	r->csn(1);
+	rf24_csn(0);
+	status = rf24_spi_xfer( FLUSH_TX );
+	rf24_csn(1);
 
 	return status;
 }
@@ -199,9 +235,9 @@ uint8_t rf24_get_status(struct rf24 *r)
 {
 	uint8_t status;
 
-	r->csn(0);
-	status = r->spi_xfer( NOP );
-	r->csn(1);
+	rf24_csn(0);
+	status = rf24_spi_xfer( NOP );
+	rf24_csn(1);
 
 	return status;
 }
@@ -304,10 +340,10 @@ void rf24_print_address_register(struct rf24 *r, const char* name, uint8_t reg, 
  */
 void rf24_toggle_features(struct rf24 *r)
 {
-	r->csn(0);
-	r->spi_xfer( ACTIVATE );
-	r->spi_xfer( 0x73 );
-	r->csn(1);
+	rf24_csn(0);
+	rf24_spi_xfer( ACTIVATE );
+	rf24_spi_xfer( 0x73 );
+	rf24_csn(1);
 }
 
 /**
@@ -326,7 +362,12 @@ void rf24_init(struct rf24 *r)
 		r->pipe0_reading_address[i] = 0;
 	r->ack_payload_length = 0;
 
-	r->ce(0);
+	/* Hacky optimisation for size */
+	#ifdef CONFIG_LIB_RF24_SIZEOPT
+	nrf = r; 
+	#endif 
+
+	rf24_ce(0);
 	/*
 	 * Must allow the radio time to settle else configuration bits will not necessarily stick.
 	 * This is actually only required following power up but some settling time also appears to
@@ -423,7 +464,7 @@ void rf24_start_listening(struct rf24 *r)
 	rf24_flush_tx(r);
 
 	/* Go! */
-	r->ce(1);
+	rf24_ce(1);
 
 	/* wait for the radio to come up (130us actually only needed) */
 	delay_us(130);
@@ -438,7 +479,7 @@ void rf24_start_listening(struct rf24 *r)
  */
 void rf24_stop_listening(struct rf24 *r)
 {
-  r->ce(0);
+  rf24_ce(0);
   rf24_flush_tx(r);
   rf24_flush_rx(r);
 }
@@ -777,10 +818,10 @@ void rf24_set_payload_size(struct rf24 *r, uint8_t size)
 uint8_t rf24_get_dynamic_payload_size(struct rf24 *r)
 {
 	uint8_t result = 0;
-	r->csn(0);
-	r->spi_xfer( R_RX_PL_WID );
-	result = r->spi_xfer(0xff);
-	r->csn(1);	
+	rf24_csn(0);
+	rf24_spi_xfer( R_RX_PL_WID );
+	result = rf24_spi_xfer(0xff);
+	rf24_csn(1);	
 	return result;
 }
  
@@ -1220,9 +1261,9 @@ void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 	rf24_write_payload( r, buf, len );
 	
 	/* Allons! */
-	r->ce(1);
+	rf24_ce(1);
 	delay_us(15);
-	r->ce(0);	
+	rf24_ce(0);	
 }
 
 /**
@@ -1244,13 +1285,13 @@ void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8
 {
 	const uint8_t* current = (const uint8_t*)(buf);
 	
-	r->csn(0);
-	r->spi_xfer( W_ACK_PAYLOAD | ( pipe & BIN(111) ) );
+	rf24_csn(0);
+	rf24_spi_xfer( W_ACK_PAYLOAD | ( pipe & BIN(111) ) );
 	const uint8_t max_payload_size = 32;
 	uint8_t data_len = min_t(uint8_t, len, max_payload_size);
 	while ( data_len-- )
-		r->spi_xfer(*current++);	
-	r->csn(1);
+		rf24_spi_xfer(*current++);	
+	rf24_csn(1);
 }
 
 
