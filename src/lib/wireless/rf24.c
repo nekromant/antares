@@ -67,6 +67,19 @@ uint8_t rf24_writeout_register(struct rf24 *r, uint8_t reg, const uint8_t* buf, 
 	return status;
 }
 
+uint8_t rf24_writeout_address(struct rf24 *r, uint8_t reg, const uint8_t* buf, uint8_t len)
+{
+	uint8_t status;
+	const uint8_t *addr = &buf[len];
+	r->csn(0);
+	status = r->spi_xfer( W_REGISTER | ( REGISTER_MASK & reg ) );
+	while ( len-- )
+		r->spi_xfer(*(--addr));
+	r->csn(1);
+	return status;
+}
+
+
 /**
  * Write a single byte to a register
  *
@@ -104,7 +117,7 @@ uint8_t rf24_write_payload(struct rf24 *r, const void* buf, uint8_t len)
 	const uint8_t* current = (uint8_t*) buf;
 	uint8_t data_len = min_t(uint8_t, len, r->payload_size);
 	uint8_t blank_len = rf24_has_dynamic_payload(r) ? 0 : r->payload_size - data_len;
-	dbg("Writing %u bytes %u blanks", data_len, blank_len);
+	dbg("Writing %u bytes %u blanks\n", data_len, blank_len);
 	r->csn(0);
 	status = r->spi_xfer( W_TX_PAYLOAD );
 	while ( data_len-- )
@@ -131,7 +144,7 @@ uint8_t rf24_read_payload(struct rf24 *r, void* buf, uint8_t len)
 	uint8_t* current = (uint8_t*) buf;
 	uint8_t data_len = min_t(uint8_t, len, r->payload_size);
 	uint8_t blank_len = rf24_has_dynamic_payload(r) ? 0 : r->payload_size - data_len;
-	dbg("Reading %u bytes %u blanks", data_len, blank_len);
+	dbg("Reading %u bytes %u blanks\n", data_len, blank_len);
 	r->csn(0);
 	status = r->spi_xfer( R_RX_PAYLOAD );
 	while ( data_len-- )
@@ -202,7 +215,7 @@ uint8_t rf24_get_status(struct rf24 *r)
  */
 void rf24_print_status(uint8_t status)
 {
-	info("STATUS\t\t = 0x%02x RX_DR=%x TX_DS=%x MAX_RT=%x RX_P_NO=%x TX_FULL=%x\n",
+	printk("STATUS\t\t = 0x%02x RX_DR=%x TX_DS=%x MAX_RT=%x RX_P_NO=%x TX_FULL=%x\n",
 	     status,
 	     (status & (1 << RX_DR))   ? 1 : 0,
 	     (status & (1 << TX_DS))   ? 1 : 0,
@@ -222,7 +235,7 @@ void rf24_print_status(uint8_t status)
  */
 void rf24_print_observe_tx(struct rf24 *r, uint8_t value)
 {
-	info("OBSERVE_TX=%02x: POLS_CNT=%x ARC_CNT=%x\n",
+	printk("OBSERVE_TX=%02x: POLS_CNT=%x ARC_CNT=%x\n",
 	     value,
 	     (value >> PLOS_CNT) & 0xf,
 	     (value >> ARC_CNT) & 0xf
@@ -244,7 +257,7 @@ void rf24_print_observe_tx(struct rf24 *r, uint8_t value)
 void rf24_print_byte_register(struct rf24 *r, const char* name, uint8_t reg, uint8_t qty)
 {
 	while (qty--) {
-		info("%s @ *0x%02x = 0x%02x\n", 
+		printk("%s @ *0x%02x = 0x%02x\n", 
 		     name, reg, rf24_read_register(r, reg));
 		reg++;
 	}
@@ -268,14 +281,14 @@ void rf24_print_address_register(struct rf24 *r, const char* name, uint8_t reg, 
 	{
 		uint8_t buffer[5];
 		rf24_readout_register(r, reg++, buffer, sizeof(buffer));
-		info("%s @ *%02x = %02x:%02x:%02x:%02x:%02x",
+		printk("%s @ *%02x = %02x:%02x:%02x:%02x:%02x\n",
 		     name,
 		     reg,
-		     buffer[0],
-		     buffer[1],
-		     buffer[2],
+		     buffer[4],
 		     buffer[3],
-		     buffer[4]
+		     buffer[2],
+		     buffer[1],
+		     buffer[0]
 			);
 	}
 
@@ -403,7 +416,7 @@ void rf24_start_listening(struct rf24 *r)
 	rf24_write_register(r, STATUS, (1<<RX_DR) | (1<<TX_DS) | (1<<MAX_RT) );
 
 	/* Write the pipe0 address */
-	rf24_writeout_register(r, RX_ADDR_P0, r->pipe0_reading_address, 5);
+	rf24_writeout_address(r, RX_ADDR_P0, r->pipe0_reading_address, 5);
 
 	/* Flush buffers */
 	rf24_flush_rx(r);
@@ -452,10 +465,9 @@ void rf24_stop_listening(struct rf24 *r)
 int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 {
 	int ret = -1;
-	int tx_ok, tx_fail, ack_payload_available;
-	uint8_t observe_tx;
-	uint8_t status;
-	int timeout = 500; /* ms to wait for timeout */
+	uint8_t tx_ok, tx_fail, ack_payload_available;
+	uint8_t status = 0;
+	uint8_t timeout = 254; /* ms to wait for timeout */
 
 	/* Begin the write */
 	rf24_start_write(r, buf, len);
@@ -472,12 +484,12 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	 * Monitor the send
 	 */
 	do
-	{       
-		delay_ms(1);
+	{      
+		uint8_t observe_tx;
 		status = rf24_readout_register(r, OBSERVE_TX, &observe_tx, 1);
-		dbg("observe_tx: 0x%02x\n", status);
+		delay_ms(1);
 	}
-	while( ! ( status & ( (1<<TX_DS) | (1<<MAX_RT) ) ) && ( timeout-- ) );
+	while( (!(status & ((1<<TX_DS) | (1<<MAX_RT)))) && ( timeout-- )) ;
 
 	/* The part above is what you could recreate with your own interrupt handler,
 	 * and then call this when you got an interrupt
@@ -488,19 +500,34 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
          *   -> There is an ack packet waiting (RX_DR)
 	 */
 
+	/* if we have ack payloads - wait fo it!  */
+
+	
+	if (r->flags & RF24_HAVE_ACK_PAYLOADS) {
+		int i=2;
+		while (!(status & (1<<RX_DR)) && i--) {
+			uint8_t observe_tx;
+			status = rf24_readout_register(r, OBSERVE_TX, &observe_tx, 1);
+			delay_ms(1);
+		}
+	}
+	
 	rf24_what_happened(r, &tx_ok, &tx_fail, &ack_payload_available);
 	
 	dbg("tx_ok: %d tx_fail: %d ack_avail: %d\n", 
 	    tx_ok, tx_fail, ack_payload_available);
 	
 	ret = tx_ok;
+
 	dbg("tx result: %s\n", ret ? "OK" : "Fail");
 	
 	/* Handle the ack packet */
 	if ( ack_payload_available )
 	{
 		r->ack_payload_length = rf24_get_dynamic_payload_size(r);
+		r->flags |= RF24_ACK_PAYLOAD_AVAIL;
 		dbg("got %d bytes of ack length\n", r->ack_payload_length);
+		
 	}
 	
 	/* Yay, we are done. */
@@ -510,7 +537,7 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	/* Flush buffers (Is this a relic of past experimentation, and not needed anymore??) */
 	rf24_flush_tx(r);
 	
-	return ret;
+	return !ret;
 }
 
 /**
@@ -572,6 +599,7 @@ int rf24_read(struct rf24 *r, void* buf, uint8_t len )
 	/* Fetch the payload */
 	rf24_read_payload(r, buf, len );
 
+	
 	/* was this the last of the data available? */
 	return rf24_read_register(r, FIFO_STATUS) & (1<<RX_EMPTY);	
 }
@@ -581,7 +609,7 @@ int rf24_read(struct rf24 *r, void* buf, uint8_t len )
  *
  * Only one pipe can be open at once, but you can change the pipe
  * you'll listen to.  Do not call this while actively listening.
- * Remember to stopListening() first.
+ * Remember to rf24_stop_listening() first.
  *
  * Addresses are 40-bit hex values, e.g.:
  *
@@ -595,8 +623,8 @@ int rf24_read(struct rf24 *r, void* buf, uint8_t len )
 void rf24_open_writing_pipe(struct rf24 *r, uint8_t* address)
 {
 	
-	rf24_writeout_register(r, RX_ADDR_P0, address, 5);
-	rf24_writeout_register(r, TX_ADDR, address, 5);
+	rf24_writeout_address(r, RX_ADDR_P0, address, 5);
+	rf24_writeout_address(r, TX_ADDR, address, 5);
 
 	const uint8_t max_payload_size = 32;
 	rf24_write_register(r, RX_PW_P0, min_t(uint8_t, r->payload_size, max_payload_size));
@@ -606,16 +634,16 @@ void rf24_open_writing_pipe(struct rf24 *r, uint8_t* address)
  * Open a pipe for reading
  *
  * Up to 6 pipes can be open for reading at once.  Open all the
- * reading pipes, and then call startListening().
+ * reading pipes, and then call rf24_start_listening().
  *
- * @see openWritingPipe
+ * @see rf24_open_writing_pipe
  *
  * @warning Pipes 1-5 should share the first 32 bits.
  * Only the least significant byte should be unique
  *
  * @warning Pipe 0 is also used by the writing pipe.  So if you open
- * pipe 0 for reading, and then startListening(), it will overwrite the
- * writing pipe.  Ergo, do an openWritingPipe() again before write().
+ * pipe 0 for reading, and then rf24_start_listening(), it will overwrite the
+ * writing pipe.  Ergo, do an rf24_open_writing_pipe() again before rf24_write().
  *
  * @todo Enforce the restriction that pipes 1-5 must share the top 32 bits
  *
@@ -656,7 +684,7 @@ void rf24_open_reading_pipe(struct rf24 *r, uint8_t child, uint8_t *address)
 	{
 		/* For pipes 2-5, only write the LSB */
 		if ( child < 2 )
-			rf24_writeout_register(r, child_pipe[child], address, 5);
+			rf24_writeout_address(r, child_pipe[child], address, 5);
 		else
 			rf24_writeout_register(r, child_pipe[child], address, 1);
 		
@@ -794,6 +822,7 @@ void rf24_enable_ack_payload(struct rf24 *r)
 		      (1<<EN_ACK_PAY) | (1<<EN_DPL) 
 		);
 	rf24_write_register(r, DYNPD, rf24_read_register(r, DYNPD) | (1 << DPL_P1) | (1 << DPL_P0));
+	r->flags |= RF24_HAVE_ACK_PAYLOADS;
 }
 
 /**
@@ -1109,9 +1138,9 @@ void rf24_disable_crc( struct rf24 *r )
  *
  * @param r rf24 instance to act upon
  * @warning Does nothing if no console active, or 
- *          CONFIG_LIB_RF24_DEBUG is less than 4
+ *          CONFIG_LIB_RF24_DEBUG is other than 0
  */
-#if DEBUG_LEVEL > 3
+#if DEBUG_LEVEL > 0
 void rf24_print_details(struct rf24 *r)
 {
 	rf24_print_status(rf24_get_status(r));
@@ -1127,10 +1156,10 @@ void rf24_print_details(struct rf24 *r)
 	rf24_print_byte_register(r, "CONFIG", CONFIG, 1);
 	rf24_print_byte_register(r, "DYNPD/FEATURE", DYNPD, 2);
 	
-	dbg("Data Rate\t = %d\n",rf24_get_data_rate(r));
-	dbg("Model\t\t = %d\n", rf24_is_p_variant(r));
-	dbg("CRC Length\t = %d\n", rf24_get_crc_length(r));
-	dbg("PA Power\t = %d\n", rf24_get_pa_level(r));
+	printk("Data Rate\t = %d\n",rf24_get_data_rate(r));
+	printk("Model\t\t = %d\n", rf24_is_p_variant(r));
+	printk("CRC Length\t = %d\n", rf24_get_crc_length(r));
+	printk("PA Power\t = %d\n", rf24_get_pa_level(r));
 }
 #else 
 void rf24_print_details(struct rf24 *r)
@@ -1184,7 +1213,8 @@ void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 	/* Transmitter power-up */
 	rf24_write_register(r, CONFIG, 
 			    ( rf24_read_register(r, CONFIG) | (1<<PWR_UP) ) & ~(1<<PRIM_RX) );
-	delay_us(150);
+
+	delay_us(350);
 	
 	/* Send the payload */
 	rf24_write_payload( r, buf, len );
@@ -1235,7 +1265,7 @@ void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8
  * @param[out] tx_fail The send failed, too many retries (MAX_RT)
  * @param[out] rx_ready There is a message waiting to be read (RX_DS)
  */
-void rf24_what_happened(struct rf24 *r, int *tx_ok, int *tx_fail, int *rx_ready)
+void rf24_what_happened(struct rf24 *r, uint8_t *tx_ok, uint8_t *tx_fail, uint8_t *rx_ready)
 {
 	/* Read the status & reset the status in one easy call
 	 * Or is that such a good idea?

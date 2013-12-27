@@ -38,11 +38,14 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
  */
 
 #define RF24_NUM_CHANNELS 128 
+#define RF24_MAX_PAYLOAD  32
 
 #define RF24_WIDE_BAND           (1<<0)
 #define RF24_P_VARIANT           (1<<1)
 #define RF24_ACK_PAYLOAD_AVAIL   (1<<2)
 #define RF24_DYNAMIC_PAYLOAD     (1<<3)
+#define RF24_HAVE_ACK_PAYLOADS   (1<<4)
+
 
 
 #define rf24_is_wideband(rf24)         ((rf24)->flags & RF24_WIDE_BAND)
@@ -121,7 +124,7 @@ int rf24_available(struct rf24 *r, uint8_t* pipe_num);
 void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len );
 void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8_t len);
 inline int rf24_is_ack_payload_available(struct rf24 *r);
-void rf24_what_happened(struct rf24 *r, int *tx_ok, int *tx_fail, int *rx_ready);
+void rf24_what_happened(struct rf24 *r, uint8_t *tx_ok, uint8_t *tx_fail, uint8_t *rx_ready);
 int rf24_test_carrier(struct rf24 *r);
 int rf24_test_rpd(struct rf24 *r) ;
 
