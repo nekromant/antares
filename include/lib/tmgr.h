@@ -19,12 +19,14 @@ typedef int64_t tmgr_uptime_t;
 #error "tmgr: Wrong tmgr_uptime_t size (must be 32 or 64 bits)"
 #endif
 
-#define tmgr_ticks_to_us(ticks) (1000000U * (ticks) / tmgr_get_fq())
-#define tmgr_ticks_to_ms(ticks) (1000 * (ticks) / tmgr_get_fq())
-#define tmgr_ticks_to_s(ticks) ((ticks) / tmgr_get_fq())
-#define tmgr_us_to_ticks(us) ((us) * tmgr_get_fq() / 1000000U)
-#define tmgr_ms_to_ticks(ms) ((ms) * tmgr_get_fq() / 1000)
-#define tmgr_s_to_ticks(s) ((s) * tmgr_get_fq())
+#define tmgr_ticks_to_us(ticks) (1000000U * (ticks) / CONFIG_LIB_TMGR_FQ)
+#define tmgr_ticks_to_ms(ticks) (1000 * (ticks) / CONFIG_LIB_TMGR_FQ)
+#define tmgr_ticks_to_s(ticks) ((ticks) / CONFIG_LIB_TMGR_FQ)
+#define tmgr_us_to_ticks(us) ((us) * CONFIG_LIB_TMGR_FQ / 1000000U)
+#define tmgr_ms_to_ticks(ms) ((ms) * CONFIG_LIB_TMGR_FQ / 1000)
+#define tmgr_s_to_ticks(s) ((s) * CONFIG_LIB_TMGR_FQ)
+
+#define tmgr_get_fq() CONFIG_LIB_TMGR_FQ
 
 /* Timer initializer macros.
  * Creates right structure for timer and fill it
@@ -56,8 +58,5 @@ void tmgr_del_timer(tmgr_timer_t *timer);
 
 tmgr_uptime_t tmgr_get_uptime(void);
 void tmgr_delay(tmgr_uptime_t time);
-
-void tmgr_set_fq(tmgr_uptime_t fq);
-tmgr_uptime_t tmgr_get_fq(void);
 
 #endif

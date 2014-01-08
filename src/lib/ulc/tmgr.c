@@ -1,7 +1,6 @@
 #include <lib/tmgr.h>
 
 static volatile tmgr_uptime_t sys_uptime = 0;
-static volatile int32_t sys_fq = 1;
 static volatile uint8_t tick_parsed = 0;
 
 /* Dirty-hack, but saves memory and runs on each platworm.
@@ -10,7 +9,7 @@ static volatile uint8_t tick_parsed = 0;
  * main queue or in fast queue (or NULL if is not in queue)
  */
 #define IN_MAIN (tmgr_timer_t *) (&sys_uptime)
-#define IN_FAST (tmgr_timer_t *) (&sys_fq)
+#define IN_FAST (tmgr_timer_t *) (&tick_parsed)
 
 static volatile tmgr_timer_t *fast_queue = NULL;
 static volatile tmgr_timer_t *main_queue = NULL;
@@ -36,45 +35,63 @@ void tmgr_process(void)
 
         /* Check fast queue */
         if (fast_queue != NULL) {
-
-
                 /* Save fast_queue list and make it ready for next timers.
                  * Also, prepare main_queue for insertions.
                  */
                 tmgr_timer_t *fast = (tmgr_timer_t *) fast_queue,
-                           *current = (tmgr_timer_t *) main_queue;
+                             *current = (tmgr_timer_t *) main_queue,
+                             *previous = NULL;
 
                 fast_queue = NULL;
 
                 while (fast != NULL) {
-                        while (current != NULL && current->expires < fast->expires) 
+                        while (current != NULL && current->expires < fast->expires) {
+                                previous = current;
                                 current = current->next;
-
-                        if (!current) { /* only element in main queue */
-                                fast->prev = IN_MAIN;
-                                main_queue = fast;
-                        } else if (!current->prev) { /* if next elem in queue is root */
-                                current->prev = fast;
-                                main_queue = fast;
-                        } else {
-                                current->prev->next = fast;
-                                fast->prev = current->prev;
-                                current->prev = fast;
                         }
 
-                        fast = fast->next; /* shift fast queue, now current element detached from fast queue */
-                        if (current)
-                                current->prev->next = current;
+                        if (!previous) { /* if new element is root */
+                                main_queue = fast;
+                                fast->prev = IN_MAIN;
                                 
+                                fast = fast->next; /* shift fast queue */
+
+                                main_queue->next = current;
+                                
+                                if (current)
+                                        current->prev = (tmgr_timer_t *) main_queue;
+
+                        } else { /* new element is NOT root */
+                                previous->next = fast;
+                                fast->prev = previous;
+
+                                fast = fast->next; /* shift fast queue */
+
+                                if (current) { /* if our element is NOT last */
+                                        previous->next->next = current;
+                                        current->prev = previous->next;
+                                } else { /* if our element IS last */
+                                        previous->next->next = NULL;
+                                }
+
+                        }
+                        
+                        current = (tmgr_timer_t *) main_queue;                                
+                        previous = NULL;
                 }
         }
 
         /* Run main queue tasks */
         if (main_queue != NULL) {
                 while (main_queue != NULL && main_queue->expires <= sys_uptime) {
-                        void (*func)(uint8_t *) = main_queue->func;
-                        uint8_t *data = main_queue->data;
+                        tmgr_timer_t *current = (tmgr_timer_t *) main_queue;
                         main_queue = main_queue->next;
+                        
+                        void (*func)(uint8_t *) = current->func;
+                        uint8_t *data = current->data;
+                        current->prev = NULL;
+                        current->next = NULL;
+
                         if (main_queue)
                                 main_queue->prev = IN_MAIN; /* dummy pointer-flag */
 
@@ -141,13 +158,6 @@ void tmgr_mod_timer(tmgr_timer_t *timer, tmgr_uptime_t expires)
         ANTARES_ENABLE_IRQS();
 }
 
-/**
- * @}
- *
- * @section Task Manager Uptime functions
- * @{
- */
-
 tmgr_uptime_t tmgr_get_uptime(void)
 {
         return sys_uptime;
@@ -156,27 +166,6 @@ tmgr_uptime_t tmgr_get_uptime(void)
 void tmgr_delay(tmgr_uptime_t time)
 {
         time += sys_uptime;
-        while (time > sys_uptime);
+        while (time > sys_uptime)
+                asm volatile ("nop");
 }
-
-/**
- * @}
- */
-
-/**
- * @section Time conversion functions
- * @{
- */
-void tmgr_set_fq(int32_t fq)
-{
-        sys_fq = fq;
-}
-
-int32_t tmgr_get_fq(void)
-{
-        return sys_fq;
-}
-
-/**
- * @}
- */
