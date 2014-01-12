@@ -1,9 +1,9 @@
 #ifndef INCLUDE_LIB_TMGR_H
 #define INCLUDE_LIB_TMGR_H
 
-#include "inttypes.h"
 #include <arch/antares.h>
 #include <generic/macros.h>
+#include <stdint.h>
 
 /* TODO: remove it ASAP */
 #ifndef ANTARES_ENABLE_IRQS
