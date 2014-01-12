@@ -1,0 +1,16 @@
+config LIB_TMGR_FQ
+        int "Scheduler timer frequecy (in Hz)"
+        default 1000
+
+choice
+    prompt "Time variable size"
+    help
+        Size of tmgr_time_t type (signed integer)
+
+    config LIB_TMGR_TIME_32
+    bool "32 bit"
+
+    config LIB_TMGR_TIME_64
+    bool "64 bit"
+
+endchoice

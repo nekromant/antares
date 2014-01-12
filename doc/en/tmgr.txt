@@ -1,0 +1,196 @@
+tmgr: Simple task manager and scheduler
+---------------------------------------
+
+Description
+-----------
+
+Task scheduler should be easily used if your program could be logically divided 
+into different threads or delayed function calls. In this case scheduler allows
+you to work with tasks in the easiest way.
+
+Features
+--------
+
+* Easy in understanding and usage
+
+* Cross-platform (written fully in C without assembler magic)
+
+
+How to use?
+-----------
+
+1. Initialization
+-----------------
+
+Operation of scheduler consists of two periodic function calls:
+tmgr_process() and tmgr_interrupt().
+
+tmgr_interrupt() function should be called in system timer interrupt hander which
+counts time quantums. Optimal time quantum size is 1 ms (author's opinion).
+In this case, frequency of timer interrupt handler calls is 1 kHz.
+tmgr_interrupt() function just counts system time, so it is fast and safe for
+interrupt context.
+
+tmgr_process() function should be called in main program loop. In this function
+context all user's tasks will be executed, so it's not recommended to call this
+function in interrupt handles.
+
+Also you need to set system timer frequency (for time conversion functions) using
+menuconfig entry "Scheduler timer frequency" (in Hz).
+
+Initialization of system timer depends on current
+platform, so tmgr library will _not_ initialize it. It is an user's problem.
+
+A sample program that correctly runs scheduler base:
+
+#include <lib/tmgr.h>
+
+void SYSTEM_TIMER_IRQ()
+{
+        /* This function means an abstract timer interrupt handler */
+        tmgr_interrupt();
+}
+
+int main(void)
+{
+        /* Platform-dependent initialization of system timer */
+        SYSTEM_TIMER_INIT(1000);
+        
+        /* Run tick function in infinite loop */
+        while (1)
+                tmgr_tick();
+
+        return 0;
+}
+
+2. How to use scheduler
+-----------------------
+
+First, you need a handler function. Its prototype is:
+
+        void my_handler(void *data);
+
+You see that function accepts a void pointer. It is a
+field for user information (if you want to control the context of 
+function running). You can keep it as is, or use this feature to give
+something you need for your handler. (For example, set mode of operation).
+This parameter is stored in timer structure, you set it once when you
+initialize or re-initialize timer.
+
+Note that the value should be stored in static memory, because there are
+no guarantees that there will be a right information in the stack when the
+handler runs.
+
+Next, scheduler need to know about the value of delay. Also
+it needs a piece of memory to save the task description.
+
+To keep timer data, scheduler needs a piece of _static_ memory. You can
+init the memory yourself, but there is a macros to save your time:
+
+        TMGR_DEFINE_TIMER(timer_name, handler, data, expires);
+
+If you want to define it as static, just write
+
+        static TMGR_DEFINE_TIMER(timer_name, handler, data, expires);
+
+in the right place.
+
+'expires' value here is an uptime timestamp when the handler need to be 
+called.
+
+After all that, call this to add timer (launch it; really add to queue):
+
+        tmgr_add_timer(&timer_name);
+
+To make a "delayed call" (ex. for 1000 ticks), set 'expires' value as
+        
+        TMGR_DELAYED(1000)   
+or
+        tmgr_get_uptime() + 1000
+
+, which is the same.
+
+To setup (reinit) defined timer, you can use macros
+
+        TMGR_SETUP_TIMER(timer_name, handler, data, expires);
+
+It just updates the fields of timer structure. NOTE: Don't do it if
+you have added this timer and not sure that it's not in the queue.
+
+To remove timer from the queue, use
+
+        tmgr_del_timer(&timer_name);
+
+After it, you can fully reinit your timer.
+
+To modify uptime trigger ('expires' value), use
+
+        tmgr_mod_timer(&timer_name, new_expires);
+
+just if you timer is in queue.
+
+In real application, you should want to calculate the time in s, ms etc.
+To convert value from "natural" units to ticks, there are few macroses:
+
+        tmgr_us_to_ticks(us)
+        tmgr_ms_to_ticks(ms)
+        tmgr_s_to_ticks(s)
+
+There are also macroses for convertions from ticks to natural units:
+        
+        tmgr_ticks_to_us(ticks)
+        tmgr_ticks_to_ms(ticks)
+        tmgr_ticks_to_s(ticks)
+
+Time values (ticks or natural) are stored in tmgr_uptime_t variables.
+
+So, this is correct way to run my_func() with 500 ms delay and without params:
+
+        static TMGR_DEFINE_TIMER(my_timer, my_func, NULL, 
+                                 TMGR_DELAYED(tmgr_ms_to_ticks(500)));
+        tmgr_add_timer(&my_timer);
+
+
+3. Operation
+------------
+
+The base of time counting is system uptime value. You can get
+the current value of system uptime by calling
+
+        tmgr_get_uptime().
+
+This function returns the value of tmgr_uptime_t type (signed integer).
+
+In the timer interrupt handler only one action is performed - increment of uptime
+value and in main loop, task runs if its "expire time" is equal to system
+uptime.
+
+Uptime is stored in tmgr_uptime_t variable. By adjusting its size (tmgr_uptime_t),
+you can move the uptime limits. Available sizes are 32 and 64 bits.
+
+The maximal time of stable operation in uptime counter move vs. tmgr_uptime_t size
+(system timers frequency = 1000 Hz):
+
+        32 bits - 2147483.65 s ~ 596 h ~ 25 days
+        64 bits - 10^11 days
+
+
+4. Extra features
+-----------------
+
+tmgr_delay(delay) - performs a simple delay (waiting in loop). To set delay
+in natural units, use time convertion macroses.
+
+        tmgr_delay(tmgr_ms_to_ticks(500));
+
+means 500 ms delay.
+
+Function receives one tmgr_uptime_t value.
+
+Notice. We DO NOT RECOMMEND to use this function, especially in task
+context, because it can break down the tasks queue (tasks could not
+run when delay is performed). Try to split your function onto several
+subtasks.
+
+tmgr_get_fq() function just returns the value of system timer
+frequency which was set before. (in tmgr_uptime_t type)

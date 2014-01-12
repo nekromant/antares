@@ -1,123 +1,171 @@
-#include <lib/tasks.h>
+#include <lib/tmgr.h>
 
+static volatile tmgr_uptime_t sys_uptime = 0;
+static volatile uint8_t tick_parsed = 0;
 
-static volatile unsigned int uptime = 0;
-static volatile unsigned int rate = 0;
-static int num_handlers = 0;
-static handler_t * first = 0;
+/* Dirty-hack, but saves memory and runs on each platworm.
+ * We will use pointers to the two previous vars for
+ * "flag" pointers to check if timer list element is in
+ * main queue or in fast queue (or NULL if is not in queue)
+ */
+#define IN_MAIN (tmgr_timer_t *) (&sys_uptime)
+#define IN_FAST (tmgr_timer_t *) (&tick_parsed)
 
-void tmgr_msleep(unsigned int  time)
+static volatile tmgr_timer_t *fast_queue = NULL;
+static volatile tmgr_timer_t *main_queue = NULL;
+
+/**
+ * @section Task Manager core
+ * @{
+ */
+
+void tmgr_interrupt(void)
 {
-  unsigned int end = uptime + time;
-  while ( uptime < end );;
+        sys_uptime++;
+        tick_parsed = 0;
 }
 
-void tmgr_set_rate(unsigned int nrate)
+void tmgr_process(void)
 {
-	rate = nrate;
-	/* TODO: Reschedule pending tasks based on new rate */
-}
+        if (tick_parsed) /* this is to save time for interrupts if we had just parsed queues */
+                return;
 
+        /* Full function is atomic; accept it as it is */
+        ANTARES_DISABLE_IRQS();
 
-unsigned int tmgr_get_uptime()
-{
-	return uptime;
-}
+        /* Check fast queue */
+        if (fast_queue != NULL) {
+                /* Save fast_queue list and make it ready for next timers.
+                 * Also, prepare main_queue for insertions.
+                 */
+                tmgr_timer_t *fast = (tmgr_timer_t *) fast_queue,
+                             *current = (tmgr_timer_t *) main_queue,
+                             *previous = NULL;
 
-int tmgr_register(handler_t * data)
-{
-    // 0. The most simplest case - too late to run handler
-    if(data->uptime < uptime) return TIME_OVER;
-    // 1. The simplest case - no handlers. So, let's add the first one
-    if(num_handlers == 0)
-    {
-        first = data;
-    }
-    // 2. The second case - there is only 1 handler.
-    else if(num_handlers == 1)
-    {
-        #ifdef REM_HANDLER_IF_DEFINED
-        if(first->handler == data->handler) // if this handler has been registered before
-        {
-            first->uptime = data->uptime;
-            return;
-        }
-        #endif
-        if(first->uptime > data->uptime) first->next = data;
-        else
-        {
-            data->next = first;
-            first = data;
-        }
-    }
-    // 3. There are many handlers - run sorting algorythm
-    else
-    {
-        int i = num_handlers;
-        handler_t * current = first;
-        handler_t * prev = 0;
+                fast_queue = NULL;
 
-        while(i != 0)
-        {
-            #ifdef REM_HANDLER_IF_DEFINED
-            if(current->handler == data->handler) // remove this handler if registered
-            {
-                if(prev == 0) first = first->next;
-                else prev->next = current->next;
-                num_handlers--;
-            }
-            #endif
-            if(current->uptime <= data->uptime)
-            {
-                data->next = current;
-                if(prev == 0) first = data;
-                else prev->next = data;
-                i++;
-                break;
-            }
-            prev = current;
-            current = current->next;
-            i--;
-        }
-        if(i==0) prev->next = data;
-        #ifdef REM_HANDLER_IF_DEFINED
-        else
-        {
-            while(i != 0)
-            {
-                if(current->handler == data->handler)
-                {
-                    prev->next = current->next;
-                    num_handlers--;
-                    break;
+                while (fast != NULL) {
+                        while (current != NULL && current->expires < fast->expires) {
+                                previous = current;
+                                current = current->next;
+                        }
+
+                        if (!previous) { /* if new element is root */
+                                main_queue = fast;
+                                fast->prev = IN_MAIN;
+                                
+                                fast = fast->next; /* shift fast queue */
+
+                                main_queue->next = current;
+                                
+                                if (current)
+                                        current->prev = (tmgr_timer_t *) main_queue;
+
+                        } else { /* new element is NOT root */
+                                previous->next = fast;
+                                fast->prev = previous;
+
+                                fast = fast->next; /* shift fast queue */
+
+                                if (current) { /* if our element is NOT last */
+                                        previous->next->next = current;
+                                        current->prev = previous->next;
+                                } else { /* if our element IS last */
+                                        previous->next->next = NULL;
+                                }
+
+                        }
+                        
+                        current = (tmgr_timer_t *) main_queue;                                
+                        previous = NULL;
                 }
-                prev = current;
-                current = current->next;
-                i--;
-            }
         }
-        #endif
-    }
 
-    num_handlers++;
-    return 0;
+        /* Run main queue tasks */
+        if (main_queue != NULL) {
+                while (main_queue != NULL && main_queue->expires <= sys_uptime) {
+                        tmgr_timer_t *current = (tmgr_timer_t *) main_queue;
+                        main_queue = main_queue->next;
+                        
+                        void (*func)(uint8_t *) = current->func;
+                        uint8_t *data = current->data;
+                        current->prev = NULL;
+                        current->next = NULL;
+
+                        if (main_queue)
+                                main_queue->prev = IN_MAIN; /* dummy pointer-flag */
+
+                        ANTARES_ENABLE_IRQS(); /* run of timer function is no atomic, save interrupts! */
+                        func(data);
+                        ANTARES_DISABLE_IRQS();
+                }
+        }
+        ANTARES_ENABLE_IRQS();
 }
 
-void tmgr_tick(void)
-{
-    int i = num_handlers;
-    handler_t * current = first;
-    while(i != 0)
-    {
-        if(current->uptime == uptime)
-        {
-            current->handler();
-        }
-        else if(current->uptime < uptime) break;
 
-        current = current->next;
-        i--;
-    }
-    num_handlers -= i;
-    uptime++;
+void tmgr_add_timer(tmgr_timer_t *timer)
+{
+        if (!timer)
+                return;
+
+        /* these lines are atomic */
+        /* TODO!!! REPLACE WITH ANTARES_ATOMIC() {} TO SAVE STATE! */
+        ANTARES_DISABLE_IRQS();
+        timer->next = (tmgr_timer_t *) fast_queue;
+        timer->prev = IN_FAST; /* set flag that this timer in fast queue */
+        
+        if (fast_queue)
+                fast_queue->prev = timer;
+
+        fast_queue = timer;
+        ANTARES_ENABLE_IRQS();
+}
+
+void tmgr_del_timer(tmgr_timer_t *timer)
+{
+        if (!timer)
+                return;
+        
+        /* these lines are atomic */
+        /* TODO!!! REPLACE WITH ANTARES_ATOMIC TO SAVE STATE! */
+        ANTARES_DISABLE_IRQS();
+        if (timer->prev == IN_MAIN) {
+                main_queue = timer->next;
+                if (main_queue)
+                        main_queue->prev = IN_MAIN;
+        } else if (timer->prev == IN_FAST) {
+                fast_queue = timer->next;
+                if (fast_queue)
+                        fast_queue->prev = IN_FAST;
+        } else if (timer->prev) {
+                timer->prev->next = timer->next;
+        }
+        ANTARES_ENABLE_IRQS();
+}
+
+void tmgr_mod_timer(tmgr_timer_t *timer, tmgr_uptime_t expires)
+{
+        if (!timer)
+                return;
+
+        /* these lines are atomic */
+        /* TODO!!! REPLACE WITH ANTARES_ATOMIC() {} TO SAVE STATE! */
+        ANTARES_DISABLE_IRQS();
+        tmgr_del_timer(timer);
+        timer->expires = expires;
+        tmgr_add_timer(timer);
+        ANTARES_ENABLE_IRQS();
+}
+
+tmgr_uptime_t tmgr_get_uptime(void)
+{
+        return sys_uptime;
+}
+
+void tmgr_delay(tmgr_uptime_t time)
+{
+        time += sys_uptime;
+        while (time > sys_uptime)
+                asm volatile ("nop");
 }
