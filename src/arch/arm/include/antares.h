@@ -47,6 +47,11 @@
 
 #endif
 
+#if defined(CONFIG_STM32F10X)
+#include "stm32f10x.h"
+#elif defined(CONFIG_STM32F4X)
+#include "stm32f4xx.h"
+#endif
 
 #define ANTARES_DISABLE_IRQS() __disable_irq()
 #define ANTARES_ENABLE_IRQS() __enable_irq()
