@@ -1,9 +1,3 @@
-config STM32F4X
-bool
-
-config STM32F1X
-bool
-
 comment "Run 'make probe' to detect some things automatically"
 
 config HAS_USB
@@ -12,52 +6,81 @@ bool
 config HAS_OTG
 bool
 
-choice 
+config STM32F10X
+bool
+
+choice
 prompt "STM32 Family"
+
+config STM32F1X
+bool "STM32F1xx Series"
+
+config STM32F4X
+bool "STM32F4xx Series"
+endchoice
+
+if STM32F1X
+choice 
+prompt "STM32F1xx Subfamily"
 
 config STM32F10X_LD  
 bool "STM32F1X Low density devices"
-select STM32F1X
+select STM32F10X
 select HAS_USB
 
 config STM32F10X_LD_VL 
 bool "STM32F1X Low density Value Line devices"
-select STM32F1X
+select STM32F10X
 
 config STM32F10X_MD 
 bool "STM32F1X Medium density devices"
-select STM32F1X
+select STM32F10X
 select HAS_USB
 
 config STM32F10X_MD_VL 
 bool "STM32F1X Medium density Value Line devices"
-select STM32F1X
+select STM32F10X
 
 config STM32F10X_HD 
 bool "STM32F1X High density devices "
-select STM32F1X
+select STM32F10X
 select HAS_USB
 
 config STM32F10X_HD_VL 
 bool "STM32F1X High density value line devices"
-select STM32F1X
+select STM32F10X
 
 config STM32F10X_XL 
 bool "STM32F1X XL-density devices "
-select STM32F1X
+select STM32F10X
 select HAS_USB
 
 config STM32F10X_CL  
 bool "STM32F1X Connectivity line devices"
-select STM32F1X
+select STM32F10X
 select HAS_OTG
 
-config STM32F4XXX
-bool "STM32F4X series"
-select STM32F4X
-select HAS_USB
+endchoice
+endif
+
+if STM32F4X
+choice
+prompt "STM32F4xx Subfamily"
+
+config STM32F401XX
+bool "STM32F401xx devices"
+
+config STM32F40_41XXX
+bool "STM32F40xxx/41xxx devices"
+
+config STM32F427_437XX
+bool "STM32F427xx/437xx devices"
+
+config STM32F429_439XX
+bool "STM32F429xx/439xx devices"
 
 endchoice
+endif
 
 config STM32_HSE_VALUE
 int "HSE (Crystal) value in Hz"
@@ -67,6 +90,7 @@ help
 	It is used in some periph libs, and in regular 
 	'SystemInit' function
 
+if STM32F1X
 choice
 prompt "Target frequency"
 
@@ -93,7 +117,23 @@ config STM32_FREQ_HSE
 bool "Use HSE"
 
 endchoice
+endif
 
+if STM32F4X
+
+if STM32F401XX
+comment "Target frequency for your device is 84 MHz"
+endif
+
+if STM32F40_41XXX
+comment "Target frequency for your device is 168 MHz"
+endif
+
+if STM32F427_437XX || STM32F429_439XX
+comment "Target frequency for your device is 180 MHz"
+endif
+
+endif
 
 menu "Code placement settings"
 

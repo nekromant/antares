@@ -6,3 +6,4 @@ objects-$(CONFIG_STM32F10X_LD_VL)+=startup_stm32f10x_ld_vl.o
 objects-$(CONFIG_STM32F10X_MD)+=startup_stm32f10x_md.o
 objects-$(CONFIG_STM32F10X_MD_VL)+=startup_stm32f10x_md_vl.o
 objects-$(CONFIG_STM32F10X_XL)+=startup_stm32f10x_xl.o
+objects-$(CONFIG_STM32F4X)+=startup_stm32f4xx.o
