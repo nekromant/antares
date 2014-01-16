@@ -1,0 +1,537 @@
+choice
+        prompt "Serial port to use"
+
+        config LIB_EARLYCON_STM32_SERIAL_PORT_USART1
+                bool "USART1"
+
+        config LIB_EARLYCON_STM32_SERIAL_PORT_USART2
+                bool "USART2"
+
+        config LIB_EARLYCON_STM32_SERIAL_PORT_USART3
+                bool "USART3"
+
+        config LIB_EARLYCON_STM32_SERIAL_PORT_UART4
+                bool "UART4"
+                depends on STM32F10X_HD || STM32F10X_HD_VL || STM32F10X_XL || STM32F4X
+
+        config LIB_EARLYCON_STM32_SERIAL_PORT_UART5
+                bool "UART5"
+                depends on STM32F10X_HD || STM32F10X_HD_VL || STM32F10X_XL || STM32F4X
+
+        config LIB_EARLYCON_STM32_SERIAL_PORT_USART6
+                bool "USART6"
+                depends on STM32F4X
+               
+
+endchoice
+
+comment "Hardware configuration"
+
+config LIB_EARLYCON_STM32_SERIAL_BAUDRATE
+        int "Baudrate"
+        default 57600
+        depends on LIB_EARLYCON_STM32_SERIAL_PORT_USART1 || LIB_EARLYCON_STM32_SERIAL_PORT_USART2 || LIB_EARLYCON_STM32_SERIAL_PORT_USART3 || LIB_EARLYCON_STM32_SERIAL_PORT_USART4 || LIB_EARLYCON_STM32_SERIAL_PORT_UART4 || LIB_EARLYCON_STM32_SERIAL_PORT_UART5 || LIB_EARLYCON_STM32_SERIAL_PORT_USART6
+
+choice
+        prompt "Parity check"
+
+        config LIB_EARLYCON_STM32_SERIAL_PARITY_NONE
+                bool "None"
+
+        config LIB_EARLYCON_STM32_SERIAL_PARITY_EVEN
+                bool "Even"
+
+        config LIB_EARLYCON_STM32_SERIAL_PARITY_ODD
+                bool "Odd"
+endchoice
+
+config LIB_EARLYCON_STM32_SERIAL_TX
+        bool "Use transmitter (TX)"
+        default y
+
+config LIB_EARLYCON_STM32_SERIAL_RX
+        bool "Use receiver (RX)"
+        default y
+
+choice
+        prompt "Stop bits"
+
+        config LIB_EARLYCON_STM32_SERIAL_STOP_1
+                bool "1 bits"
+
+        config LIB_EARLYCON_STM32_SERIAL_STOP_05
+                bool "0.5 bits"
+
+        config LIB_EARLYCON_STM32_SERIAL_STOP_15
+                bool "1.5 bits"
+
+        config LIB_EARLYCON_STM32_SERIAL_STOP_2
+                bool "2 bits"
+endchoice
+
+if LIB_EARLYCON_STM32_SERIAL_PORT_USART1 || LIB_EARLYCON_STM32_SERIAL_PORT_USART2 || LIB_EARLYCON_STM32_SERIAL_PORT_USART3 || LIB_EARLYCON_STM32_SERIAL_PORT_USART6
+
+        config LIB_EARLYCON_STM32_SERIAL_SYNC
+                bool "Synchonous mode (USRT)"
+                default n
+                help 
+                        Use CK pin to set USRT clock. Do not set if you doesn't know what is it.
+
+        config LIB_EARLYCON_STM32_SERIAL_CTS
+                bool "Use CTS (Harwdware Flow Control)"
+                default n
+                help 
+                        Use CTS pin to control data flow (hardware feature). Do not set if you doesn't know what is it.
+        
+        config LIB_EARLYCON_STM32_SERIAL_RTS
+                bool "Use RTS (Harwdware Flow Control)"
+                default n
+                help 
+                        Use RTS pin to control data flow (hardware feature). Do not set if you doesn't know what is it.
+
+        if LIB_EARLYCON_STM32_SERIAL_SYNC
+                menu "Clock configuration"
+                        
+                        choice
+                                prompt "Clock idle level"
+
+                                config LIB_EARLYCON_STM32_SERIAL_CLOCK_HIGH
+                                        bool "High"
+                                
+                                config LIB_EARLYCON_STM32_SERIAL_CLOCK_LOW
+                                        bool "Low"
+                        endchoice
+
+                        choice
+                                prompt "Clock read transition"
+
+                                config LIB_EARLYCON_STM32_SERIAL_CLOCK_FIRST
+                                        bool "First edge"
+
+                                config LIB_EARLYCON_STM32_SERIAL_CLOCK_SECOND
+                                        bool "Second edge"
+                        endchoice
+
+                        config LIB_EARLYCON_STM32_SERIAL_CLOCK_LASTBIT
+                                bool "Send clock strobe for the last bit"
+                                default y
+
+                endmenu
+        endif
+
+        if LIB_EARLYCON_STM32F10XSERIAL
+                config LIB_EARLYCON_STM32_SERIAL_REMAP_1
+                        bool "Remap USART1"
+                        depends on LIB_EARLYCON_STM32_SERIAL_PORT_USART1
+                        help 
+                                Remap pins: PA9 (TX)  -> PB6;
+                                            PA10 (RX) -> PB7;
+                                
+                                Other pins stay as they were.
+
+                config LIB_EARLYCON_STM32_SERIAL_REMAP_2
+                        bool "Remap USART2"
+                        depends on LIB_EARLYCON_STM32_SERIAL_PORT_USART2
+                        help
+                                Remap pins: PA2 (TX)  -> PD7;
+                                            PA3 (RX)  -> PD6;
+                                            
+                                            PA4 (CK)  -> PD7;
+
+                                            PA0 (CTS) -> PD3;
+                                            PA1 (RTS) -> PD4;
+                
+                if LIB_EARLYCON_STM32_SERIAL_PORT_USART3
+                
+                choice
+                        prompt "Remap USART3"
+                        
+                        config LIB_EARLYCON_STM32_SERIAL_REMAP_3_NONE
+                                bool "None"
+                                help
+                                        No remap
+
+                                        Pins map: TX  -> PB10
+                                                  RX  -> PB11
+
+                                                  CK  -> PB12
+
+                                                  CTS -> PB13
+                                                  RTS -> PB14
+
+                        config LIB_EARLYCON_STM32_SERIAL_REMAP_3_FULL
+                                bool "Full"
+                                help
+                                        Full remap
+
+                                        Pins map: TX  -> PD8
+                                                  RX  -> PD9
+
+                                                  CK  -> PD10
+
+                                                  CTS -> PD11
+                                                  RTS -> PD12
+
+                        config LIB_EARLYCON_STM32_SERIAL_REMAP_3_PART
+                                bool "Partial"
+                                help
+                                        Partial remap
+
+                                        Pins map: TX  -> PC10
+                                                  RX  -> PC11
+
+                                                  CK  -> PC12
+
+                                                  CTS -> PB13 (no remap)
+                                                  RTS -> PB14 (no remap)
+                endchoice
+                endif # LIB_EARLYCON_STM32_SERIAL_PORT_USART3
+        endif # LIB_EARLYCON_STM32F10XSERIAL
+
+
+endif
+
+if LIB_EARLYCON_STM32F4XXSERIAL
+        if LIB_EARLYCON_STM32_SERIAL_PORT_USART1
+                if LIB_EARLYCON_STM32_SERIAL_TX
+                choice
+                        prompt "TX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_1_TX_1
+                                bool "PA9"
+
+                        config LIB_EARLYCON_STM32_SERIAL_1_TX_2
+                                bool "PB6"
+                endchoice
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_RX
+                choice
+                        prompt "RX pin"
+                        
+                        config LIB_EARLYCON_STM32_SERIAL_1_RX_1
+                                bool "PA10"
+
+                        config LIB_EARLYCON_STM32_SERIAL_1_RX_2
+                                bool "PB7"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_SYNC
+                comment "CK pin  -> PA8"
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_CTS
+                comment "CTS pin -> PA11"
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_RTS
+                comment "RTS pin -> PA12"
+                endif
+        endif
+
+        if LIB_EARLYCON_STM32_SERIAL_PORT_USART2
+                if LIB_EARLYCON_STM32_SERIAL_TX
+                choice
+                        prompt "TX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_2_TX_1
+                                bool "PA2"
+
+                        config LIB_EARLYCON_STM32_SERIAL_2_TX_2
+                                bool "PD5"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_RX
+                choice
+                        prompt "RX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_2_RX_1
+                                bool "PA3"
+
+                        config LIB_EARLYCON_STM32_SERIAL_2_RX_2
+                                bool "PD6"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_SYNC
+                choice
+                        prompt "CK pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_2_CK_1
+                                bool "PA4"
+
+                        config LIB_EARLYCON_STM32_SERIAL_2_CK_2
+                                bool "PD7"
+                endchoice
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_CTS
+                choice
+                        prompt "CTS pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_2_CTS_1
+                                bool "PA4"
+
+                        config LIB_EARLYCON_STM32_SERIAL_2_CTS_2
+                                bool "PD3"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_RTS
+                choice
+                        prompt "RTS pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_2_RTS_1
+                                bool "PA1"
+
+                        config LIB_EARLYCON_STM32_SERIAL_2_RTS_2
+                                bool "PD4"
+                endchoice
+                endif
+        endif
+        
+        if LIB_EARLYCON_STM32_SERIAL_PORT_USART3
+                if LIB_EARLYCON_STM32_SERIAL_TX
+                choice
+                        prompt "TX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_3_TX_1
+                                bool "PB10"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_TX_2
+                                bool "PD8"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_TX_3
+                                bool "PC10"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_RX
+                choice
+                        prompt "RX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_3_RX_1
+                                bool "PB11"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_RX_2
+                                bool "PD9"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_RX_3
+                                bool "PC11"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_SYNC
+                choice
+                        prompt "CK pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_3_CK_1
+                                bool "PB12"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_CK_2
+                                bool "PD10"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_CK_3
+                                bool "PC12"
+                endchoice
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_CTS
+                choice
+                        prompt "CTS pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_3_CTS_1
+                                bool "PB13"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_CTS_2
+                                bool "PD11"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_RTS
+                choice
+                        prompt "RTS pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_3_RTS_1
+                                bool "PB14"
+
+                        config LIB_EARLYCON_STM32_SERIAL_3_RTS_2
+                                bool "PD12"
+                endchoice
+                endif
+        endif
+
+        if LIB_EARLYCON_STM32_SERIAL_PORT_UART4
+                if LIB_EARLYCON_STM32_SERIAL_TX
+                choice
+                        prompt "TX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_4_TX_1
+                                bool "PC10"
+                 
+                        config LIB_EARLYCON_STM32_SERIAL_4_TX_2
+                                bool "PA0"
+                endchoice
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_RX
+                choice
+                        prompt "RX pin"
+                        
+                        config LIB_EARLYCON_STM32_SERIAL_4_RX_1
+                                bool "PC11"
+                        
+                        config LIB_EARLYCON_STM32_SERIAL_4_RX_2
+                                bool "PA1"
+                endchoice
+                endif
+        endif
+        
+        if LIB_EARLYCON_STM32_SERIAL_PORT_UART5
+                if LIB_EARLYCON_STM32_SERIAL_TX
+                        comment "TX pin  -> PC12"
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_RX
+                        comment "RX pin  -> PD2"
+                endif
+        endif
+        
+        if LIB_EARLYCON_STM32_SERIAL_PORT_USART6
+                if LIB_EARLYCON_STM32_SERIAL_TX
+                choice
+                        prompt "TX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_5_TX_1
+                                bool "PC6"
+
+                        config LIB_EARLYCON_STM32_SERIAL_5_TX_2
+                                bool "PG14"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_RX
+                choice
+                        prompt "RX pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_5_RX_1
+                                bool "PC7"
+
+                        config LIB_EARLYCON_STM32_SERIAL_5_RX_2
+                                bool "PG9"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_SYNC
+                choice
+                        prompt "CK pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_5_CK_1
+                                bool "PG7"
+
+                        config LIB_EARLYCON_STM32_SERIAL_5_CK_2
+                                bool "PC8"
+                endchoice
+                endif
+
+                if LIB_EARLYCON_STM32_SERIAL_CTS
+                choice
+                        prompt "CTS pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_5_CTS_1
+                                bool "PG15"
+
+                        config LIB_EARLYCON_STM32_SERIAL_5_CTS_2
+                                bool "PG13"
+                endchoice
+                endif
+                
+                if LIB_EARLYCON_STM32_SERIAL_RTS
+                choice
+                        prompt "RTS pin"
+                              
+                        config LIB_EARLYCON_STM32_SERIAL_5_RTS_1
+                                bool "PG8"
+
+                        config LIB_EARLYCON_STM32_SERIAL_5_RTS_2
+                                bool "PG12"
+                endchoice
+                endif
+        endif
+endif # LIB_EARLYCON_STM32F4XSERIAL
+
+##### Display pin description
+if LIB_EARLYCON_STM32F10XSERIAL
+if LIB_EARLYCON_STM32_SERIAL_PORT_USART1
+        comment "Your USART1 pinout:"
+        if LIB_EARLYCON_STM32_SERIAL_REMAP_1
+                comment "TX  -> PB6"
+                comment "RX  -> PB7"
+        endif
+        if !LIB_EARLYCON_STM32_SERIAL_REMAP_1
+                comment "TX  -> PA9"
+                comment "RX  -> PA10"
+        endif
+        comment "CK  -> PA8"
+        comment "CTS -> PA11"
+        comment "RTS -> PA12"
+endif
+
+if LIB_EARLYCON_STM32_SERIAL_PORT_USART2
+        comment "Your USART2 pinout:"
+        if LIB_EARLYCON_STM32_SERIAL_REMAP_2
+                comment "TX  -> PD5"
+                comment "RX  -> PD6"
+                comment "CK  -> PD7"
+                comment "CTS -> PD3"
+                comment "RTS -> PD4"
+        endif
+        if !LIB_EARLYCON_STM32_SERIAL_REMAP_2
+                comment "TX  -> PA2"
+                comment "RX  -> PA3"
+                comment "CK  -> PA4"
+                comment "CTS -> PA0"
+                comment "RTS -> PA1"
+        endif
+endif
+
+if LIB_EARLYCON_STM32_SERIAL_PORT_USART3
+        comment "Your USART3 pinout:"
+        if LIB_EARLYCON_STM32_SERIAL_REMAP_3_FULL
+                comment "TX  -> PD8"
+                comment "RX  -> PD9"
+                comment "CK  -> PD10"
+                comment "CTS -> PD11"
+                comment "RTS -> PD12"
+        endif
+        if LIB_EARLYCON_STM32_SERIAL_REMAP_3_PART
+                comment "TX  -> PC10"
+                comment "RX  -> PC11"
+                comment "CK  -> PC12"
+                comment "CTS -> PB13"
+                comment "RTS -> PB14"
+        endif
+        if LIB_EARLYCON_STM32_SERIAL_REMAP_3_NONE
+                comment "TX  -> PB10"
+                comment "RX  -> PB11"
+                comment "CK  -> PB12"
+                comment "CTS -> PB13"
+                comment "RTS -> PB14"
+        endif
+endif
+
+if LIB_EARLYCON_STM32_SERIAL_PORT_UART4
+        comment "Your UART4 pinout:"
+        comment "TX  -> PC10"
+        comment "RX  -> PC11"
+endif
+
+if LIB_EARLYCON_STM32_SERIAL_PORT_UART5
+        comment "Your UART5 pinout:"
+        comment "TX  -> PC12"
+        comment "RX  -> PD2"
+endif
+endif
+##### End of display pin desctription
