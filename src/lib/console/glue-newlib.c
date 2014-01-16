@@ -1,15 +1,10 @@
 #include <stdint.h>
 #include <lib/earlycon.h>
-#include <lib/stlinky.h>
 
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
 #include <arch/antares.h>
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_usart.h"
-
 
 FILE* g_early_stdin;
 FILE* g_early_stdout;
