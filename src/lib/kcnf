@@ -33,7 +33,7 @@ if LIB_ANTARES_CORE
    if LIB_PRINTK
 
       config LIB_PRINTK_TIMESTAMP
-      depends on LIB_TMGR_UPTIME && LIB_PRINTK
+      depends on LIB_TMGR && LIB_PRINTK
       bool "Add an uptime timestamp to printks"
 
       config LIB_PRINTK_PREFIX

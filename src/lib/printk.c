@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <lib/tasks.h>
 #include <lib/earlycon.h>
+
+#ifdef CONFIG_LIB_PRINTK_TIMESTAMP
+#include <lib/tmgr.h>
+#endif
 
 /* TODO: Use ARCH_HAS_STDIO instead */
 #if !defined(CONFIG_ARCH_8051) && !defined(CONFIG_ARCH_MSP430)
@@ -72,9 +75,9 @@ static void printk_prefix()
 	
 #ifdef CONFIG_LIB_PRINTK_TIMESTAMP
 #ifdef CONFIG_ARCH_AVR
-	k_printf_P("[%d	] ", tmgr_get_uptime());
+	k_printf_P("[%u	] ", (unsigned int) tmgr_get_uptime());
 #else
-	k_printf("[%d	] ", tmgr_get_uptime());
+	k_printf("[%u	] ", (unsigned int) tmgr_get_uptime());
 #endif
 #endif
 }
