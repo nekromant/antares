@@ -12,21 +12,13 @@
 
 /* If we're doing business with STM32 - suck in headers */
 
-#ifdef CONFIG_STM32F4XXX
+#ifdef CONFIG_STM32F4X
 #include "stm32f4xx.h"
 #include "core_cm4.h"
 #endif
 
 
-#if (defined CONFIG_STM32F10X_LD)		\
-	|| (defined CONFIG_STM32F10X_MD)	\
-	|| (defined CONFIG_STM32F10X_HD)	\
-	|| (defined CONFIG_STM32F10X_XL)	\
-	|| (defined CONFIG_STM32F10X_CL)	\
-	|| (defined CONFIG_STM32F10X_MD_VL)	\
-	|| (defined CONFIG_STM32F10X_HD_VL)	\
-	|| (defined CONFIG_STM32F10X_LD_VL)	 
-
+#ifdef CONFIG_STM32F10X
 #include "stm32f10x.h"
 #include "core_cm3.h"
 #endif
