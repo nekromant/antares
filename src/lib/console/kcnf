@@ -3,38 +3,48 @@ menu "Console and IO"
 menuconfig LIB_EARLYCON
 bool "Early console"
 
+
 if LIB_EARLYCON
 
+config LIB_EARLYCON_STM32SERIAL
+        bool
 choice 
 prompt "Select early console backend"
 
 config LIB_EARLYCON_AVRSERIAL
-bool "AVR Hardware serial port"
-depends on ARCH_AVR
+        bool "AVR Hardware serial port"
+        depends on ARCH_AVR
 
 config LIB_EARLYCON_STCUART
-bool "STC UART"
-depends on ARCH_8051_STC
+        bool "STC UART"
+        depends on ARCH_8051_STC
 
 config LIB_EARLYCON_NATIVE
-bool "Native stdio wrapper"
-depends on ARCH_NATIVE
+        bool "Native stdio wrapper"
+        depends on ARCH_NATIVE
 
 config LIB_EARLYCON_STLINKY
-bool "STLinky serial terminal"
-depends on LIB_STLINKY
+        bool "STLinky serial terminal"
+        depends on LIB_STLINKY
 
 config LIB_EARLYCON_MSP430SOFTSERIAL
-bool "MSP430 SoftSerial (TX Only)"
-depends on ARCH_MSP430
+        bool "MSP430 SoftSerial (TX Only)"
+        depends on ARCH_MSP430
 
 config LIB_EARLYCON_AVRSOFTSERIAL
-bool "AVR SoftSerial (TX Only)"
-depends on ARCH_AVR
+        bool "AVR SoftSerial (TX Only)"
+        depends on ARCH_AVR
 
-config LIB_EARLYCON_STM32F1XSERIAL
-bool "STM32F1X Hardware Serial Port"
-depends on ARCH_ARM
+
+config LIB_EARLYCON_STM32F10XSERIAL
+        bool "STM32F10x Hardware Serial Port"
+        depends on ARCH_ARM && STM32F1X
+        select LIB_EARLYCON_STM32SERIAL
+
+config LIB_EARLYCON_STM32F4XXSERIAL
+        bool "STM32F4xx Hardware Serial Port"
+        depends on ARCH_ARM && STM32F4X
+        select LIB_EARLYCON_STM32SERIAL
 
 endchoice
 
@@ -116,7 +126,6 @@ config LIB_EARLYCON_STCUART_IAPCNT
    help
 	Specify how many sequencial 0x7f chars should be received 
 	to trigger ISP mode
-	
 
 	
 endif
@@ -157,13 +166,12 @@ if LIB_EARLYCON_AVRSOFTSERIAL
 
 endif
 
-if LIB_EARLYCON_STM32F1XSERIAL
-comment "Experimental. Only USART1 at 115200 8n1"
-comment "TODO: Nice options here"
+if LIB_EARLYCON_STM32SERIAL
+        source antares/src/lib/console/stm32.kcnf
 endif
 
+endif # if LIB_EARLYCON
 
-endif
 
 menuconfig LIB_PRINTK
 bool "printk and dbg() macro support"
@@ -183,6 +191,8 @@ if LIB_PRINTK
       string "Prefix"
 
 endif
+
+
 
 menuconfig LIB_PANIC
 bool "System panic support"
@@ -218,7 +228,6 @@ if LIB_PANIC
 	to catch and handle panics.
 
 endif
-
 
 
 endmenu
