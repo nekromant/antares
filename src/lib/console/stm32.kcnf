@@ -46,11 +46,11 @@ choice
 endchoice
 
 config LIB_EARLYCON_STM32_SERIAL_TX
-        bool "Use transmitter (TX)"
+        bool "Enable transmitter (TX)"
         default y
 
 config LIB_EARLYCON_STM32_SERIAL_RX
-        bool "Use receiver (RX)"
+        bool "Enable receiver (RX)"
         default y
 
 choice
