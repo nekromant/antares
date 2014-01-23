@@ -5,7 +5,10 @@
 #ifndef ANTARES_GENERIC_H
 #define ANTARES_GENERIC_H
 
-#include <stdint.h>
+#ifndef __ASSEMBLER__
+   #include <stdint.h>
+#endif 
+
 #include <generic/macros.h>
 
 #if !defined(CONFIG_ANTARES_STARTUP) && defined(CONFIG_ARCH_HAS_ANTARES_STARTUP)
