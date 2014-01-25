@@ -56,7 +56,7 @@ struct rf24 {
 	void    (*csn)(int level);
 	void    (*ce)(int level);
 	void    (*spi_set_speed)(int khz);
-	uint8_t (*spi_xfer)(uint8_t data);
+	uint8_t (*spi_xfer)(uint8_t dat);
 	/* private data below */
 	uint8_t flags;
 	uint8_t payload_size;
@@ -123,7 +123,7 @@ void rf24_power_up(struct rf24 *r) ;
 int rf24_available(struct rf24 *r, uint8_t* pipe_num);
 void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len );
 void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8_t len);
-inline int rf24_is_ack_payload_available(struct rf24 *r);
+int rf24_is_ack_payload_available(struct rf24 *r);
 void rf24_what_happened(struct rf24 *r, uint8_t *tx_ok, uint8_t *tx_fail, uint8_t *rx_ready);
 int rf24_test_carrier(struct rf24 *r);
 int rf24_test_rpd(struct rf24 *r) ;
