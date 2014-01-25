@@ -1,9 +1,7 @@
-menuconfig CONTRIB
-bool "3rd-party libraries"
-
-if CONTRIB
+menu "3rd-party libraries"
 
 source "antares/src/lib/contrib/lwip/kcnf"
 source "antares/src/lib/contrib/vusb/kcnf"
 
-endif
+endmenu
+
