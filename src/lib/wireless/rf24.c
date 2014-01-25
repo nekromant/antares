@@ -7,6 +7,7 @@
 #define DEBUG_LEVEL CONFIG_LIB_RF24_DEBUG
 #define COMPONENT "rf24"
 #include <lib/printk.h>
+#include <stdint.h>
 
 
 /* Agressive and hacky size optimisation, 
@@ -75,9 +76,10 @@ uint8_t rf24_readout_register(struct rf24 *r,
  */
 uint8_t rf24_read_register(struct rf24 *r, uint8_t reg)
 {
+	uint8_t result;
 	rf24_csn(0);
 	rf24_spi_xfer( R_REGISTER | ( REGISTER_MASK & reg ) );
-	uint8_t result = rf24_spi_xfer(0xff);
+	result = rf24_spi_xfer(0xff);
 	rf24_csn(1);
 	return result;
 }
@@ -639,8 +641,6 @@ int rf24_read(struct rf24 *r, void* buf, uint8_t len )
 {
 	/* Fetch the payload */
 	rf24_read_payload(r, buf, len );
-
-	
 	/* was this the last of the data available? */
 	return rf24_read_register(r, FIFO_STATUS) & (1<<RX_EMPTY);	
 }
