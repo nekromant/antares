@@ -6,7 +6,7 @@
 #ifdef CONFIG_LIB_PANIC
 void do_panic(const char* why);
 #else
-static inline void do_panic(why) { while(1);; };
+static void do_panic(const char* why) { while(1);; }
 #endif
 
 void panic_user_hook(const char* why);
@@ -15,7 +15,7 @@ void panic_user_hook(const char* why);
 #if defined(TRACE_ASSERTS) || defined(CONFIG_LIB_PANIC_TRACE)
 
 #define assert(expr) \
-	((expr) ? (void)0 : panic("assert '" QUOTE(expr)"' failed in " __FILE__ ":" \
+	((expr) ? (void) 0 : panic("assert '" QUOTE(expr)"' failed in " __FILE__ ":" \
 				  EXPAND_AND_QUOTE(__LINE__) "\n"))
 
 /* Linux kernel crowd - make yourself at home */
