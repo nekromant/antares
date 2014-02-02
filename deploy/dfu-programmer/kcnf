@@ -1,6 +1,6 @@
 menuconfig DEPLOY_DFU_PROGRAMMER
 bool "dfu-programmer"
-depends on ARCH_8051_AT89
+depends on ARCH_8051_AT89 || ARCH_AVR
 
 if DEPLOY_DFU_PROGRAMMER
 
