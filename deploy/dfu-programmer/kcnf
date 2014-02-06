@@ -9,4 +9,8 @@ prompt "Target device"
 source "antares/deploy/dfu-programmer/proglist.kcnf"
 endchoice
 
+config DEPLOY_DFUPRG_RUN
+        bool "Start execution after flashing"
+        default y
+
 endif
