@@ -1247,11 +1247,11 @@ void rf24_power_up(struct rf24 *r)
  */
 void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 {
-	/* Transmitter power-up */
-	rf24_write_register(r, CONFIG, 
-			    ( rf24_read_register(r, CONFIG) | (1<<PWR_UP) ) & ~(1<<PRIM_RX) );
 
-	delay_us(350);
+	uint8_t old_config = rf24_read_register(r, CONFIG);
+	rf24_write_register(r, CONFIG, ( old_config | (1<<PWR_UP) ) & ~(1<<PRIM_RX));
+	if ((old_config & _BV(PWR_UP)) == 0)
+		delay_us(1500);
 	
 	/* Send the payload */
 	rf24_write_payload( r, buf, len );
