@@ -573,10 +573,6 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 		
 	}
 	
-	/* Yay, we are done. */
-
-	rf24_power_down(r);
-
 	/* Flush buffers (Is this a relic of past experimentation, and not needed anymore??) */
 	rf24_flush_tx(r);
 	
