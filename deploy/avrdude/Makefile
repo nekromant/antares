@@ -5,8 +5,6 @@ deploy_help+="\n Use WFUSES=y make deploy-avrdude to write fuses"
 
 include $(SRCDIR)/deploy/avrdude/proglist.mk
 
-$(info $(CONFIG_AVRDUDE_PROG_USBASP))
-$(info $(PROG))
 root=$(call check_root,$(CONFIG_DEPLOY_ROOT))
 
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_OVR),y)
