@@ -129,6 +129,7 @@ PHONY+=deploy-$(1)
 endef
 
 -include $(TMPDIR)/deploy.mk
+-include $(TMPDIR)/edeploy.mk
 $(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 .PHONY: $(PHONY)
