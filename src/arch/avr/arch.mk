@@ -27,7 +27,6 @@ ELFFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 
 ifeq ($(CONFIG_AVR_BLDR),y)
 ELFFLAGS+=-Wl,--section-start=.text=$(CONFIG_AVR_BLDADDR)
-CFLAGS+=-fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions -Wl,--section-start=.text=$(CONFIG_AVR_BLDADDR)
 APPSIZE=-$(CONFIG_AVR_BLDADDR)
 FBANNER=BOOT FLASH usage
 else
