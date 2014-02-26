@@ -461,10 +461,6 @@ void rf24_start_listening(struct rf24 *r)
 	/* Write the pipe0 address */
 	rf24_writeout_address(r, RX_ADDR_P0, r->pipe0_reading_address, 5);
 
-	/* Flush buffers */
-	rf24_flush_rx(r);
-	rf24_flush_tx(r);
-
 	/* Go! */
 	rf24_ce(1);
 
@@ -574,7 +570,7 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	}
 	
 	/* Flush buffers (Is this a relic of past experimentation, and not needed anymore??) */
-	rf24_flush_tx(r);
+	//rf24_flush_tx(r);
 	
 	return !ret;
 }
@@ -817,7 +813,12 @@ uint8_t rf24_get_dynamic_payload_size(struct rf24 *r)
 	rf24_csn(0);
 	rf24_spi_xfer( R_RX_PL_WID );
 	result = rf24_spi_xfer(0xff);
-	rf24_csn(1);	
+	rf24_csn(1);
+	if (result > 32)
+	{
+		dbg("Junk received, dropping\n");
+		rf24_flush_rx(r);
+	}
 	return result;
 }
  
