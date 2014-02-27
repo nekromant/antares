@@ -40,10 +40,24 @@ config AVR_VFPRINTF_MIN
 bool "minimal"
 
 config AVR_VFPRINTF_FULL
-bool "full"
+bool "full (with floats)"
 
 endchoice
 
+
+choice 
+prompt "vfscanf implementation"
+
+config AVR_VFSCANF_NONE
+bool "none/default"
+
+config AVR_VFSCANF_MIN
+bool "minimal"
+
+config AVR_VFSCANF_FULL
+bool "full (with floats)"
+
+endchoice
 
 endif
 

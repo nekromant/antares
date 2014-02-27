@@ -47,6 +47,15 @@ ifeq ($(CONFIG_AVR_VFPRINTF_FULL),y)
 ELFFLAGS+= -Wl,-u,vfprintf -lprintf_flt -lm
 endif
 
+ifeq ($(CONFIG_AVR_VFSCANF_MIN),y)
+ELFFLAGS+= -Wl,-u,vfscanf -lscanf_min
+endif
+
+ifeq ($(CONFIG_AVR_VFSCANFF_FULL),y)
+ELFFLAGS+= -Wl,-u,vfscanf -lscanf_flt -lm
+endif
+
+
 ifeq ($(CONFIG_AVR_OLD_DELAY),y)
 	CFLAGS+=-D__DELAY_BACKWARD_COMPATIBLE__
 endif
