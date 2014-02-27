@@ -3,6 +3,10 @@
 
 #include <generic/antares.h>
 
+#ifndef __ASSEMBLER__
+#include <util/atomic.h>
+#endif
+
 /*
  * We use .initX sections for low and high init functions
  * APPS are called one by one in the main()
@@ -27,7 +31,7 @@
 	__attribute__((naked))						\
 	__attribute__((__section__(".init5"))) void fn ## _low(void) {	\
 		fn();							\
-	};								\
+	}								\
 	void fn() 
 
 
@@ -36,7 +40,7 @@
 	__attribute__((naked))						\
 	__attribute__((__section__(".init7"))) void fn ## _high(void) {	\
 		fn();							\
-	};								\
+	}								\
 	void fn() 							\
 
 
@@ -45,7 +49,7 @@
 	__attribute__((naked))						\
 	__attribute__((__section__(".init8"))) void fn ## _app(void) {	\
 		fn();							\
-	};								\
+	}								\
 	void fn() 						\
 	
 
@@ -63,6 +67,9 @@
 #include <avr/interrupt.h>
 #define ANTARES_DISABLE_IRQS() cli()
 #define ANTARES_ENABLE_IRQS() sei()
+
+#define ANTARES_ATOMIC_BLOCK() ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+
 
 #define get_system_clock()    F_CPU
 #define set_system_clock(clk) ;
