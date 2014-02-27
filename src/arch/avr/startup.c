@@ -7,14 +7,14 @@
 
 __attribute__((naked))							
 __attribute__((__section__(".init5"))) void low_disable_isr(void) {		
-	asm("cli;");								
+	__asm("cli;");								
 }
 
 
 /* Turn on interrupts. */
 __attribute__((naked))							
 __attribute__((__section__(".init7"))) void high_enable_isr(void) {		
-	asm("sei;");								
+	__asm("sei;");								
 }
 
 
@@ -30,9 +30,9 @@ __attribute__((__section__(".init8"))) void __antares_app_start(void) {
 ANTARES_FINISH(antares_exit)
 {
 #ifdef __AVR_HAVE_JMP_CALL__
-	asm("jmp __antares_app_start");
+	__asm("jmp __antares_app_start");
 #else
-	asm("rjmp __antares_app_start");
+	__asm("rjmp __antares_app_start");
 #endif
 }
 
