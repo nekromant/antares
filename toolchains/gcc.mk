@@ -32,17 +32,16 @@ COMPILER_TOOLS:=\
 
 GENDEPFLAGS = -MD -MP -MF $$(@).d
 
+
 CFLAGS+=$(call unquote,$(CONFIG_CFLAGS)) -include $(TOPDIR)/include/generated/autoconf.h
-
 LDFLAGS+=$(call unquote,$(CONFIG_LDFLAGS))
-
 ASFLAGS+=$(call unquote,$(CONFIG_ASFLAGS))
-
 ELFFLAGS+=$(call unquote,$(CONFIG_ELFFLAGS))
 
 
-#FixMe: Hack
+#FixMe: Hack. Removing it breaks vusb (WTF?) Need --std=gnu99 globally
 ASFLAGS+=$(CFLAGS)
+CFLAGS+=--std=gnu99
 OBJCOPYFLAGS+=-Obinary
 
 #Let's parse optimisations from .config
