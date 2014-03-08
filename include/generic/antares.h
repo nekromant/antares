@@ -7,6 +7,7 @@
 
 #ifndef __ASSEMBLER__
    #include <stdint.h>
+   #include <generic/initcall.h>
 #endif 
 
 #include <generic/macros.h>
