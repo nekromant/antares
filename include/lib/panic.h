@@ -5,9 +5,6 @@
 
 #ifdef CONFIG_LIB_PANIC
 void do_panic(const char* why);
-#else
-static void do_panic(const char* why) { while(1);; }
-#endif
 
 void panic_user_hook(const char* why);
 
@@ -32,7 +29,7 @@ void panic_user_hook(const char* why);
 #define BUG_ON(expr) \
 	((expr) ? panic("BUG detected\n") : (void)0 )
 
-#endif
+#endif /* defined(TRACE_ASSERTS) || defined(CONFIG_LIB_PANIC_TRACE) */
 
 #ifdef CONFIG_ARCH_AVR
 #include <avr/pgmspace.h>
@@ -40,6 +37,15 @@ void panic_user_hook(const char* why);
 #else
 #define panic(fmt, ...) do_panic("REASON: " fmt)
 #endif
+
+#else 
+
+#define assert(expr)
+#define BUG_ON(expr)
+#define panic(reason)
+
+#endif /* CONFIG_LIB_PANIC */
+
 
 
 #endif

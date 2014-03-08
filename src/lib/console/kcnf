@@ -35,7 +35,6 @@ config LIB_EARLYCON_AVRSOFTSERIAL
         bool "AVR SoftSerial (TX Only)"
         depends on ARCH_AVR
 
-
 config LIB_EARLYCON_STM32F10XSERIAL
         bool "STM32F10x Hardware Serial Port"
         depends on ARCH_ARM && STM32F1X
@@ -47,8 +46,6 @@ config LIB_EARLYCON_STM32F4XXSERIAL
         select LIB_EARLYCON_STM32SERIAL
 
 endchoice
-
-
 
 choice
 prompt "Select glue driver"
@@ -194,16 +191,29 @@ endif
 
 
 
-menuconfig LIB_PANIC
-bool "System panic support"
+choice 
+prompt "Panic and asserts"
+
+config LIB_PANIC_NONE
+bool "Disabled"
 help
-	Check this to properly handle panic();
-	When this is unchecked, panics result in
-	a plain and simple endless loop.
+	Reduces code size, removes all assert, 
+	panic, whatsoever. 
+	WARNING: With this enabled panic() does NOTHING 
+
+config LIB_PANIC
+bool "Enabled"
+help
+	Select this to properly handle panic();
+	Panics result in a plain and simple endless 
+	loop with interrupts disabled.
 	All asserts and BUG_ON macros eventually 
 	panic the system. 
 
+endchoice 
+
 if LIB_PANIC
+
    config LIB_PANIC_PRINTOUT
    bool "Print panic reasons"
    depends on LIB_PRINTK
