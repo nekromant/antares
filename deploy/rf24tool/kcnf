@@ -1,0 +1,64 @@
+menuconfig DEPLOY_RF24TOOL
+bool "rf24tool"
+
+  if DEPLOY_RF24TOOL
+
+   config DEPLOY_RF24TOOL_RF_CHANNEL
+   int "RF Channel"
+   default 76
+
+   config DEPLOY_RF24TOOL_RF_ADDR_0
+   hex "RF Device Adress byte 0"
+   range 0 0xff
+
+   config DEPLOY_RF24TOOL_RF_ADDR_1
+   hex "RF Device Adress byte 1"
+   range 0 0xff
+
+   config DEPLOY_RF24TOOL_RF_ADDR_2
+   hex "RF Device Adress byte 2"
+   range 0 0xff
+
+   config DEPLOY_RF24TOOL_RF_ADDR_3
+   hex "RF Device Adress byte 3"
+   range 0 0xff
+
+   config DEPLOY_RF24TOOL_RF_ADDR_4
+   hex "RF Device Adress byte 4"
+   range 0 0xff
+
+ choice 
+
+   prompt "RF Data rate"
+ 
+   config DEPLOY_RF24TOOL_RF_RATE_250KBPS
+   bool "250KBPS"
+  
+   config DEPLOY_RF24TOOL_RF_RATE_1MBPS
+   bool "1MBPS"
+
+   config DEPLOY_RF24TOOL_RF_RATE_2MBPS
+   bool "2MBPS"
+
+ endchoice
+
+ config DEPLOY_RF24TOOL_PART
+ string "Partition name"
+
+ config DEPLOY_RF24TOOL_VFY
+ bool "Verify firmware"
+
+
+ config DEPLOY_RF24TOOL_RUN
+ bool "Start application after deployment"
+
+ config DEPLOY_RF24TOOL_APPID
+ int "Partition id to boot"
+ default 1
+
+
+
+  endif
+
+
+
