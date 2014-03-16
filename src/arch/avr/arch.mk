@@ -51,7 +51,7 @@ ifeq ($(CONFIG_AVR_VFSCANF_MIN),y)
 ELFFLAGS+= -Wl,-u,vfscanf -lscanf_min
 endif
 
-ifeq ($(CONFIG_AVR_VFSCANFF_FULL),y)
+ifeq ($(CONFIG_AVR_VFSCANF_FULL),y)
 ELFFLAGS+= -Wl,-u,vfscanf -lscanf_flt -lm
 endif
 
