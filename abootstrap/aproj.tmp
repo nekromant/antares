@@ -5,7 +5,7 @@ EXAMPLES_URL=https://github.com/nekromant/antares-examples.git
 
 if [ "ANTARES_INSTALL_DIR" = "" ]
 then
-  ANTARES_INSTALL_DIR="/home/asm/Projects/antares"
+  ANTARES_INSTALL_DIR=SET_ANTARES_DIRECTORY
 fi
 
 checkout_examples(){
