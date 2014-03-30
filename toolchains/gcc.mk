@@ -88,6 +88,14 @@ ifeq ($(CONFIG_GCC_PARANOID_WRN),y)
 CFLAGS+=-Werror
 endif
 
+ifeq ($(CONFIG_GCC_WRN_MISS_DECLARATION),y)
+CFLAGS+=-Wmissing-declarations
+endif
+
+ifeq ($(CONFIG_GCC_WRN_MIXED_CODE),y)
+CFLAGS+=-Wdeclaration-after-statement
+endif
+
 #Voodoo to remove dead code from image
 ifeq ($(CONFIG_GCC_STRIP),y)
 #DEADCODE+=-Wl,-static

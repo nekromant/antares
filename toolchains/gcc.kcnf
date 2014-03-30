@@ -74,6 +74,20 @@ help
   behaviour. But that helps to keep some bad code from noobz 
   out of the main tree. Sometimes
 
+config GCC_WRN_MISS_DECLARATION
+bool "Add -Wmissing-declarations"
+default y
+depends on GCC_PARANOID_WRN
+help
+  Warn if a global function is defined without a previous declaration.
+
+config GCC_WRN_MIXED_CODE
+bool "Add -Wdeclaration-after-statement"
+default y
+depends on GCC_PARANOID_WRN
+help
+  Warn when a declaration is found after a statement in a block. 
+
 comment "Fine tuning"
 
 config CFLAGS
