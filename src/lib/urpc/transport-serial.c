@@ -11,6 +11,7 @@
  *
  */
 
+#if 0
 #include <string.h>
 #include <lib/urpc.h>
 
@@ -128,3 +129,4 @@ void urpc_tx_object(struct urpc_object* obj)
 	putchar(csum);
 	putchar(STOP);
 }
+#endif

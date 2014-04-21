@@ -1,13 +1,11 @@
 #ifndef URPC_H
 #define URPC_H
 
-/* Packet is method call */ 
-#define FLAG_URPC_METHOD       1
-/* Packet is event data */
-#define FLAG_URPC_EVENT        2
+#include <arch/antares.h>
+#include <stdint.h>
 
 #if CONFIG_URPC_SZB == 1
-typedef unsigned char urpc_size_t;
+typedef uint8_t urpc_size_t;
 #define STAG 0x1
 #elif CONFIG_URPC_SZB == 2
 typedef uint16_t urpc_size_t;
@@ -20,7 +18,7 @@ typedef uint32_t urpc_size_t;
 #endif
 
 #if CONFIG_URPC_IDB == 1
-typedef unsigned char urpc_id_t;
+typedef uint8_t urpc_id_t;
 #define ITAG 0x1
 #elif CONFIG_URPC_IDB == 2
 typedef uint16_t urpc_id_t;
@@ -41,41 +39,81 @@ typedef uint32_t urpc_id_t;
 #define ENDIANNESS '?'
 #endif
 
-#define URPC_MODE_TAG { STAG , ITAG, ENDIANNESS, 0x0 }
-
-
-/* 'data' actually serves to be the pointer to the first byte 
- * But some compilers don't like flexible arrays (sdcc) 
- */
-
-struct urpc_packet {
-	urpc_id_t id;
-	unsigned char data;
-};
+#define URPC_INFO_TAG { STAG , ITAG, ENDIANNESS, 0x0 }
 
 struct urpc_object {
-	const char flags;
 	const char* name;
-	const char* data;
-	const char* reply;
-	void (*method)(char* data); 
+	const char* argfmt;
+	const char* responsefmt;
+	void (*method)(urpc_id_t id, void *arguments, urpc_size_t arglen); 
 };
 
-#define URPC_OBJ_ID(obj)						\
-	(((char*)obj - (char*)&urpc_exports[0])/sizeof(struct urpc_object))
-
-/* Transport layer should implement these*/
-void urpc_tx_data(struct urpc_object* obj, char* data, int sz);
-void urpc_tx_object(struct urpc_object* obj);
-/* Callback */
-void urpc_handle_incoming(struct urpc_packet* pck);
+struct urpc {
+	void (*action)(urpc_id_t id, char *data, urpc_size_t sz);
+	urpc_id_t num_objects;
+	urpc_id_t max_objects;
+	struct urpc_object **objects; 
+};
 
 
+/** 
+ * Registers an urpc object (event or method) with urpc instance.
+ * Do not call this directly! Use URPC_ADD_METHOD/URPC_ADD_EVENT
+ * macros.
+ *
+ * @param u urpc instace
+ * @param o urpc object
+ * 
+ * @return newly registered object id
+ */
+urpc_id_t urpc_register_object(struct urpc *u, struct urpc_object *o);
 
-void urpc_discovery();
-void urpc_loop(); /* Processing loop */
-void urpc_respond(char* data, int sz);
+/** 
+ * Call an urpc object. 
+ * This function should be invoked by the transport layer
+ * 
+ * @param u urpc instance
+ * @param id object id
+ * @param data arguments
+ */
+void urpc_call(struct urpc *u, urpc_id_t id, void *data, urpc_size_t datalen);
 
-extern struct urpc_object urpc_exports[];
+/* Respond with data for a method call, or raise the event */
 
+void urpc_respond(struct urpc *u, urpc_id_t id, char *data, urpc_size_t datalen);
+
+
+
+#define URPC_REGISTER(u, obj)			\
+	ANTARES_INIT_LOW(urpc_add_ ## obj) {	\
+		urpc_register_object(u, &obj);	\
+	}
+
+#define URPC_REGISTER_EVENT(u, obj, id)					\
+	ANTARES_INIT_LOW(urpc_add_ ## obj ) {				\
+		id = urpc_register_object(u, obj);			\
+	}
+
+
+#define URPC_DECLARE_INSTANCE(name, evt_handler, max_obj)		\
+	static struct urpc_object * name ## _data[max_obj];		\
+	static struct urpc name =  {					\
+		.action = evt_handler,					\
+		.num_objects = 0,					\
+		.max_objects = max_obj,					\
+		.objects = (struct urpc_object *) name ## _data		\
+	};
+
+
+
+#define U_UINT(len)      (0x10 | (len & 0xf))
+#define U_SINT(len)      (0x20 | (len & 0xf))
+
+/* short binary data, up to 128 byte */
+#define U_SBIN(len)      (0x80 | (len & 0x7f))
+/* Null-terminated string */
+#define U_STR()          (0x30)
+
+#define U_FORMAT(data) { data , 0x0 }
+                                                                                   
 #endif

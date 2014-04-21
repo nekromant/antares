@@ -1,53 +1,46 @@
+#include <arch/antares.h>
 #include <lib/urpc.h>
 
-#define STATE_DISCOVERY  1 
+#define COMPONENT "urpc-core"
+#define DEBUG_LEVEL 4
+#include <lib/printk.h>
+#include <lib/panic.h>
 
-
-static unsigned char state;
-static unsigned char objid;
-
-/* TODO: Optional packet queue */
-#ifndef CONFIG_URPC_ISR_CONTEXT
-static struct urpc_packet *packet;
-#endif
-
-static void process_packet(struct urpc_packet *pck) {
-	int id = (int) pck->id;
-	if (urpc_exports[id].method)
-		urpc_exports[id].method(&pck->data);
-}
-
-void urpc_loop() {
-#ifndef CONFIG_URPC_ISR_CONTEXT
-	if (packet)
-		process_packet(packet);
-#endif
-	if (state == STATE_DISCOVERY) {
-		urpc_tx_object(&urpc_exports[objid++]);
-		if (!urpc_exports[objid].flags)
-		{
-			urpc_tx_data(0,0,0);
-			state=0;
-		}
-	}	
-}
-
-void urpc_handle_incoming(struct urpc_packet* pck) {
-#ifdef CONFIG_URPC_ISR_CONTEXT
-	process_packet(pck);
-#else
-	if (!packet)
-		packet = pck;
-	/* We discard a packet if we're busy */
-#endif
-}
-
-void urpc_discovery() {
-	struct urpc_object *obj;
-	obj = &urpc_exports[0];
-	state = STATE_DISCOVERY;
-	objid=0;
-
+urpc_id_t urpc_register_object(struct urpc *u, struct urpc_object *o)
+{
+	if (u->num_objects >= u->max_objects) {
+		panic("Available data storage exhausted. increase urpc max_objects!");
+	}
+	u->objects[u->num_objects] = o;
+	urpc_id_t id = u->num_objects++;
+	dbg("Registering object: %s\n", o->name);
+	return id;
 }
 
 
+void urpc_call(struct urpc *u, urpc_id_t id, void *data, urpc_size_t sz)
+{
+	if (id >= u->num_objects) {
+		warn("Caller id out of bounds\n");
+		return; /* bogus call to nowhere */
+	}
+	/* 
+	 * Events don't have method field set, 
+	 * and shouldn't be called, ignore them 
+	 */
+	if (u->objects[id]->method)
+		u->objects[id]->method(id, data, sz);
+}
+
+void urpc_respond(struct urpc *u, urpc_id_t id, char *data, urpc_size_t sz)
+{
+	if (id >= u->num_objects) {
+		warn("Caller id out of bounds\n");
+		return; /* bogus call to nowhere */
+	}
+
+	ANTARES_ATOMIC_BLOCK() {
+		u->action(id, data, sz);
+	}
+
+}

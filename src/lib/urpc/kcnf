@@ -3,7 +3,7 @@ bool "URPC Framework (EXPERIMENTAL)"
 
 if LIB_URPC
 
-menu "Library tuning"
+menu "Library fine-tuning"
 
 config URPC_SZB
 int "Number of bytes for urpc_size_t"
@@ -15,21 +15,7 @@ default 1
 
 endmenu
 
-choice 
-prompt "URPC Implementation"
-
-config URPC_TINY
-bool "TinyRPC"
-help
-     A very basic implementation, with a static
-     export table, no compiler magic, etc. 
-     Designed to be suitable for very small systems,
-     e.g. 8051 micros.
-
-endchoice
-
-choice 
-prompt "Transport layer"
+menu "Transport layers"
 
 config URPC_T_SERIAL
 bool "Simple Serial Transport"
@@ -38,17 +24,18 @@ help
 	with no checksumming. You should provide your
 	own 'putchar' and call 'gotchar' whenever a
 	character is received.
-endchoice
 
+config URPC_T_VUSB
+bool "VUSB-based transport"
+depends on ARCH_AVR
+select CONTRIB_VUSB
+select USB_CFG_IMPLEMENT_FN_WRITE
 
-config URPC_ISR_CONTEXT
-bool "Run methods in ISR context"
-depends on URPC_TINY
 help
-	If set to 'y' methods may be run in ISR
-	context, if the underlying transport layer
-	does the call to urpc_handle_incoming there.
-	You can set that to 'n' and do the processing
-	in the loop later.
-endif
+	A simple transport over vusb library
+	Just select vusb and
+	
 
+endmenu
+
+endif
