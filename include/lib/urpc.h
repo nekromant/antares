@@ -39,20 +39,22 @@ typedef uint32_t urpc_id_t;
 #define ENDIANNESS '?'
 #endif
 
-#define URPC_INFO_TAG { STAG , ITAG, ENDIANNESS, 0x0 }
-
 struct urpc_object {
 	const char* name;
-	const char* argfmt;
-	const char* responsefmt;
+	const unsigned char* argfmt;
+	const unsigned char* responsefmt;
 	void (*method)(urpc_id_t id, void *arguments, urpc_size_t arglen); 
 };
 
+#define CONFIG_URPC_EBLEN  128
 struct urpc {
-	void (*action)(urpc_id_t id, char *data, urpc_size_t sz);
+	void (*notify)(); /* Called when new event added to queue, optional */
 	urpc_id_t num_objects;
 	urpc_id_t max_objects;
 	struct urpc_object **objects; 
+	int  evt_tail;
+	int  evt_head; 
+	char evt_buf[CONFIG_URPC_EBLEN];
 };
 
 
@@ -84,14 +86,14 @@ void urpc_respond(struct urpc *u, urpc_id_t id, char *data, urpc_size_t datalen)
 
 
 
-#define URPC_REGISTER(u, obj)			\
-	ANTARES_INIT_LOW(urpc_add_ ## obj) {	\
-		urpc_register_object(u, &obj);	\
+#define URPC_REGISTER(__u, __obj)			\
+	ANTARES_INIT_LOW(urpc_add_ ## __obj) {	\
+		urpc_register_object(__u, &__obj);	\
 	}
 
-#define URPC_REGISTER_EVENT(u, obj, id)					\
-	ANTARES_INIT_LOW(urpc_add_ ## obj ) {				\
-		id = urpc_register_object(u, obj);			\
+#define URPC_REGISTER_EVENT(__u, __obj, __id)				\
+	ANTARES_INIT_LOW(urpc_add_ ## __obj ) {				\
+		__id = urpc_register_object(__u, &__obj);			\
 	}
 
 
@@ -106,14 +108,20 @@ void urpc_respond(struct urpc *u, urpc_id_t id, char *data, urpc_size_t datalen)
 
 
 
-#define U_UINT(len)      (0x10 | (len & 0xf))
-#define U_SINT(len)      (0x20 | (len & 0xf))
 
-/* short binary data, up to 128 byte */
-#define U_SBIN(len)      (0x80 | (len & 0x7f))
-/* Null-terminated string */
-#define U_STR()          (0x30)
+#define U_UINT8   "1"
+#define U_UINT16  "2"
+#define U_UINT32  "4"
+#define U_UINT64  "8"
 
-#define U_FORMAT(data) { data , 0x0 }
+#define U_SINT8   "a"
+#define U_SINT16  "b"
+#define U_SINT32  "c"
+#define U_SINT64  "d"
+
+#define U_STR     "s"
+
+#define U_SBIN(len) "B\x" #len
+
                                                                                    
 #endif
