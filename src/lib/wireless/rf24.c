@@ -479,7 +479,7 @@ void rf24_stop_listening(struct rf24 *r)
 {
   rf24_ce(0);
   rf24_flush_tx(r);
-  rf24_flush_rx(r);
+  /* rf24_flush_rx(r); // Maniacbug, that was a bad idea! -- ncrmnt */
 }
 
 /**
@@ -499,14 +499,14 @@ void rf24_stop_listening(struct rf24 *r)
  * @param r rf24 instance to act upon
  * @param buf Pointer to the data to be sent
  * @param len Number of bytes to be sent
- * @return 0 if the payload was delivered successfully false if not
+ * @return 0 if the payload was delivered successfully not-null if not
  */
 int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 {
 	int ret = -1;
 	uint8_t tx_ok, tx_fail, ack_payload_available;
 	uint8_t status = 0;
-	uint8_t timeout = 254; /* ms to wait for timeout */
+	uint8_t timeout = 60; /* ms to wait for timeout */
 
 	/* Begin the write */
 	rf24_start_write(r, buf, len);
