@@ -506,7 +506,7 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	int ret = -1;
 	uint8_t tx_ok, tx_fail, ack_payload_available;
 	uint8_t status = 0;
-	uint8_t timeout = 60; /* ms to wait for timeout */
+	uint8_t timeout = 250; /* ms to wait for timeout */
 
 	/* Begin the write */
 	rf24_start_write(r, buf, len);
