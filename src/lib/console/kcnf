@@ -15,6 +15,19 @@ config LIB_EARLYCON_AVRSERIAL
         bool "AVR Hardware serial port"
         depends on ARCH_AVR
 
+config LIB_EARLYCON_VUSBLOWSERIAL
+        bool "VUSB serial console emulation (LIMITED! READ HELP!)"
+        depends on ARCH_AVR && CONTRIB_VUSB
+	help
+		Using this is only possible when interrupts are ENABLED!
+		DO NOT call it in ANTARES_INIT_LOW()
+		How to use this: 
+		* Configure vusb
+		* Provide your own usb_reconnect() function. We'll call it
+ 		  upon the first usage of io. 
+		* Compile the host app, (see antares/host-utils/vusb-serial-term)
+		
+
 config LIB_EARLYCON_STCUART
         bool "STC UART"
         depends on ARCH_8051_STC
