@@ -478,9 +478,47 @@ void rf24_start_listening(struct rf24 *r)
 void rf24_stop_listening(struct rf24 *r)
 {
   rf24_ce(0);
-  rf24_flush_tx(r);
-  /* rf24_flush_rx(r); // Maniacbug, that was a bad idea! -- ncrmnt */
 }
+
+
+/* TODO: Check if these 2 are working properly */
+
+int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len)
+{
+	uint8_t tmp = rf24_read_register(r, CONFIG);
+	rf24_write_register(r, CONFIG, ( tmp | (1<<PWR_UP) ) & ~(1<<PRIM_RX));
+	if ((tmp & _BV(PWR_UP)) == 0)
+		delay_us(1500);
+	
+	tmp = rf24_read_register(r, FIFO_STATUS);
+	if (tmp & TX_FULL)
+		return -1; /* EAGAIN, we're full o' shit right now */
+
+	/* Send the payload */
+	rf24_write_payload( r, buf, len );
+
+	/* Start sending 'em out already */
+	rf24_ce(1);
+
+	return 0; /* Queued! */
+}
+
+void rf24_queue_sync(struct rf24 *r)
+{
+	uint8_t tmp;
+	do { 
+		tmp = rf24_read_register(r, FIFO_STATUS);
+	} while (!(tmp & TX_EMPTY));
+	rf24_ce(0);
+}
+
+void rf24_retry_failed(struct rf24 *r) 
+{
+	rf24_ce(1);
+	delay_us(15);
+	rf24_ce(0);
+}
+
 
 /**
  * Write to the open writing pipe
@@ -489,15 +527,14 @@ void rf24_stop_listening(struct rf24 *r)
  * of where to write to.
  *
  * This blocks until the message is successfully acknowledged by
- * the receiver or the timeout/retransmit maxima are reached.  In
- * the current configuration, the max delay here is 60ms.
+ * the receiver. 
  *
  * The maximum size of data written is the fixed payload size, see
  * rf24_get_payload_size().  However, you can write less, and the remainder
  * will just be filled with zeroes.
  *
  * @param r rf24 instance to act upon
- * @param buf Pointer to the data to be sent
+ * @param buf Pointer to the data to be sent. 
  * @param len Number of bytes to be sent
  * @return 0 if the payload was delivered successfully not-null if not
  */
@@ -506,7 +543,6 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	int ret = -1;
 	uint8_t tx_ok, tx_fail, ack_payload_available;
 	uint8_t status = 0;
-	uint8_t timeout = 250; /* ms to wait for timeout */
 
 	/* Begin the write */
 	rf24_start_write(r, buf, len);
@@ -514,21 +550,17 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	/* 
 	 * At this point we could return from a non-blocking write, and then call
 	 * the rest after an interrupt
-	 *
-	 * Instead, we are going to block here until we get TX_DS (transmission completed and ack'd)
-	 * or MAX_RT (maximum retries, transmission failed).  Also, we'll timeout in case the radio
-	 * is flaky and we get neither.
-	 * IN the end, the send should be blocking.  It comes back in 60ms worst case, or much faster
-	 * if I tighted up the retry logic.  (Default settings will be 1500us.
-	 * Monitor the send
 	 */
+
 	do
 	{      
 		uint8_t observe_tx;
 		status = rf24_readout_register(r, OBSERVE_TX, &observe_tx, 1);
-		delay_ms(1);
 	}
-	while( (!(status & ((1<<TX_DS) | (1<<MAX_RT)))) && ( timeout-- )) ;
+	while((!(status & ((1<<TX_DS) | (1<<MAX_RT))))) ;
+
+
+	uint8_t s = status;
 
 	/* The part above is what you could recreate with your own interrupt handler,
 	 * and then call this when you got an interrupt
@@ -539,8 +571,7 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
          *   -> There is an ack packet waiting (RX_DR)
 	 */
 
-	/* if we have ack payloads - wait fo it!  */
-
+	/* if we have ack payloads - (Really?)!  */
 	
 	if (r->flags & RF24_HAVE_ACK_PAYLOADS) {
 		int i=2;
@@ -553,6 +584,9 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	
 	rf24_what_happened(r, &tx_ok, &tx_fail, &ack_payload_available);
 	
+	if (tx_fail)
+		rf24_flush_tx(r);
+
 	dbg("tx_ok: %d tx_fail: %d ack_avail: %d\n", 
 	    tx_ok, tx_fail, ack_payload_available);
 	
@@ -568,9 +602,6 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 		dbg("got %d bytes of ack length\n", r->ack_payload_length);
 		
 	}
-	
-	/* Flush buffers (Is this a relic of past experimentation, and not needed anymore??) */
-	//rf24_flush_tx(r);
 	
 	return !ret;
 }
@@ -588,7 +619,7 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 int rf24_available(struct rf24 *r, uint8_t* pipe_num)
 {
 	uint8_t status = rf24_get_status(r);
-	int result = ( status & (1<<RX_DR) );	
+	int result = !(rf24_read_register(r, FIFO_STATUS) & (1<<RX_EMPTY));;	
 	if (result)
 	{
 		/* If the caller wants the pipe number, include that */
