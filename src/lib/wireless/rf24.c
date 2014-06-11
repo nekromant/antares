@@ -481,53 +481,20 @@ void rf24_stop_listening(struct rf24 *r)
 }
 
 
-/* TODO: Check if these 2 are working properly */
-
-int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len)
-{
-	uint8_t tmp = rf24_read_register(r, CONFIG);
-	rf24_write_register(r, CONFIG, ( tmp | (1<<PWR_UP) ) & ~(1<<PRIM_RX));
-	if ((tmp & _BV(PWR_UP)) == 0)
-		delay_us(1500);
-	
-	tmp = rf24_read_register(r, FIFO_STATUS);
-	if (tmp & TX_FULL)
-		return -1; /* EAGAIN, we're full o' shit right now */
-
-	/* Send the payload */
-	rf24_write_payload( r, buf, len );
-
-	/* Start sending 'em out already */
-	rf24_ce(1);
-
-	return 0; /* Queued! */
-}
-
-void rf24_queue_sync(struct rf24 *r)
-{
-	uint8_t tmp;
-	do { 
-		tmp = rf24_read_register(r, FIFO_STATUS);
-	} while (!(tmp & TX_EMPTY));
-	rf24_ce(0);
-}
-
-void rf24_retry_failed(struct rf24 *r) 
-{
-	rf24_ce(1);
-	delay_us(15);
-	rf24_ce(0);
-}
-
-
 /**
- * Write to the open writing pipe
+ * Write a single payload to the open writing pipe. 
  *
  * Be sure to call rf24_open_writing_pipe() first to set the destination
  * of where to write to.
  *
  * This blocks until the message is successfully acknowledged by
- * the receiver. 
+ * the receiver or the timeout is reached. 
+ *
+ * If the previous call to rf24_write() failed, be sure either 
+ * call rf24_flush_tx() to remove the failed payload from the TX FIFO
+ * of call rf24_write() again with buf set to NULL. 
+ * Calling rf24_write with NULL buffer and no failed payload in TX FIFO
+ * return 0 immediately.
  *
  * The maximum size of data written is the fixed payload size, see
  * rf24_get_payload_size().  However, you can write less, and the remainder
@@ -544,8 +511,13 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	uint8_t tx_ok, tx_fail, ack_payload_available;
 	uint8_t status = 0;
 
+	
 	/* Begin the write */
 	rf24_start_write(r, buf, len);
+
+	status = rf24_read_register(r, FIFO_STATUS);
+	if (status & TX_EMPTY)
+		return 0; /* TX Empty? Why? */
 
 	/* 
 	 * At this point we could return from a non-blocking write, and then call
@@ -1264,10 +1236,12 @@ void rf24_power_up(struct rf24 *r)
 
 
 /**
- * Non-blocking write to the open writing pipe
+ * Non-blocking write to the open writing pipe. 
  *
  * Just like rf24_write(), but it returns immediately. To find out what happened
  * to the send, catch the IRQ and then call rf24_what_happened().
+ * If the previous transfer failed and there's something in TX FIFO
+ * You can call this function with NULL buffer to retransmit
  *
  * @see rf24_write()
  * @see rf24_what_happened()
@@ -1286,7 +1260,8 @@ void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 		delay_us(1500);
 	
 	/* Send the payload */
-	rf24_write_payload( r, buf, len );
+	if (buf)
+		rf24_write_payload( r, buf, len );
 	
 	/* Allons! */
 	rf24_ce(1);
@@ -1396,4 +1371,54 @@ inline int rf24_is_ack_payload_available(struct rf24 *r)
 	int ret = r->flags & RF24_ACK_PAYLOAD_AVAIL;
 	r->flags &= ~RF24_ACK_PAYLOAD_AVAIL;
 	return ret;
+}
+
+/** 
+ * Start writing in 'stream' mode. This mode allows fastest 
+ * possible transfers with guaranteed delivery.
+ * Each of the packets will be enqueued in the TX fifo and
+ * sent until the receiver ACKs it. 
+ * This allows fastest possible transfer rates. 
+ * To wait for the last packets to fly out of the FIFO call
+ * rf24_queue_sync()
+ * 
+ * @param r rf24 instance to act upon
+ * @param buf buffer to send
+ * @param len length to send
+ * 
+ * @return 0 if the payload has been enqueued, -EAGAIN if there's if the TX fifo is full
+ */
+int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len)
+{
+	uint8_t tmp = rf24_read_register(r, CONFIG);
+	rf24_write_register(r, CONFIG, ( tmp | (1<<PWR_UP) ) & ~(1<<PRIM_RX));
+	if ((tmp & _BV(PWR_UP)) == 0)
+		delay_us(1500);
+	
+	tmp = rf24_read_register(r, FIFO_STATUS);
+	if (tmp & TX_FULL)
+		return -1; /* EAGAIN, we're full o' shit right now */
+
+	/* Send the payload */
+	rf24_write_payload( r, buf, len );
+
+	/* Start sending 'em out already */
+	rf24_ce(1);
+
+	return 0; /* Queued! */
+}
+
+/** 
+ * Wait for the TX fifo to become empty and 
+ * stop transmitting. 
+ * 
+ * @param r rf24 instance to act upon
+ */
+void rf24_queue_sync(struct rf24 *r)
+{
+	uint8_t tmp;
+	do { 
+		tmp = rf24_read_register(r, FIFO_STATUS);
+	} while (!(tmp & TX_EMPTY));
+	rf24_ce(0);
 }
