@@ -477,7 +477,13 @@ void rf24_start_listening(struct rf24 *r)
  */
 void rf24_stop_listening(struct rf24 *r)
 {
-  rf24_ce(0);
+	rf24_ce(0);
+
+	uint8_t tmp = rf24_read_register(r, CONFIG);
+	rf24_write_register(r, CONFIG, ( tmp ) & ~(1<<PRIM_RX));
+
+	rf24_writeout_address(r, RX_ADDR_P0, r->pipe0_writing_address, 5);
+	rf24_writeout_address(r, TX_ADDR,    r->pipe0_writing_address, 5);
 }
 
 
@@ -503,22 +509,22 @@ void rf24_stop_listening(struct rf24 *r)
  * @param r rf24 instance to act upon
  * @param buf Pointer to the data to be sent. 
  * @param len Number of bytes to be sent
- * @return 0 if the payload was delivered successfully not-null if not
+ * @return 0 if the payload was delivered successfully.
+ *         -EIO if you tried to do a retransmition with TX fifo empty
+ *         -ENODEV if the target device didn't ack us 
  */
+
 int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 {
-	int ret = -1;
+	int ret;
 	uint8_t tx_ok, tx_fail, ack_payload_available;
 	uint8_t status = 0;
 
 	
 	/* Begin the write */
-	rf24_start_write(r, buf, len);
-
-	status = rf24_read_register(r, FIFO_STATUS);
-	if (status & TX_EMPTY)
-		return 0; /* TX Empty? Why? */
-
+	ret = rf24_start_write(r, buf, len);
+	if (ret < 0)
+		return -EIO;
 	/* 
 	 * At this point we could return from a non-blocking write, and then call
 	 * the rest after an interrupt
@@ -530,9 +536,6 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 		status = rf24_readout_register(r, OBSERVE_TX, &observe_tx, 1);
 	}
 	while((!(status & ((1<<TX_DS) | (1<<MAX_RT))))) ;
-
-
-	uint8_t s = status;
 
 	/* The part above is what you could recreate with your own interrupt handler,
 	 * and then call this when you got an interrupt
@@ -556,9 +559,6 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 	
 	rf24_what_happened(r, &tx_ok, &tx_fail, &ack_payload_available);
 	
-	if (tx_fail)
-		rf24_flush_tx(r);
-
 	dbg("tx_ok: %d tx_fail: %d ack_avail: %d\n", 
 	    tx_ok, tx_fail, ack_payload_available);
 	
@@ -574,8 +574,11 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 		dbg("got %d bytes of ack length\n", r->ack_payload_length);
 		
 	}
-	
-	return !ret;
+
+	if (tx_ok) 
+		return 0;
+
+	return -ENODEV;
 }
 
 /**
@@ -661,6 +664,10 @@ void rf24_open_writing_pipe(struct rf24 *r, uint8_t* address)
 	
 	rf24_writeout_address(r, RX_ADDR_P0, address, 5);
 	rf24_writeout_address(r, TX_ADDR, address, 5);
+	/* cache the address */
+	int i;
+	for (i=0; i<5; i++)
+		r->pipe0_writing_address[i] = address[i];
 
 	const uint8_t max_payload_size = 32;
 	rf24_write_register(r, RX_PW_P0, min_t(uint8_t, r->payload_size, max_payload_size));
@@ -1213,7 +1220,7 @@ void rf24_print_details(struct rf24 *r)
  * Enter low-power mode
  *
  * To return to normal power mode, either rf24_write() some data or
- * startListening, or rf24_power_pp().
+ * startListening, or rf24_power_up().
  * @param r rf24 instance to act upon
  */
 void rf24_power_down(struct rf24 *r)
@@ -1230,8 +1237,11 @@ void rf24_power_down(struct rf24 *r)
  */
 void rf24_power_up(struct rf24 *r)
 {
-		rf24_write_register(r, CONFIG, 
-			    rf24_read_register(r, CONFIG) | (1<<PWR_UP));
+	uint8_t tmp = rf24_read_register(r, CONFIG);
+	rf24_write_register(r, CONFIG, ( tmp | _BV(PWR_UP) ));
+	if ((tmp & _BV(PWR_UP)) == 0)
+		delay_us(1500);
+
 }
 
 
@@ -1241,7 +1251,10 @@ void rf24_power_up(struct rf24 *r)
  * Just like rf24_write(), but it returns immediately. To find out what happened
  * to the send, catch the IRQ and then call rf24_what_happened().
  * If the previous transfer failed and there's something in TX FIFO
- * You can call this function with NULL buffer to retransmit
+ * You can call this function with NULL buffer to start retransmision
+ *
+ * If you call this function with NULL buffer and empty TX FIFO
+ * -EIO is returned
  *
  * @see rf24_write()
  * @see rf24_what_happened()
@@ -1249,24 +1262,24 @@ void rf24_power_up(struct rf24 *r)
  * @param r rf24 instance to act upon
  * @param buf Pointer to the data to be sent
  * @param len Number of bytes to be sent
- * @return True if the payload was delivered successfully false if not
+ * @return 0 if the write started, -EIO on error
  */
-void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
+int rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 {
-
-	uint8_t old_config = rf24_read_register(r, CONFIG);
-	rf24_write_register(r, CONFIG, ( old_config | (1<<PWR_UP) ) & ~(1<<PRIM_RX));
-	if ((old_config & _BV(PWR_UP)) == 0)
-		delay_us(1500);
 	
 	/* Send the payload */
 	if (buf)
 		rf24_write_payload( r, buf, len );
+
+	uint8_t tmp = rf24_read_register(r, FIFO_STATUS);
+	if (tmp & _BV(TX_EMPTY))
+		return -EIO; /* TX Empty? Likely a bug in app code */
 	
 	/* Allons! */
 	rf24_ce(1);
 	delay_us(15);
 	rf24_ce(0);	
+	return 0;
 }
 
 /**
@@ -1373,8 +1386,13 @@ inline int rf24_is_ack_payload_available(struct rf24 *r)
 	return ret;
 }
 
+uint8_t rf24_queue_empty(struct rf24 *r) { 
+	uint8_t tmp = rf24_read_register(r, FIFO_STATUS);
+	return tmp & (_BV(4));
+}
+
 /** 
- * Start writing in 'stream' mode. This mode allows fastest 
+ * Start writing in 'bulk' mode. This mode allows fastest 
  * possible transfers with guaranteed delivery.
  * Each of the packets will be enqueued in the TX fifo and
  * sent until the receiver ACKs it. 
@@ -1390,35 +1408,40 @@ inline int rf24_is_ack_payload_available(struct rf24 *r)
  */
 int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len)
 {
-	uint8_t tmp = rf24_read_register(r, CONFIG);
-	rf24_write_register(r, CONFIG, ( tmp | (1<<PWR_UP) ) & ~(1<<PRIM_RX));
-	if ((tmp & _BV(PWR_UP)) == 0)
-		delay_us(1500);
+	uint8_t tmp;
 	
 	tmp = rf24_read_register(r, FIFO_STATUS);
-	if (tmp & TX_FULL)
-		return -1; /* EAGAIN, we're full o' shit right now */
+	if (tmp & _BV(5)) {
+		rf24_write_register(r, STATUS, (1<<MAX_RT) );
+		return -EAGAIN; /* EAGAIN, we're full o' shit right now */
+	}
 
 	/* Send the payload */
 	rf24_write_payload( r, buf, len );
 
 	/* Start sending 'em out already */
 	rf24_ce(1);
-
 	return 0; /* Queued! */
 }
+
+
 
 /** 
  * Wait for the TX fifo to become empty and 
  * stop transmitting. 
  * 
  * @param r rf24 instance to act upon
+ * @param timeout How long to wait for queue synchronisation ( in 250uS intervals )
+ * @return 0 - timeout,  
  */
-void rf24_queue_sync(struct rf24 *r)
+uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout)
 {
 	uint8_t tmp;
 	do { 
-		tmp = rf24_read_register(r, FIFO_STATUS);
-	} while (!(tmp & TX_EMPTY));
+		rf24_what_happened(r, &tmp, &tmp, &tmp);
+		delay_ms(10); /* Wait for last packet to fly out, worst-case */
+	} while (!rf24_queue_empty(r) && --timeout);
+	/* Clean status flags */
 	rf24_ce(0);
+	return timeout;
 }
