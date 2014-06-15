@@ -11,6 +11,10 @@
 #define RF24_H
 #include <stdint.h>
 
+/**
+ * Driver for nRF24L01(+) 2.4GHz Wireless Transceiver
+ */
+
 
 /**
  * Power Amplifier level.
@@ -33,9 +37,6 @@ typedef enum { RF24_1MBPS = 0, RF24_2MBPS, RF24_250KBPS } rf24_datarate_e;
  */
 typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e;
 
-/**
- * Driver for nRF24L01(+) 2.4GHz Wireless Transceiver
- */
 
 #define RF24_NUM_CHANNELS 128 
 #define RF24_MAX_PAYLOAD  32
@@ -62,6 +63,9 @@ struct rf24 {
 	uint8_t payload_size;
 	uint8_t ack_payload_length;
 	uint8_t pipe0_reading_address[5];
+	uint8_t pipe0_writing_address[5];
+	uint8_t nretr; 
+	uint8_t rtimeout;
 };
 
 struct rf24_sweeper {
@@ -69,6 +73,8 @@ struct rf24_sweeper {
 	uint8_t values[RF24_NUM_CHANNELS];
 };
 
+
+void rf24_init(struct rf24 *r); 
 
 uint8_t rf24_readout_register(struct rf24 *r, uint8_t reg, uint8_t* buf, uint8_t len);
 uint8_t rf24_read_register(struct rf24 *r, uint8_t reg);
@@ -79,12 +85,15 @@ uint8_t rf24_read_payload(struct rf24 *r, void* buf, uint8_t len);
 uint8_t rf24_flush_rx(struct rf24 *r);
 uint8_t rf24_flush_tx(struct rf24 *r);
 uint8_t rf24_get_status(struct rf24 *r);
+
+
+
 void rf24_print_status(uint8_t status);
 void rf24_print_observe_tx(struct rf24 *r, uint8_t value);
 void rf24_print_byte_register(struct rf24 *r, const char* name, uint8_t reg, uint8_t qty);
 void rf24_print_address_register(struct rf24 *r, const char* name, uint8_t reg, uint8_t qty);
+
 void rf24_toggle_features(struct rf24 *r);
-void rf24_init(struct rf24 *r); 
 void rf24_start_listening(struct rf24 *r);
 void rf24_stop_listening(struct rf24 *r);
 int rf24_write(struct rf24 *r, const void* buf, uint8_t len );
@@ -121,16 +130,21 @@ void rf24_print_details(struct rf24 *r);
 void rf24_power_down(struct rf24 *r);
 void rf24_power_up(struct rf24 *r) ;
 int rf24_available(struct rf24 *r, uint8_t* pipe_num);
-void rf24_start_write(struct rf24 *r, const void* buf, uint8_t len );
+int rf24_start_write(struct rf24 *r, const void* buf, uint8_t len );
 void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8_t len);
 int rf24_is_ack_payload_available(struct rf24 *r);
 void rf24_what_happened(struct rf24 *r, uint8_t *tx_ok, uint8_t *tx_fail, uint8_t *rx_ready);
 int rf24_test_carrier(struct rf24 *r);
 int rf24_test_rpd(struct rf24 *r) ;
 
+
+int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len);
+uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout);
+
 void rf24_sweeper_init(struct rf24_sweeper *s, struct rf24 *r);
 void rf24_sweep(struct rf24_sweeper *s, int loops);
 void rf24_sweep_dump_results(struct rf24_sweeper *s);
 void rf24_sweep_dump_header();
+
 
 #endif

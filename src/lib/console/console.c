@@ -1,13 +1,15 @@
 
-struct circ_buffer { 
-	int head; 
-	int tail;
-	int size;
-	char buffer[];
-}
-
+struct console { 
+	int 
+	char* out_buffer;
+	int o_head, o_tail;
+	char* in_buffer;
+	int i_head, i_tail;
+};
+	
 
 struct console { 
-	void (*init)(void);
-	
-}
+	void read
+};
+
+struct consoel

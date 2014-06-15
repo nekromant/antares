@@ -11,6 +11,7 @@
 #endif 
 
 #include <generic/macros.h>
+#include <generic/error.h>
 
 #if !defined(CONFIG_ANTARES_STARTUP) && defined(CONFIG_ARCH_HAS_ANTARES_STARTUP)
 #define ANTARES_APP(fn) void fn()
