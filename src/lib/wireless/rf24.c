@@ -1436,12 +1436,14 @@ int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len)
  */
 uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout)
 {
+	rf24_ce(1); /* If we're attempting a resync - start actual transmission */
 	uint8_t tmp;
-	do { 
+	while (!rf24_queue_empty(r) && --timeout) { 
 		rf24_what_happened(r, &tmp, &tmp, &tmp);
 		delay_ms(10); /* Wait for last packet to fly out, worst-case */
-	} while (!rf24_queue_empty(r) && --timeout);
-	/* Clean status flags */
-	rf24_ce(0);
+	};
+	rf24_what_happened(r, &tmp, &tmp, &tmp); 	/* Clean status flags */
+	rf24_ce(0); /* Stop tramission */
 	return timeout;
 }
+
