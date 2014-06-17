@@ -1,0 +1,7 @@
+if ARCH_NATIVE
+
+config ARCH_NATIVE_SO
+select GCC_FPIC
+bool "Compile a shared library"
+
+endif
