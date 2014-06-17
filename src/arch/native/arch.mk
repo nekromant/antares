@@ -2,7 +2,14 @@
 ARCH_FEATURES=ANTARES_STARTUP
 
 #Set our build goals
-BUILDGOALS=$(IMAGENAME).elf 
+ifneq ($(CONFIG_ARCH_NATIVE_SO),y)
+ BUILDGOALS=$(IMAGENAME).elf
+else
+ CFLAGS+=-fPIC
+ LDFLAGS+=-fPIC
+ ELFFLAGS+=-shared
+ BUILDGOALS=$(shell dirname $(IMAGENAME))/lib$(shell basename $(IMAGENAME)).so
+endif
 
 # Do not combine objects into built-in.o
 # This screws up things on avr and breaks ANTARES_* macros
@@ -10,3 +17,4 @@ BUILDGOALS=$(IMAGENAME).elf
 LD_NO_COMBINE=y
 
 PHONY+=sizecheck
+
