@@ -20,8 +20,7 @@ ARCH?=arm
 # SILENT_GEN2 is used for canned stuff
 
 define generate_dirlist
-$(TMPDIR)/$(1).$(4): $(3)
-	$(Q)[ -d $(TMPDIR) ] || mkdir -p $(TMPDIR)
+$(TMPDIR)/$(1).$(4): $(3) $(TMPDIR)/.dirchecked
 	$(SILENT_GEN2) [ -d "$(3)" ] && ls $(3) $(junk) | \
 		$(SRCDIR)/scripts/listgen $(2) $(4) \
 			$(5) $$@
@@ -75,6 +74,7 @@ genfiles+=$(call gendirs,deploy)
 genfiles+=$(call gendirs,edeploy)
 
 $(TMPDIR)/.dirchecked:
+	$(Q)[ -d $(TMPDIR) ] || mkdir -p $(TMPDIR)
 	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
 	$(Q)[ -d $(TOPDIR)/include ] || mkdir -p $(TOPDIR)/include
 	$(Q)[ -d $(TOPDIR)/deploy ] || mkdir -p $(TOPDIR)/deploy
