@@ -83,6 +83,11 @@ ifeq ($(CONFIG_GCC_LM),y)
 ELFFLAGS+=-lm
 endif
 
+ifeq ($(CONFIG_GCC_FPIC),y)
+ CFLAGS+=-fPIC
+ LDFLAGS+=-fPIC
+endif
+
 CFLAGS+=-Wall
 ifeq ($(CONFIG_GCC_PARANOID_WRN),y)
 CFLAGS+=-Werror
@@ -130,15 +135,21 @@ endif
 	-C $(abspath $(TOPDIR)/build) \
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
+
 ifneq ($(LD_NO_COMBINE),y)
-$(IMAGENAME).elf: $(GCC_LDFILE) builtin
+%.elf %.so: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(LD) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
+
 else
-$(IMAGENAME).elf: $(GCC_LDFILE) builtin
+%.elf %.so: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`
+
 endif
+
+
+
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
 	$(SILENT_OBJCOPY) $(OBJCOPY) $(OBJCOPYFLAGS) $< $(@) 

@@ -61,6 +61,9 @@ bool "Link agains -lc"
 config GCC_LM
 bool "Link agains -lm"
 
+config GCC_FPIC
+bool "Generate position-independent code (-fPIC)"
+
 config GCC_STRIP
 bool "Remove dead code"
 	help
