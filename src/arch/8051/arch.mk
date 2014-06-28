@@ -7,7 +7,7 @@ BUILDGOALS=$(IMAGENAME).ihx $(IMAGENAME).bin
 
 LD_NO_COMBINE=y
 
-COMMONFLAGS+=-mmcs51 --stack-auto
+COMMONFLAGS+=-mmcs51 --stack-auto --std-sdcc99
 
 ifeq ($(CONFIG_MODEL_SMALL),y)
 COMMONFLAGS+=--model-small
