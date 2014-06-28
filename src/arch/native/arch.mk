@@ -5,8 +5,6 @@ ARCH_FEATURES=ANTARES_STARTUP
 ifneq ($(CONFIG_ARCH_NATIVE_SO),y)
  BUILDGOALS=$(IMAGENAME).elf
 else
- CFLAGS+=-fPIC
- LDFLAGS+=-fPIC
  ELFFLAGS+=-shared
  BUILDGOALS=$(shell dirname $(IMAGENAME))/lib$(shell basename $(IMAGENAME)).so
 endif
