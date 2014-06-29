@@ -1,0 +1,54 @@
+Console drivers and stuff
+-------------------------
+
+Console, is your usual serial debug terminal. Or whatever you may have in mind.
+Now, let's separate two entities. 'early console' and normal console. 
+At the very early stages, where you have no interrupts enabled, you may still want to 
+debug something. In really small environments it may be the only and sufficient console.
+
+Early console
+--------------
+
+#include <lib/earlycon.h>
+
+Early console is the very first console enabled. It has lazy initialization and therefore
+it will be initialized once you try to use it. 
+As a user of this library you have the following functions: 
+early_putc
+early_getc
+early_avail (returns non-zero when early_getc won't block)
+These optionally get glued by default to your platform stdio facilities, so you can use printf 
+and friends.
+
+NOTE:
+These are NOT mapped to stdin/stdout by default on most platforms, so it's not safe to use 
+printf from the start: 
+Either use
+
+fprintf(&g_early_stdout, ...) instead. 
+
+Or initialize stdin/stdout:
+
+stdout = &g_early_stdout
+stdin = &g_early_stdin
+
+For platforms lacking proper stdio (e.g. 8051), these are glued to stdin/stdout from the very start.
+printk and friends are bound to the early console from the very start until a proper console takes 
+over. So the very first call to printk() somewhere in ANTARES_INIT_LOW() or main() will initialize 
+the early console and print out your message. 
+
+Early consoles are designed to be dumb and simple. So general design notes that apply to all 
+early console backends: 
+
+* Only ONE early console can exist per project. 
+* No interrupts, please. 
+* No buffering whatsoever.   
+
+In other words, unless you're on an attiny - switch to proper console as soon as possible
+
+
+Console 
+--------
+
+TODO
+
