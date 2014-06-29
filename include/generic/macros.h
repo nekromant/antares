@@ -7,6 +7,7 @@
 
 #define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
 
+#ifndef CONFIG_TOOLCHAIN_SDCC
 #define min_t(type, x, y) ({					\
 			type __min1 = (x);			\
 			type __min2 = (y);			\
@@ -17,6 +18,14 @@
 			type __max1 = (x);			\
 			type __max2 = (y);			\
 			__max1 > __max2 ? __max1: __max2; })
+
+#else
+
+
+#define min_t(type, a, b) (((type)(a)<(type)(b))?(type)(a):(type)(b))
+#define max_t(type, a, b) (((type)(a)>(type)(b))?(type)(a):(type)(b))
+
+#endif
 
 /* Just in case */
 #ifndef NULL
@@ -61,6 +70,9 @@
 
 #define BIN(x) 0b##x
 
+#ifndef _BV
+#define _BV(a) (1<<a)
+#endif
 
 #endif
 

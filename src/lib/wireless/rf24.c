@@ -22,19 +22,20 @@
  *  PROFIT!
  */
 
-static struct rf24 *nrf;
+extern struct rf24 *g_radio;
+
 static void rf24_csn(uint8_t state) 
 {
-	nrf->csn(state);
+	g_radio->csn(state);
 }
 static void rf24_ce(uint8_t state) 
 {
-	nrf->ce(state);
+	g_radio->ce(state);
 }
 
 static uint8_t rf24_spi_xfer(uint8_t d) 
 {
-	return nrf->spi_xfer(d);
+	return g_radio->spi_xfer(d);
 }
 
 #else
@@ -364,11 +365,6 @@ void rf24_init(struct rf24 *r)
 		r->pipe0_reading_address[i] = 0;
 	r->ack_payload_length = 0;
 
-	/* Hacky optimisation for size */
-	#ifdef CONFIG_LIB_RF24_SIZEOPT
-	nrf = r; 
-	#endif 
-
 	rf24_ce(0);
 	/*
 	 * Must allow the radio time to settle else configuration bits will not necessarily stick.
@@ -477,9 +473,10 @@ void rf24_start_listening(struct rf24 *r)
  */
 void rf24_stop_listening(struct rf24 *r)
 {
+	uint8_t tmp;
 	rf24_ce(0);
 
-	uint8_t tmp = rf24_read_register(r, CONFIG);
+	tmp = rf24_read_register(r, CONFIG);
 	rf24_write_register(r, CONFIG, ( tmp ) & ~(1<<PRIM_RX));
 
 	rf24_writeout_address(r, RX_ADDR_P0, r->pipe0_writing_address, 5);
@@ -661,15 +658,15 @@ int rf24_read(struct rf24 *r, void* buf, uint8_t len )
  */
 void rf24_open_writing_pipe(struct rf24 *r, uint8_t* address)
 {
-	
+	const uint8_t max_payload_size = 32;
+	int i;	
 	rf24_writeout_address(r, RX_ADDR_P0, address, 5);
 	rf24_writeout_address(r, TX_ADDR, address, 5);
 	/* cache the address */
-	int i;
 	for (i=0; i<5; i++)
 		r->pipe0_writing_address[i] = address[i];
 
-	const uint8_t max_payload_size = 32;
+	
 	rf24_write_register(r, RX_PW_P0, min_t(uint8_t, r->payload_size, max_payload_size));
 }
 
@@ -849,6 +846,7 @@ static void write_feature(struct rf24 *r, uint8_t v)
 		rf24_toggle_features(r);
 		rf24_write_register(r, FEATURE, v);
 	}
+
 	if (!rf24_read_register(r, FEATURE))
 		panic("Failed to enable extended features. Are they supported by chip?");
 
@@ -862,13 +860,15 @@ static void write_feature(struct rf24 *r, uint8_t v)
  * Ack payloads are a handy way to return data back to senders without
  * manually changing the radio modes on both units.
  *
+ * @param enabled 1 - enable, 0 -disable
  * @param r rf24 instance to act upon
  */
-void rf24_enable_ack_payload(struct rf24 *r)
+void rf24_enable_ack_payload(struct rf24 *r, uint8_t enabled)
 {
 	write_feature(r, rf24_read_register(r, FEATURE) | 
-		      (1<<EN_ACK_PAY) | (1<<EN_DPL) 
+		      ( enabled <<EN_ACK_PAY) | (1<<EN_DPL) 
 		);
+
 	rf24_write_register(r, DYNPD, rf24_read_register(r, DYNPD) | (1 << DPL_P1) | (1 << DPL_P0));
 	r->flags |= RF24_HAVE_ACK_PAYLOADS;
 }
@@ -1266,12 +1266,12 @@ void rf24_power_up(struct rf24 *r)
  */
 int rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 {
-	
+	uint8_t tmp;
 	/* Send the payload */
 	if (buf)
 		rf24_write_payload( r, buf, len );
 
-	uint8_t tmp = rf24_read_register(r, FIFO_STATUS);
+	tmp = rf24_read_register(r, FIFO_STATUS);
 	if (tmp & _BV(TX_EMPTY))
 		return -EIO; /* TX Empty? Likely a bug in app code */
 	
@@ -1300,11 +1300,12 @@ int rf24_start_write(struct rf24 *r, const void* buf, uint8_t len )
 void rf24_write_ack_payload(struct rf24 *r, uint8_t pipe, const void* buf, uint8_t len)
 {
 	const uint8_t* current = (const uint8_t*)(buf);
-	
+	const uint8_t max_payload_size = 32;
+	uint8_t data_len;
+
 	rf24_csn(0);
 	rf24_spi_xfer( W_ACK_PAYLOAD | ( pipe & BIN(111) ) );
-	const uint8_t max_payload_size = 32;
-	uint8_t data_len = min_t(uint8_t, len, max_payload_size);
+	data_len = min_t(uint8_t, len, max_payload_size);
 	while ( data_len-- )
 		rf24_spi_xfer(*current++);	
 	rf24_csn(1);
@@ -1379,16 +1380,21 @@ int rf24_test_rpd(struct rf24 *r)
  *
  * @return True if an ack payload is available.
  */
-inline int rf24_is_ack_payload_available(struct rf24 *r)
+int rf24_is_ack_payload_available(struct rf24 *r)
 {
 	int ret = r->flags & RF24_ACK_PAYLOAD_AVAIL;
 	r->flags &= ~RF24_ACK_PAYLOAD_AVAIL;
 	return ret;
 }
 
-uint8_t rf24_queue_empty(struct rf24 *r) { 
+uint8_t rf24_tx_empty(struct rf24 *r) { 
 	uint8_t tmp = rf24_read_register(r, FIFO_STATUS);
 	return tmp & (_BV(4));
+}
+
+uint8_t rf24_tx_full(struct rf24 *r) { 
+	uint8_t tmp = rf24_read_register(r, FIFO_STATUS);
+	return tmp & (_BV(5));
 }
 
 /** 
@@ -1436,9 +1442,9 @@ int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len)
  */
 uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout)
 {
-	rf24_ce(1); /* If we're attempting a resync - start actual transmission */
 	uint8_t tmp;
-	while (!rf24_queue_empty(r) && --timeout) { 
+	rf24_ce(1); /* If we're attempting a resync - start actual transmission */
+	while (!rf24_tx_empty(r) && --timeout) { 
 		rf24_what_happened(r, &tmp, &tmp, &tmp);
 		delay_ms(10); /* Wait for last packet to fly out, worst-case */
 	};
