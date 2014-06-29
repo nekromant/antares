@@ -115,7 +115,7 @@ void rf24_set_payload_size(struct rf24 *r, uint8_t size);
 #define rf24_get_payload_size(r) ((r)->payload_size)
 
 uint8_t rf24_get_dynamic_payload_size(struct rf24 *r);
-void rf24_enable_ack_payload(struct rf24 *r);
+void rf24_enable_ack_payload(struct rf24 *r, uint8_t en);
 void rf24_enable_dynamic_payloads(struct rf24 *r);
 void rf24_set_auto_ack(struct rf24 *r, int enable);
 void rf24_set_pipe_auto_ack(struct rf24 *r, uint8_t pipe, int enable ) ;
@@ -140,6 +140,8 @@ int rf24_test_rpd(struct rf24 *r) ;
 
 int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len);
 uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout);
+uint8_t rf24_queue_empty(struct rf24 *r);
+
 
 void rf24_sweeper_init(struct rf24_sweeper *s, struct rf24 *r);
 void rf24_sweep(struct rf24_sweeper *s, int loops);

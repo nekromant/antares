@@ -7,6 +7,7 @@
 
 #define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
 
+#ifndef CONFIG_TOOLCHAIN_SDCC
 #define min_t(type, x, y) ({					\
 			type __min1 = (x);			\
 			type __min2 = (y);			\
@@ -18,12 +19,20 @@
 			type __max2 = (y);			\
 			__max1 > __max2 ? __max1: __max2; })
 
+#else
+
+
+#define min_t(type, a, b) (((type)(a)<(type)(b))?(type)(a):(type)(b))
+#define max_t(type, a, b) (((type)(a)>(type)(b))?(type)(a):(type)(b))
+
+#endif
+
 /* Just in case */
 #ifndef NULL
 #define NULL 0
 #endif
 
-/* Macro concatenation magic.  
+/* Macro concatenation magic.
  * Stolen from somewhere on the internets
  */
 
@@ -53,9 +62,9 @@
 #define QUOTE(str) #str
 #define EXPAND_AND_QUOTE(str) QUOTE(str)
 
-/* 
+/*
  * Macrofied, so that we can later add implementations
- * for compilers that don't know about 0b prefix 
+ * for compilers that don't know about 0b prefix
  * So far both gcc and sdcc can do this stuff
  */
 
@@ -70,6 +79,11 @@
 #	endif
 #else
 #	define __noreorder
+
+#ifndef _BV
+#define _BV(a) (1<<a)
+#endif
+
 #endif
 
 #define __antares_naked \
