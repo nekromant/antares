@@ -35,8 +35,8 @@ endef
 # Just note, that each one slows down build
 
 define extra_proc
-extras+=%.$(O).adeps
-PRECIOUS+=%.$(O).adeps
+extras+=%.$(O).$(1)
+PRECIOUS+=%.$(O).$(1)
 %.$(O).$(1): $(SRCDIR)/%.S
 	$(2)
 	$(SILENT_EXTRA) touch $$(@)
@@ -48,12 +48,30 @@ PRECIOUS+=%.$(O).adeps
 	$(SILENT_EXTRA) touch $$(@)
 endef
 
-#TODO: May be move extra processing receipes away
+# If a sucky compiler can't do some section magic (sdcc, sic!)
+# We will make use of hacky scripts to make ANTARES_INIT_* macros work
+# This will take care of collecting all the required definitions from 
+# source files and generate a dummy with main() that will call all our
+# stuff in order. 
 
-ifeq ($(CONFIG_ANTARES_STARTUPDEP),y)
-$(eval $(call extra_proc,adeps,\
-	$(Q) cat $$< | $(ANTARES_DIR)/scripts/mfilter ANTARES_DEPENDS > $$(@)\
+ifeq ($(TOOLCHAIN_LACKS_SECTION_MAGIC),y)
+ifeq ($(CONFIG_ANTARES_STARTUP),y)
+$(eval $(call extra_proc,a_init_low,\
+	$(Q) cat $$< | grep ANTARES_INIT_LOW|cut -d"(" -f2|cut -d")" -f1 > $$(@)\
 	))
+
+$(eval $(call extra_proc,a_init_high,\
+	$(Q) cat $$< | grep ANTARES_INIT_HIGH|cut -d"(" -f2|cut -d")" -f1 > $$(@)\
+	))
+
+$(eval $(call extra_proc,a_app,\
+	$(Q) cat $$< | grep ANTARES_APP|cut -d"(" -f2|cut -d")" -f1 > $$(@)\
+	))
+
+$(eval $(call extra_proc,a_fini,\
+	$(Q) cat $$< | grep ANTARES_FINISH|cut -d"(" -f2|cut -d")" -f1 > $$(@)\
+	))
+endif
 endif
 
 .genned: $(TOPDIR)/include/generated/autoconf.h $(gen-y)
