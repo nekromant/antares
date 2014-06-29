@@ -17,4 +17,6 @@
 #define get_system_clock()    CONFIG_F_CPU
 #define set_system_clock(clk) 
 
+extern void do_antares_startup();
+
 #endif

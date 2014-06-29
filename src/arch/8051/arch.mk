@@ -5,6 +5,8 @@ BUILDGOALS=$(IMAGENAME).ihx $(IMAGENAME).bin
 # Not supported by some compilers (sdcc)
 # So it's 100% safe to set this to y
 
+ARCH_FEATURES:=ANTARES_STARTUP
+
 LD_NO_COMBINE=y
 
 COMMONFLAGS+=-mmcs51 --stack-auto --std-sdcc99

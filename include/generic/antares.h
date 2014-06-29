@@ -13,11 +13,21 @@
 #include <generic/macros.h>
 #include <generic/error.h>
 
-#if !defined(CONFIG_ANTARES_STARTUP) && defined(CONFIG_ARCH_HAS_ANTARES_STARTUP)
-#define ANTARES_APP(fn) void fn()
-#define ANTARES_INIT_LOW(fn) void fn()
-#define ANTARES_INIT_HIGH(fn) void fn()	      
-#define ANTARES_FINISH(fn) void fn()
+/* If arch didn't have any of these defined - take care */
+#if !defined(ANTARES_APP)
+ #define ANTARES_APP(fn) void antares_app_ ## fn()
+#endif
+
+#if !defined(ANTARES_INIT_LOW)
+#define ANTARES_INIT_LOW(fn) void antares_init_low_ ## fn()
+#endif
+
+#if !defined(ANTARES_INIT_HIGH)
+#define ANTARES_INIT_HIGH(fn) void antares_init_high_ ## fn()	      
+#endif
+
+#if !defined(ANTARES_FINISH)
+#define ANTARES_FINISH(fn) void antares_finish_ ## fn()
 #endif
 
 #endif
