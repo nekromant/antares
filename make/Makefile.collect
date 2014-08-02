@@ -41,7 +41,6 @@ $(TMPDIR)/all-$(1).kcnf: $(TMPDIR)/$(1).mk $(TMPDIR)/$(1).kcnf
 		done; echo "#done" >> $$@
 endef
 
-
 ifeq ($(PROJECT_SHIPS_ARCH),y)
 $(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,mk,"=" >))
 $(eval $(call generate_dirlist,arch,ARCH,$(TOPDIR)/src/arch,kcnf,need_feats >))
@@ -75,13 +74,19 @@ genfiles+=$(call gendirs,edeploy)
 
 $(TMPDIR)/.dirchecked:
 	$(Q)[ -d $(TMPDIR) ] || mkdir -p $(TMPDIR)
-	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
+#	$(Q)[ -d $(TOPDIR)/kconfig/lxdialog ] || mkdir -p $(TOPDIR)/kconfig/lxdialog
 	$(Q)[ -d $(TOPDIR)/include ] || mkdir -p $(TOPDIR)/include
 	$(Q)[ -d $(TOPDIR)/deploy ] || mkdir -p $(TOPDIR)/deploy
 	$(Q)[ -d $(CONFIG_IMAGE_DIR) ] || mkdir -p $(CONFIG_IMAGE_DIR)
+	$(Q)[ -d $(OBJDIR)/build/config ] || mkdir -p $(OBJDIR)/build/config
+	$(Q)[ -d $(OBJDIR)/build/generated ] || mkdir -p $(OBJDIR)/build/generated
 	$(Q)touch $(@)
 
+
+#Collect all the needed info and 
 collectinfo: $(TMPDIR)/.collected $(TMPDIR)/.version
+	     $(Q)ln -sf $(abspath $(OBJDIR)/build/generated) $(OBJDIR)/include/generated
+	     $(Q)ln -sf $(abspath $(OBJDIR)/build/config)    $(OBJDIR)/include/config
 
 
 define check_tool
@@ -101,6 +106,5 @@ $(TMPDIR)/.collected: $(TMPDIR)/.dirchecked $(TMPDIR)/.toolchecked $(genfiles)
 	     $(Q)-rm -f $(OBJDIR)/include/arch
 	     $(Q)ln -sf ../$(SRCDIR)/src/arch/$(ARCH)/include $(OBJDIR)/include/arch
 	     $(Q)touch $(@)
-
 
 PHONY+=collectinfo
