@@ -10,6 +10,9 @@ ANTARES_DIR?=$(TOPDIR)
 TMPDIR?=tmp
 ARCH?=avr
 
+#The config file we will be using
+KCONFIG_CONFIG?=.config
+
 #enforce bash, since other shells may break things
 SHELL:=$(shell which bash)
 
