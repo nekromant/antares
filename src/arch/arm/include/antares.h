@@ -1,8 +1,6 @@
 #ifndef ANTARES_H
 #define ANTARES_H
 
-#include <generic/antares.h>
-
 /* 
  * normal fn(); call would cause optimizer to screw things up for 
  * no apparent reason. 
@@ -55,6 +53,8 @@
 
 #define ANTARES_DISABLE_IRQS() __disable_irq()
 #define ANTARES_ENABLE_IRQS() __enable_irq()
+
+#include <generic/antares.h>
 
 
 extern uint32_t SystemCoreClock;
