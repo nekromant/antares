@@ -1,7 +1,6 @@
 #ifndef ANTARES_H
 #define ANTARES_H
 
-#include <generic/antares.h>
 
 /*
  * We use .initX sections for low and high init functions
@@ -61,6 +60,8 @@
 
 #include <msp430.h> 
 #include <stdint.h>
+#include <generic/antares.h>
+
 
 #define ANTARES_DISABLE_IRQS() __disable_interrupt();     
 #define ANTARES_ENABLE_IRQS() __enable_interrupt();

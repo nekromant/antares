@@ -1,7 +1,6 @@
 #ifndef ARCH_ANTARES_H
 #define ARCH_ANTARES_H
 
-#include <generic/antares.h>
 
 #ifdef CONFIG_ANTARES_STARTUP
 
@@ -51,6 +50,8 @@ void antares_app_register(struct antares_app *app);
 
 #define get_system_clock()    0
 #define set_system_clock(clk) 
+
+#include <generic/antares.h>
 
 
 #endif

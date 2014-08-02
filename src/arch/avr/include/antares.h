@@ -1,7 +1,6 @@
 #ifndef ANTARES_H
 #define ANTARES_H
 
-#include <generic/antares.h>
 
 #ifndef __ASSEMBLER__
 #include <util/atomic.h>
@@ -62,7 +61,12 @@
 	}								\
 	void fn() 
 
+
+#define HAVE_ANTARES_STARTUP
+
 #endif
+
+#include <generic/antares.h>
 
 #include <avr/interrupt.h>
 #define ANTARES_DISABLE_IRQS() cli()

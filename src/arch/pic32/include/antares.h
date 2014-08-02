@@ -1,7 +1,6 @@
 #ifndef ANTARES_H
 #define ANTARES_H
 
-#include <generic/antares.h>
 
 /*
  * We use .initX sections for low and high init functions
@@ -61,6 +60,7 @@
 #endif
 
 #include <plib.h>
+#include <generic/antares.h>
 #define ANTARES_ENABLE_IRQS() INTEnableSystemMultiVectoredInt();
 #define ANTARES_DISABLE_IRQS() INTDisableSystemMultiVectoredInt();
 
