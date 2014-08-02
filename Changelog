@@ -6,10 +6,13 @@
 	* Architecture features mechanism (ARCH_HAS_XXX)
 	* Major buildsystem cleanups
 	* 'Native' port
-	* lib: Add Xilinx SLave Serial upload driver
+	* lib: Add Xilinx Slave Serial upload driver
 	* lib: Implemented earlycon
-	* lib: printk to hook to earlycon by default
+	* lib: printk hooks to earlycon by default
 	* lib: printk uses PROGMEM on AVR by default
+	* lib: rf24 library now compiles for 8051
+	* lib: spisd library
+	* 
 	...
 
 0.2-rc1: First release. More or less stable
