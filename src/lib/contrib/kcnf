@@ -2,6 +2,6 @@ menu "3rd-party libraries"
 
 source "antares/src/lib/contrib/lwip/kcnf"
 source "antares/src/lib/contrib/vusb/kcnf"
-
+source "antares/src/lib/contrib/Light_WS2812/kcnf"
 endmenu
 

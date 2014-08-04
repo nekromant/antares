@@ -1,0 +1,2 @@
+objects-y+=light_ws2812.o
+CFLAGS+=-DCONFIG_CONTRIB_WS2812_PORT=$(call unquote,$(CONFIG_CONTRIB_WS2812_PORT_))

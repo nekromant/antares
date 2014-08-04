@@ -1,0 +1,12 @@
+menuconfig CONTRIB_WS2812
+bool "LightWS2812"
+depends on ARCH_AVR
+
+if CONTRIB_WS2812
+   config CONTRIB_WS2812_PORT_
+   string "LED port"
+
+   config CONTRIB_WS2812_PIN
+   int "LED pin"
+endif
+
