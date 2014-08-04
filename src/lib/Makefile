@@ -12,6 +12,7 @@ objects-$(CONFIG_LIB_XMODEM)+=xmodem.o
 objects-$(CONFIG_LIB_XSSCU)+=xilinx-sscu.o
 objects-$(CONFIG_LIB_SPISD)+=spisd.o
 objects-$(CONFIG_LIB_PANIC)+=panic.o
+objects-$(CONFIG_LIB_CAPSENSE)+=capsense.o
 
 subdirs-y+=wireless
 subdirs-y+=ulc

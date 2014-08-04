@@ -121,6 +121,18 @@ menu "Data storage devices"
 
 endmenu 
 
+menu "Input devices"
+     config LIB_CAPSENSE
+     bool "Generic capsense driver"
+
+     if LIB_CAPSENSE
+     config LIB_CAPSENSE_NUMSAMPLES
+     int "Number of samples"
+     default 32
+     
+     endif
+
+endmenu
 
 menu "Misc drivers and libraries"
 
