@@ -1,13 +1,31 @@
 if ARCH_8051
 
+config FLEXIBLE_IRAMSIZE
+bool
+
+config FLEXIBLE_XRAMSIZE
+bool
+
+config FLEXIBLE_FLASHSIZE
+bool
+
 choice
 prompt "Pick an MCU family"
 
 config ARCH_8051_STC
 bool "STC 8051 family"
+select FLEXIBLE_IRAMSIZE
+select FLEXIBLE_XRAMSIZE
+select FLEXIBLE_FLASHSIZE
 
 config ARCH_8051_AT89
 bool "Atmel AT89 family"
+select FLEXIBLE_IRAMSIZE
+select FLEXIBLE_XRAMSIZE
+select FLEXIBLE_FLASHSIZE
+
+config ARCH_8051_NRF24LU1
+bool "Nordic Semiconductor NRF24LU1"
 
 endchoice
 
@@ -35,15 +53,18 @@ endchoice
 
 config XRAM_SIZE
 int "XRAM size (bytes)"
+depends on FLEXIBLE_XRAMSIZE
 default 128
 
 
 config IRAM_SIZE
 int "IRAM size (bytes)"
+depends on FLEXIBLE_IRAMSIZE
 default 128	
 
 config FLASH_SIZE
 int "FLASH size (bytes)"
+depends on FLEXIBLE_FLASHSIZE
 default 4096	
 
 
@@ -52,6 +73,11 @@ menu "Platform-specific libraries"
 if ARCH_8051_STC
 source "antares/src/arch/8051/stc/kcnf"
 endif
+
+if ARCH_8051_NRF24LU1
+source "antares/src/arch/8051/stc/kcnf"
+endif
+
 
 endmenu
 

@@ -9,7 +9,16 @@ ARCH_FEATURES:=ANTARES_STARTUP
 
 LD_NO_COMBINE=y
 
-COMMONFLAGS+=-mmcs51 --stack-auto --std-sdcc99
+COMMONFLAGS+=--std-sdcc99
+
+ifeq ($(CONFIG_ARCH_8051_STC),y)
+include $(ANTARES_DIR)/src/arch/8051/stc/arch.mk
+endif
+
+ifeq ($(CONFIG_ARCH_8051_NRF24LU1),y)
+include $(ANTARES_DIR)/src/arch/8051/nrf24lu1/arch.mk
+endif
+
 
 ifeq ($(CONFIG_MODEL_SMALL),y)
 COMMONFLAGS+=--model-small
@@ -30,11 +39,9 @@ endif
 COMMONFLAGS+=--iram-size $(CONFIG_IRAM_SIZE)
 COMMONFLAGS+=--xram-size $(CONFIG_XRAM_SIZE)
 
+
 CFLAGS+=-DF_CPU=$(CONFIG_F_CPU)
 
-ifeq ($(CONFIG_ARCH_8051_STC),y)
-include $(ANTARES_DIR)/src/arch/8051/stc/arch.mk
-endif
 
 #$(IMAGENAME).bin: $(IMAGENAME).ihx
 #	$(SILENT_HEX2BIN)hex2bin $(<)
