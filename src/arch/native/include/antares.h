@@ -12,24 +12,12 @@ struct antares_app {
 void antares_app_register(struct antares_app *app);
 
 
-#define ANTARES_INIT_LOW(fn)                                            \
-        void fn();                                                      \
-	void (*const fn ## _low []) (void)				\
-	__attribute__ ((section (".preinit_array"), aligned (sizeof (void *)))) = \
-	{								\
-		&fn							\
-	};								\
-        void fn()							\
+#define ANTARES_INIT_LOW(fn)				\
+        void 	__attribute__((constructor (101))) fn()	
 
-#define ANTARES_INIT_HIGH(fn)                                            \
-        void fn();                                                      \
-	void (*const fn ## _high []) (void)				\
-	__attribute__ ((section (".init_array"), aligned (sizeof (void *)))) = \
-	{								\
-		&fn							\
-	};								\
-        void fn()							\
-
+#define ANTARES_INIT_HIGH(fn)				\
+        void 	__attribute__((constructor (102))) fn()		
+	
 
 #define ANTARES_APP(fn)                                                 \
         void fn();							\

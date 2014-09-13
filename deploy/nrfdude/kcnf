@@ -1,0 +1,6 @@
+menuconfig DEPLOY_NRFDUDE
+bool "nrfdude"
+depends on ARCH_8051_NRF24LU1
+
+
+
