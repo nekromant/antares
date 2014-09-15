@@ -53,11 +53,13 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
 #define rf24_is_p_variant(rf24)        ((rf24)->flags & RF24_P_VARIANT)
 
 #define rf24_has_dynamic_payload(rf24) ((rf24)->flags & RF24_DYNAMIC_PAYLOAD)
+
 struct rf24 {
 	void    (*csn)(int level);
 	void    (*ce)(int level);
 	void    (*spi_set_speed)(int khz);
-	uint8_t (*spi_xfer)(uint8_t dat);
+	void    (*spi_write)(const uint8_t *data, uint8_t len);
+	void    (*spi_read)(uint8_t *data, uint8_t len);
 	/* private data below */
 	uint8_t flags;
 	uint8_t payload_size;
@@ -74,35 +76,56 @@ struct rf24_sweeper {
 };
 
 
-void rf24_init(struct rf24 *r); 
+struct rf24_config {
+	unsigned char channel;
+	unsigned char pa;
+	unsigned char rate;
+	unsigned char num_retries;
+	unsigned char retry_timeout; 
+	unsigned char ack_payloads; 
+	unsigned char dynamic_payloads;
+	unsigned char payload_size;
+	unsigned char crclen;
+	unsigned char pipe_auto_ack;
+} ;
 
-uint8_t rf24_readout_register(struct rf24 *r, uint8_t reg, uint8_t* buf, uint8_t len);
+
+void rf24_init(struct rf24 *r); 
+void rf24_config(struct rf24 *r, struct rf24_config *c);
+void rf24_open_writing_pipe(struct rf24 *r, uint8_t *address);
+void rf24_open_reading_pipe(struct rf24 *r, uint8_t number, uint8_t *address);
+void rf24_start_listening(struct rf24 *r);
+void rf24_stop_listening(struct rf24 *r);
+int  rf24_write(struct rf24 *r, const void* buf, uint8_t len);
+int  rf24_read(struct rf24 *r, void* buf, uint8_t len);
+
+int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len);
+uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout);
+
+uint8_t rf24_tx_empty(struct rf24 *r);
+uint8_t rf24_tx_full(struct rf24 *r);
+
+void rf24_flush_rx(struct rf24 *r);
+void rf24_flush_tx(struct rf24 *r);
+
+
+/* Register-level stuff */
+void rf24_readout_register(struct rf24 *r, uint8_t reg, uint8_t* buf, uint8_t len);
 uint8_t rf24_read_register(struct rf24 *r, uint8_t reg);
-uint8_t rf24_writeout_register(struct rf24 *r, uint8_t reg, const uint8_t* buf, uint8_t len);
-uint8_t rf24_write_register(struct rf24 *r, uint8_t reg, uint8_t value);
-uint8_t rf24_write_payload(struct rf24 *r, const void* buf, uint8_t len);
-uint8_t rf24_read_payload(struct rf24 *r, void* buf, uint8_t len);
-uint8_t rf24_flush_rx(struct rf24 *r);
-uint8_t rf24_flush_tx(struct rf24 *r);
+void rf24_writeout_register(struct rf24 *r, uint8_t reg, const uint8_t* buf, uint8_t len);
+void rf24_write_register(struct rf24 *r, uint8_t reg, uint8_t value);
+void rf24_write_payload(struct rf24 *r, const void* buf, uint8_t len);
+void rf24_read_payload(struct rf24 *r, void* buf, uint8_t len);
 uint8_t rf24_get_status(struct rf24 *r);
 
 
-
+/* Debugging shit */
 void rf24_print_status(uint8_t status);
 void rf24_print_observe_tx(struct rf24 *r, uint8_t value);
 void rf24_print_byte_register(struct rf24 *r, const char* name, uint8_t reg, uint8_t qty);
 void rf24_print_address_register(struct rf24 *r, const char* name, uint8_t reg, uint8_t qty);
+void rf24_print_details(struct rf24 *r);
 
-void rf24_toggle_features(struct rf24 *r);
-void rf24_start_listening(struct rf24 *r);
-void rf24_stop_listening(struct rf24 *r);
-int rf24_write(struct rf24 *r, const void* buf, uint8_t len );
-int rf24_read(struct rf24 *r, void* buf, uint8_t len );
-void rf24_open_writing_pipe(struct rf24 *r, uint8_t *address);
-void rf24_open_reading_pipe(struct rf24 *r, uint8_t number, uint8_t *address);
-void rf24_set_retries(struct rf24 *r, uint8_t delay, uint8_t count);
-void rf24_set_channel(struct rf24 *r, uint8_t channel);
-void rf24_set_payload_size(struct rf24 *r, uint8_t size);
 
 /**
  * Get Static Payload Size
@@ -115,18 +138,6 @@ void rf24_set_payload_size(struct rf24 *r, uint8_t size);
 #define rf24_get_payload_size(r) ((r)->payload_size)
 
 uint8_t rf24_get_dynamic_payload_size(struct rf24 *r);
-void rf24_enable_ack_payload(struct rf24 *r, uint8_t en);
-void rf24_enable_dynamic_payloads(struct rf24 *r);
-void rf24_set_auto_ack(struct rf24 *r, int enable);
-void rf24_set_pipe_auto_ack(struct rf24 *r, uint8_t pipe, int enable ) ;
-void rf24_set_pa_level( struct rf24 *r, rf24_pa_dbm_e level ) ;
-rf24_pa_dbm_e rf24_get_pa_level( struct rf24 *r ) ;
-int rf24_set_data_rate(struct rf24 *r, rf24_datarate_e speed);
-rf24_datarate_e rf24_get_data_rate( struct rf24 *r ) ;
-void rf24_set_crc_length(struct rf24 *r, rf24_crclength_e length);
-rf24_crclength_e rf24_get_crc_length(struct rf24 *r);
-void rf24_disable_crc( struct rf24 *r ) ;
-void rf24_print_details(struct rf24 *r);
 void rf24_power_down(struct rf24 *r);
 void rf24_power_up(struct rf24 *r) ;
 int rf24_available(struct rf24 *r, uint8_t* pipe_num);
@@ -138,15 +149,10 @@ int rf24_test_carrier(struct rf24 *r);
 int rf24_test_rpd(struct rf24 *r) ;
 
 
-int rf24_queue_push(struct rf24 *r, const void* buf, uint8_t len);
-uint16_t rf24_queue_sync(struct rf24 *r, uint16_t timeout);
-uint8_t rf24_queue_empty(struct rf24 *r);
-
 
 void rf24_sweeper_init(struct rf24_sweeper *s, struct rf24 *r);
 void rf24_sweep(struct rf24_sweeper *s, int loops);
 void rf24_sweep_dump_results(struct rf24_sweeper *s);
 void rf24_sweep_dump_header();
-
 
 #endif
