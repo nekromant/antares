@@ -8,7 +8,7 @@ prompt "Toolchain selection"
 
 config TOOLCHAIN_GCC
 depends on SHOW_ALL_TOOLCHAINS || ARCH_AVR || ARCH_ARM || ARCH_MSP430 || ARCH_MIPS || \
-	ARCH_NATIVE || ARCH_PIC32
+	ARCH_NATIVE || ARCH_PIC32 || ARCH_ESP8266
 
 bool "GCC-based toolchain"
 
