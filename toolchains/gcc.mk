@@ -144,19 +144,29 @@ endif
 	TMPDIR=$(TMPDIR) -f $(ANTARES_DIR)/make/Makefile.build -r build
 
 
+ifeq ($(CONFIG_BUILD_VERBOSE),y)
+_debug_printout:
+	@echo "======== Listing objects to be linked in ========="
+	@echo "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o`"
+	@echo "=================================================="
+	@echo "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`"
+	@echo "=================================================="
+else
+_debug_printout:
+	@echo > /dev/null
+endif
+
+
 ifneq ($(LD_NO_COMBINE),y)
 %.elf %.so: $(GCC_LDFILE) builtin
 	$(SILENT_LD) $(LD) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
 
 else
-%.elf %.so: $(GCC_LDFILE) builtin
+%.elf %.so: $(GCC_LDFILE) builtin _debug_printout
 	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`
-
 endif
-
-
 
 
 $(IMAGENAME).bin: $(IMAGENAME).elf
@@ -165,4 +175,4 @@ $(IMAGENAME).bin: $(IMAGENAME).elf
 $(IMAGENAME).lss: $(IMAGENAME).elf
 	$(SILENT_DISAS) $(OBJDUMP) -h -S $< > $@
 
-PHONY+=builtin
+PHONY+=builtin _debug_printout
