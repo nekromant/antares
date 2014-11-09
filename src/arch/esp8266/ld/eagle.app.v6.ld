@@ -39,6 +39,7 @@ _memmap_cacheattr_wt_allvalid = 0x22222112;
 _memmap_cacheattr_bp_allvalid = 0x22222222;
 PROVIDE(_memmap_cacheattr_reset = _memmap_cacheattr_wb_trapnull);
 
+
 SECTIONS
 {
 
@@ -65,6 +66,7 @@ SECTIONS
     *(.dport.data)
     _dport0_data_end = ABSOLUTE(.);
   } >dport0_0_seg :dport0_0_phdr
+
 
   .data : ALIGN(4)
   {
@@ -118,8 +120,14 @@ SECTIONS
     LONG(_bss_start)
     LONG(_bss_end)
     _bss_table_end = ABSOLUTE(.);
+
+    *(.console_firstcmd)
+    *(.console_cmd) 
+    *(.console_lastcmd)
+
     _rodata_end = ABSOLUTE(.);
   } >dram0_0_seg :dram0_0_phdr
+
 
   .bss ALIGN(8) (NOLOAD) : ALIGN(4)
   {
@@ -140,6 +148,7 @@ SECTIONS
     *(COMMON)
     . = ALIGN (8);
     _bss_end = ABSOLUTE(.);
+
     _heap_start = ABSOLUTE(.);
 /*    _stack_sentry = ALIGN(0x8); */
   } >dram0_0_seg :dram0_0_bss_phdr
@@ -174,7 +183,10 @@ SECTIONS
     _irom0_text_start = ABSOLUTE(.);
     *(.irom0.literal .irom.literal .irom.text.literal .irom0.text .irom.text)
     _irom0_text_end = ABSOLUTE(.);
+
   } >irom0_0_seg :irom0_0_phdr
+
+
 }
 
 /* get ROM code address */
