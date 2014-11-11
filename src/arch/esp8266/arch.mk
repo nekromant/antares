@@ -1,7 +1,7 @@
 ARCH_FEATURES:=
 
 FW_FILE_1	= 0x00000
-FW_FILE_2	= 0x40000
+FW_FILE_2	= 0x09000
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).elf $(IMAGENAME)-$(FW_FILE_1).bin $(IMAGENAME)-$(FW_FILE_2).bin
 
@@ -27,6 +27,9 @@ COMMON_LDFLAGS = -nostdlib -Wl,--no-check-sections -u call_user_start -Wl,-stati
 LDFLAGS	  +=  $(COMMON_LDFLAGS)
 ELFFLAGS  += $(COMMON_LDFLAGS) 
 
+
+#FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
+#FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
 
 FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
 FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
