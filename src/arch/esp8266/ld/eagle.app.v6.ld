@@ -40,6 +40,9 @@ _memmap_cacheattr_bp_allvalid = 0x22222222;
 PROVIDE(_memmap_cacheattr_reset = _memmap_cacheattr_wb_trapnull);
 
 
+
+
+
 SECTIONS
 {
 
@@ -122,7 +125,7 @@ SECTIONS
     _bss_table_end = ABSOLUTE(.);
 
     *(.console_firstcmd)
-    *(.console_cmd) 
+    KEEP (*(SORT(.console_cmd*)))
     *(.console_lastcmd)
 
     _rodata_end = ABSOLUTE(.);
@@ -161,7 +164,11 @@ SECTIONS
     *(.entry.text)
     *(.init.literal)
     *(.init)
+
     *(.literal .text .literal.* .text.* .stub .gnu.warning .gnu.linkonce.literal.* .gnu.linkonce.t.*.literal .gnu.linkonce.t.*)
+
+    *( .iram0.literal .iram.literal .iram.text.literal .iram0.text .iram.text)
+
     *(.fini.literal)
     *(.fini)
     *(.gnu.version)
@@ -182,10 +189,10 @@ SECTIONS
   {
     _irom0_text_start = ABSOLUTE(.);
     *(.irom0.literal .irom.literal .irom.text.literal .irom0.text .irom.text)
+
     _irom0_text_end = ABSOLUTE(.);
 
   } >irom0_0_seg :irom0_0_phdr
-
 
 }
 

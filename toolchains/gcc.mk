@@ -150,14 +150,15 @@ endif
 
 
 ifneq ($(LD_NO_COMBINE),y)
-%.elf %.so: $(GCC_LDFILE) builtin
-	$(SILENT_LD) $(LD) $(ELFFLAGS) -o $(@) $(OBJDIR)/build/built-in.o 
+%.elf %.so: $(GCC_LDFILE) builtin $(before-link)
+	$(SILENT_LD) $(LD) -o $(@) $(OBJDIR)/build/built-in.o $(ELFFLAGS)
 
 else
-%.elf %.so: $(GCC_LDFILE) builtin _debug_printout
-	$(SILENT_LD) $(CC) $(ELFFLAGS) -o $(@) \
+%.elf %.so: $(GCC_LDFILE) builtin _debug_printout $(before-link)
+	$(SILENT_LD) $(CC) -o $(@) \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
-	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o` \
+	$(ELFFLAGS)
 endif
 
 
