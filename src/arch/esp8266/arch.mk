@@ -17,11 +17,11 @@ CFLAGS	  += -I$(ANTARES_INSTALL_DIR)/src/arch/esp8266/include-sdk
 
 GCC_LDFILE = $(ANTARES_INSTALL_DIR)/src/arch/esp8266/ld/eagle.app.v6.ld
 
-ELFFLAGS  +=  -lgcc -L$(ANTARES_INSTALL_DIR)/src/arch/esp8266/lib
+ELFFLAGS  +=  -L$(ANTARES_INSTALL_DIR)/src/arch/esp8266/lib
 
 #Link our binary blobbies
 LIBS	   =          c gcc hal phy net80211 lwip wpa main
-ELFFLAGS  +=  -Wl,--start-group $(addprefix -l,$(LIBS)) -Wl,--end-group
+ELFFLAGS  +=  -Wl,--start-group $(addprefix -l,$(LIBS)) -lgcc -Wl,--end-group
 
 COMMON_LDFLAGS = -nostdlib -Wl,--no-check-sections -u call_user_start -Wl,-static
 LDFLAGS	  +=  $(COMMON_LDFLAGS)
@@ -34,7 +34,7 @@ ELFFLAGS  += $(COMMON_LDFLAGS)
 FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
 FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
 
-
+ifeq ($(CONFIG_ESP8266_FORCE_IROM),y)
 before-link+=_move_code_to_irom
 _move_code_to_irom: builtin 
 	echo "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
@@ -42,6 +42,8 @@ _move_code_to_irom: builtin
 	$(OBJCOPY) --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $$file; \
 	done
+endif
+
 
 $(IMAGENAME)-$(FW_FILE_1).bin: $(IMAGENAME).elf
 	esptool -eo $< $(FW_FILE_1_ARGS)  

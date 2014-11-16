@@ -1,5 +1,9 @@
 if ARCH_ESP8266
 
+config ESP8266_FORCE_IROM
+bool "Put all user code into irom0 section"
+default y
+
 endif
 
 
