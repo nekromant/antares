@@ -35,8 +35,18 @@ FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
 FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
 
 
+before-link+=_move_code_to_irom
+_move_code_to_irom: builtin 
+	echo "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`" | while read file; do \
+	$(OBJCOPY) --rename-section .text=.irom0.text \
+		--rename-section .literal=.irom0.literal $$file; \
+	done
+
 $(IMAGENAME)-$(FW_FILE_1).bin: $(IMAGENAME).elf
 	esptool -eo $< $(FW_FILE_1_ARGS)  
 
 $(IMAGENAME)-$(FW_FILE_2).bin: $(IMAGENAME).elf
 	esptool -eo $< $(FW_FILE_2_ARGS) 
+
+PHONY+=_move_code_to_irom
