@@ -5,7 +5,7 @@ MEMORY
   dport0_0_seg :                      	org = 0x3FF00000, len = 0x10
   dram0_0_seg :                       	org = 0x3FFE8000, len = 0x14000
   iram1_0_seg :                       	org = 0x40100000, len = 0x8000
-  irom0_0_seg :                       	org = 0x40209000, len = 0x37000
+  irom0_0_seg :                       	org = 0x4020A000, len = 0x36000
 }
 
 PHDRS
@@ -124,9 +124,6 @@ SECTIONS
     LONG(_bss_end)
     _bss_table_end = ABSOLUTE(.);
 
-    *(.console_firstcmd)
-    KEEP (*(SORT(.console_cmd*)))
-    *(.console_lastcmd)
 
     _rodata_end = ABSOLUTE(.);
   } >dram0_0_seg :dram0_0_phdr
@@ -189,8 +186,12 @@ SECTIONS
   {
     _irom0_text_start = ABSOLUTE(.);
     *(.irom0.literal .irom.literal .irom.text.literal .irom0.text .irom.text)
-
     _irom0_text_end = ABSOLUTE(.);
+
+    *(.console_firstcmd)
+    KEEP (*(SORT(.console_cmd*)))
+    *(.console_lastcmd)
+
 
   } >irom0_0_seg :irom0_0_phdr
 
