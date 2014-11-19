@@ -41,7 +41,7 @@ source "antares/src/lib/console/kcnf"
 
 menuconfig LIB_NLIBSTUBS
 #TODO: Depend on ARCH_HAS_NEWLIB
-depends on ARCH_ARM
+depends on ARCH_ARM || ARCH_ESP8266
 bool "Configure newlib stubs"
 
 if LIB_NLIBSTUBS

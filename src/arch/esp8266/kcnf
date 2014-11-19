@@ -1,8 +1,44 @@
 if ARCH_ESP8266
 
 config ESP8266_FORCE_IROM
-bool "Put all user code into irom0 section"
+bool "Put all user code into irom0 section (recommended)"
 default y
+
+menu "Configure libraries to link against"
+
+config ESP8266_BLOB_MAIN
+bool "libmain.a (required, proprietary)"
+default y
+
+config ESP8266_BLOB_HAL
+bool "libhal.a (required, opensource)"
+default y
+
+config ESP8266_BLOB_NET80211
+bool "libnet80211.a (required, proprietary)"
+default y
+
+config ESP8266_BLOB_PHY
+bool "libphy.a (required, proprietary)"
+default y
+
+config ESP8266_BLOB_PP
+bool "libpp.a"
+default y
+
+config ESP8266_BLOB_WPA
+bool "libwpa.a (required, proprietary)"
+default y
+
+config ESP8266_BLOB_SSL
+bool "libssl.a (required, proprietary)"
+default y
+
+config ESP8266_BLOB_LWIP
+bool "liblwip.a (proprietary alternative to antares' builtin lwip)"
+default y
+
+endmenu 
 
 endif
 
