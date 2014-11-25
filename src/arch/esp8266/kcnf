@@ -4,6 +4,10 @@ config ESP8266_FORCE_IROM
 bool "Put all user code into irom0 section (recommended)"
 default y
 
+config ESP8266_LIBC_IROM
+bool "Use IROM version of libc"
+default n
+
 menu "Configure libraries to link against"
 
 config ESP8266_BLOB_MAIN
