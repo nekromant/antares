@@ -12,7 +12,6 @@ LD_NO_COMBINE=y
 
 CFLAGS	  += -Wpointer-arith -Wundef -Wl,-EL -mtext-section-literals -fno-inline-functions -mlongcalls -D__ets__ -DICACHE_FLASH
 
-CFLAGS	  += -I$(ANTARES_INSTALL_DIR)/src/arch/esp8266/include-libc
 CFLAGS	  += -I$(ANTARES_INSTALL_DIR)/src/arch/esp8266/include-sdk
 
 GCC_LDFILE = $(ANTARES_INSTALL_DIR)/src/arch/esp8266/ld/eagle.app.v6.ld
@@ -37,7 +36,14 @@ $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_WPA,wpa))
 $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_SSL,ssl))
 $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_LWIP,lwip))
 
-ELFFLAGS  += -lc -lgcc -Wl,--end-group
+
+ifeq ($(CONFIG_ESP8266_LIBC_IROM),y)
+ELFFLAGS  += -lcirom
+else
+ELFFLAGS  += -lc
+endif
+
+ELFFLAGS  += -lgcc -Wl,--end-group
 
 
 LDFLAGS	  +=  $(COMMON_LDFLAGS)
@@ -53,8 +59,9 @@ FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
 ifeq ($(CONFIG_ESP8266_FORCE_IROM),y)
 before-link+=_move_code_to_irom
 _move_code_to_irom: builtin 
-	echo "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
+	echo -e "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \n \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`" | while read file; do \
+	echo $$file; \
 	$(OBJCOPY) --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $$file; \
 	done

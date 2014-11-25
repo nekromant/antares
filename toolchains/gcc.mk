@@ -163,6 +163,11 @@ ifneq ($(LD_NO_COMBINE),y)
 
 else
 %.elf %.so: $(GCC_LDFILE) builtin _debug_printout $(before-link)
+	echo $(CC) -o $(@) \
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
+	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o` \
+	$(ELFFLAGS)
+
 	$(SILENT_LD) $(CC) -o $(@) \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o` \
