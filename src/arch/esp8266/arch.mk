@@ -36,19 +36,18 @@ $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_WPA,wpa))
 $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_SSL,ssl))
 $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_LWIP,lwip))
 
+ELFFLAGS  += -lm 
 
 ifeq ($(CONFIG_ESP8266_LIBC_IROM),y)
 ELFFLAGS  += -lcirom
 else
-ELFFLAGS  += -lc
+ELFFLAGS  += -lc 
 endif
 
 ELFFLAGS  += -lgcc -Wl,--end-group
 
-
 LDFLAGS	  +=  $(COMMON_LDFLAGS)
 ELFFLAGS  += $(COMMON_LDFLAGS) 
-
 
 #FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
 #FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
@@ -67,7 +66,6 @@ _move_code_to_irom: builtin
 	done
 endif
 
-
 $(IMAGENAME)-$(FW_FILE_1).bin: $(IMAGENAME).elf
 	esptool -eo $< $(FW_FILE_1_ARGS)  
 
@@ -78,6 +76,5 @@ $(IMAGENAME).rom: $(IMAGENAME)-$(FW_FILE_1).bin $(IMAGENAME)-$(FW_FILE_2).bin
 	dd if=/dev/zero of=$(@) bs=1K count=512
 	dd if=$(IMAGENAME)-$(FW_FILE_1).bin of=$(@) conv=notrunc
 	dd if=$(IMAGENAME)-$(FW_FILE_2).bin of=$(@) bs=1 seek=$$(($(FW_FILE_2))) 
-
 
 PHONY+=_move_code_to_irom
