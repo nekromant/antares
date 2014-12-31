@@ -1,0 +1,22 @@
+menuconfig DEPLOY_ESPTOOL
+bool "esptool"
+depends on ARCH_ESP8266
+
+  if DEPLOY_ESPTOOL
+
+  config DEPLOY_ESPTOOL_BIN
+  string "esptool.py binary name"
+  default "esptool.py"
+
+  config DEPLOY_ESPTOOL_PORT
+  string "Port"
+  default "/dev/ttyUSB0"
+
+  config DEPLOY_ESPTOOL_ADDRESS
+  string "Flash address"
+  default "0x00000"
+
+  config DEPLOY_ESPTOOL_PL2303
+  bool "Use PL2303 GPIO to reset/run"
+
+  endif
