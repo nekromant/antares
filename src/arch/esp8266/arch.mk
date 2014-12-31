@@ -46,7 +46,12 @@ endif
 
 ELFFLAGS  += -lgcc -Wl,--end-group
 
-LDFLAGS	  +=  $(COMMON_LDFLAGS)
+ifneq ($(CONFIG_ESP8266_SDK),)
+CFLAGS    += -I$(CONFIG_ESP8266_SDK)/include
+ELFFLAGS  += -L$(CONFIG_ESP8266_SDK)/lib
+endif
+
+LDFLAGS   += $(COMMON_LDFLAGS)
 ELFFLAGS  += $(COMMON_LDFLAGS) 
 
 #FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
