@@ -1,7 +1,7 @@
 ARCH_FEATURES:=
 
 FW_FILE_1	= 0x00000
-FW_FILE_2	= 0x0A000
+FW_FILE_2	= 0x0a000
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).rom
 
@@ -65,7 +65,11 @@ _move_code_to_irom: builtin
 	done
 endif
 
+
 $(IMAGENAME).rom: $(IMAGENAME).elf
 	esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
+	dd if=/dev/zero of=$(@) bs=1K count=512
+	dd if=$(IMAGENAME)-$(FW_FILE_1).bin of=$(@) conv=notrunc
+	dd if=$(IMAGENAME)-$(FW_FILE_2).bin of=$(@) bs=1 seek=$$(($(FW_FILE_2))) 
 
 PHONY+=_move_code_to_irom
