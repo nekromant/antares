@@ -65,12 +65,7 @@ _move_code_to_irom: builtin
 	done
 endif
 
-$(IMAGENAME)-%.bin: $(IMAGENAME).elf
-    esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
-
-$(IMAGENAME).rom: $(IMAGENAME)-$(FW_FILE_1).bin $(IMAGENAME)-$(FW_FILE_2).bin
-	dd if=/dev/zero of=$(@) bs=1K count=512
-	dd if=$(IMAGENAME)-$(FW_FILE_1).bin of=$(@) conv=notrunc
-	dd if=$(IMAGENAME)-$(FW_FILE_2).bin of=$(@) bs=1 seek=$$(($(FW_FILE_2))) 
+$(IMAGENAME).rom: $(IMAGENAME).elf
+	esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
 
 PHONY+=_move_code_to_irom

@@ -8,7 +8,11 @@ config ESP8266_LIBC_IROM
 bool "Use IROM version of libc"
 default n
 
+config ESP8266_NEED_SDK_PATH
+bool "Link against external SDK"
+
 config ESP8266_SDK
+depends on ESP8266_NEED_SDK_PATH
 string "External SDK path"
 help
   If you compiled esp-open-sdk without STANDALONE=Y, specify
