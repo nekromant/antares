@@ -49,12 +49,6 @@ ELFFLAGS  += -lgcc -Wl,--end-group
 LDFLAGS	  +=  $(COMMON_LDFLAGS)
 ELFFLAGS  += $(COMMON_LDFLAGS) 
 
-#FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
-#FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
-
-FW_FILE_1_ARGS	= -bo $@ -bs .text -bs .data -bs .rodata -bc -ec
-FW_FILE_2_ARGS	= -es .irom0.text $@ -ec
-
 ifeq ($(CONFIG_ESP8266_FORCE_IROM),y)
 before-link+=_move_code_to_irom
 _move_code_to_irom: builtin 
@@ -66,11 +60,8 @@ _move_code_to_irom: builtin
 	done
 endif
 
-$(IMAGENAME)-$(FW_FILE_1).bin: $(IMAGENAME).elf
-	esptool -eo $< $(FW_FILE_1_ARGS)  
-
-$(IMAGENAME)-$(FW_FILE_2).bin: $(IMAGENAME).elf
-	esptool -eo $< $(FW_FILE_2_ARGS) 
+$(IMAGENAME)-%.bin: $(IMAGENAME).elf
+    esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
 
 $(IMAGENAME).rom: $(IMAGENAME)-$(FW_FILE_1).bin $(IMAGENAME)-$(FW_FILE_2).bin
 	dd if=/dev/zero of=$(@) bs=1K count=512
