@@ -17,6 +17,10 @@ depends on ARCH_ESP8266
   default "0x00000"
 
   config DEPLOY_ESPTOOL_PL2303
-  bool "Use PL2303 GPIO to reset/run"
+  bool "Use pl2303gpio for autoreset"
+
+  config DEPLOY_ESPTOOL_MINICOM
+  bool "Start minicom after deployment"
 
   endif
+  

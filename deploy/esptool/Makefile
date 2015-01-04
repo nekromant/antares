@@ -26,7 +26,12 @@ esptool:
 ifeq ($(CONFIG_DEPLOY_ESPTOOL_PL2303),y)
 	$(root) $(tobootloader)
 endif
+
 	$(root) $(esptool) --port $(CONFIG_DEPLOY_ESPTOOL_PORT) write_flash $(CONFIG_DEPLOY_ESPTOOL_ADDRESS) $(IMAGENAME).rom
 ifeq ($(CONFIG_DEPLOY_ESPTOOL_PL2303),y)
 	$(root) $(reset)
+endif
+
+ifeq ($(CONFIG_DEPLOY_ESPTOOL_MINICOM),y)
+	$(root) minicom -o -D $(CONFIG_DEPLOY_ESPTOOL_PORT) -b 115200
 endif
