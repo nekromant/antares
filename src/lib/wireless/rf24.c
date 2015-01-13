@@ -63,7 +63,6 @@ static  void rf24_spi_read(uint8_t *data, uint8_t len)
 
 static void rf24_readout(struct rf24 *r, uint8_t cmd, uint8_t *data, uint8_t len)
 {
-	r;
 	rf24_csn(0);
 	rf24_spi_write(&cmd, 1);
 	if (len)
@@ -73,7 +72,6 @@ static void rf24_readout(struct rf24 *r, uint8_t cmd, uint8_t *data, uint8_t len
 
 static void rf24_writeout(struct rf24 *r, uint8_t cmd, const uint8_t *data, uint8_t len)
 {
-	r;
 	rf24_csn(0);
 	rf24_spi_write(&cmd, 1);
 	if (len)
@@ -155,7 +153,7 @@ void rf24_write_payload(struct rf24 *r, const void* buf, uint8_t len)
 	uint8_t cmd = W_TX_PAYLOAD;
 	uint8_t data_len = min_t(uint8_t, len, r->payload_size);
 	uint8_t blank_len = rf24_has_dynamic_payload(r) ? 0 : r->payload_size - data_len;
-	dbg("Writing %u bytes %u blanks\n", data_len, blank_len);
+	dbg("Writing %u bytes %u blanks (len %d)\n", data_len, blank_len, len);
 	memset(blanks, 0x0, blank_len);
 
 	rf24_csn(0);
@@ -227,7 +225,6 @@ void rf24_flush_tx(struct rf24 *r)
 uint8_t rf24_get_status(struct rf24 *r)
 {
 	uint8_t status;
-	r;
 	rf24_csn(0);
 	rf24_spi_read( &status, 1 );
 	rf24_csn(1);
@@ -247,7 +244,6 @@ uint8_t rf24_get_status(struct rf24 *r)
 static void rf24_toggle_features(struct rf24 *r)
 {
 	uint8_t data[] = { ACTIVATE, 0x73 } ;
-	r;
 	rf24_csn(0);
 	rf24_spi_write(data, 2);
 	rf24_csn(1);
@@ -255,13 +251,14 @@ static void rf24_toggle_features(struct rf24 *r)
 
 static void write_feature(struct rf24 *r, uint8_t v)
 {
+	dbg("FEATURE <= %x \n", v);
 	rf24_write_register(r, FEATURE, v);
 
 	/* 
 	 * If it didn't work, the features are not enabled
 	 */
 	
-	if ( ! rf24_read_register(r, FEATURE) )
+	if ( v && (!rf24_read_register(r, FEATURE)) )
 	{
 		/* So enable them and try again */
 		dbg("Extended features aren't enabled. Enabling...\n");
@@ -270,7 +267,7 @@ static void write_feature(struct rf24 *r, uint8_t v)
 	}
 
 
-	if (!rf24_read_register(r, FEATURE))
+	if (v && !rf24_read_register(r, FEATURE))
 		panic("Failed to enable extended features. Are they supported by chip?");
 
 
@@ -286,6 +283,9 @@ void rf24_config(struct rf24 *r, struct rf24_config *c)
 	uint8_t feat;
 	uint8_t dynpd;
 	uint8_t setup, config;
+
+	rf24_ce(0);
+
 	rf24_write_register(r, RF_CH, min_t(uint8_t, c->channel, (RF24_NUM_CHANNELS - 1)));
 
 	rf24_write_register(r, SETUP_RETR, 
@@ -314,15 +314,14 @@ void rf24_config(struct rf24 *r, struct rf24_config *c)
 		r->flags &= ~RF24_HAVE_ACK_PAYLOADS;
 		feat     &= ~(1<<EN_ACK_PAY);
 	}
-
-
+	
 	write_feature(r, feat); 
 	rf24_write_register(r, DYNPD, dynpd);
 
 	setup = rf24_read_register(r, RF_SETUP) ;
 	/* Data rate and PA level */
 	/* HIGH and LOW '00' is 1Mbs - our default */
-	r->flags &= ~(RF24_WIDE_BAND);
+	r->flags |= RF24_WIDE_BAND;
 	setup &= ~((1<<RF_DR_LOW) | (1<<RF_DR_HIGH)) ;
 	if( c->rate == RF24_250KBPS )
 	{
@@ -333,14 +332,9 @@ void rf24_config(struct rf24 *r, struct rf24_config *c)
 		setup |= (1<< RF_DR_LOW ) ;
 	} else if ( c->rate == RF24_2MBPS )
 	{
-		r->flags |= RF24_WIDE_BAND;
 		setup |= (1<<RF_DR_HIGH);
 	}
-	else
-	{
-		/* 1Mbs */
-		r->flags |= RF24_WIDE_BAND;
-	}
+
 	/* PA Level */
 	setup &= ~((1<<RF_PWR_LOW) | (1<<RF_PWR_HIGH)) ;
 	
@@ -364,7 +358,8 @@ void rf24_config(struct rf24 *r, struct rf24_config *c)
 	}
 
 	rf24_write_register(r, RF_SETUP, setup);
-
+	printk("setup <= %x\n", setup);
+		
 	/* CRC */
 	config = rf24_read_register(r, CONFIG) & 
 		~( (1<<CRCO) | (1<<EN_CRC)) ;
@@ -379,9 +374,12 @@ void rf24_config(struct rf24 *r, struct rf24_config *c)
 		config |= (1<<EN_CRC);
 		config |= (1<< CRCO );
 	}
+	printk("config <= %x\n", config);
 	rf24_write_register( r, CONFIG, config ) ;
+	
+	
 	/* per-pipe auto-ack */
-	rf24_write_register(r, EN_AA, c->pipe_auto_ack);
+	rf24_write_register(r, EN_AA, c->pipe_auto_ack & 0x3F );
 	/* Finally, flush fifos */
 	rf24_flush_rx(r);
 	rf24_flush_tx(r);
@@ -561,12 +559,11 @@ int rf24_write(struct rf24 *r, const void* buf, uint8_t len )
 int rf24_available(struct rf24 *r, uint8_t* pipe_num)
 {
 	uint8_t status = rf24_get_status(r);
-	int result = !(rf24_read_register(r, FIFO_STATUS) & (1<<RX_EMPTY));;	
-	if (result)
-	{
-		/* If the caller wants the pipe number, include that */
-		if ( pipe_num )
-			*pipe_num = ( status >> RX_P_NO ) & BIN(111);
+	status = (status >> RX_P_NO ) & BIN(111);
+	
+	if (status != BIN(111)) { 
+		if (pipe_num)
+			*pipe_num = status;
 		
 		/* Clear the status bit */
 		
@@ -584,7 +581,7 @@ int rf24_available(struct rf24 *r, uint8_t* pipe_num)
 		}
 	}
 	
-	return result;
+	return (status != BIN(111));
 }
 
 /**
@@ -606,6 +603,7 @@ int rf24_read(struct rf24 *r, void* buf, uint8_t len )
 {
 	/* Fetch the payload */
 	rf24_read_payload(r, buf, len );
+
 	/* was this the last of the data available? */
 	return rf24_read_register(r, FIFO_STATUS) & (1<<RX_EMPTY);	
 }
@@ -854,6 +852,8 @@ void rf24_what_happened(struct rf24 *r, uint8_t *tx_ok, uint8_t *tx_fail, uint8_
 	*tx_ok = status & (1<<TX_DS);
 	*tx_fail = status & (1<<MAX_RT);
 	*rx_ready = status & (1<<RX_DR);
+	printk("TX_OK %x TX_FAIL %x RX_READY %x STATUS %x\n", 
+	       status & (1<<TX_DS), status & (1<<MAX_RT), status & (1<<RX_DR), status);
 }
 
 /**
@@ -990,12 +990,9 @@ void rf24_print_details(struct rf24 *r)
 	rf24_print_byte_register(r, "RF_CH", RF_CH, 1);
 	rf24_print_byte_register(r, "RF_SETUP", RF_SETUP, 1);
 	rf24_print_byte_register(r, "CONFIG", CONFIG, 1);
+	rf24_print_byte_register(r, "SETUP_RETR", SETUP_RETR, 1);
 	rf24_print_byte_register(r, "DYNPD/FEATURE", DYNPD, 2);
 	
-	printk("Data Rate\t = %d\n",rf24_get_data_rate(r));
-	printk("Model\t\t = %d\n", rf24_is_p_variant(r));
-	printk("CRC Length\t = %d\n", rf24_get_crc_length(r));
-	printk("PA Power\t = %d\n", rf24_get_pa_level(r));
 }
 
 #else 
@@ -1042,7 +1039,6 @@ void rf24_print_status(uint8_t status) { status; }
 #if DEBUG_LEVEL > 0
 void rf24_print_observe_tx(struct rf24 *r, uint8_t value)
 {
-	r;
 	printk("OBSERVE_TX=%02x: POLS_CNT=%x ARC_CNT=%x\n",
 	     value,
 	     (value >> PLOS_CNT) & 0xf,
@@ -1050,7 +1046,7 @@ void rf24_print_observe_tx(struct rf24 *r, uint8_t value)
 		);
 }
 #else
-void rf24_print_observe_tx(struct rf24 *r, uint8_t value) { r; value; }
+void rf24_print_observe_tx(struct rf24 *r, uint8_t value) {  }
 #endif
 
 

@@ -70,11 +70,6 @@ struct rf24 {
 	uint8_t rtimeout;
 };
 
-struct rf24_sweeper {
-	struct rf24* r; 
-	uint8_t values[RF24_NUM_CHANNELS];
-};
-
 
 struct rf24_config {
 	unsigned char channel;
@@ -87,7 +82,12 @@ struct rf24_config {
 	unsigned char payload_size;
 	unsigned char crclen;
 	unsigned char pipe_auto_ack;
-} ;
+} __attribute_packed__ ;
+
+struct rf24_sweeper {
+	struct rf24* r; 
+	uint8_t values[RF24_NUM_CHANNELS];
+};
 
 
 void rf24_init(struct rf24 *r); 
