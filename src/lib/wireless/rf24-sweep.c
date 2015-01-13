@@ -1,4 +1,6 @@
 #include <lib/RF24.h>
+#include <lib/nRF24L01.h>
+
 #include <string.h>
 #include <arch/delay.h>
 #include <arch/antares.h>
@@ -17,7 +19,7 @@ void rf24_sweeper_init(struct rf24_sweeper *s, struct rf24 *r)
 {
 	s->r = r;
 	memset(s->values, 0, sizeof(s->values));
-	rf24_set_auto_ack(r, 0);	
+	rf24_write_register(r, EN_AA, 0x0); /* disable auto-ack */
 }
 
 /** 
@@ -35,7 +37,7 @@ void rf24_sweep(struct rf24_sweeper *s, int loops)
 		while (i--)
 		{
 			/* Select this channel */
-			rf24_set_channel(s->r, i);
+			rf24_write_register(s->r, RF_CH, i);
 			
 			// Listen for a little
 			rf24_start_listening(s->r);
