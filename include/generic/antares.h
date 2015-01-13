@@ -12,6 +12,8 @@
 
 #include <generic/macros.h>
 #include <generic/error.h>
+#include <generic/compiler.h>
+
 
 /* If arch didn't have any of these defined - take care */
 #if !defined(ANTARES_APP)
