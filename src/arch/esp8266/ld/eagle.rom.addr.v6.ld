@@ -337,6 +337,9 @@ PROVIDE ( xthal_set_intclear = 0x4000dd60 );
 PROVIDE ( xthal_spill_registers_into_stack_nw = 0x4000e320 );
 PROVIDE ( xthal_window_spill = 0x4000e324 );
 PROVIDE ( xthal_window_spill_nw = 0x4000e320 );
+PROVIDE ( SPI_read_status = 0x400043c8 );
+PROVIDE ( SPI_write_status = 0x40004400 );
+PROVIDE ( SPI_write_enable = 0x4000443c );
 PROVIDE ( Wait_SPI_Idle = 0x4000448c );
 
 PROVIDE ( Te0 = 0x3fffccf0 );
