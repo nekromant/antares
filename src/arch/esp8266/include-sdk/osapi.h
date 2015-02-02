@@ -44,5 +44,6 @@
 #define os_sprintf  ets_sprintf
 #define os_update_cpu_frequency ets_update_cpu_frequency
 
-#endif
+#define os_printf	os_printf_plus
 
+#endif
