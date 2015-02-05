@@ -79,6 +79,10 @@ typedef void (* init_done_cb_t)(void);
 
 void system_init_done_cb(init_done_cb_t cb);
 
+uint16 system_adc_read(void);
+
+const char *system_get_sdk_version(void);
+
 #define NULL_MODE       0x00
 #define STATION_MODE    0x01
 #define SOFTAP_MODE     0x02
