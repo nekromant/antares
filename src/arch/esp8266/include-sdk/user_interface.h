@@ -173,6 +173,7 @@ struct station_info {
 };
 
 struct station_info * wifi_softap_get_station_info(void);
+int wifi_softap_set_station_info(uint8_t *addr, struct ip_addr *adr);
 void wifi_softap_free_station_info(void);
 
 #define STATION_IF      0x00
@@ -201,5 +202,7 @@ void wifi_set_promiscuous_rx_cb(wifi_promiscuous_cb_t cb);
 uint8 wifi_station_get_current_ap_id(void);
 bool wifi_station_ap_change(uint8 current_ap_id);
 bool wifi_station_ap_number_set(uint8 ap_number);
+
+void system_station_got_ip_set(ip_addr_t * ip_addr, ip_addr_t *sn_mask, ip_addr_t *gw_addr);
 
 #endif

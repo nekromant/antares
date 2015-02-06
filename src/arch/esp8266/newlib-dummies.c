@@ -1,7 +1,7 @@
 /* These newlib stubs are borrowed and adapted from 
     http://caves.org/section/commelect/DUSI/openmag/src/hacks/lpc21xx/com/
     Original copyright notice follows
-
+*/
 /************************************************************************/
 /* Copyright 2003/12/27 Aeolus Development				*/
 /* All rights reserved.							*/
