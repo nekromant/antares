@@ -205,4 +205,6 @@ bool wifi_station_ap_number_set(uint8 ap_number);
 
 void system_station_got_ip_set(ip_addr_t * ip_addr, ip_addr_t *sn_mask, ip_addr_t *gw_addr);
 
+void system_pp_recycle_rx_pkt (void*);
+
 #endif
