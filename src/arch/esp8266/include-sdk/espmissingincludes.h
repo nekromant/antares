@@ -41,6 +41,7 @@ void ets_delay_us (int us);
 
 void pvPortFree(void *ptr);
 void *pvPortMalloc(size_t xWantedSize);
+void *pvPortRealloc(void* ptr, size_t xWantedSize);
 void *pvPortZalloc(size_t);
 void uart_div_modify(int no, unsigned int freq);
 void vPortFree(void *ptr);
