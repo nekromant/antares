@@ -75,10 +75,10 @@ FBANNER=Flash usage
 
 $(IMAGENAME).rom: $(IMAGENAME).elf
 	$(SILENT_ESPTOOL)esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
-	$(Q)dd if=/dev/zero of=$(@) bs=1K count=512 2>/dev/null
+	$(Q)dd if=/dev/zero of=$(@) bs=1k count=512 2>/dev/null
 	$(Q)dd if=$(IMAGENAME)-$(FW_FILE_1).bin of=$(@) conv=notrunc 2>/dev/null
 	$(Q)dd if=$(IMAGENAME)-$(FW_FILE_2).bin of=$(@) bs=1 seek=$$(($(FW_FILE_2))) 2>/dev/null
-	$(Q)$(ANTARES_DIR)/scripts/meter "$(FBANNER)" `$(STAT) $(@) -c %s`  $(FLASH_SIZE)
+	$(Q)$(ANTARES_DIR)/scripts/meter "$(FBANNER)" `wc -c<$(@)`  $(FLASH_SIZE)
 
 
 PHONY+=_move_code_to_irom
