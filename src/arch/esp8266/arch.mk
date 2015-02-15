@@ -54,22 +54,27 @@ endif
 LDFLAGS   += $(COMMON_LDFLAGS)
 ELFFLAGS  += $(COMMON_LDFLAGS) 
 
+ifneq ($(CONFIG_BUILD_VERBOSE),y)
+   SILENT_ESPTOOL  = @echo '  $(tb_grn)[ESPTOOL]$(col_rst)  ' $(@);
+endif
+
 ifeq ($(CONFIG_ESP8266_FORCE_IROM),y)
 before-link+=_move_code_to_irom
 _move_code_to_irom: builtin 
-	echo -e "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \n \
+	@echo "  $(tb_red)[IROMIFY]$(col_rst)   Moving application code to $(tb_red)IROM$(col_rst)" 
+	$(Q)echo -e "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \n \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`" | while read file; do \
-	echo $$file; \
 	$(OBJCOPY) --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $$file; \
 	done
 endif
 
 
+
 $(IMAGENAME).rom: $(IMAGENAME).elf
-	esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
-	dd if=/dev/zero of=$(@) bs=1K count=512
-	dd if=$(IMAGENAME)-$(FW_FILE_1).bin of=$(@) conv=notrunc
-	dd if=$(IMAGENAME)-$(FW_FILE_2).bin of=$(@) bs=1 seek=$$(($(FW_FILE_2))) 
+	$(SILENT_ESPTOOL)esptool.py elf2image -o $(IMAGENAME)- $(IMAGENAME).elf
+	$(Q)dd if=/dev/zero of=$(@) bs=1K count=512 2>/dev/null
+	$(Q)dd if=$(IMAGENAME)-$(FW_FILE_1).bin of=$(@) conv=notrunc 2>/dev/null
+	$(Q)dd if=$(IMAGENAME)-$(FW_FILE_2).bin of=$(@) bs=1 seek=$$(($(FW_FILE_2))) 2>/dev/null
 
 PHONY+=_move_code_to_irom
