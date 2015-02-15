@@ -79,6 +79,10 @@ typedef void (* init_done_cb_t)(void);
 
 void system_init_done_cb(init_done_cb_t cb);
 
+uint16 system_adc_read(void);
+
+const char *system_get_sdk_version(void);
+
 #define NULL_MODE       0x00
 #define STATION_MODE    0x01
 #define SOFTAP_MODE     0x02
@@ -169,6 +173,7 @@ struct station_info {
 };
 
 struct station_info * wifi_softap_get_station_info(void);
+int wifi_softap_set_station_info(uint8_t *addr, struct ip_addr *adr);
 void wifi_softap_free_station_info(void);
 
 #define STATION_IF      0x00
@@ -197,5 +202,9 @@ void wifi_set_promiscuous_rx_cb(wifi_promiscuous_cb_t cb);
 uint8 wifi_station_get_current_ap_id(void);
 bool wifi_station_ap_change(uint8 current_ap_id);
 bool wifi_station_ap_number_set(uint8 ap_number);
+
+void system_station_got_ip_set(ip_addr_t * ip_addr, ip_addr_t *sn_mask, ip_addr_t *gw_addr);
+
+void system_pp_recycle_rx_pkt (void*);
 
 #endif

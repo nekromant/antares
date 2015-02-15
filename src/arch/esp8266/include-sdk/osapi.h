@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "user_config.h"
+#include "espmissingincludes.h"
 
 #define os_bzero ets_bzero
 #define os_delay_us ets_delay_us
@@ -45,4 +46,3 @@
 #define os_update_cpu_frequency ets_update_cpu_frequency
 
 #endif
-
