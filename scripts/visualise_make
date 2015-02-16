@@ -139,7 +139,7 @@ while getopts "a:l:f:i:" opt; do
 			FILTER_FILE="$OPTARG"
 			;;
 		i)
-			IMAGE_FILE=$(echo "$OPTARG"  | sed -r 's#[_/. \t]+#_#g').png
+			IMAGE_FILE=$(echo "$OPTARG"  | sed -E 's#[_/. \t]+#_#g').png
 			;;
 		*)
 			usage >&2
@@ -163,7 +163,7 @@ fi
 
 TARGET="$1"
 LOG_TARGET="$2"
-IMAGE_FILE=$(echo "$TARGET"  | sed -r 's#[_/. \t]+#_#g').png
+IMAGE_FILE=$(echo "$TARGET"  | sed -E 's#[_/. \t]+#_#g').png
 
 # Step 1: generate log file
 if [ "$DO_LOG" ]; then
@@ -184,10 +184,10 @@ if [ "$DO_FILTER" ]; then
 	# Extract top-level make database, then remove everything but
 	# dependency declarations
 	tail "$LOG_FILE" -n $TAIL_LINES |
-		sed -r '/^# GNU Make/,/^# Make data base/d' |
-		sed -r '/^# Variables$/,/^# Files$/d' |
-		sed -r '/^#.*/d;/^[[:space:]]+.*/d' |
-		sed -r '/^[^:]*$/d' \
+		sed -E '/^# GNU Make/,/^# Make data base/d' |
+		sed -E '/^# Variables$/,/^# Files$/d' |
+		sed -E '/^#.*/d;/^[[:space:]]+.*/d' |
+		sed -E '/^[^:]*$/d' \
 		> "$FILTER_FILE"
 	echo "done."
 fi
