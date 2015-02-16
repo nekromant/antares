@@ -51,9 +51,9 @@ set_var() {
 	name_re="^($name=|# $name is not set)"
 	before_re="^($before=|# $before is not set)"
 	if test -n "$before" && grep -Eq "$before_re" "$FN"; then
-		sed -ri "/$before_re/a $new" "$FN"
+		sed -Ei.bak "/$before_re/a $new" "$FN"
 	elif grep -Eq "$name_re" "$FN"; then
-		sed -ri "s:$name_re.*:$new:" "$FN"
+		sed -Ei.bak "s:$name_re.*:$new:" "$FN"
 	else
 		echo "$new" >>"$FN"
 	fi
