@@ -111,7 +111,7 @@ Patches welcome.
 
 Quickstart?
 -----------
-Have a look at docs/en/quickstart
+Have a look at `docs/en/GETTING_STARTED.txt`
 
 Who?
 ----
