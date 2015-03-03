@@ -395,6 +395,8 @@ void rf24_init(struct rf24 *r)
 	r->ack_payload_length = 0;
 
 	rf24_ce(0);
+	rf24_csn(1);
+
 	/*
 	 * Must allow the radio time to settle else configuration bits will not necessarily stick.
 	 * This is actually only required following power up but some settling time also appears to
