@@ -16,4 +16,5 @@ objects-$(CONFIG_LIB_CAPSENSE)+=capsense.o
 
 subdirs-y+=wireless
 subdirs-y+=ulc
-subdirs-y+=delaylib/
+subdirs-y+=delaylib
+subdirs-y+=compression

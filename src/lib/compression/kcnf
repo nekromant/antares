@@ -1,0 +1,41 @@
+menu "Data compression"
+
+menuconfig LIB_HEATSHRINK
+bool "HeatShrink"
+
+if LIB_HEATSHRINK
+
+config LIB_HEATSHRINK_ENCODE
+bool "Encoder"
+
+config LIB_HEATSHRINK_DECODE
+bool "Decoder"
+
+config LIB_HEATSHRINK_DYNAMIC_ALLOC
+bool "Use dynamic memory allocation alloc"
+default n
+
+if !LIB_HEATSHRINK_DYNAMIC_ALLOC
+
+config LIB_HEATSHRINK_STATIC_INPUT_BUFFER_SIZE
+int "Input buffer size"
+default 32
+
+config LIB_HEATSHRINK_STATIC_WINDOW_BITS
+int "Window bits"
+default 8
+
+config LIB_HEATSHRINK_STATIC_LOOKAHEAD_BITS
+int "Lookahead bits"
+default 4
+
+endif
+
+config LIB_HEATSHRINK_USE_INDEX
+bool "Use index during compression"
+default n
+
+endif
+
+endmenu
+
