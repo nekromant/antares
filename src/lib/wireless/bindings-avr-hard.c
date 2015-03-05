@@ -7,14 +7,14 @@
 #include <avr/io.h>
 #include <avr/wdt.h>
 
-#define CSN_PIN   (1<<CONFIG_CSN_PIN)
-#define  CE_PIN   (1<<CONFIG_CE_PIN)
+#define CSN_PIN   (1<<CONFIG_LIB_RF24_CSN_PIN)
+#define  CE_PIN   (1<<CONFIG_LIB_RF24_CE_PIN)
 #define SPI_PORTX PORTB
 #define SPI_DDRX  DDRB
-#define SPI_MOSI  CONFIG_SPI_MOSI_PIN
-#define SPI_MISO  CONFIG_SPI_MISO_PIN
-#define SPI_SCK   CONFIG_SPI_SCK_PIN
-#define SPI_SS    CONFIG_SPI_SS_PIN
+#define SPI_MOSI  CONFIG_LIB_RF24_SPI_MOSI_PIN
+#define SPI_MISO  CONFIG_LIB_RF24_SPI_MISO_PIN
+#define SPI_SCK   CONFIG_LIB_RF24_SPI_SCK_PIN
+#define SPI_SS    CONFIG_LIB_RF24_SPI_SS_PIN
 
 static void set_csn(int level) 
 {
