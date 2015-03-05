@@ -27,40 +27,41 @@ if LIB_RF24
    menu "SPI Pin Settings"
    depends on LIB_RF24_HAVE_AVRSPI
 
-   config CE_PIN
+   config LIB_RF24_CE_PIN
    int "CE Pin"
    default 0
 
-   config CE_PORT
+   config LIB_RF24_CE_PORT
    string "CE Port"
    default "D"
 
-   config CSN_PIN
+   config LIB_RF24_CSN_PIN
    int "CSN Pin"
    default 0
 
-   config CSN_PORT
+   config LIB_RF24_CSN_PORT
    string "CSN Port"
    default "D"
 
-   config SPI_PORT
+   config LIB_RF24_SPI_PORT
    string "SPI Port"
    default "B"
 
-   config SPI_MOSI_PIN
+   config LIB_RF24_SPI_MOSI_PIN
    int "SPI MOSI Pin"
    default "3"
 
-   config SPI_MISO_PIN
+   config LIB_RF24_SPI_MISO_PIN
    int "SPI MISO Pin"
    default "4"
 
-   config SPI_SCK_PIN
+   config LIB_RF24_SPI_SCK_PIN
    int "SPI SCK Pin"
    default "5"
 
-   config SPI_SS_PIN
-   int "SPI SS Pin"
+   config LIB_RF24_SPI_SS_PIN
+   int "SPI SS Pin (Must be output for master to work)"
+   depends on LIB_RF24_AVR_HARDSPI
    default "2"
 
    endmenu
