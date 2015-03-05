@@ -1,9 +1,70 @@
 menu "Wireless devices"
 
+config LIB_RF24_HAVE_AVRSPI
+bool
+
 menuconfig LIB_RF24
 bool "nRF24L01 Support"
 
 if LIB_RF24
+
+   choice 
+   prompt "Platform bindings"
+
+   config LIB_RF24_BINDINGS_NONE
+   bool "None"
+
+   config LIB_RF24_AVR_SOFTSPI
+   bool "AVR software SPI"
+   select LIB_RF24_HAVE_AVRSPI
+
+   config LIB_RF24_AVR_HARDSPI
+   bool "AVR hardware SPI (Only first SPI for now)"
+   select LIB_RF24_HAVE_AVRSPI
+
+   endchoice
+
+   menu "SPI Pin Settings"
+   depends on LIB_RF24_HAVE_AVRSPI
+
+   config CE_PIN
+   int "CE Pin"
+   default 0
+
+   config CE_PORT
+   string "CE Port"
+   default "D"
+
+   config CSN_PIN
+   int "CSN Pin"
+   default 0
+
+   config CSN_PORT
+   string "CSN Port"
+   default "D"
+
+   config SPI_PORT
+   string "SPI Port"
+   default "B"
+
+   config SPI_MOSI_PIN
+   int "SPI MOSI Pin"
+   default "3"
+
+   config SPI_MISO_PIN
+   int "SPI MISO Pin"
+   default "4"
+
+   config SPI_SCK_PIN
+   int "SPI SCK Pin"
+   default "5"
+
+   config SPI_SS_PIN
+   int "SPI SS Pin"
+   default "2"
+
+   endmenu
+
 
    config LIB_RF24_DEBUG
    int "Debugging verbosity (0-4)"
