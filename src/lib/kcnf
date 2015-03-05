@@ -155,4 +155,6 @@ endmenu
 source "antares/src/lib/delaylib/kcnf"
 source "antares/src/lib/stlinky/kcnf"
 source "antares/src/lib/urpc/kcnf"
+source "antares/src/lib/compression/kcnf"
 source "antares/src/lib/contrib/kcnf"
+
