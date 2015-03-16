@@ -4,124 +4,78 @@
 #include <arch/antares.h>
 #include <stdint.h>
 
-#if CONFIG_URPC_SZB == 1
-typedef uint8_t urpc_size_t;
-#define STAG 0x1
-#elif CONFIG_URPC_SZB == 2
-typedef uint16_t urpc_size_t;
-#define STAG 0x2
-#elif CONFIG_URPC_SZB == 4
-typedef uint32_t urpc_size_t;
-#define STAG 0x4
-#else
-#error "Something nasty just happened"
-#endif
+#define URPC_NONE "1"
+#define URPC_U8   "2"
+#define URPC_U16  "3"
+#define URPC_U32  "4"
+#define URPC_U64  "5"
 
-#if CONFIG_URPC_IDB == 1
-typedef uint8_t urpc_id_t;
-#define ITAG 0x1
-#elif CONFIG_URPC_IDB == 2
-typedef uint16_t urpc_id_t;
-#define ITAG 0x2
-#elif CONFIG_URPC_IDB == 4
-#define ITAG 0x4
-typedef uint32_t urpc_id_t;
-#else
-#error "Something nasty just happened"
-#endif
+#define URPC_I8   "6"
+#define URPC_I16  "7"
+#define URPC_I32  "8"
+#define URPC_I64  "9"
+
+#define URPC_STR    "s"
+#define URPC_BIN(n) "b" #n "."
 
 
-#if defined(CONFIG_ARCH_LE)
-#define ENDIANNESS 'l'
-#elif defined(CONFIG_ARCH_BE)
-#define ENDIANNESS 'b'
-#else  
-#define ENDIANNESS '?'
-#endif
+#define urpc_arg_pop(tp, argptr)			\
+	(*((tp *) argptr)); argptr += sizeof(tp);	\
+	
+#define urpc_ret_push(tp, argptr, ret)			\
+	(*((tp *) argptr)) = ret; argptr += sizeof(tp);	\
+	
 
-struct urpc_object {
-	const char* name;
-	const unsigned char* argfmt;
-	const unsigned char* responsefmt;
-	void (*method)(urpc_id_t id, void *arguments, urpc_size_t arglen); 
+#define urpc_pop_u8()  urpc_arg_pop(uint8_t, arg)
+#define urpc_pop_u16() urpc_arg_pop(uint16_t, arg)
+#define urpc_pop_u32() urpc_arg_pop(uint32_t, arg)
+#define urpc_pop_u64() urpc_arg_pop(uint64_t, arg)
+
+#define urpc_pop_i8()  urpc_arg_pop(int8_t, arg)
+#define urpc_pop_i16() urpc_arg_pop(int16_t, arg)
+#define urpc_pop_i32() urpc_arg_pop(int32_t, arg)
+#define urpc_pop_i64() urpc_arg_pop(int64_t, arg)
+
+#define urpc_pop_string()			\
+	(char *) arg; arg += strlen(arg) + 1;
+
+#define urpc_push_string(str)			\
+	(char *) arg; arg += strlen(arg) + 1;
+
+
+struct urpc_object { 
+	uint8_t id;
+	const char* name; 
+	const char* arg;
+	const char* ret;
+	void (*method)(void *arg, void *ret);
 };
 
-#define CONFIG_URPC_EBLEN  128
-struct urpc {
-	void (*notify)(); /* Called when new event added to queue, optional */
-	urpc_id_t num_objects;
-	urpc_id_t max_objects;
-	struct urpc_object **objects; 
-	int  evt_tail;
-	int  evt_head; 
-	char evt_buf[CONFIG_URPC_EBLEN];
-};
+#define URPC_METHOD(_name, arglist, retlist)				\
+	void urpc_method_##_name(void *arg, void *ret);			\
+	static struct urpc_object urpc_obj_method_##_name = {		\
+		.name = #_name,						\
+                .arg = arglist URPC_NONE,				\
+                .ret = retlist URPC_NONE,				\
+		.method = urpc_method_##_name,				\
+	};								\
+	ANTARES_INIT_LOW(register_method_##_name) {			\
+		urpc_register(&urpc_obj_method_##_name);		\
+	};								\
+	void urpc_method_##_name(void *arg, void *ret)			\
+		
 
-
-/** 
- * Registers an urpc object (event or method) with urpc instance.
- * Do not call this directly! Use URPC_ADD_METHOD/URPC_ADD_EVENT
- * macros.
- *
- * @param u urpc instace
- * @param o urpc object
- * 
- * @return newly registered object id
- */
-urpc_id_t urpc_register_object(struct urpc *u, struct urpc_object *o);
-
-/** 
- * Call an urpc object. 
- * This function should be invoked by the transport layer
- * 
- * @param u urpc instance
- * @param id object id
- * @param data arguments
- */
-void urpc_call(struct urpc *u, urpc_id_t id, void *data, urpc_size_t datalen);
-
-/* Respond with data for a method call, or raise the event */
-
-void urpc_respond(struct urpc *u, urpc_id_t id, char *data, urpc_size_t datalen);
+#define URPC_EVENT(name, retlist)			\
+	struct urpc_object g_urpc_obj_event_##_name = {	\
+		.name = _name,				\
+                .ret = retlist URPC_NONE,		\
+	};						\
+	ANTARES_INIT_LOW(register_method_##_name) {     \
+		urpc_register(&urpc_obj_event_##_name);	\
+	};						\
 
 
 
-#define URPC_REGISTER(__u, __obj)			\
-	ANTARES_INIT_LOW(urpc_add_ ## __obj) {	\
-		urpc_register_object(__u, &__obj);	\
-	}
-
-#define URPC_REGISTER_EVENT(__u, __obj, __id)				\
-	ANTARES_INIT_LOW(urpc_add_ ## __obj ) {				\
-		__id = urpc_register_object(__u, &__obj);			\
-	}
-
-
-#define URPC_DECLARE_INSTANCE(name, evt_handler, max_obj)		\
-	static struct urpc_object * name ## _data[max_obj];		\
-	static struct urpc name =  {					\
-		.action = evt_handler,					\
-		.num_objects = 0,					\
-		.max_objects = max_obj,					\
-		.objects = (struct urpc_object *) name ## _data		\
-	};
-
-
-
-
-#define U_UINT8   "1"
-#define U_UINT16  "2"
-#define U_UINT32  "4"
-#define U_UINT64  "8"
-
-#define U_SINT8   "a"
-#define U_SINT16  "b"
-#define U_SINT32  "c"
-#define U_SINT64  "d"
-
-#define U_STR     "s"
-
-#define U_SBIN(len) "B\x" #len
-
-                                                                                   
+void urpc_register(struct urpc_object *o);
+         
 #endif
