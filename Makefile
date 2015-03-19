@@ -34,7 +34,7 @@ Kconfig:=$(SRCDIR)/kcnf
 KVersion:=$(ANTARES_DIR)/version.kcnf
 
 
-PHONY+=deftarget deploy build collectinfo clean
+PHONY+=deftarget deploy build collectinfo clean ensure_config
 MAKEFLAGS:=-r
 
 IMAGENAME=$(call unquote,$(CONFIG_IMAGE_DIR))/$(call unquote,$(CONFIG_IMAGE_FILENAME))
@@ -124,6 +124,9 @@ graph-%:
 deploy-help:
 	$(Q)$(MAKE) -f $(ANTARES_DIR)/make/Makefile.deploy help
 
+ensure_config:
+	$(Q)echo "Please create a new .config file by running make menuconfig"
+
 #For deployment autocompletion
 define deploy_dummy
 deploy-$(1): real-deploy-$(1)
@@ -137,4 +140,11 @@ $(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 .PHONY: $(PHONY)
 
+# If .config doesnt exist yet the following line will fail...
+# On debian wheezy with make 3.8.1-8.2 it actually crashes make (debian bug #780778)
+ifeq ($(strip $(CONFIG_MAKE_DEFTARGET)),)
+.DEFAULT_GOAL := ensure_config
+else
 .DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
+endif
+
