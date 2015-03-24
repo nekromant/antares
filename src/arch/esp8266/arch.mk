@@ -1,7 +1,7 @@
 ARCH_FEATURES:=
 
 FW_FILE_1	= 0x00000
-FW_FILE_2	= 0x0a000
+FW_FILE_2	= 0x0b000
 #Set our build goals
 BUILDGOALS=$(IMAGENAME).rom
 
