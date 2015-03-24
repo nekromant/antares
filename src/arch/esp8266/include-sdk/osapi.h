@@ -7,7 +7,6 @@
 
 #include <string.h>
 #include "user_config.h"
-#include "espmissingincludes.h"
 
 #define os_bzero ets_bzero
 #define os_delay_us ets_delay_us
@@ -45,4 +44,14 @@
 #define os_sprintf  ets_sprintf
 #define os_update_cpu_frequency ets_update_cpu_frequency
 
+#ifdef USE_OPTIMIZE_PRINTF
+#define os_printf(fmt, ...) do {	\
+	static const char flash_str[] ICACHE_RODATA_ATTR = fmt;	\
+	os_printf_plus(flash_str, ##__VA_ARGS__);	\
+	} while(0)
+#else
+#define os_printf	os_printf_plus
 #endif
+
+#endif
+

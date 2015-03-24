@@ -6,6 +6,11 @@
 #ifndef _C_TYPES_H_
 #define _C_TYPES_H_
 
+#include <stdint.h>
+#include <stdbool.h>
+
+
+#if 0
 typedef unsigned char       uint8_t;
 typedef signed char         sint8_t;
 typedef signed char         int8_t;
@@ -20,6 +25,7 @@ typedef unsigned long long  uint64_t;
 typedef unsigned long long  u_int64_t;
 typedef float               real32_t;
 typedef double              real64_t;
+#endif
 
 typedef unsigned char       uint8;
 typedef unsigned char       u8;
@@ -41,6 +47,11 @@ typedef unsigned long long  uint64;
 typedef unsigned long long  u64;
 typedef float               real32;
 typedef double              real64;
+
+#define sint16_t sint16
+#define sint8_t  sint8
+#define sint32_t sint32
+#define sint64_t sint64
 
 #define __le16      u16
 
@@ -73,15 +84,16 @@ typedef enum {
 
 #ifdef ICACHE_FLASH
 #define ICACHE_FLASH_ATTR __attribute__((section(".irom0.text")))
+#define ICACHE_RODATA_ATTR __attribute__((section(".irom.text")))
 #else
 #define ICACHE_FLASH_ATTR
 #endif /* ICACHE_FLASH */
 
 #ifndef __cplusplus
-typedef unsigned char   bool;
+//typedef unsigned char   bool;
 #define BOOL            bool
-#define true            (1)
-#define false           (0)
+//#define true            (1)
+//#define false           (0)
 #define TRUE            true
 #define FALSE           false
 

@@ -51,6 +51,7 @@ typedef struct _esp_tcp {
     espconn_connect_callback connect_callback;
     espconn_reconnect_callback reconnect_callback;
     espconn_connect_callback disconnect_callback;
+	espconn_connect_callback write_finish_fn;
 } esp_tcp;
 
 typedef struct _esp_udp {
@@ -85,6 +86,14 @@ struct espconn {
     espconn_sent_callback sent_callback;
     uint8 link_cnt;
     void *reverse;
+};
+
+enum espconn_option{
+	ESPCONN_START = 0x00,
+	ESPCONN_REUSEADDR = 0x01,
+	ESPCONN_NODELAY = 0x02,
+	ESPCONN_COPY = 0x04,
+	ESPCONN_END
 };
 
 /******************************************************************************
@@ -133,6 +142,43 @@ sint8 espconn_accept(struct espconn *espconn);
 sint8 espconn_create(struct espconn *espconn);
 
 /******************************************************************************
+ * FunctionName : espconn_tcp_get_max_con
+ * Description  : get the number of simulatenously active TCP connections
+ * Parameters   : none
+ * Returns      : none
+*******************************************************************************/
+
+uint8 espconn_tcp_get_max_con(void);
+
+/******************************************************************************
+ * FunctionName : espconn_tcp_set_max_con
+ * Description  : set the number of simulatenously active TCP connections
+ * Parameters   : num -- total number
+ * Returns      : none
+*******************************************************************************/
+
+sint8 espconn_tcp_set_max_con(uint8 num);
+
+/******************************************************************************
+ * FunctionName : espconn_tcp_get_max_con_allow
+ * Description  : get the count of simulatenously active connections on the server
+ * Parameters   : espconn -- espconn to get the count
+ * Returns      : result
+*******************************************************************************/
+
+sint8 espconn_tcp_get_max_con_allow(struct espconn *espconn);
+
+/******************************************************************************
+ * FunctionName : espconn_tcp_set_max_con_allow
+ * Description  : set the count of simulatenously active connections on the server
+ * Parameters   : espconn -- espconn to set the count
+ * 				  num -- support the connection number
+ * Returns      : result
+*******************************************************************************/
+
+sint8 espconn_tcp_set_max_con_allow(struct espconn *espconn, uint8 num);
+
+/******************************************************************************
  * FunctionName : espconn_regist_time
  * Description  : used to specify the time that should be called when don't recv data
  * Parameters   : espconn -- the espconn used to the connection
@@ -163,6 +209,18 @@ sint8 espconn_get_connection_info(struct espconn *pespconn, remot_info **pcon_in
 *******************************************************************************/
 
 sint8 espconn_regist_sentcb(struct espconn *espconn, espconn_sent_callback sent_cb);
+
+/******************************************************************************
+ * FunctionName : espconn_regist_sentcb
+ * Description  : Used to specify the function that should be called when data
+ *                has been successfully delivered to the remote host.
+ * Parameters   : espconn -- espconn to set the sent callback
+ *                sent_cb -- sent callback function to call for this espconn
+ *                when data is successfully sent
+ * Returns      : none
+*******************************************************************************/
+
+sint8 espconn_regist_write_finish(struct espconn *espconn, espconn_connect_callback write_finish_fn);
 
 /******************************************************************************
  * FunctionName : espconn_sent
@@ -227,6 +285,16 @@ sint8 espconn_regist_disconcb(struct espconn *espconn, espconn_connect_callback 
 *******************************************************************************/
 
 uint32 espconn_port(void);
+
+/******************************************************************************
+ * FunctionName : espconn_set_opt
+ * Description  : access port value for client so that we don't end up bouncing
+ *                all connections at the same time .
+ * Parameters   : none
+ * Returns      : access port value
+*******************************************************************************/
+
+sint8 espconn_set_opt(struct espconn *espconn, uint8 opt);
 
 /******************************************************************************
  * TypedefName : dns_found_callback
@@ -316,6 +384,22 @@ sint8 espconn_igmp_join(ip_addr_t *host_ip, ip_addr_t *multicast_ip);
  * Returns      : none
 *******************************************************************************/
 sint8 espconn_igmp_leave(ip_addr_t *host_ip, ip_addr_t *multicast_ip);
+
+/******************************************************************************
+ * FunctionName : espconn_recv_hold
+ * Description  : hold tcp receive
+ * Parameters   : espconn -- espconn to hold
+ * Returns      : none
+*******************************************************************************/
+sint8 espconn_recv_hold(struct espconn *pespconn);
+
+/******************************************************************************
+ * FunctionName : espconn_recv_unhold
+ * Description  : unhold tcp receive
+ * Parameters   : espconn -- espconn to unhold
+ * Returns      : none
+*******************************************************************************/
+sint8 espconn_recv_unhold(struct espconn *pespconn);
 
 #endif
 

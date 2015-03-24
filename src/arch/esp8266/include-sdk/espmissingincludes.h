@@ -56,4 +56,9 @@ int os_printf      (const char *fmt, ...)                         __attribute__(
 #define os_printf os_printf_plus
 #endif
 
+/* These were dropped from newer SDKs */
+int wifi_softap_set_station_info(uint8_t *addr, struct ip_addr *adr);
+void system_station_got_ip_set(ip_addr_t * ip_addr, ip_addr_t *sn_mask, ip_addr_t *gw_addr);
+void system_pp_recycle_rx_pkt (void*);
+
 #endif
