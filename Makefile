@@ -98,7 +98,7 @@ mrproper: clean
 
 distclean: mrproper
 
-build:  $(BUILDGOALS)
+build:  $(BUILDGOALS) .config
 	@echo > /dev/null
 
 deploy: build
@@ -119,6 +119,8 @@ tags:
 graph-%:
 	$(Q)$(ANTARES_DIR)/scripts/visualise_make $*
 
+.config:
+	@echo "Missing configuration file ($(tb_red).config$(col_rst)). Please run configuation tool (menuconfig, etc))"
 
 #Help needs a dedicated rule, so that it won't invoke build as it normally does
 deploy-help:
@@ -139,8 +141,8 @@ $(foreach d,$(DEPLOY), $(eval $(call deploy_dummy,$(d))))
 
 # On debian wheezy with make 3.8.1-8.2 empty DEFAULT_GOAL crashes make (debian bug #780778)
 ifeq ($(strip $(CONFIG_MAKE_DEFTARGET)),)
-$(info Missing configuration file ($(tb_red).config$(col_rst)). Please run configuation tool (menuconfig, etc))
-$(error Cowardly refusing to go further)
+$(warn Empty default target or missing configuration file)
+.DEFAULT_GOAL :=.config
 else
 .DEFAULT_GOAL := $(subst ",, $(CONFIG_MAKE_DEFTARGET))
 endif
