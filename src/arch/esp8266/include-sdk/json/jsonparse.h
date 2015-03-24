@@ -79,6 +79,9 @@ int jsonparse_get_value_as_int(struct jsonparse_state *state);
 /* get the current JSON value parsed as a long */
 long jsonparse_get_value_as_long(struct jsonparse_state *state);
 
+/* get the current JSON value parsed as a unsigned long */
+unsigned long jsonparse_get_value_as_ulong(struct jsonparse_state *state);
+
 /* get the length of the current JSON value */
 int jsonparse_get_len(struct jsonparse_state *state);
 
