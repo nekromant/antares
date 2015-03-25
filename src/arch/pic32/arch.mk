@@ -20,11 +20,11 @@ ELFFLAGS+=-mprocessor=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 CFLAGS += -mprocessor=$(MCU) -DF_CPU=$(CONFIG_F_CPU) 
 
 ifeq ($(CONFIG_USE_UNO32_LD),y)
-GCC_LDFILE=$(ANTARES_INSTALL_DIR)/src/arch/pic32/chipKIT-UNO32-application-32MX320F128L.ld
+GCC_LDFILE=$(ANTARES_DIR)/src/arch/pic32/chipKIT-UNO32-application-32MX320F128L.ld
 endif
 
 ifeq ($(CONFIG_USE_MAX32_LD),y)
-GCC_LDFILE=$(ANTARES_INSTALL_DIR)/src/arch/pic32/chipKIT-MAX32-application-32MX795F512L.ld
+GCC_LDFILE=$(ANTARES_DIR)/src/arch/pic32/chipKIT-MAX32-application-32MX795F512L.ld
 endif
 
 MCHIP_PATH=$(shell dirname `which $(CC)`)

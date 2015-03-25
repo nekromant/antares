@@ -14,12 +14,12 @@ endif
 # Yes, freaky people use avrdude for pic32
 # We even ship an avrdude.conf for those
 ifeq ($(CONFIG_ARCH_PIC32),y)
-	AVRDUDE_EXTRA=-C $(ANTARES_INSTALL_DIR)/extra/avrdude.pic32.conf
+	AVRDUDE_EXTRA=-C $(ANTARES_DIR)/extra/avrdude.pic32.conf
 endif
 
 RESETCMD:=
 ifeq ($(CONFIG_DEPLOY_AVRDUDE_RESET),y)
-	RESETCMD:= $(Q)$(root) $(ANTARES_INSTALL_DIR)/scripts/serial_reset.sh \
+	RESETCMD:= $(Q)$(root) $(ANTARES_DIR)/scripts/serial_reset.sh \
 		$(CONFIG_DEPLOY_AVRDUDE_PORT)
 endif
 

@@ -12,9 +12,9 @@ LD_NO_COMBINE=y
 
 CFLAGS	  += -Wpointer-arith -Wundef -Wl,-EL -mtext-section-literals -fno-inline-functions -mlongcalls -D__ets__ -DICACHE_FLASH
 
-CFLAGS	  += -I$(ANTARES_INSTALL_DIR)/src/arch/esp8266/include-sdk
+CFLAGS	  += -I$(ANTARES_DIR)/src/arch/esp8266/include-sdk
 
-GCC_LDFILE = $(ANTARES_INSTALL_DIR)/src/arch/esp8266/ld/eagle.app.v6.ld
+GCC_LDFILE = $(ANTARES_DIR)/src/arch/esp8266/ld/eagle.app.v6.ld
 
 
 #Link our binary blobbies
