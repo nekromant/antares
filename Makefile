@@ -91,10 +91,12 @@ clean:
 
 mrproper: clean
 	-$(SILENT_MRPROPER) rm -Rf $(TOPDIR)/kconfig 
-	$(Q)rm -f $(TOPDIR)/antares
+	-$(Q)rm -f $(TOPDIR)/antares 2>/dev/null
 	$(Q)rm -Rf $(TOPDIR)/include/config
 	$(Q)rm -f $(TOPDIR)/include/arch
 	-$(Q)rm rm -f $(TOPDIR)/TAGS
+	$(Q)[ -d $(TOPDIR)/antares ] && \
+	  echo "WARN: $(TOPDIR)/antares was not a symlink. Remove manually if you want to refetch antares"
 
 distclean: mrproper
 
