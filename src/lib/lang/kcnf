@@ -1,0 +1,14 @@
+menuconfig LIB_LANG
+bool "Scripting"
+
+if LIB_LANG
+
+menuconfig LIB_LANG_LUA
+bool "Lua"
+
+if LIB_LANG_LUA
+
+endif
+
+endif
+

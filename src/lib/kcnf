@@ -157,4 +157,4 @@ source "antares/src/lib/stlinky/kcnf"
 source "antares/src/lib/urpc/kcnf"
 source "antares/src/lib/compression/kcnf"
 source "antares/src/lib/contrib/kcnf"
-
+source "antares/src/lib/lang/kcnf"

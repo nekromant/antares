@@ -18,3 +18,5 @@ subdirs-y+=wireless
 subdirs-y+=ulc
 subdirs-y+=delaylib
 subdirs-y+=compression
+subdirs-y+=lang
+
