@@ -1,1 +1,1 @@
-subdirs-y+=lua
+subdirs-$(CONFIG_LANG_LUA)+=lua
