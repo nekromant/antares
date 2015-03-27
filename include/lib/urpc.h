@@ -4,19 +4,31 @@
 #include <arch/antares.h>
 #include <stdint.h>
 
-#define URPC_NONE "1"
-#define URPC_U8   "2"
-#define URPC_U16  "3"
-#define URPC_U32  "4"
-#define URPC_U64  "5"
+#define R_URPC_NONE 0x00
+#define R_URPC_U8   0x01
+#define R_URPC_U16  0x02
+#define R_URPC_U32  0x03
+#define R_URPC_U64  0x04
 
-#define URPC_I8   "6"
-#define URPC_I16  "7"
-#define URPC_I32  "8"
-#define URPC_I64  "9"
+#define R_URPC_I8   0x05
+#define R_URPC_I16  0x06
+#define R_URPC_I32  0x07
+#define R_URPC_I64  0x08
 
-#define URPC_STR    "s"
-#define URPC_BIN(n) "b" #n "."
+#define R_URPC_BIN  0x09
+
+#define URPC_NONE "\x00\x00"
+#define URPC_U8   "\x00\x01"
+#define URPC_U16  "\x00\x02"
+#define URPC_U32  "\x00\x03"
+#define URPC_U64  "\x00\x04"
+
+#define URPC_I8   "\x00\x05"
+#define URPC_I16  "\x00\x06"
+#define URPC_I32  "\x00\x07"
+#define URPC_I64  "\x00\x08"
+
+#define URPC_BIN(n) "\x00\x09" n
 
 
 #define urpc_arg_pop(tp, argptr)			\
