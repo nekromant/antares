@@ -185,7 +185,7 @@ SECTIONS
   .irom0.text : ALIGN(4)
   {
     _irom0_text_start = ABSOLUTE(.);
-    *(.irom0.literal .irom.literal .irom.text.literal .irom0.text .irom.text)
+    *(.irom0.literal .irom.literal .irom0.literal.* .irom.text.literal .irom0.text .irom0.text.* .irom.text)
     _irom0_text_end = ABSOLUTE(.);
 
     *(.console_firstcmd)

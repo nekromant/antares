@@ -26,6 +26,7 @@ endif
 endef
 
 ELFFLAGS  += -nostdlib -Wl,--no-check-sections -u call_user_start -Wl,-static -Wl,--start-group 
+ELFFLAGS  += -Wl,-Map=$(IMAGENAME).map
 
 $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_MAIN,main))
 $(eval $(call esp_check_lib,CONFIG_ESP8266_BLOB_HAL,hal))
@@ -60,10 +61,24 @@ endif
 
 ifeq ($(CONFIG_ESP8266_FORCE_IROM),y)
 before-link+=_move_code_to_irom
+
+# Some really dark magic in bash. Feel teh power!
+# In short. the simple way is rename .text=.irom0.text and .literal=.irom0.literal
+# However if we use gc-sections, we end up with .text.symbolname and .literal.symbolname
+# So we iterate around all sections that start with .text and carry out the dirty work
+# Yep. Say thanks to Espressif for trying to enforce the weird ICACHE_FLASH_ATTR way.
+# FixMe: We could theoretically parallelize the objcopy, but since it will require some
+# hacking of toolchains/gcc.mk - let it be. 
+
 _move_code_to_irom: builtin 
 	@echo "  $(tb_red)[IROMIFY]$(col_rst)   Moving application code to $(tb_red)IROM$(col_rst)" 
 	$(Q)echo -e "`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/built-in.o` \n \
 	`$(ANTARES_DIR)/scripts/parseobjs $(TOPDIR)/build/app/built-in.o`" | while read file; do \
+	for section in `$(OBJDUMP) -h $$file|grep text|grep -v irom|grep -v iram|awk '{print $$2}'`; do \
+		sname=`echo $$section|sed 's/.text.//'`; 							\
+		$(OBJCOPY) --rename-section .text.$$sname=.irom0.text.$$sname \
+				--rename-section .literal.$$sname=.irom0.literal.$$sname $$file; \
+	done; \
 	$(OBJCOPY) --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $$file; \
 	done
