@@ -16,6 +16,7 @@ int "CPU frequency in Hz"
 default 8000000
 
 config F_USB
+depends on AVR_HAS_USB
 int "USB PLL input frequency in Hz"
 default 8000000
 
