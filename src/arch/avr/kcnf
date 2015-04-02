@@ -15,6 +15,10 @@ config F_CPU
 int "CPU frequency in Hz"
 default 8000000
 
+config F_USB
+int "USB PLL input frequency in Hz"
+default 8000000
+
 config AVR_BLDR
 bool "Run in bootloader section"
 

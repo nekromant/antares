@@ -20,6 +20,12 @@ CFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 LDFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 ELFFLAGS+= -mmcu=$(MCU) -DF_CPU=$(CONFIG_F_CPU)
 
+ifeq ($(CONFIG_AVR_HAS_USB),y)
+CFLAGS += -DF_USB=$(CONFIG_F_USB)
+LDFLAGS += -DF_USB=$(CONFIG_F_USB)
+ELFFLAGS += -DF_USB=$(CONFIG_F_USB)
+endif
+
 #avr-specifik voodoo for hex generation
 
 #ELFFLAGS+=-Wl,--relax,--gc-sections 

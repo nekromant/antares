@@ -1,5 +1,5 @@
 
 # Selector if selected MCU has hardware USB
-config ARCH_HAS_USB
+config AVR_HAS_USB
         bool
 

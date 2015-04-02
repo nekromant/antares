@@ -103,33 +103,33 @@ config MCU_ATA6289
 	bool "ata6289"
 config MCU_AT43USB355
 	bool "at43usb355"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_AT76C711
 	bool "at76c711"
 config MCU_ATMEGA103
 	bool "atmega103"
 config MCU_AT43USB320
 	bool "at43usb320"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATTINY167
 	bool "attiny167"
 config MCU_ATTINY327
 	bool "attiny327"
 config MCU_AT90USB82
 	bool "at90usb82"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_AT90USB162
 	bool "at90usb162"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATMEGA8U2
 	bool "atmega8u2"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATMEGA16U2
 	bool "atmega16u2"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATMEGA32U2
 	bool "atmega32u2"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATMEGA8
 	bool "atmega8"
 config MCU_ATMEGA48
@@ -260,13 +260,13 @@ config MCU_ATMEGA64M1
 	bool "atmega64m1"
 config MCU_ATMEGA16U4
 	bool "atmega16u4"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATMEGA32U4
 	bool "atmega32u4"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_ATMEGA32U6
 	bool "atmega32u6"
-        select HAS_USB
+        select AVR_HAS_USB
 config MCU_AT90USB646
 	bool "at90usb646"
 config MCU_AT90USB647
