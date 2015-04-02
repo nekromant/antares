@@ -1,0 +1,62 @@
+menuconfig LIB_LUFA
+        bool "LUFA Hardware USB stack"
+        depends on ARCH_AVR && AVR_HAS_USB
+
+if LIB_LUFA
+
+        config LIB_LUFA_DEVICE
+                bool "Use USB Device stack"
+                default y
+
+        config LIB_LUFA_HOST
+                bool "User USB Host stack"
+                depends on AVR_HAS_USB_HOST
+
+        if LIB_LUFA_DEVICE
+        menu "USB Device classes"
+                config LIB_LUFA_AUDIOCLASSDEVICE
+                        bool "Audio Class Device"
+
+                config LIB_LUFA_CDCCLASSDEVICE
+                        bool "CDC Class Device"
+
+                config LIB_LUFA_HIDCLASSDEVICE
+                        bool "HID Class Device"
+
+                config LIB_LUFA_MASSSTORAGECLASSDEVICE
+                        bool "Mass Storage Class Device"
+
+                config LIB_LUFA_MIDICLASSDEVICE
+                        bool "MIDI Class Device"
+
+                config LIB_LUFA_PRINTERCLASSDEVICE
+                        bool "Printer Class Device"
+
+                config LIB_LUFA_RNDISCLASSDEVICE
+                        bool "RNDIS Class Device"
+        endmenu
+        endif
+
+# TODO: add host classes
+
+        comment "Tweaks"
+
+        choice
+                prompt "Allocate desctiptors in"
+
+                config LIB_LUFA_USE_FLASH_DESCRIPTORS
+                        bool "Flash"
+
+                config LIB_LUFA_USE_RAM_DESCRIPTORS
+                        bool "RAM"
+
+                config LIB_LUFA_USE_EEPROM_DESCRIPTORS
+                        bool "EEPROM"
+
+        endchoice
+
+        config LIB_LUFA_USE_HID_PARSER
+                bool "Use HID parser (HIDParser.c)"
+                default n
+
+endif

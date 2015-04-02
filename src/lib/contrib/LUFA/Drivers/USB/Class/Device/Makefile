@@ -1,0 +1,7 @@
+objects-$(CONFIG_LIB_LUFA_AUDIOCLASSDEVICE) += AudioClassDevice.o
+objects-$(CONFIG_LIB_LUFA_CDCCLASSDEVICE) += CDCClassDevice.o
+objects-$(CONFIG_LIB_LUFA_HIDCLASSDEVICE) += HIDClassDevice.o
+objects-$(CONFIG_LIB_LUFA_MASSSTORAGECLASSDEVICE) += MassStorageClassDevice.o
+objects-$(CONFIG_LIB_LUFA_MIDICLASSDEVICE) += MIDIClassDevice.o
+objects-$(CONFIG_LIB_LUFA_PRINTERCLASSDEVICE) += PrinterClassDevice.o
+objects-$(CONFIG_LIB_LUFA_RNDISCLASSDEVICE) += RNDISClassDevice.o
