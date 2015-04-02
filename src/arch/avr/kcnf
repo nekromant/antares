@@ -1,5 +1,7 @@
 if ARCH_AVR
 
+# Get configuration flags for libraries
+source "antares/src/arch/avr/mcu_feature_flags.kcnf"
 
 choice
 depends on ARCH_AVR
@@ -12,7 +14,6 @@ endchoice
 config F_CPU
 int "CPU frequency in Hz"
 default 8000000
-
 
 config AVR_BLDR
 bool "Run in bootloader section"
