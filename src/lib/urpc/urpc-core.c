@@ -76,6 +76,16 @@ size_t urpc_calc_buffer_size(const unsigned char *fmt)
 	return ret;
 }
 
+
+static int  get_copy_size(const unsigned char *rfmt)
+{
+	
+}
+
+/* Some data types may be promoted that screws things up */
+#define va_arg_ex(ret, ap, type, ptype)			\
+			ret = (type) va_arg(ap, ptype);	\
+
 bool urpc_raise_event(struct urpc_object *o, ...)
 {
 	va_list ap;
@@ -96,39 +106,30 @@ bool urpc_raise_event(struct urpc_object *o, ...)
 		int64_t i64;
 
 	} tmp;
+
 	while (*rfmt) {
 		
 		switch (*rfmt) {
-/* Warning: Variadic stuff gets promoted differently on different architectures */
-/* TODO: Carefully handle these weird cases */
-#if 0
 		case R_URPC_U8:
-		case R_URPC_I8:
-			tmp.u8 = va_arg(ap, uint8_t);
+			va_arg_ex(tmp.u8, ap, uint8_t, unsigned int);
 			from = &tmp.u8;
 			tocopy = sizeof(uint8_t);;
 			break;
-#endif
-		case R_URPC_U8: {
-			int inttmp = va_arg(ap, int);
-			tmp.u8 = (uint8_t) inttmp;
-			from = &tmp.u8;
-			tocopy = sizeof(uint8_t);;
-			break;
-		}
-
 		case R_URPC_I8: {
-			int inttmp = va_arg(ap, int);
-			tmp.i8 = (int8_t) inttmp;
+			va_arg_ex(tmp.i8, ap, int8_t, int);
 			from = &tmp.i8;
 			tocopy = sizeof(int8_t);;
 			break;
 		}
 		case R_URPC_U16:
-		case R_URPC_I16:
-			tmp.u16 = va_arg(ap, uint16_t);
+			va_arg_ex(tmp.u16, ap, uint16_t, unsigned int);
 			from = &tmp.u16;
 			tocopy = sizeof(uint16_t);;
+			break;
+		case R_URPC_I16:
+			va_arg_ex(tmp.i16, ap, int16_t, int);
+			from = &tmp.i16;
+			tocopy = sizeof(int16_t);;
 			break;
 		case R_URPC_U32:
 		case R_URPC_I32:
@@ -162,7 +163,8 @@ void urpc_call(uint8_t id, void *arg, void *ret)
 {
 	if (id >= CONFIG_LIB_URPC_OCOUNT)
 		return;
-	registry[id]->method(arg, ret);
+	if (registry[id]->method)
+		registry[id]->method(arg, ret);
 }
 
 void urpc_register(struct urpc_object *o)
@@ -170,11 +172,11 @@ void urpc_register(struct urpc_object *o)
 	if (lastid >= CONFIG_LIB_URPC_OCOUNT) { 
 		panic("Too many objects");
 	}
-#if 1
+
 	dbg("Registering object: %s\n", o->name);
 	dbg("Arg len %d\n",  urpc_calc_buffer_size((unsigned char *) o->arg));
 	dbg("Ret len %d\n",  urpc_calc_buffer_size((unsigned char *) o->ret));
-#endif
+
 	registry[lastid] = o;
 	o->id = (uint8_t) lastid++;
 }
