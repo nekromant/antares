@@ -13,7 +13,7 @@ endif
 
 
 rf24tool:
-	$(root) rf24tool --channel=$(CONFIG_DEPLOY_RF24TOOL_RF_CHANNEL) \
+	$(root) rf24-boot --channel=$(CONFIG_DEPLOY_RF24TOOL_RF_CHANNEL) \
 	--remote-addr=\
 $(CONFIG_DEPLOY_RF24TOOL_RF_ADDR_0):\
 $(CONFIG_DEPLOY_RF24TOOL_RF_ADDR_1):\
