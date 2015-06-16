@@ -13,12 +13,12 @@
 
 /*
  * Since in a naked function we're pretty much limited
- * RTFM says:  The only statements that can be safely included in naked functions 
- * are asm statements that do not have operands. All other statements, including 
- * declarations of local variables, if statements, and so forth, should be avoided. 
- * Naked functions should be used to implement the body of an assembly function, while 
- * allowing the compiler to construct the requisite function declaration for the assembler. 
- * Thefore we place calls to the actual functions. That does the trick allowing us to 
+ * RTFM says:  The only statements that can be safely included in naked functions
+ * are asm statements that do not have operands. All other statements, including
+ * declarations of local variables, if statements, and so forth, should be avoided.
+ * Naked functions should be used to implement the body of an assembly function, while
+ * allowing the compiler to construct the requisite function declaration for the assembler.
+ * Thefore we place calls to the actual functions. That does the trick allowing us to
  * achieve more
  */
 
@@ -31,7 +31,7 @@
 	__attribute__((__section__(".init5"))) void fn ## _low(void) {	\
 		fn();							\
 	}								\
-	void fn() 
+	void fn()
 
 
 #define ANTARES_INIT_HIGH(fn)						\
@@ -49,8 +49,8 @@
 	__attribute__((__section__(".init8"))) void fn ## _app(void) {	\
 		fn();							\
 	}								\
-	void fn() 						\
-	
+	void fn()							\
+
 
 
 #define ANTARES_FINISH(fn)						\
@@ -59,7 +59,7 @@
 	__attribute__((__section__(".fini2"))) void fn ## _finish(void) { \
 		fn();							\
 	}								\
-	void fn() 
+	void fn()
 
 
 #define HAVE_ANTARES_STARTUP
