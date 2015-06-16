@@ -11,7 +11,7 @@ deploy_help+="\nesptool - Flash the firmware via esptool"
 #release boot
 define tobootloader
 	pl2303gpio --gpio=0 --out=0 --gpio=1 --out=0 \
-	--gpio=1 --in --sleep 50 \
+	--gpio=1 --in --sleep 350 \
 	--gpio=0 --in
 endef
 
