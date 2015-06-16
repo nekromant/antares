@@ -29,11 +29,24 @@ void urpc_call(struct urpc *u, urpc_id_t id, void *data, urpc_size_t sz)
 	 * Events don't have method field set, 
 	 * and shouldn't be called, ignore them 
 	 */
-	if (!u->objects[id]->method)
-		return;
-	
-	u->objects[id]->method(id, data, u->respbuf);
-	
+	if (u->objects[id]->method)
+		u->objects[id]->method(id, data, sz);
+}
+
+
+void urpc_evt_write(struct urpc *u, char *data, urpc_size_t sz)
+{
+	int tocopy; 
+	do { 
+		tocopy = min_t(int, sz, 
+			       CIRC_SPACE_TO_END(
+				       u->evt_head, 
+				       u->evt_tail, 
+				       CONFIG_URPC_EBLEN));
+		memcpy(&u->evt_buf[u->evt_head], data, tocopy);
+		sz-=tocopy;
+		u->evt_head = (u->evt_head + tocopy) & (CONFIG_URPC_EBLEN - 1);
+	} while (sz);
 }
 
 void urpc_respond(struct urpc *u, urpc_id_t id, char *data, urpc_size_t sz)
