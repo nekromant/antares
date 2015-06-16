@@ -44,17 +44,17 @@
 
 
 #define ANTARES_APP(fn)							\
-	void fn();						\
+	void fn();							\
 	__attribute__((naked))						\
 	__attribute__((__section__(".init8"))) void fn ## _app(void) {	\
 		fn();							\
 	}								\
-	void fn() 						\
-	
+	void fn()							\
+		
 
 
 #define ANTARES_FINISH(fn)						\
-	void fn();						\
+	void fn();							\
 	__attribute__((naked))						\
 	__attribute__((__section__(".fini0"))) void fn ## _finish(void) { \
 		fn();							\
