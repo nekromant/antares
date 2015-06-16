@@ -54,6 +54,11 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
 
 #define rf24_has_dynamic_payload(rf24) ((rf24)->flags & RF24_DYNAMIC_PAYLOAD)
 
+struct rf24_pmgr_cb { 
+	void (*callback)(char* data, uint8_t len, void *arg);
+	void *arg;
+};
+
 struct rf24 {
 	void    (*csn)(int level);
 	void    (*ce)(int level);
@@ -68,6 +73,9 @@ struct rf24 {
 	uint8_t pipe0_writing_address[5];
 	uint8_t nretr; 
 	uint8_t rtimeout;
+#ifdef CONFIG_LIB_RF24_PMGR
+	struct rf24_pmgr_cb[6];	
+#endif
 };
 
 
