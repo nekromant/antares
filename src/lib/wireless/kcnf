@@ -8,6 +8,9 @@ bool "nRF24L01 Support"
 
 if LIB_RF24
 
+   config LIB_RF24_PMGR
+   bool "Pipe Manager"
+
    choice 
    prompt "Platform bindings"
 
