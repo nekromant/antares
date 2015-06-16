@@ -1,0 +1,7 @@
+menu "Cryptography"
+
+config LIB_CRYPTO_CRC16
+bool "CRC16 checksumming"
+
+
+endmenu

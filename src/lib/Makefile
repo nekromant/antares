@@ -1,5 +1,6 @@
 subdirs-y+=contrib
 subdirs-y+=console
+subdirs-y+=crypto
 
 subdirs-$(CONFIG_LIB_URPC)+=urpc
 subdirs-$(CONFIG_LIB_STLINKY)+=stlinky
