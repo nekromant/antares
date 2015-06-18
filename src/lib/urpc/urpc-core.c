@@ -9,89 +9,27 @@
 #include <alloca.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 
 
 static struct urpc_object *registry[CONFIG_LIB_URPC_OCOUNT];
 static uint8_t lastid;
 
-
-static inline const unsigned char* next_arg(const unsigned char *args)
+int urpc_get_registry(struct urpc_object ***reg)
 {
-	printk("current %x\n", *args);
-	if (*args == R_URPC_NONE)
-		return NULL;
-	while (*args++ != 0x0);;
-	printk("next %x\n", *args);
-	return args;
-}
-
-
-inline int urpc_type_size(const unsigned char *fmt) {
-	int increment;
-	switch (*fmt) 
-	{
-	case 0:
-		increment = 0;
-	case R_URPC_U8:
-	case R_URPC_I8:
-		increment = sizeof(uint8_t);;
-		break;
-	case R_URPC_U16:
-	case R_URPC_I16:
-		increment = sizeof(uint16_t);;
-		break;
-	case R_URPC_U32:
-	case R_URPC_I32:
-		increment = sizeof(uint32_t);;
-		break;
-	case R_URPC_U64:
-	case R_URPC_I64:
-		increment = sizeof(uint64_t);;
-		break;
-	case R_URPC_BIN:
-		fmt++;
-		increment = (size_t) *fmt;
-		break;
-	default:
-		increment = -1;
-	}	
-	return increment;
-};
-
-
-size_t urpc_calc_buffer_size(const unsigned char *fmt)
-{
-	int increment;
-	size_t ret = 0;
-	fmt++; /* Skip first 0x0 */
-	while (*fmt) {
-		increment = urpc_type_size(fmt);
-		if (increment < 0) { 
-			panic("urpc: Invalid format token!");
-		}
-		ret+=increment;
-		fmt = next_arg(fmt);
-	}
-	return ret;
-}
-
-
-static int  get_copy_size(const unsigned char *rfmt)
-{
-	
+	*reg = registry;
+	return lastid;
 }
 
 /* Some data types may be promoted that screws things up */
 #define va_arg_ex(ret, ap, type, ptype)			\
 			ret = (type) va_arg(ap, ptype);	\
 
-bool urpc_raise_event(struct urpc_object *o, ...)
+void urpc_raise_event(struct urpc_object *o, ...)
 {
 	va_list ap;
 	const unsigned char *rfmt = (unsigned char *) o->ret;
-	size_t evtbufsize = urpc_calc_buffer_size(rfmt);
-	char *buf = alloca(evtbufsize);
 	va_start(ap, o);
 	int tocopy;
 	void *from;
@@ -107,64 +45,75 @@ bool urpc_raise_event(struct urpc_object *o, ...)
 
 	} tmp;
 
-	while (*rfmt) {
-		
+	urpc_backend_evt_start(o);
+	while (true) {
 		switch (*rfmt) {
-		case R_URPC_U8:
+		case URPC_U8_TOK:
 			va_arg_ex(tmp.u8, ap, uint8_t, unsigned int);
 			from = &tmp.u8;
 			tocopy = sizeof(uint8_t);;
 			break;
-		case R_URPC_I8: {
+		case URPC_S8_TOK: {
 			va_arg_ex(tmp.i8, ap, int8_t, int);
 			from = &tmp.i8;
 			tocopy = sizeof(int8_t);;
 			break;
 		}
-		case R_URPC_U16:
+		case URPC_U16_TOK:
 			va_arg_ex(tmp.u16, ap, uint16_t, unsigned int);
 			from = &tmp.u16;
 			tocopy = sizeof(uint16_t);;
 			break;
-		case R_URPC_I16:
+		case URPC_S16_TOK:
 			va_arg_ex(tmp.i16, ap, int16_t, int);
 			from = &tmp.i16;
 			tocopy = sizeof(int16_t);;
 			break;
-		case R_URPC_U32:
-		case R_URPC_I32:
+		case URPC_U32_TOK:
+		case URPC_S32_TOK:
 			tmp.u32 = va_arg(ap, uint32_t);
 			from = &tmp.u32;
 			tocopy = sizeof(uint32_t);;
 			break;
-		case R_URPC_U64:
-		case R_URPC_I64:
+		case URPC_U64_TOK:
+		case URPC_S64_TOK:
 			tmp.u64 = va_arg(ap, uint64_t);
 			from = &tmp.u64;
 			tocopy = sizeof(uint64_t);;
 			break;
-		case R_URPC_BIN:
-			rfmt++;
+		case URPC_BIN_TOK:
 			from = va_arg(ap, char *);
-			tocopy = (int) *rfmt;	
+			tocopy = atoi((char *) rfmt);
+			while (*rfmt && (*(++rfmt) != '.'));
 			break;
+		case 0x0:
+			urpc_backend_evt_finish();	
+			return;
 		default: 
 			panic("Invalid token");
-			return false;
+			return;
 		}
-		memcpy(buf, from, tocopy);
-		buf += tocopy;
-		rfmt = next_arg(rfmt);
+		urpc_backend_evt_write(from, tocopy);	
+		rfmt++;
 	}
-	return urpc_backend_evt_deliver(o, buf, evtbufsize);
 }
 
 void urpc_call(uint8_t id, void *arg, void *ret)
 {
+	struct urpc_object *o;
+	int len; 
+	char *rstart = ret; 
 	if (id >= CONFIG_LIB_URPC_OCOUNT)
 		return;
-	if (registry[id]->method)
-		registry[id]->method(arg, ret);
+	o = registry[id];
+	if (o->method)
+		o->method(arg, &ret);
+	len = ((char *) ret) - rstart;
+
+	/* Issue completion event */ 
+	urpc_backend_evt_start(o);
+	urpc_backend_evt_write(ret, len);
+	urpc_backend_evt_finish();	
 }
 
 void urpc_register(struct urpc_object *o)
@@ -172,11 +121,9 @@ void urpc_register(struct urpc_object *o)
 	if (lastid >= CONFIG_LIB_URPC_OCOUNT) { 
 		panic("Too many objects");
 	}
-
 	dbg("Registering object: %s\n", o->name);
 	dbg("Arg len %d\n",  urpc_calc_buffer_size((unsigned char *) o->arg));
 	dbg("Ret len %d\n",  urpc_calc_buffer_size((unsigned char *) o->ret));
-
 	registry[lastid] = o;
 	o->id = (uint8_t) lastid++;
 }
