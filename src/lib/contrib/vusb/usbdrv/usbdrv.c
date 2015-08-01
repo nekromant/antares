@@ -8,6 +8,10 @@
  * This Revision: $Id$
  */
 
+#ifdef CONFIG_USB_TUNEPROPSFILE
+#include CONFIG_USB_TUNEPROPSFILE
+#endif
+
 #include <generated/usbconfig.h>
 #include <arch/vusb/usbportability.h>
 #include <arch/vusb/usbdrv.h>
