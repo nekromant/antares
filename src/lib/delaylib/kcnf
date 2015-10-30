@@ -37,7 +37,7 @@ comment "Nothing to tune for AVR, everything should work out of the box"
 endif
 
 
-if ARCH_AVR
+if ARCH_ARM
 comment "Nothing to tune for ARM, everything should work out of the box"
 endif
 
