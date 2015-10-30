@@ -5,7 +5,7 @@ CFLAGS+=-DSYSCLK_FREQ_HSE=HSE_VALUE
 endif
 
 CFLAGS+=-DHSE_VALUE=$(CONFIG_STM32_HSE_VALUE)
-objects-y+=core_cm3.o
+#objects-y+=core_cm3.o
 objects-y+=misc.o
 objects-$(CONFIG_STM32_LIB_ADC)+=stm32l1xx_adc.o
 objects-$(CONFIG_STM32_LIB_BKP)+=stm32l1xx_bkp.o
