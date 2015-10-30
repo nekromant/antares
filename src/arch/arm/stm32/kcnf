@@ -158,9 +158,13 @@ endif
 endif
 
 if STM32L1X
+choice
+prompt "Target frequency"
 
 config STM32_FREQ_HSE
 bool "Use HSE"
+
+endchoice
 endif
 
 menu "Code placement settings"
