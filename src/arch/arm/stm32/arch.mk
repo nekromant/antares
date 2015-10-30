@@ -30,13 +30,21 @@ else ifeq ($(CONFIG_STM32F10X_CL),y)
 	CFLAGS+=-DSTM32F10X_CL
 else ifeq ($(CONFIG_STM32F4X),y)
 	CFLAGS+=-DSTM32F4X
+else ifeq ($(CONFIG_STM32L1XX_MD),y)
+	CFLAGS+=-DSTM32L1XX_MD
+else ifeq ($(CONFIG_STM32L1XX_MDP),y)
+	CFLAGS+=-DSTM32L1XX_MDP
+else ifeq ($(CONFIG_STM32L1XX_HD),y)
+	CFLAGS+=-DSTM32L1XX_HD
+else ifeq ($(CONFIG_STM32L1XX_XL),y)
+	CFLAGS+=-DSTM32L1XX_XL
 endif
 
 ifeq ($(CONFIG_STM32_FULL_ASSERT),y)
 	CFLAGS+=-DFULL_ASSERT
 endif
 
-# Handle default code placement. This looks like the same for st32f1x and stm32f4x
+# Handle default code placement. This looks like the same for stm32f1x stm32f4x stm32l1xx
 
 ifneq ($(CONFIG_STM32_OVERRIDE_BASES),y)
 	GFLAGS+=-DCONFIG_STM32_FLASH_BASE=0x08000000
@@ -64,11 +72,16 @@ CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x
 CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-f4x/assert.h
 endif
 
+ifeq ($(CONFIG_STM32L1X),y)
+CFLAGS+=-mcpu=cortex-m3 -mthumb
+ASFLAGS+=-mcpu=cortex-m3 -mthumb
+CFLAGS+=-I$(ANTARES_DIR)/src/arch/arm/stm32/include-l1x
+CFLAGS+=-include $$(ANTARES_DIR)/src/arch/arm/stm32/include-l1x/assert.h
+endif
 
 CFLAGS+=-fno-common 
 ASFLAGS+=-fno-common  -xassembler-with-cpp
 CFLAGS+=$(GFLAGS)
-
 
 
 # Let the magic of gcc preprocessor commence!
