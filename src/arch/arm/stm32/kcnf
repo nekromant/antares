@@ -17,6 +17,9 @@ bool "STM32F1xx Series"
 
 config STM32F4X
 bool "STM32F4xx Series"
+
+config STM32L1X
+bool "STM32L1xx Series"
 endchoice
 
 if STM32F1X
@@ -82,6 +85,25 @@ bool "STM32F429xx/439xx devices"
 endchoice
 endif
 
+if STM32L1X
+choice
+prompt "STM32L1XX Subfamily"
+
+config STM32L1XX_MD
+bool "STM32L1XX_MD device family"
+
+config STM32L1XX_MDP
+bool "STM32L1XX_MDP device family"
+
+config STM32L1XX_HD
+bool "STM32L1XX_HD device family"
+
+config STM32L1XX_XL
+bool "STM32L1XX_XL device family"
+
+endchoice
+endif
+
 config STM32_HSE_VALUE
 int "HSE (Crystal) value in Hz"
 default 8000000
@@ -133,6 +155,12 @@ if STM32F427_437XX || STM32F429_439XX
 comment "Target frequency for your device is 180 MHz"
 endif
 
+endif
+
+if STM32L1X
+
+config STM32_FREQ_HSE
+bool "Use HSE"
 endif
 
 menu "Code placement settings"
@@ -193,6 +221,7 @@ endmenu
 
 source "antares/src/arch/arm/stm32/library-f1x/kcnf"
 source "antares/src/arch/arm/stm32/library-f4x/kcnf"
+source "antares/src/arch/arm/stm32/library-l1x/kcnf"
 source "antares/src/arch/arm/stm32/usb-f1x/kcnf"
 
 
@@ -237,7 +266,3 @@ endif
 
 config STM32_FULL_ASSERT
 bool "Use full assert in STM32 periph lib"
-
-
-
-
