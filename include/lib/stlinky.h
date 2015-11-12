@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 #define STLINKY_MAGIC 0xDEADF00D
-#define CONFIG_LIB_STLINKY_BSIZE 4096
 
 struct stlinky {
 	uint32_t magic;
