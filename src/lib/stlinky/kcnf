@@ -6,7 +6,7 @@ help
 config LIB_STLINKY_BSIZE
 depends on LIB_STLINKY
 int "RX/TX Buffer sizes"
-range 1 255
+range 1 1048576
 
 config LIB_STLINKY_NLIB
 depends on LIB_STLINKY

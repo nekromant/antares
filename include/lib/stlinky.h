@@ -1,23 +1,21 @@
 #ifndef STLINKY_H
 #define STLINKY_H
 
+#include <stdint.h>
 
 #define STLINKY_MAGIC 0xDEADF00D
 
-/* NOTE: Since rxsize/txsize will be always one
-   AXI transaction these will be hopefully atomic
-   Therefore we use them as a dumb locking mechanism
- */
-
 struct stlinky {
-	uint32_t magic; /* [3:0] */
-	unsigned char bufsize; /* 4 */
-	char txsize; /* 5 */ 
-	char rxsize; /* 6 */
-	char reserved; /* 7 */
-	char txbuf[CONFIG_LIB_STLINKY_BSIZE];  
-	char rxbuf[CONFIG_LIB_STLINKY_BSIZE];
-} __attribute__ ((packed));;
+	uint32_t magic;
+	uint32_t bufsize;
+	uint32_t up_tail;
+	uint32_t up_head;
+	uint32_t dw_tail;
+	uint32_t dw_head;
+	char upbuf[CONFIG_LIB_STLINKY_BSIZE];
+	char dwbuf[CONFIG_LIB_STLINKY_BSIZE];
+} __attribute__ ((packed));
+
 
 int stlinky_tx(volatile struct stlinky* st, const char* buf, int sz);
 
