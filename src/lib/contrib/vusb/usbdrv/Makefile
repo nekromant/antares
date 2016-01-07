@@ -35,5 +35,7 @@ usbconfig:
 	@$(call append,#define USB_CFG_DEVICE_VERSION $(U_VER))
 	@$(call vusb_def_string,USB_CFG_VENDOR_NAME)
 	$(call vusb_def_string,USB_CFG_DEVICE_NAME)
+ifeq ($(CONFIG_USB_HAS_SERIAL),y)
 	$(call vusb_def_string,USB_CFG_SERIAL_NUMBER)
+endif
 	$(call append,#include <arch/vusb/usbconfig.h>)
