@@ -1,7 +1,7 @@
 /* Converted from original STC's include file via keil2sdcc.pl */
 
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机内核特殊功能寄存器 C51 Core SFRs
+// New Generation 1T 8051 Series MCU Special Function Registers C51 Core SFRs
 //                                          7     6      5       4     3    2    1     0   Reset Value
 __sfr __at(0xE0) ACC; //Accumulator                                                              0000,0000
 #define __SFR_ACC 0xE0
@@ -25,7 +25,7 @@ __sfr __at(0x82) DPL; //Data Pointer Low Byte                                   
 __sfr __at(0x83) DPH; //Data Pointer High Byte                                                   0000,0000
 #define __SFR_DPH 0x83
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机系统管理特殊功能寄存器
+// new generation 1T 8051 series MCU system management special function registers
 //                                          7     6      5    4     3      2    1     0     Reset Value
 __sfr __at(0x87) PCON; //Power Control        SMOD  SMOD0  LVDF  POF   GF1    GF0   PD   IDL    0001,0000
 #define __SFR_PCON 0x87
@@ -37,44 +37,44 @@ __sfr __at(0xA2) AUXR1; //Auxiliary Register 1  -  PCA_P4  SPI_P4  S2_P4  GF2   
 #define __SFR_AUXR1 0xA2
 /*
 PCA_P4:
-    0, 缺省PCA 在P1 口
-    1，PCA/PWM 从P1 口切换到P4 口: ECI 从P1.2 切换到P4.1 口，
-                                   PCA0/PWM0 从P1.3 切换到P4.2 口
-                                   PCA1/PWM1 从P1.4 切换到P4.3 口
+    0, the default PCA is at port P1
+    1, PCA / PWM switch from P1 port to P4 port: ECI switch from P1.2 to P4.1 port,
+                                                 PCA0 / PWM0 switches from P1.3 to P4.2
+                                                 PCA1 / PWM1 switches from P1.4 to P4.3
 SPI_P4:
-    0, 缺省SPI 在P1 口
-    1，SPI 从P1 口切换到P4 口: SPICLK 从P1.7 切换到P4.3 口
-                               MISO 从P1.6 切换到P4.2 口
-                               MOSI 从P1.5 切换到P4.1 口
-                               SS 从P1.4 切换到P4.0 口
+    0, the default SPI in the P1 port
+    1, SPI switch from P1 port to P4 port: SPICLK switch from P1.7 to P4.3 port
+                                           MISO switches from P1.6 to P4.2
+                                           MOSI switches from P1.5 to P4.1
+                                           SS switches from P1.4 to P4.0
 S2_P4: 
-    0, 缺省UART2 在P1 口
-    1，UART2 从P1 口切换到P4 口: TxD2 从P1.3 切换到P4.3 口
-                                 RxD2 从P1.2 切换到P4.2 口
-GF2: 通用标志位
+    0, the default UART2 in the P1 port
+    1, UART2 switches from P1 port to P4 port: TxD2 switches from P1.3 to P4.3
+                                               RxD2 switches from P1.2 to P4.2
+GF2: General purpose flag
 
 ADRJ:
-    0, 10 位A/D 转换结果的高8 位放在ADC_RES 寄存器, 低2 位放在ADC_RESL 寄存器
-    1，10 位A/D 转换结果的最高2 位放在ADC_RES 寄存器的低2 位, 低8 位放在ADC_RESL 寄存器
+    0, the upper 8 bits of the 10-bit A/D conversion result are placed in the ADC_RES register and the lower 2 bits are placed in the ADC_RESL register
+    1, the upper 2 bits of the 10-bit A/D conversion result are placed in the lower 2 bits of the ADC_RES register and the lower 8 bits in the ADC_RESL register
 
-DPS: 0, 使用缺省数据指针DPTR0
-     1，使用另一个数据指针DPTR1
+DPS: 0, use the default data pointer DPTR0
+     1, use another data pointer DPTR1
 */
 //-----------------------------------
-__sfr __at(0x8F) WAKE_CLKO; //附加的 SFR WAK1_CLKO
+__sfr __at(0x8F) WAKE_CLKO; //Additional SFR WAK1_CLKO
 #define __SFR_WAKE_CLKO 0x8F
 /*
       7            6          5          4          3       2       1      0         Reset Value
    PCAWAKEUP  RXD_PIN_IE  T1_PIN_IE  T0_PIN_IE  LVD_WAKE    _    T1CLKO  T0CLKO      0000,0000B
 
-b7 - PCAWAKEUP : PCA 中断可唤醒 powerdown。
-b6 - RXD_PIN_IE : 当 P3.0(RXD) 下降沿置位 RI 时可唤醒 powerdown(必须打开相应中断)。
-b5 - T1_PIN_IE : 当 T1 脚下降沿置位 T1 中断标志时可唤醒 powerdown(必须打开相应中断)。
-b4 - T0_PIN_IE : 当 T0 脚下降沿置位 T0 中断标志时可唤醒 powerdown(必须打开相应中断)。
-b3 - LVD_WAKE : 当 CMPIN 脚低电平置位 LVD 中断标志时可唤醒 powerdown(必须打开相应中断)。
+b7 - PCAWAKEUP : PCA interrupt can wake up powerdown.
+b6 - RXD_PIN_IE : wakeup powerdown when RI is set on the falling edge of P3.0 (RXD) (interrupt must be enabled).
+b5 - T1_PIN_IE : wake up powerdown when the T1 interrupt flag is set on the falling edge of the T1 pin (must be enabled).
+b4 - T0_PIN_IE : wake up powerdown when T0 interrupt flag is set on the falling edge of T0 pin (corresponding interrupt must be turned on).
+b3 - LVD_WAKE : wake-up powerdown when LVD interrupt flag is set low by CMPIN pin (corresponding interrupt must be turned on).
 b2 - 
-b1 - T1CLKO : 允许 T1CKO(P3.5) 脚输出 T1 溢出脉冲，Fck1 = 1/2 T1 溢出率
-b0 - T0CLKO : 允许 T0CKO(P3.4) 脚输出 T0 溢出脉冲，Fck0 = 1/2 T1 溢出率
+b1 - T1CLKO : enable T1CKO (P3.5) pin output T1 overflow pulse, Fck1 = 1/2 T1 overflow rate
+b0 - T0CLKO : enable T0CKO (P3.4) pin output T0 overflow pulse, Fck0 = 1/2 T1 overflow rate
 */
 //-----------------------------------
 __sfr __at(0x97) CLK_DIV; //Clock Divder          -     -      -       -     -  CLKS2 CLKS1 CLKS0 xxxx,x000
@@ -100,16 +100,16 @@ RWS2,RWS1,RWS0:
   111 : The MOVX read/write pulse is 8 clock cycles.
 */
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机中断特殊功能寄存器
-//有的中断控制、中断标志位散布在其它特殊功能寄存器中，这些位在位地址中定义
-//其中有的位无位寻址能力，请参阅 新一代 1T 8051系列 单片机中文指南
+//new generation 1T 8051 series MCU interrupt special function register
+//Some interrupt control, interrupt flag bits scattered in other special function registers, these bits defined in the bit address
+//Some of them have no bit addressing capability, please refer to the new generation 1T 8051 MCU Chinese Guide
 //                                           7     6     5    4     3    2    1    0   Reset Value
-__sfr __at(0xA8) IE;  //中断控制寄存器        EA  ELVD  EADC   ES   ET1  EX1  ET0  EX0  0x00,0000
 #define __SFR_IE 0xA8
+__sfr __at(0xA8) IE;  //Interrupt control register        EA  ELVD  EADC   ES   ET1  EX1  ET0  EX0  0x00,0000
 //-----------------------
 __sbit __at(__SFR_IE^7) EA;
-__sbit __at(__SFR_IE^6) ELVD; //低压监测中断允许位
-__sbit __at(__SFR_IE^5) EADC; //ADC 中断允许位
+__sbit __at(__SFR_IE^6) ELVD; //Low-voltage monitoring interrupt enable bit
+__sbit __at(__SFR_IE^5) EADC; //ADC interrupt enable bit
 __sbit __at(__SFR_IE^4) ES;
 __sbit __at(__SFR_IE^3) ET1;
 __sbit __at(__SFR_IE^2) EX1;
@@ -120,12 +120,12 @@ __sfr __at(0xAF) IE2;  //Auxiliary Interrupt   -     -     -    -     -    -  ES
 #define __SFR_IE2 0xAF
 //-----------------------
 //                                          7     6     5    4    3    2    1    0    Reset Value
-__sfr __at(0xB8) IP; //中断优先级低位      PPCA  PLVD  PADC  PS   PT1  PX1  PT0  PX0   0000,0000
+__sfr __at(0xB8) IP; //Interrupt priority low      PPCA  PLVD  PADC  PS   PT1  PX1  PT0  PX0   0000,0000
 #define __SFR_IP 0xB8
 //--------
-__sbit __at(__SFR_IP^7) PPCA;  //PCA 模块中断优先级
-__sbit __at(__SFR_IP^6) PLVD;  //低压监测中断优先级
-__sbit __at(__SFR_IP^5) PADC;  //ADC 中断优先级
+__sbit __at(__SFR_IP^7) PPCA;  //PCA Module interrupt priority
+__sbit __at(__SFR_IP^6) PLVD;  //Low-voltage monitoring interrupt priority
+__sbit __at(__SFR_IP^5) PADC;  //ADC Interrupt priority
 __sbit __at(__SFR_IP^4) PS;
 __sbit __at(__SFR_IP^3) PT1;
 __sbit __at(__SFR_IP^2) PX1;
@@ -133,14 +133,14 @@ __sbit __at(__SFR_IP^1) PT0;
 __sbit __at(__SFR_IP^0) PX0;
 //-----------------------
 //                                         7      6      5     4     3     2     1     0    Reset Value
-__sfr __at(0xB7) IPH; //中断优先级高位       PPCAH  PLVDH  PADCH  PSH  PT1H  PX1H  PT0H  PX0H   0000,0000
+__sfr __at(0xB7) IPH; //Interrupt priority high       PPCAH  PLVDH  PADCH  PSH  PT1H  PX1H  PT0H  PX0H   0000,0000
 #define __SFR_IPH 0xB7
 __sfr __at(0xB5) IP2; //                       -      -      -     -     -     -   PSPI   PS2   xxxx,xx00
 #define __SFR_IP2 0xB5
 __sfr __at(0xB6) IPH2; //                       -      -      -     -     -     -   PSPIH  PS2H  xxxx,xx00
 #define __SFR_IPH2 0xB6
 //-----------------------
-//新一代 1T 8051系列 单片机I/O 口特殊功能寄存器
+//New Generation 1T 8051 Series MCU I / O Port Special Function Registers
 //                                      7     6     5     4     3     2     1     0         Reset Value
 __sfr __at(0x80) P0; //8 bitPort0          P0.7  P0.6  P0.5  P0.4  P0.3  P0.2  P0.1  P0.0       1111,1111
 #define __SFR_P0 0x80
@@ -185,7 +185,7 @@ __sfr __at(0xCA) P5M0; //                                                       
 __sfr __at(0xC9) P5M1; //                                                                         0000,0000
 #define __SFR_P5M1 0xC9
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机定时器特殊功能寄存器
+//New Generation 1T 8051 Series Single - Chip Microcomputer Timers Special Function Registers
 //                                          7     6     5     4     3     2     1     0     Reset Value
 __sfr __at(0x88) TCON; //T0/T1 Control           TF1   TR1   TF0   TR0   IE1   IT1   IE0   IT0    0000,0000
 #define __SFR_TCON 0x88
@@ -210,7 +210,7 @@ __sfr __at(0x8B) TL1; //T1 Low Byte                                             
 __sfr __at(0x8D) TH1; //T1 High Byte                                                             0000,0000
 #define __SFR_TH1 0x8D
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机串行口特殊功能寄存器
+//New Generation 1T 8051 Series MCU Serial Port Special Function Registers
 //                                          7     6     5     4     3     2     1     0     Reset Value
 __sfr __at(0x98) SCON; //Serial Control         SM0/FE SM1   SM2   REN   TB8   RB8    TI    RI    0000,0000
 #define __SFR_SCON 0x98
@@ -239,7 +239,7 @@ __sfr __at(0x9B) S2BUF; //S2 Serial Buffer                                      
 __sfr __at(0x9C) BRT; //S2 Baud-Rate Timer                                                    0000,0000
 #define __SFR_BRT 0x9C
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机看门狗定时器特殊功能寄存器
+//New Generation 1T 8051 Series MCU Watchdog Timer Special Function Registers
 __sfr __at(0xC1) WDT_CONTR; //Watch-Dog-Timer Control register
 #define __SFR_WDT_CONTR 0xC1
 //                                      7     6     5      4       3      2   1   0     Reset Value
@@ -247,105 +247,105 @@ __sfr __at(0xC1) WDT_CONTR; //Watch-Dog-Timer Control register
 //-----------------------
 
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机PCA/PWM 特殊功能寄存器
+//New Generation 1T 8051 Series Single Chip PCA / PWM Special Function Registers
 //                                         7     6     5     4     3     2     1     0     Reset Value
-__sfr __at(0xD8) CCON;   //PCA 控制寄存器。    CF    CR    -     -     -     -    CCF1  CCF0   00xx,xx00
+__sfr __at(0xD8) CCON;   //PCA Control register.    CF    CR    -     -     -     -    CCF1  CCF0   00xx,xx00
 #define __SFR_CCON 0xD8
 //-----------------------
-__sbit __at(__SFR_CCON^7) CF; //PCA计数器溢出标志,由硬件或软件置位,必须由软件清0。
-__sbit __at(__SFR_CCON^6) CR; //1:允许 PCA 计数器计数, 必须由软件清0。
+__sbit __at(__SFR_CCON^7) CF; //PCA counter overflow flag, set by hardware or software, must be cleared by software.
+__sbit __at(__SFR_CCON^6) CR; //1: Enables PCA counter to count and must be cleared by software.
 //-
 //-
-__sbit __at(__SFR_CCON^1) CCF1; //PCA 模块1 中断标志, 由硬件置位, 必须由软件清0。
-__sbit __at(__SFR_CCON^0) CCF0; //PCA 模块0 中断标志, 由硬件置位, 必须由软件清0。
+__sbit __at(__SFR_CCON^1) CCF1; //PCA module 1 interrupt flag, set by hardware, must be cleared by software.
+__sbit __at(__SFR_CCON^0) CCF0; //PCA module 0 interrupt flag, set by hardware, must be cleared by software.
 //-----------------------
-__sfr __at(0xD9) CMOD; //PCA 工作模式寄存器。   CIDL   -     -     -   CPS2   CPS1  CPS0  ECF   0xxx,x000
+__sfr __at(0xD9) CMOD; //PCA Operating mode register.   CIDL   -     -     -   CPS2   CPS1  CPS0  ECF   0xxx,x000
 #define __SFR_CMOD 0xD9
 /*
-CIDL: idle 状态时 PCA 计数器是否继续计数, 0: 继续计数, 1: 停止计数。
+CIDL: Idle state PCA counter is to continue counting, 0: continue to count, 1: stop counting.
 
-CPS2: PCA 计数器脉冲源选择位 2。
-CPS1: PCA 计数器脉冲源选择位 1。
-CPS0: PCA 计数器脉冲源选择位 0。
+CPS2: PCA Counter pulse source selection bit 2.
+CPS1: PCA Counter pulse source selection bit 1.
+CPS0: PCA Counter pulse source selection bit 0.
    CPS2   CPS1   CPS0
-    0      0      0    系统时钟频率 fosc/12。
-    0      0      1    系统时钟频率 fosc/2。
-    0      1      0    Timer0 溢出。
-    0      1      1    由 ECI/P3.4 脚输入的外部时钟，最大 fosc/2。
-    1      0      0    系统时钟频率，  Fosc/1
-    1      0      1    系统时钟频率/4，Fosc/4
-    1      1      0    系统时钟频率/6，Fosc/6
-    1      1      1    系统时钟频率/8，Fosc/8
+    0      0      0    System clock frequency fosc/12.
+    0      0      1    System clock frequency fosc/2.
+    0      1      0    Timer0 overflow.
+    0      1      1    External clock input from ECI / P3.4 pin, max fosc/2.
+    1      0      0    System clock frequency,  Fosc/1
+    1      0      1    System clock frequency/4,Fosc/4
+    1      1      0    System clock frequency/6,Fosc/6
+    1      1      1    System clock frequency/8,Fosc/8
 
-ECF: PCA计数器溢出中断允许位, 1--允许 CF(CCON.7) 产生中断。
+ECF: PCA Counter Overflow Interrupt Enable bit, 1 - Enable CF (CCON.7) to generate an interrupt.
 */
 //-----------------------
-__sfr __at(0xE9) CL; //PCA 计数器低位                                                        0000,0000
+__sfr __at(0xE9) CL; //PCA Counter low                                                        0000,0000
 #define __SFR_CL 0xE9
-__sfr __at(0xF9) CH; //PCA 计数器高位                                                        0000,0000
+__sfr __at(0xF9) CH; //PCA Counter high                                                      0000,0000
 #define __SFR_CH 0xF9
 //-----------------------
 //                                         7     6      5      4     3     2     1     0     Reset Value
-__sfr __at(0xDA) CCAPM0; //PCA 模块0 PWM 寄存器  -   ECOM0  CAPP0  CAPN0  MAT0  TOG0  PWM0  ECCF0   x000,0000
+__sfr __at(0xDA) CCAPM0; //PCA Module 0 PWM register  -   ECOM0  CAPP0  CAPN0  MAT0  TOG0  PWM0  ECCF0   x000,0000
 #define __SFR_CCAPM0 0xDA
-__sfr __at(0xDB) CCAPM1; //PCA 模块1 PWM 寄存器  -   ECOM1  CAPP1  CAPN1  MAT1  TOG1  PWM1  ECCF1   x000,0000
+__sfr __at(0xDB) CCAPM1; //PCA Module 1 PWM register  -   ECOM1  CAPP1  CAPN1  MAT1  TOG1  PWM1  ECCF1   x000,0000
 #define __SFR_CCAPM1 0xDB
 
-//ECOMn = 1:允许比较功能。
-//CAPPn = 1:允许上升沿触发捕捉功能。
-//CAPNn = 1:允许下降沿触发捕捉功能。
-//MATn  = 1:当匹配情况发生时, 允许 CCON 中的 CCFn 置位。
-//TOGn  = 1:当匹配情况发生时, CEXn 将翻转。
-//PWMn  = 1:将 CEXn 设置为 PWM 输出。
-//ECCFn = 1:允许 CCON 中的 CCFn 触发中断。
+//ECOMn = 1:Allows comparison.
+//CAPPn = 1:Enables the rising edge to trigger the capture function.
+//CAPNn = 1:Falling edge triggering is enabled.
+//MATn  = 1:CCFn in CCON is asserted when a match condition occurs.
+//TOGn  = 1:When a match occurs, CEXn transitions.
+//PWMn  = 1:Set CEXn to PWM output.
+//ECCFn = 1:Enable CCFn in CCON to trigger an interrupt.
 
 //ECOMn  CAPPn  CAPNn  MATn  TOGn  PWMn  ECCFn
-//  0      0      0     0     0     0     0   0x00   未启用任何功能。
-//  x      1      0     0     0     0     x   0x21   16位CEXn上升沿触发捕捉功能。
-//  x      0      1     0     0     0     x   0x11   16位CEXn下降沿触发捕捉功能。
-//  x      1      1     0     0     0     x   0x31   16位CEXn边沿(上、下沿)触发捕捉功能。
-//  1      0      0     1     0     0     x   0x49   16位软件定时器。
-//  1      0      0     1     1     0     x   0x4d   16位高速脉冲输出。
-//  1      0      0     0     0     1     0   0x42   8位 PWM。
+//  0      0      0     0     0     0     0   0x00   No features are enabled.
+//  x      1      0     0     0     0     x   0x21   16-bit CEXn rising edge triggers the capture function.
+//  x      0      1     0     0     0     x   0x11   16-bit CEXn falling edge triggers the capture function.
+//  x      1      1     0     0     0     x   0x31   16-bit CEXn edge (upper and lower edge) triggers the capture function.
+//  1      0      0     1     0     0     x   0x49   16-bit software timer.
+//  1      0      0     1     1     0     x   0x4d   16-bit high-speed pulse output.
+//  1      0      0     0     0     1     0   0x42   8-bit PWM.
 
 //ECOMn  CAPPn  CAPNn  MATn  TOGn  PWMn  ECCFn
-//  0      0      0     0     0     0     0   0x00   无此操作
-//  1      0      0     0     0     1     0   0x42   普通8位PWM, 无中断
-//  1      1      0     0     0     1     1   0x63   PWM输出由低变高可产生中断
-//  1      0      1     0     0     1     1   0x53   PWM输出由高变低可产生中断
-//  1      1      1     0     0     1     1   0x73   PWM输出由低变高或由高变低都可产生中断
+//  0      0      0     0     0     0     0   0x00   There is no such action
+//  1      0      0     0     0     1     0   0x42   Ordinary 8-bit PWM, no interrupt
+//  1      1      0     0     0     1     1   0x63   PWM output from low to high can generate interrupts
+//  1      0      1     0     0     1     1   0x53   PWM output from high to low can generate an interrupt
+//  1      1      1     0     0     1     1   0x73   PWM output from low to high or from high to low can generate interrupts
 
 //-----------------------
-__sfr __at(0xEA) CCAP0L; //PCA 模块 0 的捕捉/比较寄存器低 8 位。                                    0000,0000
+__sfr __at(0xEA) CCAP0L; //PCA Module 0 lower 8 bits of the capture / compare register.                                    0000,0000
 #define __SFR_CCAP0L 0xEA
-__sfr __at(0xFA) CCAP0H; //PCA 模块 0 的捕捉/比较寄存器高 8 位。                                    0000,0000
+__sfr __at(0xFA) CCAP0H; //PCA Module 0 upper 8 bits of the capture / compare register.                                    0000,0000
 #define __SFR_CCAP0H 0xFA
-__sfr __at(0xEB) CCAP1L; //PCA 模块 1 的捕捉/比较寄存器低 8 位。                                    0000,0000
+__sfr __at(0xEB) CCAP1L; //PCA Module 1 lower 8 bits of the capture / compare register.                                    0000,0000
 #define __SFR_CCAP1L 0xEB
-__sfr __at(0xFB) CCAP1H; //PCA 模块 1 的捕捉/比较寄存器高 8 位。                                    0000,0000
+__sfr __at(0xFB) CCAP1H; //PCA Module 1 upper 8 bits of the capture / compare register.                                    0000,0000
 #define __SFR_CCAP1H 0xFB
 //-----------------------
 //                                                       7   6   5   4   3   2    1     0    Reset Value
-__sfr __at(0xF2) PCA_PWM0; //PCA 模块0 PWM 寄存器。            -   -   -   -   -   -  EPC0H EPC0L   xxxx,xx00
+__sfr __at(0xF2) PCA_PWM0; //PCA Module 0 PWM register.            -   -   -   -   -   -  EPC0H EPC0L   xxxx,xx00
 #define __SFR_PCA_PWM0 0xF2
-__sfr __at(0xF3) PCA_PWM1; //PCA 模块1 PWM 寄存器。            -   -   -   -   -   -  EPC1H EPC1L   xxxx,xx00
+__sfr __at(0xF3) PCA_PWM1; //PCA Module 1 PWM register.            -   -   -   -   -   -  EPC1H EPC1L   xxxx,xx00
 #define __SFR_PCA_PWM1 0xF3
 //PCA_PWMn:    7      6      5      4      3      2      1      0
 //             -      -      -      -      -      -    EPCnH  EPCnL
-//B7-B2: 保留
-//B1(EPCnH): 在 PWM 模式下，与 CCAPnH 组成 9 位数。
-//B0(EPCnL): 在 PWM 模式下，与 CCAPnL 组成 9 位数。
+//B7-B2: Reserved
+//B1(EPCnH): In PWM mode, 9 bits are formed with CCAPnH.
+//B0(EPCnL): In PWM mode, 9 bits are formed with CCAPnL.
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机 ADC 特殊功能寄存器
+//New Generation 1T 8051 Series MCU Special Function Registers
 //                                            7        6      5       4         3      2    1    0   Reset Value
-__sfr __at(0xBC) ADC_CONTR; //A/D 转换控制寄存器 ADC_POWER SPEED1 SPEED0 ADC_FLAG ADC_START CHS2 CHS1 CHS0 0000,0000
+__sfr __at(0xBC) ADC_CONTR; //A/D Conversion control register ADC_POWER SPEED1 SPEED0 ADC_FLAG ADC_START CHS2 CHS1 CHS0 0000,0000
 #define __SFR_ADC_CONTR 0xBC
-__sfr __at(0xBD) ADC_RES;  //A/D 转换结果高8位 ADCV.9 ADCV.8 ADCV.7 ADCV.6 ADCV.5 ADCV.4 ADCV.3 ADCV.2	 0000,0000
+__sfr __at(0xBD) ADC_RES;  //A/D The conversion result is 8 bits high ADCV.9 ADCV.8 ADCV.7 ADCV.6 ADCV.5 ADCV.4 ADCV.3 ADCV.2	 0000,0000
 #define __SFR_ADC_RES 0xBD
-__sfr __at(0xBE) ADC_RESL;  //A/D 转换结果低2位                                           ADCV.1 ADCV.0	 0000,0000
+__sfr __at(0xBE) ADC_RESL;  //A/D Low conversion result 2 bits                                           ADCV.1 ADCV.0	 0000,0000
 #define __SFR_ADC_RESL 0xBE
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机 SPI 特殊功能寄存器
+//New Generation 1T 8051 Series Single Chip Microcomputer SPI Special Function Registers
 //                                      7     6     5     4     3     2     1     0    Reset Value
 __sfr __at(0xCE) SPCTL; //SPI Control Register  SSIG  SPEN  DORD  MSTR  CPOL  CPHA  SPR1  SPR0  0000,0100
 #define __SFR_SPCTL 0xCE
@@ -354,7 +354,7 @@ __sfr __at(0xCD) SPSTAT; //SPI Status Register   SPIF  WCOL   -     -     -     
 __sfr __at(0xCF) SPDAT; //SPI Data Register                                                     0000,0000
 #define __SFR_SPDAT 0xCF
 //--------------------------------------------------------------------------------
-//新一代 1T 8051系列 单片机 IAP/ISP 特殊功能寄存器
+//New Generation 1T 8051 Series MCU IAP / ISP Special Function Registers
 __sfr __at(0xC2) IAP_DATA;
 #define __SFR_IAP_DATA 0xC2
 __sfr __at(0xC3) IAP_ADDRH;
