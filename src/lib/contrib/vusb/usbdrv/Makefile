@@ -1,4 +1,9 @@
-objects-y+=usbdrv.o usbdrvasm.o oddebug.o
+objects-y+=usbdrvasm.o oddebug.o
+
+ifneq ($(CONFIG_USB_ONLY_INCLUDE),y)
+objects-y+=usbdrv.o
+endif
+
 gen-y+=usbconfig
 
 #Nothing can describe, how much this thing sucks
@@ -32,4 +37,3 @@ usbconfig:
 	$(call vusb_def_string,USB_CFG_DEVICE_NAME)
 	$(call vusb_def_string,USB_CFG_SERIAL_NUMBER)
 	$(call append,#include <arch/vusb/usbconfig.h>)
-
