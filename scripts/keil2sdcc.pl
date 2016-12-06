@@ -68,6 +68,24 @@ while(<>)
 		next;
 	}
 
+	# sfr16 statement
+	#
+	# in:  sfr IOA = 0x80;
+	# out: sfr at 0x80 IOA;
+	# $1: leading whitespace
+	# $2: variable name
+	# $3: variable location
+	# $4: trailing comments, etc.
+        # Since sbit below may rely on this name
+	# avoid Initializer element is not constant
+	# and add a define
+
+	if(/^(\s*)sfr16\s*(\w+)\s*=\s*([^;]+);(.*)$/) {
+		print "$1__sfr16 __at($3) $2;$4\n";
+		print "#define __SFR16_$2 $3\n";
+		next;
+	}
+
 	# sbit statement
 	#
 	# in:  sbit SEL = 0x86+0;

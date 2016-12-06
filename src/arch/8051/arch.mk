@@ -50,6 +50,20 @@ $(IMAGENAME).bin: $(IMAGENAME).ihx
 	$(SILENT_HEX2BIN)srec_cat -Disable_Sequence_Warnings $(<) -Intel -output $(@) -Binary
 
 
+ifeq ($(CONFIG_8051_NRFBOOTIMAGE),y)
+BUILDGOALS+=$(IMAGENAME)-boot.bin
+
+$(IMAGENAME)-boot.bin: $(IMAGENAME).bin
+	cp $(<) $(@)
+	PAD=$$(($(CONFIG_FLASH_SIZE) - `$(STAT) $(IMAGENAME).bin -c %s`)); \
+	echo $$PAD; \
+	while [[ $$PAD -gt "1" ]]; do \
+		echo -ne "\xff" >> $(@); \
+		PAD=$$((PAD-1)); \
+	done;
+	echo -ne "\x7f" >> $(@);
+endif
+
 BUILDGOALS+=checksize
 PHONY+=checksize
 
@@ -58,8 +72,8 @@ checksize: $(filter-out checksize,$(BUILDGOALS))
 	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
 	`$(STAT) $(IMAGENAME).bin -c %s` $(CONFIG_FLASH_SIZE)
 	$(Q)$(ANTARES_DIR)/scripts/meter "IRAM Usage" \
-	"`cat $(IMAGENAME).mem |grep EXTERN|awk '{print $$5}'`" \
+	"`cat $(IMAGENAME).mem |grep PAGED|awk '{print $$6}'`" \
 	$(CONFIG_IRAM_SIZE)
 	$(Q)$(ANTARES_DIR)/scripts/meter "XRAM Usage" \
-	"`cat $(IMAGENAME).mem |grep PAGE|awk '{print $$6}'`" \
+	"`cat $(IMAGENAME).mem |grep EXTERNAL|awk '{print $$5}'`" \
 	$(CONFIG_XRAM_SIZE)
