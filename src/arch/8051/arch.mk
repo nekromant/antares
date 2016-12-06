@@ -1,7 +1,7 @@
 BUILDGOALS=$(IMAGENAME).ihx $(IMAGENAME).bin
 
 # Do not combine objects into one built-in.o
-# This screws up things on avr and breaks ANTARES_* macros. 
+# This screws up things on avr and breaks ANTARES_* macros.
 # Not supported by some compilers (sdcc)
 # So it's 100% safe to set this to y
 
@@ -49,6 +49,20 @@ CFLAGS+=-DF_CPU=$(CONFIG_F_CPU)
 $(IMAGENAME).bin: $(IMAGENAME).ihx
 	$(SILENT_HEX2BIN)srec_cat -Disable_Sequence_Warnings $(<) -Intel -output $(@) -Binary
 
+
+ifeq ($(CONFIG_8051_NRFBOOTIMAGE),y)
+BUILDGOALS+=$(IMAGENAME)-boot.bin
+
+$(IMAGENAME)-boot.bin: $(IMAGENAME).bin
+	cp $(<) $(@)
+	PAD=$$(($(CONFIG_FLASH_SIZE) - `$(STAT) $(IMAGENAME).bin -c %s`)); \
+	echo $$PAD; \
+	while [[ $$PAD -gt "1" ]]; do \
+		echo -ne "\xff" >> $(@); \
+		PAD=$$((PAD-1)); \
+	done;
+	echo -ne "\x7f" >> $(@);
+endif
 
 BUILDGOALS+=checksize
 PHONY+=checksize

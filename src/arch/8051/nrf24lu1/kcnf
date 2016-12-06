@@ -1,0 +1,2 @@
+config 8051_NRFBOOTIMAGE
+bool "Build a padded bootloader image with STP enabled"

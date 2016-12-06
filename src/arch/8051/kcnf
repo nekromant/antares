@@ -75,7 +75,7 @@ source "antares/src/arch/8051/stc/kcnf"
 endif
 
 if ARCH_8051_NRF24LU1
-source "antares/src/arch/8051/stc/kcnf"
+source "antares/src/arch/8051/nrf24lu1/kcnf"
 endif
 
 
