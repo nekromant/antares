@@ -32,7 +32,7 @@ endmenu
 
 menu "Deployment settings"
      config DEPLOY_ROOT
-     bool "Run deploy commands with superuser priveledges"
+     bool "Run deploy commands with superuser privileges"
      help
 	Pick this, if you're missing udev rules
 

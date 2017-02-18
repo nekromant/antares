@@ -122,7 +122,8 @@ graph-%:
 	$(Q)$(ANTARES_DIR)/scripts/visualise_make $*
 
 .config:
-	@echo "Missing configuration file ($(tb_red).config$(col_rst)). Please run configuation tool (menuconfig, etc))"
+	@echo "Missing configuration file ($(tb_red).config$(col_rst))."
+	@echo "Please run configuation tool, e.g. 'make menuconfig', or 'make defconfig' if supported."
 
 #Help needs a dedicated rule, so that it won't invoke build as it normally does
 deploy-help:
