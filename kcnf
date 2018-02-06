@@ -111,7 +111,7 @@ comment "Use make set_version to change"
   default 0
 
   config VERSION_MINOR
-  string "Major Version"
+  string "Minor Version"
   default 1
 
   config VERSION_CODENAME

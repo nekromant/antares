@@ -7,7 +7,7 @@ comment "They use it once they want to increment the version"
   default 0
 
   config VERSION_MINOR
-  string "Major Version"
+  string "Minor Version"
   default 1
 
   config VERSION_CODENAME
