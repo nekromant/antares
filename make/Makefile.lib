@@ -37,6 +37,8 @@ bg_wht=$(shell $(ECHO) -e '\e[47m')
 col_rst=$(shell $(ECHO) -e '\e[0m')
 endif
 
+METER_CMD:=NOCOLOR=$(CONFIG_NOCOLOR) $(ANTARES_DIR)/scripts/meter
+
 
 ifeq (0,${MAKELEVEL})
 ifeq ($(CONFIG_THREADED),y)

@@ -43,7 +43,7 @@ FLASHSIZE=$(shell MCU=$(MCU);echo $${MCU:8:3}*1024|bc)
 #TODO: Find a way to find out target RAM size
 
 sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
-	$(Q)$(ANTARES_DIR)/scripts/meter "Flash usage" \
+	$(Q)$(METER_CMD) "Flash usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
 	$(FLASHSIZE);
 	$(Q)echo "RAM Usage:" \
