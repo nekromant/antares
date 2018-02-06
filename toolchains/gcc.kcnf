@@ -79,6 +79,13 @@ help
 
 comment "Fine tuning"
 
+config STANDARD
+string "Version of language standard"
+default "gnu99"
+help
+  WARNING: Changing this from default "gnu99" somehow
+  breaks vusb (WTF?).
+
 config CFLAGS
 string "Additional C compiler flags (cc)"
 
