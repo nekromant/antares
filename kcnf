@@ -94,6 +94,19 @@ menu "Build System Configuration"
    
   config BUILD_VERBOSE
   bool "Verbose build"
+  help
+    This value may be overridden using shortcuts from
+    command line:
+
+      # Force enable verbose build:
+      make V=1
+      # or
+      make VERBOSE=1
+
+      # Force disable verbose build:
+      make V=0
+      # or
+      make VERBOSE=0
 
   config BUILD_VERBOSE_D
   bool "Even more verbose build"

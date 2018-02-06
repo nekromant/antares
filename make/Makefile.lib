@@ -46,6 +46,22 @@ ifeq ($(CONFIG_THREADED),y)
 endif
 endif
 
+ifneq ($(V),)
+  ifeq ($(V),1)
+    CONFIG_BUILD_VERBOSE=y
+  else
+    CONFIG_BUILD_VERBOSE=n
+  endif
+else
+  ifneq ($(VERBOSE),)
+    ifeq ($(VERBOSE),1)
+      CONFIG_BUILD_VERBOSE=y
+    else
+      CONFIG_BUILD_VERBOSE=n
+    endif
+  endif
+endif
+
 Q:=
 #When the build is ! 'even more verbose' we place @ istread of Q
 ifneq ($(CONFIG_BUILD_VERBOSE),y)
