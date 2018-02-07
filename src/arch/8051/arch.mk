@@ -46,11 +46,11 @@ PHONY+=checksize
 
 #CONFIG IRAM/XRAM/FLASH
 checksize: $(filter-out checksize,$(BUILDGOALS))
-	$(Q)$(ANTARES_DIR)/scripts/meter "FLASH Usage" \
+	$(Q)$(METER_CMD) "FLASH Usage" \
 	`$(STAT) $(IMAGENAME).bin -c %s` $(CONFIG_FLASH_SIZE)
-	$(Q)$(ANTARES_DIR)/scripts/meter "IRAM Usage" \
+	$(Q)$(METER_CMD) "IRAM Usage" \
 	"`cat $(IMAGENAME).mem |grep EXTERN|awk '{print $$5}'`" \
 	$(CONFIG_IRAM_SIZE)
-	$(Q)$(ANTARES_DIR)/scripts/meter "XRAM Usage" \
+	$(Q)$(METER_CMD) "XRAM Usage" \
 	"`cat $(IMAGENAME).mem |grep PAGE|awk '{print $$6}'`" \
 	$(CONFIG_XRAM_SIZE)

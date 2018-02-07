@@ -85,13 +85,13 @@ EESIZE= $(shell echo $$((`echo -e "\#include <avr/io.h>\nE2END" | avr-cpp -mmcu=
 
 
 sizecheck: $(filter-out sizecheck,$(BUILDGOALS))
-	$(Q)$(ANTARES_DIR)/scripts/meter "$(FBANNER)" \
+	$(Q)$(METER_CMD) "$(FBANNER)" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$1+$$2}'` \
 	$(FLASHSIZE);
-	$(Q)$(ANTARES_DIR)/scripts/meter "EEPROM Usage" \
+	$(Q)$(METER_CMD) "EEPROM Usage" \
 	`$(STAT) $(IMAGENAME).eep.bin -c %s` \
 	$(EESIZE);
-	$(Q)$(ANTARES_DIR)/scripts/meter "RAM Usage" \
+	$(Q)$(METER_CMD) "RAM Usage" \
 	`$(SIZE) $(IMAGENAME).elf |grep elf|awk '{print $$2+$$3}'` \
 	$(RAMSIZE);
 	$(Q)echo "Note: Ram usage is only rough minimum estimation (.data + .bss)"

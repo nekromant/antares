@@ -37,11 +37,29 @@ bg_wht=$(shell $(ECHO) -e '\e[47m')
 col_rst=$(shell $(ECHO) -e '\e[0m')
 endif
 
+METER_CMD:=NOCOLOR=$(CONFIG_NOCOLOR) $(ANTARES_DIR)/scripts/meter
+
 
 ifeq (0,${MAKELEVEL})
 ifeq ($(CONFIG_THREADED),y)
 	MAKEFLAGS+=-j$(CONFIG_THREADS)
 endif
+endif
+
+ifneq ($(V),)
+  ifeq ($(V),1)
+    CONFIG_BUILD_VERBOSE=y
+  else
+    CONFIG_BUILD_VERBOSE=n
+  endif
+else
+  ifneq ($(VERBOSE),)
+    ifeq ($(VERBOSE),1)
+      CONFIG_BUILD_VERBOSE=y
+    else
+      CONFIG_BUILD_VERBOSE=n
+    endif
+  endif
 endif
 
 Q:=

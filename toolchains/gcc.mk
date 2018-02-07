@@ -41,7 +41,7 @@ ELFFLAGS+=$(call unquote,$(CONFIG_ELFFLAGS))
 
 #FixMe: Hack. Removing it breaks vusb (WTF?) Need --std=gnu99 globally
 ASFLAGS+=$(CFLAGS)
-CFLAGS+=--std=gnu99
+CFLAGS+=-std=$(CONFIG_STANDARD)
 OBJCOPYFLAGS+=-Obinary
 
 #Let's parse optimisations from .config

@@ -1,9 +1,16 @@
 #!/bin/bash
 
-COLOR_BANNER="\e[33;1m"
-COLOR_BAR="\e[32;1m"
-COLOR_RESET="\e[0m"
-COLOR_ERROR="\e[31;5m"
+if [ "$NOCOLOR" == "y" ]; then
+    COLOR_BANNER=""
+    COLOR_BAR=""
+    COLOR_RESET=""
+    COLOR_ERROR=""
+else
+    COLOR_BANNER="\e[33;1m"
+    COLOR_BAR="\e[32;1m"
+    COLOR_RESET="\e[0m"
+    COLOR_ERROR="\e[31;5m"
+fi
 
 
 if [ "$ECHO" == "" ]; then
