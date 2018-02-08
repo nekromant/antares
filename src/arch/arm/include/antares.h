@@ -13,7 +13,7 @@
 
 #define ANTARES_INIT_LOW(fn)						\
 	void fn();							\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".text.antares_init_low"))) void fn ## _low(void) { \
 		asm("bl " #fn);						\
 	};								\
@@ -21,7 +21,7 @@
 
 #define ANTARES_INIT_HIGH(fn)						\
 	void fn();							\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".text.antares_init_high"))) void fn ## _high(void) { \
 		asm("bl " #fn);						\
 	};								\
@@ -30,7 +30,7 @@
 
 #define ANTARES_APP(fn)							\
 	void fn();						\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".text.antares_app"))) void fn ## _app(void) { \
 		asm("bl " #fn);						\
 	};								\
@@ -39,7 +39,7 @@
 
 #define ANTARES_FINISH(fn)						\
 	void fn();						\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".antares_app_end"))) void fn ## _finish(void) { \
 		asm("bl " #fn);						\
 	}								\

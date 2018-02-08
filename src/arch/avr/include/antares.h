@@ -28,7 +28,7 @@
 
 #define ANTARES_INIT_LOW(fn)						\
 	void fn();							\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".init5"))) void fn ## _low(void) {	\
 		fn();							\
 	}								\
@@ -37,7 +37,7 @@
 
 #define ANTARES_INIT_HIGH(fn)						\
 	void fn();							\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".init7"))) void fn ## _high(void) {	\
 		fn();							\
 	}								\
@@ -46,7 +46,7 @@
 
 #define ANTARES_APP(fn)							\
 	void fn();						\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".init8"))) void fn ## _app(void) {	\
 		fn();							\
 	}								\
@@ -56,7 +56,7 @@
 
 #define ANTARES_FINISH(fn)						\
 	void fn();						\
-	__attribute__((naked))						\
+	__antares_naked							\
 	__attribute__((__section__(".fini0"))) void fn ## _finish(void) { \
 		fn();							\
 	}								\

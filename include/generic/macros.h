@@ -61,6 +61,20 @@
 
 #define BIN(x) 0b##x
 
-
+/* Disable reordering (supported since GCC 5). */
+#if defined(__GNUC__)
+#	if __GNUC__ >= 5
+#		define __noreorder __attribute__((no_reorder))
+#	else
+#		define __noreorder
+#	endif
+#else
+#	define __noreorder
 #endif
 
+#define __antares_naked \
+		__attribute__((naked))	\
+		__attribute__((used))	\
+		__noreorder
+
+#endif
