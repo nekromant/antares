@@ -46,6 +46,13 @@ choice
 
 endchoice
 
+config GCC_LTO
+bool "Enable LTO"
+help
+  LTO may not work properly in some cases, like when inline assembler
+  is used. See https://gcc.gnu.org/wiki/LinkTimeOptimizationFAQ for
+  details.
+
 config GCC_NOSTDLIBS
 bool "Do not link against stdlib"
 	help

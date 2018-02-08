@@ -1,7 +1,7 @@
 #include <arch/antares.h>
 
 /* The first thing we do is: Turn on interrupts. */
-__attribute__((naked))							
+__antares_naked
 __attribute__((__section__(".init7"))) void high_enable_isr(void) {		
 	__eint();;								
 }
@@ -11,7 +11,7 @@ __attribute__((__section__(".init7"))) void high_enable_isr(void) {
  * over again. Since startup is the first one, we get it to run first
  */
 
-__attribute__((naked))
+__antares_naked
 __attribute__((__section__(".init8"))) void __antares_app_start(void) {
 
 }
