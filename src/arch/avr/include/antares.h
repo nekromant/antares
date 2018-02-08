@@ -57,7 +57,7 @@
 #define ANTARES_FINISH(fn)						\
 	void fn();						\
 	__antares_naked							\
-	__attribute__((__section__(".fini0"))) void fn ## _finish(void) { \
+	__attribute__((__section__(".fini2"))) void fn ## _finish(void) { \
 		fn();							\
 	}								\
 	void fn() 

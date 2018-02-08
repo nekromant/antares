@@ -27,7 +27,8 @@ __attribute__((__section__(".init8"))) void __antares_app_start(void) {
 
 }
 
-ANTARES_FINISH(antares_exit)
+__antares_naked
+__attribute__((__section__(".fini1"))) void _antares_exit(void)
 {
 #ifdef __AVR_HAVE_JMP_CALL__
 	__asm("jmp __antares_app_start");
