@@ -37,8 +37,11 @@ __attribute__((__section__(".fini1"))) void _antares_exit(void)
 #endif
 }
 
-int main()
+#pragma GCC diagnostic push
+/* Stop complaining about return type of main(). */
+#pragma GCC diagnostic ignored "-Wmain"
+void main()
 {
 	/* Nothing in here for now */
-	return 0;
 }
+#pragma GCC diagnostic pop
