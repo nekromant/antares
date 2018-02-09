@@ -1,6 +1,8 @@
 Antares
 =======
 
+[![Join the chat at https://gitter.im/antares_uc/Lobby](https://badges.gitter.im/antares_uc/Lobby.svg)](https://gitter.im/antares_uc/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ANTARES is an all-in-one buildsystem, aimed at baremetal targets.
 It is designed to be portable across a lot of MCUs and adding another 
 MCU is trivial. 
