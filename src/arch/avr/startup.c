@@ -27,7 +27,8 @@ __attribute__((__section__(".init8"))) void __antares_app_start(void) {
 
 }
 
-ANTARES_FINISH(antares_exit)
+__antares_naked
+__attribute__((__section__(".fini1"))) void _antares_exit(void)
 {
 #ifdef __AVR_HAVE_JMP_CALL__
 	__asm("jmp __antares_app_start");
@@ -36,8 +37,11 @@ ANTARES_FINISH(antares_exit)
 #endif
 }
 
-int main()
+#pragma GCC diagnostic push
+/* Stop complaining about return type of main(). */
+#pragma GCC diagnostic ignored "-Wmain"
+void main()
 {
 	/* Nothing in here for now */
-	return 0;
 }
+#pragma GCC diagnostic pop
