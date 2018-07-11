@@ -10,3 +10,14 @@ if CONTRIB_WS2812
    int "LED pin"
 endif
 
+menuconfig CONTRIB_APA102
+bool "LightAPA102"
+depends on ARCH_AVR
+
+if CONTRIB_APA102
+   config CONTRIB_APA102_PORT_
+   string "LED port"
+
+   config CONTRIB_APA102_PIN
+   int "LED pin"
+endif
