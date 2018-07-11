@@ -5,15 +5,18 @@
 * Author: Tim (cpldcpu@gmail.com)
 *
 * Jan 18th, 2014  v2.0b Initial Version
+* Nov 29th, 2015  v2.3  Added SK6812RGBW support
 *
-* License: GNU GPL v2 (see License.txt)
+* License: GNU GPL v2+ (see License.txt)
 */
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 #include <lib/light_ws2812.h>
- 
+
+
+// Setleds for standard RGB
 void inline ws2812_setleds(struct cRGB *ledarray, uint16_t leds)
 {
    ws2812_setleds_pin(ledarray,leds, _BV(ws2812_pin));
@@ -21,9 +24,15 @@ void inline ws2812_setleds(struct cRGB *ledarray, uint16_t leds)
 
 void inline ws2812_setleds_pin(struct cRGB *ledarray, uint16_t leds, uint8_t pinmask)
 {
-  ws2812_DDRREG |= _BV(ws2812_pin); // Enable DDR
   ws2812_sendarray_mask((uint8_t*)ledarray,leds+leds+leds,pinmask);
-  _delay_us(50);
+  _delay_us(ws2812_resettime);
+}
+
+// Setleds for SK6812RGBW
+void inline ws2812_setleds_rgbw(struct cRGBW *ledarray, uint16_t leds)
+{
+  ws2812_sendarray_mask((uint8_t*)ledarray,leds<<2,_BV(ws2812_pin));
+  _delay_us(ws2812_resettime);
 }
 
 void ws2812_sendarray(uint8_t *data,uint16_t datlen)
@@ -44,7 +53,7 @@ void ws2812_sendarray(uint8_t *data,uint16_t datlen)
 // Fixed cycles used by the inner loop
 #define w_fixedlow    2
 #define w_fixedhigh   4
-#define w_fixedtotal  8   
+#define w_fixedtotal  8
 
 // Insert NOPs to match the timing, if possible
 #define w_zerocycles    (((F_CPU/1000)*w_zeropulse          )/1000000)
@@ -72,7 +81,7 @@ void ws2812_sendarray(uint8_t *data,uint16_t datlen)
 #elif w_lowtime>450
    #warning "Light_ws2812: The timing is critical and may only work on WS2812B, not on WS2812(S)."
    #warning "Please consider a higher clockspeed, if possible"
-#endif   
+#endif
 
 #if w2>0
 #define w2_nops w2
@@ -96,15 +105,18 @@ void inline ws2812_sendarray_mask(uint8_t *data,uint16_t datlen,uint8_t maskhi)
 {
   uint8_t curbyte,ctr,masklo;
   uint8_t sreg_prev;
-  
+
+  ws2812_DDRREG |= maskhi; // Enable output
+
   masklo	=~maskhi&ws2812_PORTREG;
   maskhi |=        ws2812_PORTREG;
+
   sreg_prev=SREG;
-  cli();  
+  cli();
 
   while (datlen--) {
     curbyte=*data++;
-    
+
     asm volatile(
     "       ldi   %0,8  \n\t"
     "loop%=:            \n\t"
@@ -140,7 +152,7 @@ w_nop16
   w_nop8
 #endif
 #if (w2_nops&16)
-  w_nop16 
+  w_nop16
 #endif
     "       out   %2,%4 \n\t"    //  '1' [+1] '0' [+1] - fe-high
 #if (w3_nops&1)
@@ -165,6 +177,6 @@ w_nop16
     :	"r" (curbyte), "I" (_SFR_IO_ADDR(ws2812_PORTREG)), "r" (maskhi), "r" (masklo)
     );
   }
-  
+
   SREG=sreg_prev;
 }
