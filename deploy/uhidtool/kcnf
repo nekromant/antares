@@ -1,0 +1,12 @@
+menuconfig DEPLOY_UHIDTOOL
+bool "uhidtool"
+
+  if DEPLOY_UHIDTOOL
+
+  config DEPLOY_UHIDTOOL_RUN
+  bool "Execute after deployment"
+  
+  endif
+
+
+
